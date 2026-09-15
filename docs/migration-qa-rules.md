@@ -37,6 +37,54 @@ before they reach production.
 - [ ] Accessibility basics checked (headings, alt text, keyboard navigation)
 - [ ] Verified on a non-production environment before sign-off
 
-## 5. Open Questions
+## 5. Staging Environment Safety Controls
+
+- [ ] **Search engine restriction**
+  - [ ] WordPress "Discourage search engines from indexing this site" enabled on staging
+  - [ ] `robots.txt` on staging disallows all crawling (`Disallow: /`)
+  - [ ] `noindex, nofollow` meta tag/header verified in staging page source
+- [ ] **Form & email safety**
+  - [ ] Real lead-notification emails disabled or redirected to a test inbox on staging
+  - [ ] Form submissions on staging clearly logged/flagged as test data
+  - [ ] Any third-party CRM/webhook integrations point to a sandbox/test endpoint, not production
+- [ ] **Canonical & database URL isolation**
+  - [ ] Staging `siteurl`/`home` values isolated from production (not sharing the same options)
+  - [ ] Canonical tags on staging point to the staging domain, not production
+  - [ ] Search-replace of URLs performed correctly when cloning the database (no stray production URLs left in staging content/options)
+  - [ ] No staging URLs leak into production (e.g., via cached templates or hardcoded links)
+
+## 6. Backup & Rollback Protocol
+
+### 6.1 Full Site Backup Requirements (before any deployment)
+
+- [ ] Full database backup taken and stored in a known, accessible location
+- [ ] Full file backup taken (`wp-content/themes/focused-schools/`, `wp-content/plugins/focused-schools-core/`, and any other modified paths)
+- [ ] Backup includes a timestamp and short description of the pre-deployment state
+- [ ] Backup integrity spot-checked (e.g., database dump opens/imports without errors)
+- [ ] Backup location and retrieval steps documented/communicated to the team
+
+### 6.2 Rollback Procedure (if issues occur)
+
+1. Stop further changes — do not deploy on top of a known issue.
+2. Identify the scope of the problem (files only, database only, or both).
+3. Restore from the most recent verified backup:
+   - [ ] Restore the database backup taken in 6.1
+   - [ ] Restore the file backup taken in 6.1
+4. Clear any caching layers (SiteGround caching, CDN, browser cache) after restoring.
+5. Verify the site loads correctly post-rollback (spot-check key pages, forms, and templates).
+6. Document what went wrong, what was rolled back, and the timestamp of the rollback.
+7. Do not re-attempt the deployment until the root cause is understood and a fix has been tested on staging.
+
+## 7. Verification Checklist for Production vs. Staging
+
+- [ ] Confirm which environment you are viewing before testing (check the URL/domain)
+- [ ] WordPress & PHP versions match expectations for each environment (see `docs/audit/audit-report.md`)
+- [ ] Staging shows noindex/robots restrictions; production does not
+- [ ] Forms on staging use test/sandboxed destinations; production forms use real destinations
+- [ ] Analytics/tracking scripts fire only on production (unless intentionally testing tracking on staging)
+- [ ] Content/data differences between staging and production are expected and documented (not accidental drift)
+- [ ] Sign-off recorded before promoting staging changes to production
+
+## 8. Open Questions
 
 - (none yet — add items here as migration/QA needs are identified)
