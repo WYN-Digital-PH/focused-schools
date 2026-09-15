@@ -1,0 +1,30 @@
+/**
+ * CTA Banner — highlighted closing call-to-action band.
+ */
+
+.fs-cta-banner {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+	background-color: var( --wp--preset--color--primary, #1e40af );
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-cta-banner__inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var( --wp--preset--spacing--medium, 1rem );
+	text-align: center;
+}
+
+.fs-cta-banner__heading {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+	color: inherit;
+}
+
+.fs-cta-banner__description {
+	margin: 0;
+	max-width: 60ch;
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+	color: inherit;
+}

@@ -10,6 +10,9 @@
  * - cta_url    (string)
  * - alignment  (string) 'left'|'center', default 'left'
  *
+ * Always renders in the wide (.fs-container--wide, 1200px) container — a
+ * Hero is inherently a wide/impactful visual section, same as CTA Banner.
+ *
  * @package FocusedSchools
  */
 
@@ -27,7 +30,7 @@ if ( '' === trim( (string) $fs_heading ) ) {
 }
 ?>
 <section class="fs-hero fs-hero--align-<?php echo esc_attr( $fs_alignment ); ?>">
-	<div class="fs-container fs-hero__inner">
+	<div class="fs-container fs-container--wide fs-hero__inner">
 		<div class="fs-hero__content">
 			<h1 class="fs-hero__heading"><?php echo esc_html( $fs_heading ); ?></h1>
 			<?php if ( $fs_subheading ) : ?>

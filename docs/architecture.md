@@ -155,15 +155,17 @@ wp-content/themes/focused-schools/
 ├── index.php               # minimal required fallback template (no page design yet)
 ├── header.php              # doctype, skip link, wp_head(), delegates nav to site-header component
 ├── footer.php              # delegates nav to site-footer component, wp_footer()
+├── front-page.php          # Home page (static front page) — see 4.6
 ├── inc/
 │   ├── setup.php           # add_theme_support(), register_nav_menus(), content_width
 │   └── enqueue.php         # wp_enqueue_style()/wp_enqueue_script() for base + all components
 ├── template-parts/
-│   └── components/         # 12 reusable components — see docs/component-specs.md
+│   └── components/         # 13 reusable components — see docs/component-specs.md
 └── assets/
     ├── css/
     │   ├── editor-style.css    # mirrors frontend base typography in the block editor
-    │   └── components/         # one CSS file per component + shared card.css base
+    │   ├── page-home.css       # Home-page-only spacing, enqueued only via is_front_page()
+    │   └── components/         # one CSS file per component + shared card.css/card-grid.css bases
     └── js/
         └── components/         # site-header.js (nav toggle), statistics-counter.js (count-up)
 ```
@@ -175,8 +177,9 @@ content rendering.
 
 ### 4.2 Template hierarchy usage
 
-Only the WordPress-required fallback (`index.php`) plus `header.php`/`footer.php` exist.
-Page-specific templates are deferred to future tasks per project scope.
+The WordPress-required fallback (`index.php`), `header.php`/`footer.php`, and
+`front-page.php` (the Home page — see §4.6) exist. Other page-specific templates are
+deferred to future tasks per project scope.
 
 ### 4.3 Enqueued assets strategy
 
@@ -208,17 +211,46 @@ registered: `primary` and `footer`.
 
 ### 4.5 Reusable Components
 
-12 approved reusable components live in `template-parts/components/`, each invoked as
+13 approved reusable components live in `template-parts/components/`, each invoked as
 `get_template_part( 'template-parts/components/{name}', null, $args )`. Full specs
 (props/contracts, states, dependencies) are documented in
 [`docs/component-specs.md`](component-specs.md) — that is the source of truth, not this
 section. In brief: Header & Footer navigation structures, Hero, Section Heading,
 Buttons/CTA, Content/Image Split, Service/Team/Impact Story cards (CPT-integrated),
 Podcast Card and Partner Strip (generic/args-driven — no CPT yet), a Statistics counter,
-and a Form styling wrapper for Elementor coexistence. All component CSS uses only
-`theme.json` custom properties (still the TEMPORARY placeholders from §4.4); component
-JS is limited to two small, scoped, vanilla files (nav toggle, count-up animation), both
-respecting `prefers-reduced-motion` where relevant.
+a Form styling wrapper for Elementor coexistence, and a CTA Banner (added for the Home
+page — §4.6). `assets/css/components/card-grid.css` is a shared responsive grid layout
+utility (not a component itself) for arranging repeated cards. All component CSS uses
+only `theme.json` custom properties (still the TEMPORARY placeholders from §4.4);
+component JS is limited to two small, scoped, vanilla files (nav toggle, count-up
+animation), both respecting `prefers-reduced-motion` where relevant.
+
+### 4.6 Page Templates: Home (`front-page.php`)
+
+`front-page.php` is WordPress's native template-hierarchy hook for "whatever page is
+currently configured as the static front page" — it never references a specific post ID.
+This is deliberate: it's how "preserve the existing front Page ID and its slug/canonical
+URL" is satisfied structurally, without any code path that could create, replace, or
+touch that page's `post_type`/`post_name`/`ID`. No change was made to the
+`show_on_front`/`page_on_front` options as part of building this template — that's a live
+Settings → Reading configuration decision, out of scope for a code change.
+
+**Elementor coexistence:** the template checks the front page's own
+`_elementor_edit_mode` post meta at render time. If it's `'builder'`, only `the_content()`
+is rendered (Elementor's own content filter renders exactly as it does today, untouched).
+Otherwise, the full component-based layout renders (Hero, Services/Team/Impact Stories
+grids via `card-grid.css`, Statistics, Podcast teaser, Partner Strip, CTA Banner). Any
+existing plain (non-Elementor) page content is still shown via `the_content()` in an
+intro block, rather than discarded.
+
+**Known limitation:** this detection logic could not be verified against real data. The
+local development database has no Elementor plugin active and no page with the real
+production front-page ID at all (see §6) — verify the Elementor branch actually fires
+correctly against the real staging/production front page before deploying this template.
+
+Statistics, Partner Strip, and Podcast sections on the Home page currently use literal
+placeholder content (marked `TODO` inline in `front-page.php`) — no Site Settings fields,
+CPT, or media exist yet for real stats, partner logos, or podcast episodes.
 
 ## 5. Plugin Architecture
 
@@ -230,7 +262,26 @@ _To be defined._ This section will describe:
 
 ## 6. Environments
 
-_To be defined._ Local, staging, and production environment differences, if any.
+**Local development** (this Local by Flywheel environment) is currently a **fresh/default
+WordPress install**, not a copy of the real site:
+
+- Only 17 total posts exist (WordPress's default sample content — "Sample Page,"
+  "Privacy Policy," etc.). There is no page with the real production front-page ID
+  (referenced elsewhere as Page 992), and no legacy/migrated content of any kind.
+- Active plugins here are only `all-in-one-wp-migration` and `focused-schools-core`.
+  **Elementor and Elementor Pro are not active in this environment**, despite being
+  referenced as active on the real site in earlier audit documentation
+  (`docs/audit/audit-report.md`).
+- `show_on_front` is `posts` (no static front page configured), unlike the real site.
+
+Practical effect: any work here that depends on real content, a real Elementor build, or
+the real front-page ID (e.g. `front-page.php`'s Elementor-detection branch, §4.6) is
+built defensively/generically and **cannot be verified end-to-end locally**. Before
+deploying such work, verify it against the actual staging/production database — a
+discrepancy discovered here should be treated as "this environment lacks the data to
+test," not as evidence the real site differs from what was originally understood.
+
+**Staging/production** environment specifics beyond the above are still _to be defined_.
 
 ## 7. Open Questions
 

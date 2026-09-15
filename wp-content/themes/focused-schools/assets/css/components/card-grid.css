@@ -1,0 +1,34 @@
+/**
+ * Card grid — shared responsive layout utility for arranging repeated
+ * cards (Service/Team/Impact Story). Not a template-part component itself,
+ * just the layout primitive so grid CSS isn't duplicated per page/section.
+ *
+ * Mobile-first: 1 column by default, 2 from 640px, 3 from 1024px.
+ */
+
+.fs-card-grid {
+	display: grid;
+	width: 100%;
+	grid-template-columns: 1fr;
+	align-items: stretch;
+	gap: var( --wp--preset--spacing--large, 2rem );
+}
+
+/* Grid items with flex/content children default to min-width: auto, which
+ * can stop them shrinking to their 1fr track. Reset it so columns size
+ * evenly instead of overflowing/squishing unpredictably. */
+.fs-card-grid > * {
+	min-width: 0;
+}
+
+@media ( min-width: 640px ) {
+	.fs-card-grid {
+		grid-template-columns: repeat( 2, 1fr );
+	}
+}
+
+@media ( min-width: 1024px ) {
+	.fs-card-grid {
+		grid-template-columns: repeat( 3, 1fr );
+	}
+}

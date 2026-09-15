@@ -30,6 +30,8 @@ function focused_schools_component_styles() {
 		'form-wrapper',
 		'site-header',
 		'site-footer',
+		'cta-banner',
+		'card-grid',
 	);
 }
 
@@ -80,5 +82,14 @@ function focused_schools_enqueue_assets() {
 			'strategy'  => 'defer',
 		)
 	);
+
+	if ( is_front_page() ) {
+		wp_enqueue_style(
+			'focused-schools-page-home',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-home.css',
+			array( 'focused-schools-style' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'focused_schools_enqueue_assets' );

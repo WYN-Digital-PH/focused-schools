@@ -1,6 +1,6 @@
 # Component Specifications
 
-Status: **12 components approved and implemented** (foundation set). Components are
+Status: **13 components approved and implemented.** Components are
 invoked via `get_template_part( 'template-parts/components/{name}', null, $args )`, using
 WordPress's native `$args` support as the prop/contract mechanism — see each spec below
 for its `$args`.
@@ -27,10 +27,14 @@ partials, blocks, or UI patterns) used across `focused-schools`.
 | Statistics counter block | `template-parts/components/statistics-counter.php` | Animated count-up, real value always in markup | Implemented |
 | Partner Strip / Logo grid | `template-parts/components/partner-strip.php` | Generic/args-driven logo list | Implemented |
 | Form styling wrappers | `template-parts/components/form-wrapper.php` | CSS-only Elementor form coexistence wrapper | Implemented |
+| CTA Banner | `template-parts/components/cta-banner.php` | Highlighted-band closing call-to-action section | Implemented (added for the Home page task) |
 
 Shared CSS: `assets/css/components/card.css` provides the base `.fs-card` styling reused
-by Service/Team/Impact Story/Podcast cards. Component JS: `assets/js/components/site-header.js`
-(mobile nav toggle), `assets/js/components/statistics-counter.js` (count-up animation).
+by Service/Team/Impact Story/Podcast cards. `assets/css/components/card-grid.css` is a
+shared responsive grid layout utility (not a template-part component) for arranging
+repeated cards — used by the Home page's Services/Team/Impact Stories sections. Component
+JS: `assets/js/components/site-header.js` (mobile nav toggle),
+`assets/js/components/statistics-counter.js` (count-up animation).
 
 ## 3. Component Specs
 
@@ -151,9 +155,19 @@ by Service/Team/Impact Story/Podcast cards. Component JS: `assets/js/components/
 - **Dependencies:** none — CSS specifically targets `.elementor-form`, `.elementor-field-group`, `.elementor-button` in addition to generic form elements so it coexists with, rather than overrides, Elementor's own output.
 - **Related design tokens:** color palette, spacing scale, typography.
 
+### CTA Banner
+
+- **Location:** `template-parts/components/cta-banner.php` / `assets/css/components/cta-banner.css`
+- **Purpose:** Highlighted-band closing call-to-action section (e.g. "Ready to get started?"), distinct from the single-link Button component it composes internally.
+- **Props / Fields:** `heading` (string, required), `description` (string), `cta_label` (string, required), `cta_url` (string, required).
+- **States:** default only.
+- **Dependencies:** `template-parts/components/button.php` (rendered with the `secondary` style for contrast against the banner's primary-colored background).
+- **Related design tokens:** primary color background, base color text — same TEMPORARY placeholder tokens as everywhere else.
+
 ## 4. Notes
 
-All 13 components (12 approved + the shared `card.css` base) use only `theme.json`
-CSS custom properties (`var(--wp--preset--...)`) for color/spacing/typography — no
-hardcoded design values. Every interactive element inherits the base stylesheet's
-`:focus-visible` styling. No external CSS/JS framework is used.
+All 14 components/utilities (13 template-part components + the shared `card.css` base;
+`card-grid.css` is a layout utility, not a component) use only `theme.json` CSS custom
+properties (`var(--wp--preset--...)`) for color/spacing/typography — no hardcoded design
+values. Every interactive element inherits the base stylesheet's `:focus-visible`
+styling. No external CSS/JS framework is used.
