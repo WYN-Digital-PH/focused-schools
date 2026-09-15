@@ -67,11 +67,35 @@ Admin-only content type (no public URLs) for staff/leadership profiles, implemen
 
 - **Admin columns:** Headshot, Name, Position, Order, Modified Date.
 
-### 3.3 Other Content Types
+### 3.3 Services
+
+Admin-only content type (no public URLs) for the services list, implemented in
+`wp-content/plugins/focused-schools-core/modules/services/`.
+
+- **Post type:** `fs_service`
+- **Visibility:** `public => false`, `publicly_queryable => false`, `has_archive => false`,
+  `rewrite => false` — no frontend URLs or archive; content is surfaced only through
+  whatever the theme queries directly.
+- **Admin location:** nested under Focused Schools → Services (same shared top-level menu
+  as Site Settings and Team Members).
+- **Supports:** `title`, `editor`, `excerpt`, `thumbnail`, `page-attributes` (`menu_order`)
+- **REST/Gutenberg:** `show_in_rest => true`
+- **Meta fields** (schema source of truth: `FocusedSchoolsCore\Modules\Services\Meta::all()`,
+  keys prefixed `_fs_service_`):
+
+  | Field | Type | Sanitizer | Notes |
+  | ----- | ---- | --------- | ----- |
+  | Tagline | text | `sanitize_text_field` | — |
+  | Accent Role | enum | `Meta::sanitize_accent_role()` | Strictly whitelisted to `strategy`, `leadership`, or `capacity` — no hex colors or arbitrary strings. Enforced both in the admin `<select>` and in the REST meta schema (`enum` in `show_in_rest`), plus a manual sanitize pass in the classic save handler. Defaults to `strategy` when unset. |
+
+- **Admin columns:** Tagline, Accent Role, Order, Modified Date.
+- No demo content is created on plugin activation.
+
+### 3.4 Other Content Types
 
 _To be defined._ This section will describe, as they are built:
 
-- Custom post types (e.g. Services, Impact Stories, Podcast)
+- Custom post types (e.g. Impact Stories, Podcast)
 - Custom taxonomies
 - Custom fields / field groups
 - Relationships between content types
