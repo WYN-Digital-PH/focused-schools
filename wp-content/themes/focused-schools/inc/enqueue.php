@@ -91,5 +91,14 @@ function focused_schools_enqueue_assets() {
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
 	}
+
+	if ( is_page( 'about-our-mission-vision' ) ) {
+		wp_enqueue_style(
+			'focused-schools-page-about',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-about.css',
+			array( 'focused-schools-style' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'focused_schools_enqueue_assets' );

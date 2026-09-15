@@ -91,6 +91,7 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 - **States:** stacked (mobile) / side-by-side (≥1024px), image left or right.
 - **Dependencies:** `template-parts/components/button.php`.
 - **Related design tokens:** typography scale, spacing scale.
+- **Note:** always renders in the wide (`.fs-container--wide`, 1200px) container, same as Hero — this is a self-contained section component, so its width is fixed internally and unaffected by whatever wraps its `get_template_part()` call.
 
 ### Service Card
 

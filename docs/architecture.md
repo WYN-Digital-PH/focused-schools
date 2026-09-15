@@ -252,6 +252,45 @@ Statistics, Partner Strip, and Podcast sections on the Home page currently use l
 placeholder content (marked `TODO` inline in `front-page.php`) — no Site Settings fields,
 CPT, or media exist yet for real stats, partner logos, or podcast episodes.
 
+**Uniform section widths:** `hero.php` and `content-image-split.php` render their own
+container internally (they're "self-contained section" components), independent of
+whatever wraps their `get_template_part()` call. Both were fixed to render their internal
+container as `.fs-container.fs-container--wide` (1200px) unconditionally, matching
+CTA Banner's existing behavior — wrapping them externally in a wide container from the
+calling page template has **no effect**, since their own internal markup sets its own
+width regardless of any ancestor. `statistics-counter.php` and `podcast-card.php`, by
+contrast, render bare with no container of their own, so the calling template must wrap
+them explicitly (see the pattern in `front-page.php`). Keep this distinction in mind when
+adding new page templates that use these components.
+
+**Card grid: `auto-fit`/`minmax`, not fixed column-count breakpoints.**
+`assets/css/components/card-grid.css` uses `grid-template-columns: repeat(auto-fit,
+minmax(280px, 1fr))` rather than hardcoded `repeat(2, 1fr)`/`repeat(3, 1fr)` at fixed
+breakpoints. This matters in practice, not just aesthetically: a fixed 3-column grid with
+only 1 real post in a CPT renders that 1 card in the first column with two empty,
+invisible tracks beside it — which visually reads as "broken/narrow" even though the grid
+math is correct. `auto-fit` collapses unused tracks and lets existing cards stretch to
+fill the row, so sparse content (the normal state while a site is still being populated)
+still looks intentional. Revisit the `280px` minimum if card content ever needs more room.
+
+### 4.7 Page Templates: About (`page-about-our-mission-vision.php`)
+
+Spec: [`docs/page-specs/about.md`](page-specs/about.md). Implements the approved About
+page: Hero, two Content/Image Split sections (Mission, Vision), a Team grid
+(`fs_team_member` CPT query), and a closing CTA Banner.
+
+Uses WordPress's native `page-{slug}.php` template hierarchy rather than
+`front-page.php`'s `page_on_front`-option approach — a `page-{slug}.php` template is
+always scoped to that exact page via URL routing (no "Settings → Reading" ambiguity like
+the site root has), so the standard `have_posts()`/`the_post()` Loop is used directly.
+Same Elementor-coexistence detection (`_elementor_edit_mode`) and the same known
+limitation: Page 3726 does not exist in this local environment (confirmed via direct
+database query), so this could not be verified against real data — verify against
+staging/production before deploying. A local-only test page (ID 18, slug
+`about-our-mission-vision`) was created directly in this environment's database purely to
+QA the template visually; it is not part of the theme/plugin code and has no bearing on
+the real site.
+
 ## 5. Plugin Architecture
 
 _To be defined._ This section will describe:

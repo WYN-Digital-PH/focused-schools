@@ -10,6 +10,10 @@
  * - cta_label       (string)
  * - cta_url         (string)
  *
+ * Always renders in the wide (.fs-container--wide, 1200px) container — same
+ * treatment as Hero and CTA Banner, for uniform section widths across a
+ * page (see docs/architecture.md §4.6/§4.7).
+ *
  * @package FocusedSchools
  */
 
@@ -27,7 +31,7 @@ if ( '' === trim( (string) $fs_heading ) && '' === trim( (string) $fs_body ) && 
 }
 ?>
 <div class="fs-content-split fs-content-split--image-<?php echo esc_attr( $fs_position ); ?>">
-	<div class="fs-container fs-content-split__inner">
+	<div class="fs-container fs-container--wide fs-content-split__inner">
 		<div class="fs-content-split__content">
 			<?php if ( $fs_heading ) : ?>
 				<h2 class="fs-content-split__heading"><?php echo esc_html( $fs_heading ); ?></h2>

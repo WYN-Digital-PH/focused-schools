@@ -1,0 +1,15 @@
+/**
+ * About page-specific spacing only. Layout/visual work is done entirely by
+ * the reusable components in assets/css/components/ — this file just
+ * provides vertical rhythm between the sections in
+ * page-about-our-mission-vision.php. Enqueued only on that page (see
+ * inc/enqueue.php). Mirrors assets/css/page-home.css.
+ */
+
+.fs-about__intro {
+	padding-block: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-about__section {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}
