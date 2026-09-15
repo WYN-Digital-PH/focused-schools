@@ -1,0 +1,32 @@
+/**
+ * Buttons & CTA blocks.
+ */
+
+.fs-btn {
+	display: inline-block;
+	padding: var( --wp--preset--spacing--small, 0.5rem ) var( --wp--preset--spacing--large, 2rem );
+	border-radius: 4px;
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+	line-height: 1.6;
+	text-decoration: none;
+	border: 2px solid transparent;
+	cursor: pointer;
+}
+
+.fs-btn--primary {
+	background-color: var( --wp--preset--color--primary, #1e40af );
+	color: var( --wp--preset--color--base, #ffffff );
+	border-color: var( --wp--preset--color--primary, #1e40af );
+}
+
+.fs-btn--secondary {
+	background-color: var( --wp--preset--color--secondary, #6b7280 );
+	color: var( --wp--preset--color--base, #ffffff );
+	border-color: var( --wp--preset--color--secondary, #6b7280 );
+}
+
+.fs-btn--outline {
+	background-color: transparent;
+	color: var( --wp--preset--color--primary, #1e40af );
+	border-color: var( --wp--preset--color--primary, #1e40af );
+}

@@ -1,0 +1,35 @@
+/**
+ * Statistics counter block. Mobile-first: single column, grid from 640px.
+ */
+
+.fs-stats {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var( --wp--preset--spacing--large, 2rem );
+	text-align: center;
+}
+
+.fs-stats__item {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--small, 0.5rem );
+}
+
+.fs-stats__value {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+	font-weight: 700;
+	color: var( --wp--preset--color--primary, #1e40af );
+}
+
+.fs-stats__label {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+	color: var( --wp--preset--color--secondary, #6b7280 );
+}
+
+@media ( min-width: 640px ) {
+	.fs-stats {
+		grid-template-columns: repeat( auto-fit, minmax( 160px, 1fr ) );
+	}
+}

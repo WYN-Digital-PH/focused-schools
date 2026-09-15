@@ -140,9 +140,10 @@ _To be defined._ This section will describe, as they are built:
 
 ## 4. Theme Architecture
 
-The `focused-schools` theme (`wp-content/themes/focused-schools/`) is currently a
-**foundation only** — bootstrap, global styles, and accessibility defaults. No individual
-page templates or components exist yet.
+The `focused-schools` theme (`wp-content/themes/focused-schools/`) has a foundation
+(bootstrap, global styles, accessibility defaults) plus a set of reusable components (see
+§4.5). No individual page templates exist yet — components are built and documented, but
+not yet assembled into pages.
 
 ### 4.1 File structure
 
@@ -152,14 +153,19 @@ wp-content/themes/focused-schools/
 ├── theme.json              # global settings/styles (see 4.4 — placeholder tokens)
 ├── functions.php           # bootstrap: requires inc/ files only
 ├── index.php               # minimal required fallback template (no page design yet)
-├── header.php              # doctype, skip link, wp_head(), Primary menu
-├── footer.php              # Footer menu, wp_footer()
+├── header.php              # doctype, skip link, wp_head(), delegates nav to site-header component
+├── footer.php              # delegates nav to site-footer component, wp_footer()
 ├── inc/
 │   ├── setup.php           # add_theme_support(), register_nav_menus(), content_width
-│   └── enqueue.php         # wp_enqueue_style() for the main stylesheet
+│   └── enqueue.php         # wp_enqueue_style()/wp_enqueue_script() for base + all components
+├── template-parts/
+│   └── components/         # 12 reusable components — see docs/component-specs.md
 └── assets/
-    └── css/
-        └── editor-style.css   # mirrors frontend base typography in the block editor
+    ├── css/
+    │   ├── editor-style.css    # mirrors frontend base typography in the block editor
+    │   └── components/         # one CSS file per component + shared card.css base
+    └── js/
+        └── components/         # site-header.js (nav toggle), statistics-counter.js (count-up)
 ```
 
 There is intentionally no `page.php` and no custom page templates yet, so Elementor's own
@@ -199,6 +205,20 @@ Theme supports registered in `inc/setup.php`: `title-tag`, `align-wide`,
 `responsive-embeds`, `post-thumbnails`, `editor-styles`, and an `html5` markup list
 (search form, comment form/list, gallery, caption, script, style). Two nav menus are
 registered: `primary` and `footer`.
+
+### 4.5 Reusable Components
+
+12 approved reusable components live in `template-parts/components/`, each invoked as
+`get_template_part( 'template-parts/components/{name}', null, $args )`. Full specs
+(props/contracts, states, dependencies) are documented in
+[`docs/component-specs.md`](component-specs.md) — that is the source of truth, not this
+section. In brief: Header & Footer navigation structures, Hero, Section Heading,
+Buttons/CTA, Content/Image Split, Service/Team/Impact Story cards (CPT-integrated),
+Podcast Card and Partner Strip (generic/args-driven — no CPT yet), a Statistics counter,
+and a Form styling wrapper for Elementor coexistence. All component CSS uses only
+`theme.json` custom properties (still the TEMPORARY placeholders from §4.4); component
+JS is limited to two small, scoped, vanilla files (nav toggle, count-up animation), both
+respecting `prefers-reduced-motion` where relevant.
 
 ## 5. Plugin Architecture
 

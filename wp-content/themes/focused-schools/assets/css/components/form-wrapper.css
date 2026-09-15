@@ -1,0 +1,60 @@
+/**
+ * Form styling wrapper — Elementor form coexistence.
+ *
+ * Targets both generic form elements (in case a non-Elementor form is ever
+ * wrapped) and Elementor's own form widget classes, so it doesn't fight
+ * Elementor's markup/specificity. No structural changes to Elementor's
+ * output — styling only.
+ */
+
+.fs-form {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-form__heading {
+	margin-top: 0;
+	margin-bottom: var( --wp--preset--spacing--large, 2rem );
+	text-align: center;
+	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+}
+
+/* Generic form elements */
+.fs-form__content input[type="text"],
+.fs-form__content input[type="email"],
+.fs-form__content input[type="tel"],
+.fs-form__content input[type="url"],
+.fs-form__content textarea,
+.fs-form__content select,
+.fs-form__content .elementor-field-group .elementor-field,
+.fs-form__content .elementor-field-textual {
+	width: 100%;
+	padding: var( --wp--preset--spacing--small, 0.5rem );
+	font-family: inherit;
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+	border: 1px solid var( --wp--preset--color--secondary, #6b7280 );
+	border-radius: 4px;
+}
+
+.fs-form__content label,
+.fs-form__content .elementor-field-label {
+	display: block;
+	margin-bottom: var( --wp--preset--spacing--small, 0.5rem );
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+}
+
+.fs-form__content .elementor-field-group {
+	margin-bottom: var( --wp--preset--spacing--medium, 1rem );
+}
+
+.fs-form__content button,
+.fs-form__content input[type="submit"],
+.fs-form__content .elementor-button {
+	display: inline-block;
+	padding: var( --wp--preset--spacing--small, 0.5rem ) var( --wp--preset--spacing--large, 2rem );
+	background-color: var( --wp--preset--color--primary, #1e40af );
+	color: var( --wp--preset--color--base, #ffffff );
+	border: 2px solid var( --wp--preset--color--primary, #1e40af );
+	border-radius: 4px;
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+	cursor: pointer;
+}

@@ -1,0 +1,46 @@
+/**
+ * Hero block. Mobile-first: stacked by default, side-by-side from 1024px.
+ */
+
+.fs-hero {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-hero__inner {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-hero--align-center .fs-hero__content {
+	text-align: center;
+}
+
+.fs-hero__heading {
+	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
+	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+}
+
+.fs-hero__subheading {
+	margin: 0 0 var( --wp--preset--spacing--medium, 1rem );
+	font-size: var( --wp--preset--font-size--large, 1.5rem );
+	color: var( --wp--preset--color--secondary, #6b7280 );
+}
+
+.fs-hero__media img {
+	width: 100%;
+	height: auto;
+	border-radius: 4px;
+}
+
+@media ( min-width: 1024px ) {
+	.fs-hero__inner {
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.fs-hero__content,
+	.fs-hero__media {
+		flex: 1 1 50%;
+	}
+}

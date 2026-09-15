@@ -1,0 +1,70 @@
+/**
+ * Header navigation structure. Mobile-first: nav is collapsed behind a
+ * toggle button below 1024px, always visible from 1024px up.
+ */
+
+.fs-site-header__inner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --wp--preset--spacing--medium, 1rem );
+	padding-block: var( --wp--preset--spacing--medium, 1rem );
+}
+
+.fs-site-header__logo {
+	font-size: var( --wp--preset--font-size--large, 1.5rem );
+	font-weight: 700;
+	text-decoration: none;
+	color: inherit;
+}
+
+.fs-site-header__toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	background: transparent;
+	border: 1px solid var( --wp--preset--color--secondary, #6b7280 );
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.fs-site-header__toggle-icon,
+.fs-site-header__toggle-icon::before,
+.fs-site-header__toggle-icon::after {
+	display: block;
+	width: 20px;
+	height: 2px;
+	background-color: currentColor;
+}
+
+.fs-site-header__toggle-icon::before,
+.fs-site-header__toggle-icon::after {
+	content: "";
+	margin-block: 5px;
+}
+
+.fs-nav--primary {
+	flex-basis: 100%;
+	order: 3;
+	display: none;
+}
+
+.fs-nav--primary.is-open {
+	display: block;
+}
+
+@media ( min-width: 1024px ) {
+	.fs-site-header__toggle {
+		display: none;
+	}
+
+	.fs-nav--primary {
+		flex-basis: auto;
+		order: 2;
+		display: block;
+	}
+}

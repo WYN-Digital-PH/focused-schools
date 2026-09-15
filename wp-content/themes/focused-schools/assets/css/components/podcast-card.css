@@ -1,0 +1,25 @@
+/**
+ * Podcast Card — adds episode/duration meta and embed sizing on top of the
+ * shared .fs-card base (see card.css).
+ */
+
+.fs-podcast-card__episode {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--small, 0.9rem );
+	color: var( --wp--preset--color--accent, #0d9488 );
+}
+
+.fs-podcast-card__duration {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--small, 0.9rem );
+	color: var( --wp--preset--color--secondary, #6b7280 );
+}
+
+.fs-podcast-card__embed {
+	position: relative;
+}
+
+.fs-podcast-card__embed iframe {
+	width: 100%;
+	border: 0;
+}

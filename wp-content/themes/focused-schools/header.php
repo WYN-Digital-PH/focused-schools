@@ -23,17 +23,5 @@ defined( 'ABSPATH' ) || exit;
 <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'focused-schools' ); ?></a>
 
 <header class="fs-site-header">
-	<div class="fs-container">
-		<nav class="fs-nav fs-nav--primary" aria-label="<?php esc_attr_e( 'Primary', 'focused-schools' ); ?>">
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'primary',
-					'container'      => false,
-					'fallback_cb'    => false,
-				)
-			);
-			?>
-		</nav>
-	</div>
+	<?php get_template_part( 'template-parts/components/site-header' ); ?>
 </header>

@@ -1,0 +1,32 @@
+/**
+ * Section Heading.
+ */
+
+.fs-section-heading {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--small, 0.5rem );
+	margin-bottom: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-section-heading--align-center {
+	text-align: center;
+	align-items: center;
+}
+
+.fs-section-heading__eyebrow {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--small, 0.9rem );
+	color: var( --wp--preset--color--accent, #0d9488 );
+}
+
+.fs-section-heading__heading {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+}
+
+.fs-section-heading__description {
+	margin: 0;
+	max-width: 60ch;
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+}

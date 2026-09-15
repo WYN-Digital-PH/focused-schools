@@ -12,19 +12,7 @@ defined( 'ABSPATH' ) || exit;
 ?>
 
 	<footer class="fs-site-footer">
-		<div class="fs-container">
-			<nav class="fs-nav fs-nav--footer" aria-label="<?php esc_attr_e( 'Footer', 'focused-schools' ); ?>">
-				<?php
-				wp_nav_menu(
-					array(
-						'theme_location' => 'footer',
-						'container'      => false,
-						'fallback_cb'    => false,
-					)
-				);
-				?>
-			</nav>
-		</div>
+		<?php get_template_part( 'template-parts/components/site-footer' ); ?>
 	</footer>
 
 	<?php wp_footer(); ?>
