@@ -41,11 +41,37 @@ WordPress Settings API / Options API in
   `includes/functions.php`). Returns the sanitized-at-save-time value; the caller must
   still escape for output context (`esc_html()`, `esc_url()`, etc.).
 
-### 3.2 Other Content Types
+### 3.2 Team Members
+
+Admin-only content type (no public URLs) for staff/leadership profiles, implemented in
+`wp-content/plugins/focused-schools-core/modules/team/`.
+
+- **Post type:** `fs_team_member`
+- **Visibility:** `public => false`, `publicly_queryable => false`, `has_archive => false`,
+  `rewrite => false` — no frontend URLs or archive; content is surfaced only through
+  whatever the theme queries directly (e.g. a "Team" page template pulling these posts).
+- **Admin location:** nested under Focused Schools → Team Members
+  (`show_in_menu` set to the Site Settings page slug so it appears as a submenu of the
+  shared "Focused Schools" top-level menu).
+- **Supports:** `title` (member name), `editor` (optional bio), `thumbnail` (headshot),
+  `page-attributes` (`menu_order`, used for manual ordering)
+- **REST/Gutenberg:** `show_in_rest => true`
+- **Meta fields** (schema source of truth: `FocusedSchoolsCore\Modules\Team\Meta::all()`,
+  keys prefixed `_fs_team_`):
+
+  | Field | Type | Sanitizer |
+  | ----- | ---- | --------- |
+  | Position | text | `sanitize_text_field` |
+  | Quote | textarea | `sanitize_textarea_field` |
+  | LinkedIn URL | url | `esc_url_raw` |
+
+- **Admin columns:** Headshot, Name, Position, Order, Modified Date.
+
+### 3.3 Other Content Types
 
 _To be defined._ This section will describe, as they are built:
 
-- Custom post types (e.g. Team, Services, Impact Stories, Podcast)
+- Custom post types (e.g. Services, Impact Stories, Podcast)
 - Custom taxonomies
 - Custom fields / field groups
 - Relationships between content types
