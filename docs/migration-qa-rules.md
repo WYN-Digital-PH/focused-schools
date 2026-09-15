@@ -85,6 +85,43 @@ before they reach production.
 - [ ] Content/data differences between staging and production are expected and documented (not accidental drift)
 - [ ] Sign-off recorded before promoting staging changes to production
 
-## 8. Open Questions
+## 9. Impact Stories Legacy Page Bridge (WP-CLI Migration Utility)
+
+A WP-CLI command tags approved, pre-existing legacy Pages with
+`_fs_legacy_impact_story = 1` so they can be recognized as impact stories without
+migrating their content, slug, or post type into the new `fs_impact_story` post type.
+Implemented in `wp-content/plugins/focused-schools-core/modules/impact-stories/`
+(`Legacy_Bridge` class + `CLI_Command` class).
+
+### 9.1 Usage
+
+```
+wp focused-schools tag-legacy-impact-stories --ids=12,45,67          # dry run (default)
+wp focused-schools tag-legacy-impact-stories --ids=12,45,67 --write  # applies, asks to confirm
+```
+
+- `--ids` is a comma-separated list of Page IDs, supplied at run time — this list is
+  site-specific, human-approved data and is never hardcoded into plugin code.
+- Without `--write`, the command only prints a report table (ID, Title, Exists, Is Page,
+  Already Tagged, Eligible) and makes no changes.
+- With `--write`, the same report is printed, then WP-CLI's own `--confirm` prompt blocks
+  until you confirm (or pass the global `--yes` flag) before anything is written.
+- A Page is only eligible if it exists, is `post_type === 'page'`, and is not already
+  tagged. Anything else is skipped and reported as ineligible rather than silently
+  ignored.
+
+### 9.2 Guardrails
+
+- **Dry-run by default.** No flag is required to preview; `--write` is required to change
+  anything.
+- **Never alters `post_type`, `post_name` (slug), post content, or Yoast (or any other)
+  metadata.** The `Legacy_Bridge` class only ever calls `update_post_meta()` for its own
+  `_fs_legacy_impact_story` key — it has no code path that calls `wp_update_post()` or
+  touches any other meta key.
+- Follow the standard rules in §2 and §6 (back up before running with `--write`,
+  idempotent by design since already-tagged pages are reported as ineligible and left
+  alone on re-run).
+
+## 10. Open Questions
 
 - (none yet — add items here as migration/QA needs are identified)

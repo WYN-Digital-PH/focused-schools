@@ -1,0 +1,21 @@
+/**
+ * Editor styles — mirrors the frontend base typography inside the block
+ * editor iframe so authors see a reasonable approximation of the frontend.
+ * Values are the same TEMPORARY placeholders as style.css / theme.json.
+ */
+
+body {
+	font-family: var( --wp--preset--font-family--system, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif );
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+	line-height: 1.6;
+	color: var( --wp--preset--color--contrast, #111111 );
+	background-color: var( --wp--preset--color--base, #ffffff );
+}
+
+.wp-block {
+	max-width: var( --wp--style--global--content-size, 720px );
+}
+
+.wp-block[data-align="wide"] {
+	max-width: var( --wp--style--global--wide-size, 1200px );
+}

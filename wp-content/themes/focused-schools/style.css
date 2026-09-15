@@ -1,0 +1,148 @@
+/*
+Theme Name: Focused Schools
+Author: WYN Digital
+Description: Custom theme foundation for the focused-schools WordPress site. Design tokens in theme.json are TEMPORARY structural placeholders pending real values in docs/design-system.md — do not treat any color, font, or spacing value here as approved brand design.
+Version: 0.1.0
+Requires at least: 6.0
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: focused-schools
+*/
+
+/* -----------------------------------------------------------------------
+ * Base reset
+ * --------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: var( --wp--preset--font-family--system, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif );
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+	line-height: 1.6;
+	color: var( --wp--preset--color--contrast, #111111 );
+	background-color: var( --wp--preset--color--base, #ffffff );
+}
+
+/* -----------------------------------------------------------------------
+ * Responsive media
+ * --------------------------------------------------------------------- */
+
+img,
+video,
+iframe,
+embed,
+object {
+	max-width: 100%;
+	height: auto;
+}
+
+/* -----------------------------------------------------------------------
+ * Container / spacing primitives
+ *
+ * Breakpoints below are provisional structural values (not brand design
+ * tokens) pending docs/design-system.md §5. Adjust freely once real
+ * breakpoints are approved.
+ * --------------------------------------------------------------------- */
+
+.fs-container {
+	width: 100%;
+	max-width: var( --wp--style--global--content-size, 720px );
+	margin-inline: auto;
+	padding-inline: var( --wp--preset--spacing--medium, 1rem );
+}
+
+.fs-container--wide {
+	max-width: var( --wp--style--global--wide-size, 1200px );
+}
+
+@media ( min-width: 640px ) {
+	.fs-container {
+		padding-inline: var( --wp--preset--spacing--large, 2rem );
+	}
+}
+
+@media ( min-width: 1024px ) {
+	.fs-container {
+		padding-inline: var( --wp--preset--spacing--x-large, 3rem );
+	}
+}
+
+/* -----------------------------------------------------------------------
+ * Navigation menus (structural reset only — no visual design yet)
+ * --------------------------------------------------------------------- */
+
+.fs-nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --wp--preset--spacing--medium, 1rem );
+}
+
+.fs-nav a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* -----------------------------------------------------------------------
+ * Accessibility: skip link
+ * --------------------------------------------------------------------- */
+
+.skip-link {
+	position: absolute;
+	top: -999px;
+	left: -999px;
+	z-index: 100000;
+	padding: 0.75rem 1rem;
+	background: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #111111 );
+	border: 2px solid var( --wp--preset--color--primary, #1e40af );
+}
+
+.skip-link:focus {
+	top: 0.5rem;
+	left: 0.5rem;
+}
+
+/* -----------------------------------------------------------------------
+ * Accessibility: visible keyboard focus
+ *
+ * Enhances focus visibility for keyboard users without ever removing the
+ * default focus outline for other input modes.
+ * --------------------------------------------------------------------- */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+	outline: 2px solid var( --wp--preset--color--primary, #1e40af );
+	outline-offset: 2px;
+}
+
+/* -----------------------------------------------------------------------
+ * Accessibility: reduced motion
+ * --------------------------------------------------------------------- */
+
+@media ( prefers-reduced-motion: reduce ) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}

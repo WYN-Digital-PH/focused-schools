@@ -140,12 +140,65 @@ _To be defined._ This section will describe, as they are built:
 
 ## 4. Theme Architecture
 
-_To be defined._ This section will describe:
+The `focused-schools` theme (`wp-content/themes/focused-schools/`) is currently a
+**foundation only** — bootstrap, global styles, and accessibility defaults. No individual
+page templates or components exist yet.
 
-- Template hierarchy usage
-- Template partials / components structure
-- Enqueued assets (CSS/JS) strategy
-- Block editor (Gutenberg) usage, if any
+### 4.1 File structure
+
+```
+wp-content/themes/focused-schools/
+├── style.css              # required WP theme header + mobile-first base stylesheet
+├── theme.json              # global settings/styles (see 4.4 — placeholder tokens)
+├── functions.php           # bootstrap: requires inc/ files only
+├── index.php               # minimal required fallback template (no page design yet)
+├── header.php              # doctype, skip link, wp_head(), Primary menu
+├── footer.php              # Footer menu, wp_footer()
+├── inc/
+│   ├── setup.php           # add_theme_support(), register_nav_menus(), content_width
+│   └── enqueue.php         # wp_enqueue_style() for the main stylesheet
+└── assets/
+    └── css/
+        └── editor-style.css   # mirrors frontend base typography in the block editor
+```
+
+There is intentionally no `page.php` and no custom page templates yet, so Elementor's own
+page templates (Canvas / Full Width) and existing Elementor-built pages are unaffected —
+the theme adds no filters touching `theme_page_templates`, `wp_head`, `wp_footer`, or
+content rendering.
+
+### 4.2 Template hierarchy usage
+
+Only the WordPress-required fallback (`index.php`) plus `header.php`/`footer.php` exist.
+Page-specific templates are deferred to future tasks per project scope.
+
+### 4.3 Enqueued assets strategy
+
+- The theme's own stylesheet is enqueued via `get_stylesheet_uri()` (i.e. `style.css`
+  itself is the single frontend stylesheet — no separate build step or bundler).
+- Block editor: `add_theme_support( 'editor-styles' )` + `add_editor_style()` loads
+  `assets/css/editor-style.css`, which mirrors the frontend's base typography/layout
+  variables so the editor preview roughly matches the frontend.
+- No external CSS/JS framework (Tailwind, Bootstrap, etc.) is used.
+
+### 4.4 Block editor (Gutenberg) / `theme.json`
+
+`theme.json` (schema v2) defines global settings and styles: `appearanceTools`, a
+`layout.contentSize`/`wideSize`, a color palette, font family/sizes, and a spacing scale.
+
+**Every token in `theme.json` is a TEMPORARY structural placeholder**, not an approved
+design decision — see [`docs/design-system.md`](design-system.md), which has no real
+tokens defined yet. Palette and font-family entries are deliberately named
+`"Placeholder – …"` so they're identifiable as such directly in the block editor's color
+picker. A `custom.tokenStatus` key (`"placeholder-pending-design-system-md"`) is set
+specifically so this status is traceable in generated CSS
+(`--wp--custom--token-status`), not just in documentation. When real tokens are approved,
+update `docs/design-system.md` first, then bring `theme.json` in line with it.
+
+Theme supports registered in `inc/setup.php`: `title-tag`, `align-wide`,
+`responsive-embeds`, `post-thumbnails`, `editor-styles`, and an `html5` markup list
+(search form, comment form/list, gallery, caption, script, style). Two nav menus are
+registered: `primary` and `footer`.
 
 ## 5. Plugin Architecture
 

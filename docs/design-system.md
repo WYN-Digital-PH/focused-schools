@@ -2,6 +2,13 @@
 
 Status: **placeholder** — no design system has been defined yet.
 
+> **Note:** `wp-content/themes/focused-schools/theme.json` currently ships with
+> TEMPORARY structural placeholder tokens (system font stack, a small neutral color set
+> explicitly labeled "Placeholder – …") so the theme foundation has correct structure to
+> build against. Those are **not** approved values and must not be read as this design
+> system — see [`docs/architecture.md`](architecture.md) §4.4. When real tokens are
+> approved, fill in the tables below first, then update `theme.json` to match.
+
 ## 1. Purpose
 
 This document will hold the visual design system for `focused-schools`: colors,
