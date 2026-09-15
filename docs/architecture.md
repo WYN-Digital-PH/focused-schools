@@ -91,11 +91,49 @@ Admin-only content type (no public URLs) for the services list, implemented in
 - **Admin columns:** Tagline, Accent Role, Order, Modified Date.
 - No demo content is created on plugin activation.
 
-### 3.4 Other Content Types
+### 3.4 Impact Stories
+
+Public content type, implemented in
+`wp-content/plugins/focused-schools-core/modules/impact-stories/`. Unlike Team Members
+and Services, this one has real frontend URLs.
+
+- **Post type:** `fs_impact_story`
+- **Visibility:** `public => true`, `publicly_queryable => true`, `show_in_rest => true`
+- **URLs:** `has_archive => false` — the existing `/impact-stories/` **Page** remains the
+  main landing page. Individual stories use `rewrite => [ 'slug' => 'impact-stories' ]`,
+  giving URLs of the form `/impact-stories/{story-slug}/`, which coexist with the Page at
+  the bare `/impact-stories/` path since there is no competing archive rule.
+- **Admin location:** nested under Focused Schools → Impact Stories (same shared
+  top-level menu as Site Settings, Team Members, and Services).
+- **Supports:** `title`, `editor`, `excerpt`, `thumbnail`
+- **Meta fields** (schema source of truth:
+  `FocusedSchoolsCore\Modules\Impact_Stories\Meta::all()`, keys prefixed
+  `_fs_impact_story_`):
+
+  | Field | Type | Sanitizer | Notes |
+  | ----- | ---- | --------- | ----- |
+  | District or School | text | `sanitize_text_field` | — |
+  | State | text | `sanitize_text_field` | — |
+  | Year | text | `sanitize_text_field` | — |
+  | Featured | boolean | `rest_sanitize_boolean` | Rendered as a checkbox; an unchecked box is explicitly saved as `0`, not skipped. Defaults to `false`. |
+
+#### Legacy Page Bridge (migration utility)
+
+A WP-CLI command tags approved, pre-existing legacy Pages as impact stories without
+migrating them into the new post type. See
+[`docs/migration-qa-rules.md`](migration-qa-rules.md) §9 for full usage, guardrails, and
+the dry-run/`--write` workflow.
+
+- **Meta key:** `_fs_legacy_impact_story` (set to `1` on tagged Pages)
+- **Class:** `FocusedSchoolsCore\Modules\Impact_Stories\Legacy_Bridge` — the only write
+  it can ever perform is `update_post_meta()` for this one key; it has no code path that
+  touches `post_type`, `post_name`, content, or any other meta (Yoast included).
+
+### 3.5 Other Content Types
 
 _To be defined._ This section will describe, as they are built:
 
-- Custom post types (e.g. Impact Stories, Podcast)
+- Custom post types (e.g. Podcast)
 - Custom taxonomies
 - Custom fields / field groups
 - Relationships between content types
