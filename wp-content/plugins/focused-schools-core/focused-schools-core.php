@@ -34,6 +34,8 @@ require_once FOCUSED_SCHOOLS_CORE_DIR . 'includes/class-autoloader.php';
 
 FocusedSchoolsCore\Autoloader::register();
 
+require_once FOCUSED_SCHOOLS_CORE_DIR . 'includes/functions.php';
+
 register_activation_hook( __FILE__, array( 'FocusedSchoolsCore\\Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'FocusedSchoolsCore\\Deactivator', 'deactivate' ) );
 

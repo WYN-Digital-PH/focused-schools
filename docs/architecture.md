@@ -17,9 +17,35 @@ content-model decisions are made.
 
 ## 3. Content Model
 
-_To be defined._ This section will describe:
+### 3.1 Site Settings
 
-- Custom post types
+Global, singleton business/site data — not a post type. Implemented via the native
+WordPress Settings API / Options API in
+`wp-content/plugins/focused-schools-core/modules/site-settings/`.
+
+- **Storage:** a single namespaced option, `focused_schools_site_settings`, holding one
+  associative array (no custom DB tables, no ACF).
+- **Settings group:** `focused_schools_site_settings_group`
+- **Admin location:** Focused Schools → Site Settings (`admin.php?page=focused-schools-site-settings`)
+- **Field schema source of truth:** `FocusedSchoolsCore\Modules\Site_Settings\Fields::all()`
+- **Fields:**
+
+  | Section | Fields |
+  | ------- | ------ |
+  | Business Information | Business Name, Phone, Email, Address |
+  | Primary Call To Action | Primary CTA Label, Primary CTA URL |
+  | Social Links | Facebook URL, LinkedIn URL, YouTube URL |
+  | Footer | Footer Short Text, Copyright Name |
+
+- **Theme retrieval:** `focused_schools_get_setting( $key, $default = '' )` (defined in
+  `includes/functions.php`). Returns the sanitized-at-save-time value; the caller must
+  still escape for output context (`esc_html()`, `esc_url()`, etc.).
+
+### 3.2 Other Content Types
+
+_To be defined._ This section will describe, as they are built:
+
+- Custom post types (e.g. Team, Services, Impact Stories, Podcast)
 - Custom taxonomies
 - Custom fields / field groups
 - Relationships between content types
