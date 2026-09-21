@@ -1,0 +1,10 @@
+/**
+ * Post Card — adds date styling on top of the shared .fs-card base
+ * (see card.css).
+ */
+
+.fs-post-card__date {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--small, 0.9rem );
+	color: var( --wp--preset--color--secondary, #6b7280 );
+}

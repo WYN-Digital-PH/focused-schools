@@ -133,10 +133,66 @@ the dry-run/`--write` workflow.
 
 _To be defined._ This section will describe, as they are built:
 
-- Custom post types (e.g. Podcast)
 - Custom taxonomies
 - Custom fields / field groups
 - Relationships between content types
+
+No `fs_podcast` post type exists — the Podcast page's episode list (Buzzsprout audio) is
+still the literal placeholder array documented in §4.11. §3.6 below is a separate,
+non-CPT data source (YouTube video metadata only) layered alongside it.
+
+### 3.6 Podcast — YouTube Playlist Integration
+
+Feature-flagged, non-visual data integration implemented in
+`wp-content/plugins/focused-schools-core/modules/podcast/`. Fetches and normalizes
+YouTube playlist video metadata; deliberately does **not** touch Buzzsprout audio
+handling, `podcast-card.php`, `podcast-video.js`, or any grid markup/CSS — those remain
+entirely the theme's responsibility. Not a custom post type — see §3.5.
+
+- **API key:** read directly from the `FS_YOUTUBE_API_KEY` constant, expected in
+  `wp-config.php`. Never stored in an option, never committed. `wp-config.php` is out of
+  this repo's editable scope (`AGENTS.md` §2) — the site owner must define this constant
+  themselves. Until it is, live fetches fail gracefully (see fail-safe behavior below);
+  nothing else breaks.
+- **Settings storage:** a single namespaced option, `focused_schools_podcast_settings`
+  (feature flag, playlist ID, max videos 1–50, cache duration in seconds — default 21600
+  = 6 hours). Field schema source of truth:
+  `FocusedSchoolsCore\Modules\Podcast\Fields::all()`.
+- **Admin location:** Focused Schools → Podcast (YouTube)
+  (`admin.php?page=focused-schools-podcast`), a submenu of the same shared top-level menu
+  as Site Settings/Team/Services/Impact Stories.
+- **Manual refresh:** a "Refresh Now" button on that page, posting to `admin-post.php`
+  with `current_user_can( 'manage_options' )` and an explicit `wp_verify_nonce()` check
+  (`FocusedSchoolsCore\Modules\Podcast::handle_manual_refresh()`). This is the **only**
+  code path that ever calls the YouTube API.
+- **Cache strategy — two tiers, both required by the fail-safe requirement:**
+  1. A transient (`focused_schools_podcast_videos_cache`) is the fast path, expiring
+     after the configured cache duration.
+  2. A persistent option (`focused_schools_podcast_videos_last_good`, `autoload = no`)
+     holds the last successful payload indefinitely. A failed live fetch (missing/invalid
+     key, quota, network error) leaves **both** caches untouched — stale-but-good data
+     keeps serving rather than being wiped by a bad fetch.
+- **Theme-facing helper:** `FocusedSchoolsCore\get_podcast_youtube_videos()`
+  (`includes/functions-podcast.php`), delegating to
+  `Modules\Podcast::get_cached_videos()`. **Never performs a live HTTP request** — it only
+  reads the fresh transient, or falls back to the last-known-good option, or returns
+  `array()` (feature disabled, or nothing ever fetched successfully). This is what
+  satisfies "zero frontend overhead on standard page loads."
+  Each video: `['video_id' => string, 'title' => string, 'thumbnail_url' => string,
+  'publish_date' => string (ISO 8601)]`.
+- **Not yet wired into `page-podcast.php`:** the task scoped this to the plugin only (no
+  visual grid markup/CSS in the plugin). The placeholder episode array in
+  `page-podcast.php` (§4.11) is unchanged; wiring the two together — deciding how YouTube
+  videos and Buzzsprout audio episodes are merged/ordered on the page — is a follow-up
+  theme-side decision, not made here.
+- **Verified locally** (no real playlist/API key available in this environment — see
+  `AGENTS.md` §2): isolated logic tests against the actual class files (not a mock
+  reimplementation) covering flag-off, empty-cache, fresh-transient,
+  expired-transient-falls-back-to-last-good, and — for `Youtube_Client` — every documented
+  failure branch (missing key, missing playlist ID, network error, non-2xx, malformed
+  body) plus successful normalization (title sanitized, correct thumbnail tier picked,
+  items missing a video ID skipped, `max_videos` clamped to 50). All pass. Live requests
+  against the real YouTube Data API were not exercised — no key is available here.
 
 ## 4. Theme Architecture
 
@@ -290,6 +346,150 @@ staging/production before deploying. A local-only test page (ID 18, slug
 `about-our-mission-vision`) was created directly in this environment's database purely to
 QA the template visually; it is not part of the theme/plugin code and has no bearing on
 the real site.
+
+### 4.8 Page Templates: Services (`page-services.php`)
+
+Spec: [`docs/page-specs/services.md`](page-specs/services.md), written from the task's
+own explicit requirements (no separate design spec existed). Implements Hero, a dynamic
+`fs_service` CPT grid (all published services, no teaser limit — every service an editor
+publishes renders automatically, nothing manually duplicated), and a closing CTA Banner.
+Same `page-{slug}.php` mechanism, Elementor-coexistence detection, and known
+local-environment limitation (Page 1187 does not exist here) as About.
+
+**Deep-link anchors:** `service-card.php` now always renders `id="{post_name}"` (the
+service's own slug), so `/services/#{slug}` lands on that card, with `scroll-margin-top`
+keeping it clear of the header — generic and slug-driven, correct for any current or
+future service without a fixed list. This is a small, additive, backward-compatible
+extension to the existing component (harmless everywhere else it's used, e.g. the Home
+page teaser).
+
+**`section-heading.php` gained an optional `heading_id` arg** (same kind of additive
+extension) so the Services grid's `<section>` can use a real `aria-labelledby` reference
+instead of a dangling one — worth reusing this pattern rather than hardcoding a heading
+`id` inline wherever a section needs one.
+
+**Empty state:** if the `fs_service` query returns zero posts, the grid section renders a
+friendly message rather than an empty gap — see `page-services.css`.
+
+### 4.9 Page Templates: Team (`page-team.php`)
+
+Spec: [`docs/page-specs/team.md`](page-specs/team.md), written the same way as Services'
+(no separate design spec existed). Implements Hero, a dynamic `fs_team_member` CPT grid
+(`post_status => 'publish'` — deliberately excludes the `auto-draft` rows WordPress
+creates automatically when someone starts and abandons a new post in wp-admin), and a
+closing CTA Banner. Same `page-{slug}.php` mechanism, Elementor-coexistence detection,
+and known local-environment limitation (Page 1198 does not exist here) as Services/About.
+
+**Taxonomy grouping (requirement in the task) was not implemented.** `fs_team_member`
+has no taxonomy registered at all (see §3.2) — there's no role/department data to group
+by. Registering one would be a plugin/content-model change, not a page-template change,
+and wasn't specified with enough detail to invent safely; documented as an open gap in
+`docs/page-specs/team.md` §4 rather than guessed at.
+
+**`team-card.php` gained an opt-in `show_bio` arg** (same additive-extension pattern as
+the Services anchor/heading_id work) rendering a bio excerpt from the member's `editor`
+content, enabled only from the Team page — the Home page teaser's existing look is
+unaffected. When a member has no bio content (confirmed locally with the one real test
+member, who has empty `post_content`), the block is correctly omitted rather than
+rendering empty.
+
+### 4.10 Impact Stories: Landing Page + CPT Single (`page-impact-stories.php`, `single-fs_impact_story.php`)
+
+Spec: [`docs/page-specs/impact-stories.md`](page-specs/impact-stories.md). Two templates:
+
+- **`page-impact-stories.php`** — the landing page (Page 3785, `page-{slug}.php`
+  mechanism, same Elementor-coexistence detection as the other page templates). Its grid
+  is a **unified query**: `fs_impact_story` CPT posts merged in PHP with legacy Pages
+  tagged `_fs_legacy_impact_story = 1` — the exact meta key the Legacy Page Bridge
+  WP-CLI command (`docs/migration-qa-rules.md` §9) was built to set. A single `WP_Query`
+  can't apply a `meta_query` to only one post type within a multi-post-type query, so
+  this is two separate queries merged and sorted (featured CPT stories first, then
+  everything by `post_date` DESC) rather than one. Verified locally end-to-end by tagging
+  the default "Sample Page" as a test legacy story — confirmed both post types render
+  correctly in one grid via the same `impact-story-card.php` component, with the legacy
+  Page correctly showing no Featured badge/meta line (it has none of that CPT-specific
+  meta) rather than anything broken.
+- **`single-fs_impact_story.php`** — WordPress's native `single-{post_type}.php`
+  hierarchy for individual story URLs (`/impact-stories/{slug}/`). Unlike the
+  page-{slug}.php templates, no Elementor-coexistence branch — this CPT is new,
+  Gutenberg-only content per the project plan, never Elementor-authored. Yoast
+  compatibility (unverifiable locally — Yoast isn't installed here) is structural: the
+  standard Loop plus `wp_head()`/`title-tag` support, nothing custom that would fight
+  Yoast's own hooks.
+
+**`single-fs_impact_story.php`'s filename necessarily contains an underscore**
+(matching the registered post type `fs_impact_story` exactly, as WordPress's template
+hierarchy requires) despite WPCS's usual all-hyphens filename convention. An inline
+`phpcs:ignore` does not work for this sniff (it reports against the filename, not a
+line) — `phpcs.xml.dist` has a file-specific `<exclude-pattern>` for
+`WordPress.Files.FileName.NotHyphenatedLowercase` scoped to just this one file instead.
+
+### 4.11 Page Templates: Podcast (`page-podcast.php`)
+
+Spec: [`docs/page-specs/podcast.md`](page-specs/podcast.md). No numeric Page ID was
+provided for this task (unlike the other page templates) — not a blocker, since
+`page-{slug}.php` never references an ID anyway. Implements Hero, an episodes grid
+looped over a defined placeholder array (no `fs_podcast` post type or feed exists yet —
+§3.5), and a closing CTA Banner. Same Elementor-coexistence detection as the other page
+templates.
+
+**YouTube click-to-load, added to `podcast-card.php`:** a new `youtube_id` prop renders
+a lightweight facade (thumbnail `<img loading="lazy">` + a real `<button>`) instead of an
+iframe; `assets/js/components/podcast-video.js` creates the actual
+`youtube-nocookie.com` iframe only after a click. Verified live: zero YouTube network
+requests before the click, and — after initially seeing a `getBoundingClientRect().y`
+change post-click — confirmed via `document`-relative position (not viewport-relative)
+that this was Playwright's click-action auto-scroll, not a real layout shift; the video
+container's own width/height are provably identical before and after. See
+`docs/component-specs.md`'s Podcast Card entry and `docs/page-specs/podcast.md` §4 for
+the full design. `embed_html` (Buzzsprout) is unchanged and still renders immediately —
+it's a lightweight audio widget, not the "heavy" case this requirement targets.
+
+### 4.12 Page Templates: Contact & Thank You (`page-contact.php`, `page-thanks.php`)
+
+Spec: [`docs/page-specs/contact.md`](page-specs/contact.md). No numeric Page IDs were
+provided (like Podcast) — not a blocker.
+
+**The central constraint here is form preservation, not new presentation.**
+`page-contact.php` never generates, modifies, or replaces the real form: the Elementor
+branch (if the page is Elementor-built) renders only `the_content()`, untouched, same as
+every other page template. In the non-Elementor fallback path, `the_content()` — whatever
+shortcode/widget/block the page actually contains — is passed unmodified into
+`form-wrapper.php`'s `inner` prop. This makes **no assumption about which form plugin is
+in use**; verified locally with a Contact Form 7 shortcode (not installed here), which
+rendered as literal unprocessed text — proving the pass-through pipeline is correct
+regardless of what's actually active on the real site. The `/thanks/` redirect after
+submission is configured entirely within the form's own settings, external to any
+template file — `page-thanks.php` has no form/redirect logic at all, just presentation
+for the destination page.
+
+**New `contact-info.php` component** (Site Settings-driven, no args) fills the "contact
+information... from native settings, avoiding hardcoded global business values"
+requirement — verified live with real data already present in this environment's
+Site Settings (business name, address, phone, email all populated), including correct
+`tel:`/`mailto:` href generation and keyboard-reachable focus states.
+
+**No CTA Banner on the Contact page**, deliberately — the page's entire purpose already
+is the call to action.
+
+### 4.13 Blog / Elementor Coexistence (`home.php`, `archive.php`, `single.php`)
+
+Full coexistence rules, the template-hierarchy reasoning (why `/blog/` needs `home.php`
+rather than `page-{slug}.php`), the Elementor Pro Theme Builder caveat, the
+Elementor-excerpt limitation, and the verification matrix (tested with real local
+fixtures — recent/older Elementor posts, a standard native post, a new Gutenberg post,
+pagination across a real second page) all live in
+[`docs/blog-coexistence.md`](blog-coexistence.md) — that is the source of truth, not this
+entry. In brief: `home.php`/`single.php` each check `_elementor_edit_mode` on the one
+relevant post/page and defer entirely to `the_content()` when Elementor-built, same
+pattern as every page template; `archive.php` (category/tag/date/author) is always
+native, since there's no single post/page to key a check off of. New
+`template-parts/components/post-card.php` provides the native excerpt-card rendering
+used across all three. Fixed two real, previously-undiscovered bugs along the way: a
+`the_post_navigation()` label/title CSS stacking issue, and a sitewide missing
+`.screen-reader-text` utility class (now in `style.css`) that would have made
+`the_post_navigation()`'s auto-generated heading fully visible instead of
+screen-reader-only.
 
 ## 5. Plugin Architecture
 

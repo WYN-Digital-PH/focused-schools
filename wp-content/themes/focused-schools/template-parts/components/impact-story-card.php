@@ -10,6 +10,16 @@
  * FocusedSchoolsCore\Modules\Impact_Stories\Meta so this template degrades
  * gracefully if the plugin is deactivated.
  *
+ * Also renders legacy Impact Story Pages unchanged — used on the Impact
+ * Stories landing page (docs/page-specs/impact-stories.md §3) for a unified
+ * grid of fs_impact_story posts and approved legacy Pages together. Every
+ * function called below (get_the_title(), get_permalink(),
+ * has_post_thumbnail(), get_the_excerpt()) is post-type-agnostic; the
+ * _fs_impact_story_* meta lookups simply return empty for a Page, which
+ * correctly omits the district/state/year line and the Featured badge
+ * rather than rendering anything broken. No changes were needed here to
+ * support both post types.
+ *
  * @package FocusedSchools
  */
 

@@ -44,6 +44,12 @@ $fs_socials = array(
 		?>
 	</nav>
 
+	<?php if ( is_active_sidebar( 'footer-widgets' ) ) : ?>
+		<div class="fs-site-footer__widgets">
+			<?php dynamic_sidebar( 'footer-widgets' ); ?>
+		</div>
+	<?php endif; ?>
+
 	<?php if ( array_filter( wp_list_pluck( $fs_socials, 'url' ) ) ) : ?>
 		<ul class="fs-site-footer__social">
 			<?php

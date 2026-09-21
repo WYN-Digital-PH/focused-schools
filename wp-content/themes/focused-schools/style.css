@@ -116,6 +116,47 @@ object {
 }
 
 /* -----------------------------------------------------------------------
+ * Accessibility: screen-reader-only text
+ *
+ * Standard WordPress core utility class — visually hidden but available to
+ * assistive tech, and (if focusable) revealed on focus. The !important
+ * flags here match WP core's own convention for this exact class, since it
+ * needs to reliably override other CSS to guarantee content stays
+ * accessible; not a pattern used elsewhere in this theme.
+ * --------------------------------------------------------------------- */
+
+.screen-reader-text {
+	border: 0;
+	clip: rect( 1px, 1px, 1px, 1px );
+	clip-path: inset( 50% );
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute !important;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+	background-color: var( --wp--preset--color--base, #ffffff );
+	border: 2px solid var( --wp--preset--color--primary, #1e40af );
+	border-radius: 4px;
+	clip: auto !important;
+	clip-path: none;
+	color: var( --wp--preset--color--contrast, #111111 );
+	display: block;
+	height: auto;
+	left: 0.5rem;
+	line-height: normal;
+	padding: 0.75rem 1rem;
+	text-decoration: none;
+	top: 0.5rem;
+	width: auto;
+	z-index: 100000;
+}
+
+/* -----------------------------------------------------------------------
  * Accessibility: visible keyboard focus
  *
  * Enhances focus visibility for keyboard users without ever removing the

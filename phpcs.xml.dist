@@ -37,4 +37,14 @@
 
     <rule ref="PHPCompatibilityWP"/>
     <config name="testVersion" value="7.4-"/>
+
+    <!-- WordPress's single-{post_type}.php template hierarchy requires this
+         exact filename, underscore included, to match the registered post
+         type "fs_impact_story" — renaming it to hyphens would break the
+         template entirely. An inline phpcs:ignore comment does not work for
+         this sniff (it reports against the filename itself, not a line), so
+         this file-specific exclude-pattern is the correct mechanism. -->
+    <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+        <exclude-pattern>*/single-fs_impact_story\.php</exclude-pattern>
+    </rule>
 </ruleset>

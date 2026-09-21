@@ -1,0 +1,24 @@
+/**
+ * Impact Stories landing page-specific spacing only. Layout/visual work is
+ * done entirely by the reusable components in assets/css/components/ —
+ * this file just provides vertical rhythm and the empty-state message
+ * styling for page-impact-stories.php. Enqueued only on that page (see
+ * inc/enqueue.php). Mirrors assets/css/page-services.css / page-team.css.
+ */
+
+.fs-impact-stories__intro {
+	padding-block: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-impact-stories__section {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-impact-stories__empty {
+	margin: 0;
+	padding: var( --wp--preset--spacing--large, 2rem );
+	text-align: center;
+	color: var( --wp--preset--color--secondary, #6b7280 );
+	border: 1px dashed var( --wp--preset--color--secondary, #6b7280 );
+	border-radius: 4px;
+}

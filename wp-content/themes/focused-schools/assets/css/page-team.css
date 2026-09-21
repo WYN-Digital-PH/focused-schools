@@ -1,0 +1,24 @@
+/**
+ * Team page-specific spacing only. Layout/visual work is done entirely by
+ * the reusable components in assets/css/components/ — this file just
+ * provides vertical rhythm and the empty-state message styling for
+ * page-team.php. Enqueued only on that page (see inc/enqueue.php).
+ * Mirrors assets/css/page-home.css / page-about.css / page-services.css.
+ */
+
+.fs-team__intro {
+	padding-block: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-team__section {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-team__empty {
+	margin: 0;
+	padding: var( --wp--preset--spacing--large, 2rem );
+	text-align: center;
+	color: var( --wp--preset--color--secondary, #6b7280 );
+	border: 1px dashed var( --wp--preset--color--secondary, #6b7280 );
+	border-radius: 4px;
+}

@@ -1,6 +1,6 @@
 # Component Specifications
 
-Status: **13 components approved and implemented.** Components are
+Status: **16 components approved and implemented.** Components are
 invoked via `get_template_part( 'template-parts/components/{name}', null, $args )`, using
 WordPress's native `$args` support as the prop/contract mechanism — see each spec below
 for its `$args`.
@@ -28,13 +28,17 @@ partials, blocks, or UI patterns) used across `focused-schools`.
 | Partner Strip / Logo grid | `template-parts/components/partner-strip.php` | Generic/args-driven logo list | Implemented |
 | Form styling wrappers | `template-parts/components/form-wrapper.php` | CSS-only Elementor form coexistence wrapper | Implemented |
 | CTA Banner | `template-parts/components/cta-banner.php` | Highlighted-band closing call-to-action section | Implemented (added for the Home page task) |
+| Contact Info block | `template-parts/components/contact-info.php` | Site Settings-driven business contact details | Implemented (added for the Contact page task) |
+| Post Card | `template-parts/components/post-card.php` | Native `post` display (archive listings + related posts) | Implemented (added for the Blog coexistence task) |
 
 Shared CSS: `assets/css/components/card.css` provides the base `.fs-card` styling reused
-by Service/Team/Impact Story/Podcast cards. `assets/css/components/card-grid.css` is a
-shared responsive grid layout utility (not a template-part component) for arranging
-repeated cards — used by the Home page's Services/Team/Impact Stories sections. Component
-JS: `assets/js/components/site-header.js` (mobile nav toggle),
-`assets/js/components/statistics-counter.js` (count-up animation).
+by Service/Team/Impact Story/Podcast/Post cards. `assets/css/components/card-grid.css` is
+a shared responsive grid layout utility (not a template-part component) for arranging
+repeated cards — used by the Home page's Services/Team/Impact Stories sections and the
+blog archive/related-posts listings. Component JS:
+`assets/js/components/site-header.js` (mobile nav toggle),
+`assets/js/components/statistics-counter.js` (count-up animation),
+`assets/js/components/podcast-video.js` (YouTube click-to-load).
 
 ## 3. Component Specs
 
@@ -69,7 +73,7 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 
 - **Location:** `template-parts/components/section-heading.php` / `assets/css/components/section-heading.css`
 - **Purpose:** Consistent eyebrow/heading/description block above a section.
-- **Props / Fields:** `heading` (string, required), `eyebrow` (string), `description` (string), `heading_level` (int 2–4, default 2), `alignment` (`left`\|`center`, default `left`).
+- **Props / Fields:** `heading` (string, required), `eyebrow` (string), `description` (string), `heading_level` (int 2–4, default 2), `alignment` (`left`\|`center`, default `left`), `heading_id` (string, optional — added for the Services page so an ancestor `<section>` can use `aria-labelledby`).
 - **States:** left/center alignment; with/without eyebrow/description.
 - **Dependencies:** none.
 - **Related design tokens:** typography scale.
@@ -101,13 +105,14 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 - **States:** with/without featured image; 3 accent-role modifiers (`fs-card--accent-strategy|leadership|capacity`).
 - **Dependencies:** `focused-schools-core` plugin's `fs_service` post type + `_fs_service_*` meta (theme reads meta key literals directly so it degrades gracefully, not fatally, if the plugin is inactive).
 - **Related design tokens:** **TEMPORARY** accent-role → color mapping (strategy/leadership/capacity → primary/accent/secondary placeholder tokens); revisit once `docs/design-system.md` defines real semantic role colors.
+- **Anchor:** always renders with `id="{post_name}"` (the service's own slug), so `/services/#{slug}` deep-links land on the card; `scroll-margin-top` in `service-card.css` keeps it clear of the header on jump. Added for the Services page — see `docs/page-specs/services.md` §4.
 
 ### Team Card
 
 - **Location:** `template-parts/components/team-card.php` / `assets/css/components/team-card.css` (+ shared `card.css`)
 - **Purpose:** Display a single `fs_team_member` post.
-- **Props / Fields:** `post` (`WP_Post`\|int, required).
-- **States:** with/without headshot, quote, or LinkedIn URL (each section omitted if empty).
+- **Props / Fields:** `post` (`WP_Post`\|int, required), `show_bio` (bool, optional, default `false` — renders a bio excerpt from the member's `editor` content; opt-in so existing usages like the Home page teaser are unaffected. Added for the Team page.).
+- **States:** with/without headshot, bio, quote, or LinkedIn URL (each section omitted if empty).
 - **Dependencies:** `focused-schools-core` plugin's `fs_team_member` post type + `_fs_team_*` meta.
 - **Related design tokens:** typography, spacing, accent color (quote border).
 
@@ -119,15 +124,17 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 - **States:** featured (`fs-impact-story-card--featured`, with visible "Featured" badge, not color-only) vs. standard.
 - **Dependencies:** `focused-schools-core` plugin's `fs_impact_story` post type + `_fs_impact_story_*` meta.
 - **Related design tokens:** accent color (featured badge/border).
+- **Dual post-type support:** also renders legacy Impact Story Pages unchanged (used on the Impact Stories landing page for a unified grid) — every function it calls is post-type-agnostic, so this required no code changes, only a docblock update. See `docs/page-specs/impact-stories.md` §3.
 
 ### Podcast Card
 
 - **Location:** `template-parts/components/podcast-card.php` / `assets/css/components/podcast-card.css` (+ shared `card.css`)
 - **Purpose:** Display a podcast episode. **Generic/args-driven — no `fs_podcast` post type exists yet** (see `docs/architecture.md` §3.5); ready to wire to real data once that module is built.
-- **Props / Fields:** `title` (string, required), `description` (string), `embed_html` (string, e.g. a Buzzsprout `<iframe>` — sanitized via `wp_kses()` with an iframe-extended allowlist, not trusted verbatim), `episode_number` (string\|int), `duration` (string), `cta_label` (string), `cta_url` (string).
-- **States:** with/without embed, episode number, duration, CTA.
-- **Dependencies:** `template-parts/components/button.php`.
+- **Props / Fields:** `title` (string, required), `description` (string), `embed_html` (string, e.g. a Buzzsprout `<iframe>` — sanitized via `wp_kses()` with an iframe-extended allowlist, not trusted verbatim; lightweight, so renders immediately), `youtube_id` (string, bare 11-char YouTube video ID, validated by regex — renders a click-to-load facade instead of an iframe; see below), `episode_number` (string\|int), `duration` (string), `cta_label` (string), `cta_url` (string).
+- **States:** with/without embed, video, episode number, duration, CTA; video facade (unplayed) vs. loaded iframe (post-click).
+- **Dependencies:** `template-parts/components/button.php`; `assets/js/components/podcast-video.js` for the video facade's click-to-load behavior.
 - **Related design tokens:** typography, spacing.
+- **YouTube performance:** `youtube_id` never renders a `<iframe>` on initial load — only a lightweight `<img loading="lazy">` (YouTube's own thumbnail URL) plus a real `<button>` facade (native keyboard support, no custom role/keydown handling needed). The real iframe is created client-side only after a genuine click/Enter/Space. The facade and the eventual iframe both live inside one `aspect-ratio: 16/9` container (`.fs-podcast-card__video`) and fill it identically, so the swap causes zero layout shift — verified via document-relative position (not viewport-relative, which is affected by auto-scroll-into-view on click) before/after the swap. See `docs/page-specs/podcast.md` §4.
 
 ### Statistics counter block
 
@@ -155,6 +162,17 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 - **States:** default only.
 - **Dependencies:** none — CSS specifically targets `.elementor-form`, `.elementor-field-group`, `.elementor-button` in addition to generic form elements so it coexists with, rather than overrides, Elementor's own output.
 - **Related design tokens:** color palette, spacing scale, typography.
+- **Error/success messaging:** best-effort defensive styling for `.elementor-message`/`.elementor-message-danger`/`.elementor-message-success` — could not be verified against a live form since Elementor isn't installed in this local environment; verify against staging/production. First real consumer: the Contact page (`docs/page-specs/contact.md`).
+
+### Contact Info block
+
+- **Location:** `template-parts/components/contact-info.php` / `assets/css/components/contact-info.css`
+- **Purpose:** Structured business contact details — name, address, phone, email — inside a semantic `<address>` element.
+- **Props / Fields:** none — pulls directly from `focused_schools_get_setting()` (`business_name`, `phone`, `email`, `address`), same no-args pattern as `site-footer.php`.
+- **States:** omits itself entirely if the plugin is inactive or all four fields are empty; each of phone/email is independently optional.
+- **Dependencies:** `focused_schools_get_setting()` (plugin helper).
+- **Related design tokens:** typography, spacing, primary color (link color).
+- **Notes:** `tel:` href is built by stripping everything except digits and a leading `+` from the display phone number; address line breaks use `nl2br()` after `esc_html()` (escape first, then reintroduce only the one safe tag).
 
 ### CTA Banner
 
@@ -165,9 +183,19 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 - **Dependencies:** `template-parts/components/button.php` (rendered with the `secondary` style for contrast against the banner's primary-colored background).
 - **Related design tokens:** primary color background, base color text — same TEMPORARY placeholder tokens as everywhere else.
 
+### Post Card
+
+- **Location:** `template-parts/components/post-card.php` / `assets/css/components/post-card.css` (+ shared `card.css`)
+- **Purpose:** Display a single native `post` as an excerpt card — used in `home.php`/`archive.php`'s listing loops and `single.php`'s related-posts section.
+- **Props / Fields:** `post` (`WP_Post`\|int, required).
+- **States:** with/without featured image; with/without excerpt (omitted if empty, not shown blank).
+- **Dependencies:** none — no plugin dependency, since native posts need no custom meta.
+- **Related design tokens:** typography, spacing.
+- **Notes:** always renders an excerpt-style card regardless of whether the post's own content was authored with Elementor — see `docs/blog-coexistence.md` §5 for why that's correct, and its documented limitation (thin/empty excerpts possible on Elementor-authored posts with no manual excerpt set).
+
 ## 4. Notes
 
-All 14 components/utilities (13 template-part components + the shared `card.css` base;
+All 17 components/utilities (16 template-part components + the shared `card.css` base;
 `card-grid.css` is a layout utility, not a component) use only `theme.json` CSS custom
 properties (`var(--wp--preset--...)`) for color/spacing/typography — no hardcoded design
 values. Every interactive element inherits the base stylesheet's `:focus-visible`

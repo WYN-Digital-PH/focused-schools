@@ -14,6 +14,7 @@
 !/composer.lock
 !/phpcs.xml.dist
 !/.editorconfig
+!/docs/
 
 # Composer's own installed dependencies stay ignored (regenerated via
 # `composer install`), even though composer.json/composer.lock above are

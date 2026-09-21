@@ -14,6 +14,11 @@
 	color: var( --wp--preset--color--secondary, #6b7280 );
 }
 
+.fs-team-card__bio {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+}
+
 .fs-team-card__quote {
 	margin: 0;
 	padding-inline-start: var( --wp--preset--spacing--small, 0.5rem );

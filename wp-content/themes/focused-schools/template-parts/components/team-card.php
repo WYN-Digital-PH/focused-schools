@@ -3,7 +3,10 @@
  * Component: Team Card (fs_team_member display integration).
  *
  * Contract ($args):
- * - post (WP_Post|int, required)
+ * - post     (WP_Post|int, required)
+ * - show_bio (bool, optional, default false) — renders a bio excerpt from
+ *   the member's `editor` content. Opt-in so existing usages (e.g. the Home
+ *   page teaser) render exactly as before; enabled from page-team.php.
  *
  * Meta key literals mirror FocusedSchoolsCore\Modules\Team\Meta so this
  * template degrades gracefully (empty values) rather than fataling if the
@@ -25,6 +28,8 @@ $fs_name     = get_the_title( $fs_post_id );
 $fs_position = get_post_meta( $fs_post_id, '_fs_team_position', true );
 $fs_quote    = get_post_meta( $fs_post_id, '_fs_team_quote', true );
 $fs_linkedin = get_post_meta( $fs_post_id, '_fs_team_linkedin_url', true );
+$fs_show_bio = ! empty( $args['show_bio'] );
+$fs_bio      = $fs_show_bio ? get_the_excerpt( $fs_post_id ) : '';
 ?>
 <div class="fs-card fs-team-card">
 	<?php if ( has_post_thumbnail( $fs_post_id ) ) : ?>
@@ -45,6 +50,9 @@ $fs_linkedin = get_post_meta( $fs_post_id, '_fs_team_linkedin_url', true );
 		<h3 class="fs-card__heading"><?php echo esc_html( $fs_name ); ?></h3>
 		<?php if ( $fs_position ) : ?>
 			<p class="fs-team-card__position"><?php echo esc_html( $fs_position ); ?></p>
+		<?php endif; ?>
+		<?php if ( $fs_bio ) : ?>
+			<p class="fs-team-card__bio"><?php echo esc_html( $fs_bio ); ?></p>
 		<?php endif; ?>
 		<?php if ( $fs_quote ) : ?>
 			<blockquote class="fs-team-card__quote">
