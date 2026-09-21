@@ -1,0 +1,16 @@
+/**
+ * Contact page-specific spacing only. Layout/visual work is done entirely
+ * by the reusable components in assets/css/components/ — this file just
+ * provides vertical rhythm for page-contact.php. Enqueued only on that
+ * page (see inc/enqueue.php).
+ */
+
+.fs-contact-info {
+	padding-block: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-contact__empty {
+	padding-block: var( --wp--preset--spacing--large, 2rem );
+	text-align: center;
+	color: var( --wp--preset--color--secondary, #6b7280 );
+}

@@ -1,0 +1,29 @@
+/**
+ * Contact Info block.
+ */
+
+.fs-contact-info {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--small, 0.5rem );
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+}
+
+.fs-contact-info__address {
+	font-style: normal;
+	line-height: 1.6;
+}
+
+.fs-contact-info__name {
+	display: inline-block;
+	margin-bottom: var( --wp--preset--spacing--small, 0.5rem );
+}
+
+.fs-contact-info__line {
+	margin: 0;
+}
+
+.fs-contact-info__line a,
+.fs-contact-info__address a {
+	color: var( --wp--preset--color--primary, #1e40af );
+}

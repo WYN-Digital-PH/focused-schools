@@ -58,3 +58,31 @@
 	font-size: var( --wp--preset--font-size--medium, 1rem );
 	cursor: pointer;
 }
+
+/*
+ * Elementor Pro form validation/status messages. Best-effort: these class
+ * names are Elementor's documented convention, but could not be verified
+ * against a live form since Elementor is not installed in this local
+ * environment — confirm against staging/production. Error/success red/green
+ * are near-universal UX convention (not a brand design choice), used here
+ * as a sensible default distinct from the theme.json placeholder palette.
+ */
+.fs-form__content .elementor-message {
+	margin-bottom: var( --wp--preset--spacing--medium, 1rem );
+	padding: var( --wp--preset--spacing--small, 0.5rem ) var( --wp--preset--spacing--medium, 1rem );
+	border-radius: 4px;
+	font-size: var( --wp--preset--font-size--small, 0.9rem );
+}
+
+.fs-form__content .elementor-message-danger,
+.fs-form__content .elementor-field-group.elementor-error {
+	color: #7f1d1d;
+	background-color: #fef2f2;
+	border: 1px solid #dc2626;
+}
+
+.fs-form__content .elementor-message-success {
+	color: #14532d;
+	background-color: #f0fdf4;
+	border: 1px solid #16a34a;
+}

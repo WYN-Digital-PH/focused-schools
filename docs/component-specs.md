@@ -126,10 +126,11 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 
 - **Location:** `template-parts/components/podcast-card.php` / `assets/css/components/podcast-card.css` (+ shared `card.css`)
 - **Purpose:** Display a podcast episode. **Generic/args-driven — no `fs_podcast` post type exists yet** (see `docs/architecture.md` §3.5); ready to wire to real data once that module is built.
-- **Props / Fields:** `title` (string, required), `description` (string), `embed_html` (string, e.g. a Buzzsprout `<iframe>` — sanitized via `wp_kses()` with an iframe-extended allowlist, not trusted verbatim), `episode_number` (string\|int), `duration` (string), `cta_label` (string), `cta_url` (string).
-- **States:** with/without embed, episode number, duration, CTA.
-- **Dependencies:** `template-parts/components/button.php`.
+- **Props / Fields:** `title` (string, required), `description` (string), `embed_html` (string, e.g. a Buzzsprout `<iframe>` — sanitized via `wp_kses()` with an iframe-extended allowlist, not trusted verbatim; lightweight, so renders immediately), `youtube_id` (string, bare 11-char YouTube video ID, validated by regex — renders a click-to-load facade instead of an iframe; see below), `episode_number` (string\|int), `duration` (string), `cta_label` (string), `cta_url` (string).
+- **States:** with/without embed, video, episode number, duration, CTA; video facade (unplayed) vs. loaded iframe (post-click).
+- **Dependencies:** `template-parts/components/button.php`; `assets/js/components/podcast-video.js` for the video facade's click-to-load behavior.
 - **Related design tokens:** typography, spacing.
+- **YouTube performance:** `youtube_id` never renders a `<iframe>` on initial load — only a lightweight `<img loading="lazy">` (YouTube's own thumbnail URL) plus a real `<button>` facade (native keyboard support, no custom role/keydown handling needed). The real iframe is created client-side only after a genuine click/Enter/Space. The facade and the eventual iframe both live inside one `aspect-ratio: 16/9` container (`.fs-podcast-card__video`) and fill it identically, so the swap causes zero layout shift — verified via document-relative position (not viewport-relative, which is affected by auto-scroll-into-view on click) before/after the swap. See `docs/page-specs/podcast.md` §4.
 
 ### Statistics counter block
 
@@ -157,6 +158,17 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 - **States:** default only.
 - **Dependencies:** none — CSS specifically targets `.elementor-form`, `.elementor-field-group`, `.elementor-button` in addition to generic form elements so it coexists with, rather than overrides, Elementor's own output.
 - **Related design tokens:** color palette, spacing scale, typography.
+- **Error/success messaging:** best-effort defensive styling for `.elementor-message`/`.elementor-message-danger`/`.elementor-message-success` — could not be verified against a live form since Elementor isn't installed in this local environment; verify against staging/production. First real consumer: the Contact page (`docs/page-specs/contact.md`).
+
+### Contact Info block
+
+- **Location:** `template-parts/components/contact-info.php` / `assets/css/components/contact-info.css`
+- **Purpose:** Structured business contact details — name, address, phone, email — inside a semantic `<address>` element.
+- **Props / Fields:** none — pulls directly from `focused_schools_get_setting()` (`business_name`, `phone`, `email`, `address`), same no-args pattern as `site-footer.php`.
+- **States:** omits itself entirely if the plugin is inactive or all four fields are empty; each of phone/email is independently optional.
+- **Dependencies:** `focused_schools_get_setting()` (plugin helper).
+- **Related design tokens:** typography, spacing, primary color (link color).
+- **Notes:** `tel:` href is built by stripping everything except digits and a leading `+` from the display phone number; address line breaks use `nl2br()` after `esc_html()` (escape first, then reintroduce only the one safe tag).
 
 ### CTA Banner
 

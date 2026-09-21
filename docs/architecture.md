@@ -368,6 +368,54 @@ hierarchy requires) despite WPCS's usual all-hyphens filename convention. An inl
 line) — `phpcs.xml.dist` has a file-specific `<exclude-pattern>` for
 `WordPress.Files.FileName.NotHyphenatedLowercase` scoped to just this one file instead.
 
+### 4.11 Page Templates: Podcast (`page-podcast.php`)
+
+Spec: [`docs/page-specs/podcast.md`](page-specs/podcast.md). No numeric Page ID was
+provided for this task (unlike the other page templates) — not a blocker, since
+`page-{slug}.php` never references an ID anyway. Implements Hero, an episodes grid
+looped over a defined placeholder array (no `fs_podcast` post type or feed exists yet —
+§3.5), and a closing CTA Banner. Same Elementor-coexistence detection as the other page
+templates.
+
+**YouTube click-to-load, added to `podcast-card.php`:** a new `youtube_id` prop renders
+a lightweight facade (thumbnail `<img loading="lazy">` + a real `<button>`) instead of an
+iframe; `assets/js/components/podcast-video.js` creates the actual
+`youtube-nocookie.com` iframe only after a click. Verified live: zero YouTube network
+requests before the click, and — after initially seeing a `getBoundingClientRect().y`
+change post-click — confirmed via `document`-relative position (not viewport-relative)
+that this was Playwright's click-action auto-scroll, not a real layout shift; the video
+container's own width/height are provably identical before and after. See
+`docs/component-specs.md`'s Podcast Card entry and `docs/page-specs/podcast.md` §4 for
+the full design. `embed_html` (Buzzsprout) is unchanged and still renders immediately —
+it's a lightweight audio widget, not the "heavy" case this requirement targets.
+
+### 4.12 Page Templates: Contact & Thank You (`page-contact.php`, `page-thanks.php`)
+
+Spec: [`docs/page-specs/contact.md`](page-specs/contact.md). No numeric Page IDs were
+provided (like Podcast) — not a blocker.
+
+**The central constraint here is form preservation, not new presentation.**
+`page-contact.php` never generates, modifies, or replaces the real form: the Elementor
+branch (if the page is Elementor-built) renders only `the_content()`, untouched, same as
+every other page template. In the non-Elementor fallback path, `the_content()` — whatever
+shortcode/widget/block the page actually contains — is passed unmodified into
+`form-wrapper.php`'s `inner` prop. This makes **no assumption about which form plugin is
+in use**; verified locally with a Contact Form 7 shortcode (not installed here), which
+rendered as literal unprocessed text — proving the pass-through pipeline is correct
+regardless of what's actually active on the real site. The `/thanks/` redirect after
+submission is configured entirely within the form's own settings, external to any
+template file — `page-thanks.php` has no form/redirect logic at all, just presentation
+for the destination page.
+
+**New `contact-info.php` component** (Site Settings-driven, no args) fills the "contact
+information... from native settings, avoiding hardcoded global business values"
+requirement — verified live with real data already present in this environment's
+Site Settings (business name, address, phone, email all populated), including correct
+`tel:`/`mailto:` href generation and keyboard-reachable focus states.
+
+**No CTA Banner on the Contact page**, deliberately — the page's entire purpose already
+is the call to action.
+
 ## 5. Plugin Architecture
 
 _To be defined._ This section will describe:

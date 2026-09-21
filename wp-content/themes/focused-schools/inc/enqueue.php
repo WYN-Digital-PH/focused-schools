@@ -32,6 +32,7 @@ function focused_schools_component_styles() {
 		'site-footer',
 		'cta-banner',
 		'card-grid',
+		'contact-info',
 	);
 }
 
@@ -75,6 +76,17 @@ function focused_schools_enqueue_assets() {
 	wp_enqueue_script(
 		'focused-schools-statistics-counter',
 		FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/statistics-counter.js',
+		array(),
+		FOCUSED_SCHOOLS_THEME_VERSION,
+		array(
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		)
+	);
+
+	wp_enqueue_script(
+		'focused-schools-podcast-video',
+		FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/podcast-video.js',
 		array(),
 		FOCUSED_SCHOOLS_THEME_VERSION,
 		array(
@@ -133,6 +145,33 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-single-impact-story',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/single-impact-story.css',
 			array( 'focused-schools-style', 'focused-schools-component-card' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
+
+	if ( is_page( 'podcast' ) ) {
+		wp_enqueue_style(
+			'focused-schools-page-podcast',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-podcast.css',
+			array( 'focused-schools-style' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
+
+	if ( is_page( 'contact' ) ) {
+		wp_enqueue_style(
+			'focused-schools-page-contact',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-contact.css',
+			array( 'focused-schools-style', 'focused-schools-component-contact-info' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
+
+	if ( is_page( 'thanks' ) ) {
+		wp_enqueue_style(
+			'focused-schools-page-thanks',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-thanks.css',
+			array( 'focused-schools-style' ),
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
 	}
