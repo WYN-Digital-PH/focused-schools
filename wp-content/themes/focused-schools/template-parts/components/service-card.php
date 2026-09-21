@@ -10,6 +10,11 @@
  * the plugin is deactivated — get_post_meta() simply returns '' instead.
  * Keep these in sync with that class's PREFIX/field keys.
  *
+ * Always renders with id="{post_name}" (the service's own slug) so
+ * /services/#{slug}-style deep links land on this card — see
+ * docs/page-specs/services.md §4. scroll-margin-top in service-card.css
+ * keeps the anchored card clear of the header on jump.
+ *
  * @package FocusedSchools
  */
 
@@ -26,7 +31,7 @@ $fs_tagline = get_post_meta( $fs_post_id, '_fs_service_tagline', true );
 $fs_accent  = get_post_meta( $fs_post_id, '_fs_service_accent_role', true );
 $fs_accent  = in_array( $fs_accent, array( 'strategy', 'leadership', 'capacity' ), true ) ? $fs_accent : 'strategy';
 ?>
-<div class="fs-card fs-service-card fs-card--accent-<?php echo esc_attr( $fs_accent ); ?>">
+<div class="fs-card fs-service-card fs-card--accent-<?php echo esc_attr( $fs_accent ); ?>" id="<?php echo esc_attr( $fs_post->post_name ); ?>">
 	<?php if ( has_post_thumbnail( $fs_post_id ) ) : ?>
 		<div class="fs-card__media">
 			<?php echo get_the_post_thumbnail( $fs_post_id, 'medium', array( 'class' => 'fs-card__image' ) ); ?>

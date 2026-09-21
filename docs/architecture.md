@@ -291,6 +291,52 @@ staging/production before deploying. A local-only test page (ID 18, slug
 QA the template visually; it is not part of the theme/plugin code and has no bearing on
 the real site.
 
+### 4.8 Page Templates: Services (`page-services.php`)
+
+Spec: [`docs/page-specs/services.md`](page-specs/services.md), written from the task's
+own explicit requirements (no separate design spec existed). Implements Hero, a dynamic
+`fs_service` CPT grid (all published services, no teaser limit — every service an editor
+publishes renders automatically, nothing manually duplicated), and a closing CTA Banner.
+Same `page-{slug}.php` mechanism, Elementor-coexistence detection, and known
+local-environment limitation (Page 1187 does not exist here) as About.
+
+**Deep-link anchors:** `service-card.php` now always renders `id="{post_name}"` (the
+service's own slug), so `/services/#{slug}` lands on that card, with `scroll-margin-top`
+keeping it clear of the header — generic and slug-driven, correct for any current or
+future service without a fixed list. This is a small, additive, backward-compatible
+extension to the existing component (harmless everywhere else it's used, e.g. the Home
+page teaser).
+
+**`section-heading.php` gained an optional `heading_id` arg** (same kind of additive
+extension) so the Services grid's `<section>` can use a real `aria-labelledby` reference
+instead of a dangling one — worth reusing this pattern rather than hardcoding a heading
+`id` inline wherever a section needs one.
+
+**Empty state:** if the `fs_service` query returns zero posts, the grid section renders a
+friendly message rather than an empty gap — see `page-services.css`.
+
+### 4.9 Page Templates: Team (`page-team.php`)
+
+Spec: [`docs/page-specs/team.md`](page-specs/team.md), written the same way as Services'
+(no separate design spec existed). Implements Hero, a dynamic `fs_team_member` CPT grid
+(`post_status => 'publish'` — deliberately excludes the `auto-draft` rows WordPress
+creates automatically when someone starts and abandons a new post in wp-admin), and a
+closing CTA Banner. Same `page-{slug}.php` mechanism, Elementor-coexistence detection,
+and known local-environment limitation (Page 1198 does not exist here) as Services/About.
+
+**Taxonomy grouping (requirement in the task) was not implemented.** `fs_team_member`
+has no taxonomy registered at all (see §3.2) — there's no role/department data to group
+by. Registering one would be a plugin/content-model change, not a page-template change,
+and wasn't specified with enough detail to invent safely; documented as an open gap in
+`docs/page-specs/team.md` §4 rather than guessed at.
+
+**`team-card.php` gained an opt-in `show_bio` arg** (same additive-extension pattern as
+the Services anchor/heading_id work) rendering a bio excerpt from the member's `editor`
+content, enabled only from the Team page — the Home page teaser's existing look is
+unaffected. When a member has no bio content (confirmed locally with the one real test
+member, who has empty `post_content`), the block is correctly omitted rather than
+rendering empty.
+
 ## 5. Plugin Architecture
 
 _To be defined._ This section will describe:

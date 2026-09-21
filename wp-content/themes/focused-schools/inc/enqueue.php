@@ -100,5 +100,23 @@ function focused_schools_enqueue_assets() {
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
 	}
+
+	if ( is_page( 'services' ) ) {
+		wp_enqueue_style(
+			'focused-schools-page-services',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-services.css',
+			array( 'focused-schools-style' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
+
+	if ( is_page( 'team' ) ) {
+		wp_enqueue_style(
+			'focused-schools-page-team',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-team.css',
+			array( 'focused-schools-style' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'focused_schools_enqueue_assets' );

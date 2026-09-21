@@ -69,7 +69,7 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 
 - **Location:** `template-parts/components/section-heading.php` / `assets/css/components/section-heading.css`
 - **Purpose:** Consistent eyebrow/heading/description block above a section.
-- **Props / Fields:** `heading` (string, required), `eyebrow` (string), `description` (string), `heading_level` (int 2–4, default 2), `alignment` (`left`\|`center`, default `left`).
+- **Props / Fields:** `heading` (string, required), `eyebrow` (string), `description` (string), `heading_level` (int 2–4, default 2), `alignment` (`left`\|`center`, default `left`), `heading_id` (string, optional — added for the Services page so an ancestor `<section>` can use `aria-labelledby`).
 - **States:** left/center alignment; with/without eyebrow/description.
 - **Dependencies:** none.
 - **Related design tokens:** typography scale.
@@ -101,13 +101,14 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 - **States:** with/without featured image; 3 accent-role modifiers (`fs-card--accent-strategy|leadership|capacity`).
 - **Dependencies:** `focused-schools-core` plugin's `fs_service` post type + `_fs_service_*` meta (theme reads meta key literals directly so it degrades gracefully, not fatally, if the plugin is inactive).
 - **Related design tokens:** **TEMPORARY** accent-role → color mapping (strategy/leadership/capacity → primary/accent/secondary placeholder tokens); revisit once `docs/design-system.md` defines real semantic role colors.
+- **Anchor:** always renders with `id="{post_name}"` (the service's own slug), so `/services/#{slug}` deep-links land on the card; `scroll-margin-top` in `service-card.css` keeps it clear of the header on jump. Added for the Services page — see `docs/page-specs/services.md` §4.
 
 ### Team Card
 
 - **Location:** `template-parts/components/team-card.php` / `assets/css/components/team-card.css` (+ shared `card.css`)
 - **Purpose:** Display a single `fs_team_member` post.
-- **Props / Fields:** `post` (`WP_Post`\|int, required).
-- **States:** with/without headshot, quote, or LinkedIn URL (each section omitted if empty).
+- **Props / Fields:** `post` (`WP_Post`\|int, required), `show_bio` (bool, optional, default `false` — renders a bio excerpt from the member's `editor` content; opt-in so existing usages like the Home page teaser are unaffected. Added for the Team page.).
+- **States:** with/without headshot, bio, quote, or LinkedIn URL (each section omitted if empty).
 - **Dependencies:** `focused-schools-core` plugin's `fs_team_member` post type + `_fs_team_*` meta.
 - **Related design tokens:** typography, spacing, accent color (quote border).
 
