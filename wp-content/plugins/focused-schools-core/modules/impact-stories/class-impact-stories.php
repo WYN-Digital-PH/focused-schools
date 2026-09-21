@@ -212,7 +212,7 @@ class Impact_Stories implements Module_Interface {
 				continue;
 			}
 
-			$raw       = wp_unslash( $_POST[ $meta_key ] );
+			$raw       = wp_unslash( $_POST[ $meta_key ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized on the next line via Meta::sanitizer_for().
 			$sanitized = call_user_func( Meta::sanitizer_for( $field['type'] ), $raw );
 
 			update_post_meta( $post_id, $meta_key, $sanitized );

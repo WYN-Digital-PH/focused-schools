@@ -145,6 +145,8 @@ class Site_Settings implements Module_Interface {
 	 * Render a single settings field.
 	 *
 	 * @param array $args {
+	 *     Field arguments passed by add_settings_field().
+	 *
 	 *     @type string $field_key Field key within the option array.
 	 *     @type array  $field     Field definition from Fields::all().
 	 * }

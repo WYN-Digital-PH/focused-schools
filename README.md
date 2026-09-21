@@ -1,23 +1,44 @@
 # Focused Schools
 
 Custom WordPress theme and site plugin for the Focused Schools website refresh.
-See [Focused-Schools-Project-Plan.md](Focused-Schools-Project-Plan.md) for architecture and rules.
+See [Focused-Schools-Project-Plan.md](Focused-Schools-Project-Plan.md) for the plan and [AGENTS.md](AGENTS.md) for development rules.
 
-## What is tracked
+## Repository layout
 
-The local checkout is a full WordPress install (Local by Flywheel), but Git only tracks project-owned code:
+The local checkout is a full WordPress install (Local by Flywheel), but Git only tracks project-owned files:
 
-- `wp-content/themes/focused-schools/`
-- `wp-content/plugins/focused-schools-core/`
-- `.github/workflows/` and project docs
+| Path | Purpose |
+| --- | --- |
+| `wp-content/themes/focused-schools/` | Custom hybrid theme (presentation) |
+| `wp-content/plugins/focused-schools-core/` | Site plugin (content models, settings, migration helpers) |
+| `docs/` | Audits, architecture, and migration docs |
+| `docs/page-specs/` | One spec per page; see the template in its README |
+| `composer.json`, `phpcs.xml.dist` | Dev tooling (WordPress Coding Standards) |
+| `.editorconfig` | Editor formatting rules |
+| `.github/workflows/` | Staging deployment |
 
-WordPress core, uploads, third-party plugins/themes, `wp-config.php`, `.wpress`/SQL files, and secrets are ignored.
+**Never committed:** WordPress core, `wp-config.php`, uploads, cache, backups, `.wpress`/SQL files, secrets,
+third-party plugins/themes (including Elementor), `vendor/`, and `node_modules/`. The `.gitignore` is a whitelist,
+so anything not listed above stays out of Git by default.
+
+## Coding standards
+
+```sh
+composer install
+composer lint       # phpcs
+composer lint:fix   # phpcbf
+```
 
 ## Staging deployment
 
-Every push to `main` (including merged pull requests) runs `.github/workflows/deploy-staging.yml`, which rsyncs the tracked theme and plugin to
-https://grey-lemur-550879.hostingersite.com/ over SSH. Only those two directories are touched on the server; `--delete` is scoped to them.
-It can also be run manually from the Actions tab.
+Every push to `main` (including merged pull requests) runs `.github/workflows/deploy-staging.yml`, which rsyncs
+**only** these two directories to https://grey-lemur-550879.hostingersite.com/ over SSH:
+
+- `wp-content/themes/focused-schools/`
+- `wp-content/plugins/focused-schools-core/`
+
+Nothing else on the server is touched, and `--delete` is scoped to those two directories. Docs and dev tooling are not deployed.
+Deploying does not activate the theme or plugin. The workflow can also be run manually from the Actions tab.
 
 Required repository secrets (Settings → Secrets and variables → Actions):
 
