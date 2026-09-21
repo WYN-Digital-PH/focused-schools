@@ -33,6 +33,7 @@ function focused_schools_component_styles() {
 		'cta-banner',
 		'card-grid',
 		'contact-info',
+		'post-card',
 	);
 }
 
@@ -172,6 +173,28 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-page-thanks',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-thanks.css',
 			array( 'focused-schools-style' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
+
+	if ( is_home() || is_archive() ) {
+		wp_enqueue_style(
+			'focused-schools-blog-archive',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/blog-archive.css',
+			array( 'focused-schools-style', 'focused-schools-component-post-card' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
+
+	// is_single() alone also matches other public post types (e.g.
+	// fs_impact_story) — scope explicitly to native `post` singles, since
+	// fs_impact_story already has its own single-fs_impact_story.php +
+	// single-impact-story.css.
+	if ( is_single() && 'post' === get_post_type() ) {
+		wp_enqueue_style(
+			'focused-schools-blog-single',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/blog-single.css',
+			array( 'focused-schools-style', 'focused-schools-component-post-card' ),
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
 	}

@@ -416,6 +416,25 @@ Site Settings (business name, address, phone, email all populated), including co
 **No CTA Banner on the Contact page**, deliberately — the page's entire purpose already
 is the call to action.
 
+### 4.13 Blog / Elementor Coexistence (`home.php`, `archive.php`, `single.php`)
+
+Full coexistence rules, the template-hierarchy reasoning (why `/blog/` needs `home.php`
+rather than `page-{slug}.php`), the Elementor Pro Theme Builder caveat, the
+Elementor-excerpt limitation, and the verification matrix (tested with real local
+fixtures — recent/older Elementor posts, a standard native post, a new Gutenberg post,
+pagination across a real second page) all live in
+[`docs/blog-coexistence.md`](blog-coexistence.md) — that is the source of truth, not this
+entry. In brief: `home.php`/`single.php` each check `_elementor_edit_mode` on the one
+relevant post/page and defer entirely to `the_content()` when Elementor-built, same
+pattern as every page template; `archive.php` (category/tag/date/author) is always
+native, since there's no single post/page to key a check off of. New
+`template-parts/components/post-card.php` provides the native excerpt-card rendering
+used across all three. Fixed two real, previously-undiscovered bugs along the way: a
+`the_post_navigation()` label/title CSS stacking issue, and a sitewide missing
+`.screen-reader-text` utility class (now in `style.css`) that would have made
+`the_post_navigation()`'s auto-generated heading fully visible instead of
+screen-reader-only.
+
 ## 5. Plugin Architecture
 
 _To be defined._ This section will describe:
