@@ -18,18 +18,18 @@ if ( ! function_exists( 'focused_schools_get_setting' ) ) {
 	 * No capability check: this is a public read used by front-end
 	 * templates, not an admin-only operation.
 	 *
-	 * @param string $key     Field key, e.g. 'business_name', 'phone', 'cta_url'.
-	 * @param string $default Value to return if the key is unknown or unset.
+	 * @param string $key      Field key, e.g. 'business_name', 'phone', 'cta_url'.
+	 * @param string $fallback Value to return if the key is unknown or unset.
 	 * @return string
 	 */
-	function focused_schools_get_setting( $key, $default = '' ) {
+	function focused_schools_get_setting( $key, $fallback = '' ) {
 		$settings = wp_parse_args(
 			get_option( \FocusedSchoolsCore\Modules\Site_Settings::OPTION_NAME, array() ),
 			\FocusedSchoolsCore\Modules\Site_Settings\Fields::defaults()
 		);
 
 		if ( ! array_key_exists( $key, $settings ) ) {
-			return $default;
+			return $fallback;
 		}
 
 		return $settings[ $key ];

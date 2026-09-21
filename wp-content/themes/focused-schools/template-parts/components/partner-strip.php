@@ -40,17 +40,17 @@ if ( empty( $fs_logos ) ) {
 					false,
 					array(
 						'class' => 'fs-partner-strip__logo',
-						'alt'   => esc_attr( $fs_name ),
+						'alt'   => $fs_name,
 					)
 				);
 				?>
 				<li class="fs-partner-strip__item">
 					<?php if ( $fs_url ) : ?>
 						<a href="<?php echo esc_url( $fs_url ); ?>" <?php echo $fs_name ? 'aria-label="' . esc_attr( $fs_name ) . '"' : ''; ?>>
-							<?php echo $fs_image; ?>
+							<?php echo $fs_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() returns escaped markup. ?>
 						</a>
 					<?php else : ?>
-						<?php echo $fs_image; ?>
+						<?php echo $fs_image; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() returns escaped markup. ?>
 					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>

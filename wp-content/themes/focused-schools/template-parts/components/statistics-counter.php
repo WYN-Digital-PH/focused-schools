@@ -31,7 +31,11 @@ if ( empty( $fs_stats ) ) {
 		?>
 		<div class="fs-stats__item" role="group" <?php echo $fs_label ? 'aria-label="' . esc_attr( $fs_label ) . '"' : ''; ?>>
 			<p class="fs-stats__value" data-fs-count-to="<?php echo esc_attr( $fs_value ); ?>">
-				<span class="fs-stats__number"><?php echo esc_html( $fs_value ); ?></span><?php if ( $fs_suffix ) : ?><span class="fs-stats__suffix"><?php echo esc_html( $fs_suffix ); ?></span><?php endif; ?>
+				<span class="fs-stats__number"><?php echo esc_html( $fs_value ); ?></span>
+				<?php
+				if ( $fs_suffix ) :
+					?>
+					<span class="fs-stats__suffix"><?php echo esc_html( $fs_suffix ); ?></span><?php endif; ?>
 			</p>
 			<?php if ( $fs_label ) : ?>
 				<p class="fs-stats__label"><?php echo esc_html( $fs_label ); ?></p>

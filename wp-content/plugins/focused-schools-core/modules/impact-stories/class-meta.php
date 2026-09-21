@@ -47,15 +47,15 @@ class Meta {
 				'label' => __( 'District or School', 'focused-schools-core' ),
 				'type'  => 'text',
 			),
-			'state'               => array(
+			'state'              => array(
 				'label' => __( 'State', 'focused-schools-core' ),
 				'type'  => 'text',
 			),
-			'year'                => array(
+			'year'               => array(
 				'label' => __( 'Year', 'focused-schools-core' ),
 				'type'  => 'text',
 			),
-			'featured'            => array(
+			'featured'           => array(
 				'label' => __( 'Featured', 'focused-schools-core' ),
 				'type'  => 'boolean',
 			),

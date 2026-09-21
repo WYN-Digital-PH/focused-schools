@@ -21,11 +21,11 @@ if ( ! $fs_post instanceof WP_Post ) {
 	return;
 }
 
-$fs_post_id  = $fs_post->ID;
-$fs_district = get_post_meta( $fs_post_id, '_fs_impact_story_district_or_school', true );
-$fs_state    = get_post_meta( $fs_post_id, '_fs_impact_story_state', true );
-$fs_year     = get_post_meta( $fs_post_id, '_fs_impact_story_year', true );
-$fs_featured = get_post_meta( $fs_post_id, '_fs_impact_story_featured', true );
+$fs_post_id   = $fs_post->ID;
+$fs_district  = get_post_meta( $fs_post_id, '_fs_impact_story_district_or_school', true );
+$fs_state     = get_post_meta( $fs_post_id, '_fs_impact_story_state', true );
+$fs_year      = get_post_meta( $fs_post_id, '_fs_impact_story_year', true );
+$fs_featured  = get_post_meta( $fs_post_id, '_fs_impact_story_featured', true );
 $fs_permalink = get_permalink( $fs_post_id );
 ?>
 <article class="fs-card fs-impact-story-card<?php echo $fs_featured ? ' fs-impact-story-card--featured' : ''; ?>">
