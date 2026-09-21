@@ -1,0 +1,49 @@
+/**
+ * Content/Image Split. Mobile-first: stacked by default, side-by-side from
+ * 1024px, with the image ordered per image_position on larger screens.
+ */
+
+.fs-content-split {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-content-split__inner {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-content-split__heading {
+	margin-top: 0;
+	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+}
+
+.fs-content-split__body {
+	font-size: var( --wp--preset--font-size--medium, 1rem );
+}
+
+.fs-content-split__body > :first-child {
+	margin-top: 0;
+}
+
+.fs-content-split__image {
+	width: 100%;
+	height: auto;
+	border-radius: 4px;
+}
+
+@media ( min-width: 1024px ) {
+	.fs-content-split__inner {
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.fs-content-split__content,
+	.fs-content-split__media {
+		flex: 1 1 50%;
+	}
+
+	.fs-content-split--image-left .fs-content-split__media {
+		order: -1;
+	}
+}

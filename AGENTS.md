@@ -1,131 +1,63 @@
-# Focused Schools — Codex Instructions
+# AGENTS.md
 
-## Mission
-Build a maintainable custom WordPress implementation for Focused Schools. Client editing experience, accessibility, performance, URL preservation, security, and maintainability are first-class requirements.
+Operating rules for AI coding assistants (Claude Code, Codex, Copilot, etc.) working on
+**focused-schools**, a WYN-owned WordPress project.
 
-## Sources of Truth
-Read before making architectural changes:
-- `docs/architecture.md`
-- `docs/content-model.md`
-- `docs/migration-plan.md`
-- `docs/design-system.md`
-- `docs/component-specs.md`
-- `docs/legacy-dependencies.md`
-- matching file in `docs/page-specs/`
+## 1. Project Scope
 
-## Architecture
-Custom hybrid WordPress theme: `wp-content/themes/focused-schools`
+This repository is the WordPress site root for `focused-schools`. Active development is
+scoped to:
 
-Site functionality plugin: `wp-content/plugins/focused-schools-core`
+- `wp-content/themes/focused-schools/` — the custom theme
+- `wp-content/plugins/focused-schools-core/` — the custom core plugin
+- `docs/` — project documentation
+- Root-level tooling config (`composer.json`, `phpcs.xml.dist`, `.editorconfig`, `.gitignore`)
 
-New/rebuilt primary pages use Gutenberg.
+## 2. Do Not Touch
 
-The site-core plugin owns:
-- Global Site Settings
-- Team content architecture
-- Services content architecture
-- Impact Stories content architecture
-- migration helpers for explicitly approved legacy content
-- Podcast YouTube integration if/when approved
+AI assistants must **never** create, modify, or delete:
 
-The theme owns:
-- HTML presentation
-- templates
-- reusable components
-- CSS and responsive behavior
-- `theme.json`
-- editor styling
+- WordPress core files (`wp-admin/`, `wp-includes/`, root `wp-*.php`, `index.php`, `license.txt`, `readme.html`)
+- Third-party/vendor plugins or themes not listed above (including default themes such as
+  `twentytwenty*`)
+- `wp-content/uploads/`
+- `wp-config.php` or any file containing credentials/secrets
+- SQL dumps or database exports
+- `.env` files
 
-## Existing Site Compatibility
-Do not remove/deactivate without explicit approval:
-- Elementor
-- Elementor Pro
-- Yoast SEO
-- current SiteGround security controls
-- current SiteGround caching
-- Buzzsprout
-- other plugins still required by documented legacy content
+If a task appears to require changes in one of these areas, stop and ask for explicit
+confirmation before proceeding.
 
-Legacy Blog content and forms must continue to work during the phased migration.
+## 3. Coding Standards
 
-## Content Models
-- Team: `fs_team_member`
-- Services: `fs_service`
-- Impact Stories: `fs_impact_story`
+- Follow WordPress Coding Standards (WPCS) as configured in `phpcs.xml.dist`.
+- PHP, JS, and CSS should match the conventions already established in the theme/plugin
+  once they exist; do not introduce new frameworks or build tools without discussion.
+- No commented-out code, debug `var_dump`/`print_r`, or TODOs left in committed code.
 
-Do not create additional CPTs without approval.
+## 4. Documentation
 
-### Team
-No public single pages initially.
+Consult and keep in sync with:
 
-### Services
-Do not expose/index individual service-detail pages until substantive approved content exists.
+- [`docs/architecture.md`](docs/architecture.md) — architecture and content-model rules
+- [`docs/migration-qa-rules.md`](docs/migration-qa-rules.md) — migration & QA guidelines
+- [`docs/design-system.md`](docs/design-system.md) — design system reference
+- [`docs/component-specs.md`](docs/component-specs.md) — component specifications
+- [`docs/audit/audit-report.md`](docs/audit/audit-report.md) — sanitized audit findings
 
-### Impact Stories
-Existing legacy Impact Story Pages retain their Page IDs, slugs, URLs, post type, content, and Yoast metadata. New stories use `fs_impact_story`.
+When a change affects architecture, content modeling, migrations, or components, update the
+relevant doc in the same change set.
 
-## URL Preservation
-Do not change:
-- Page IDs
-- Post IDs
-- slugs
-- permalink structure
-- taxonomy URLs
-- Blog Posts Page
-without explicit approval.
+## 5. Git & Workflow Rules
 
-Current Blog structure is `/blog/` with individual Posts at root-level `/%postname%/` URLs.
+- Never commit secrets, credentials, `wp-config.php`, database dumps, or uploads.
+- Never force-push, rewrite history, or delete branches without explicit user approval.
+- Keep commits scoped to the theme/plugin/docs/tooling described in Section 1.
+- Do not run destructive database or file operations (`wp db drop`, `rm -rf`, etc.)
+  without explicit user approval.
 
-## Forms
-Do not build a custom forms framework during this sprint. Existing Elementor Pro forms remain until separately approved for migration.
+## 6. Placeholder Status
 
-## Podcast
-Buzzsprout remains the audio source. YouTube playlist automation is feature-flagged/stretch work and must never become a launch blocker. Never commit API credentials.
-
-## WordPress Standards
-Prefer native WordPress APIs.
-- sanitize input
-- validate where appropriate
-- escape output contextually
-- use capability checks
-- use nonces for state-changing requests
-- avoid direct DB writes when a WordPress API exists
-- follow WordPress Coding Standards
-
-## Frontend
-Do not invent new colors, fonts, spacing systems, component variants, or breakpoint systems outside the approved design docs.
-
-## AI Development Rules
-Before coding:
-1. Read the relevant docs.
-2. Inspect existing code.
-3. State the proposed implementation.
-4. Identify files to change.
-5. Identify migration/compatibility risks.
-
-During coding:
-- make the smallest maintainable change
-- reuse existing components
-- avoid unnecessary abstraction
-- avoid duplicated CSS/PHP
-- do not add frameworks without approval
-
-After coding:
-1. Run appropriate checks.
-2. Review the diff.
-3. Verify affected frontend/admin behavior.
-4. Report unresolved risks.
-5. Update documentation if architecture/behavior changed.
-
-## Prohibited
-Do not:
-- modify WordPress core
-- commit secrets/backups/databases
-- change slugs/permalinks
-- deploy directly to production
-- remove legacy plugins without staged QA and approval
-- build custom React blocks unless Core blocks/patterns cannot meet the requirement
-- create custom REST APIs without a demonstrated need
-
-## Definition of Done
-A feature is complete only when it is readable, maintainable, secure, responsive, accessible, tested, consistent with the approved design system, free from relevant PHP warnings/console errors, and human-reviewed.
+This documentation set is baseline scaffolding. No custom features, content models, or
+components are implemented yet. Do not treat placeholder text in `docs/` as finalized
+requirements — confirm with the project owner before building against it.

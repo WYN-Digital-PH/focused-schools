@@ -13,7 +13,12 @@
 !/composer.json
 !/composer.lock
 !/phpcs.xml.dist
-!/docs/
+!/.editorconfig
+
+# Composer's own installed dependencies stay ignored (regenerated via
+# `composer install`), even though composer.json/composer.lock above are
+# whitelisted.
+/vendor/
 
 !/wp-content/
 /wp-content/*
@@ -59,3 +64,6 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+# Local and Upload Exclusions
+wp-config.php
+wp-content/uploads/

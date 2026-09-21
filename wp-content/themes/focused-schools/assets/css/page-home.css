@@ -1,0 +1,14 @@
+/**
+ * Home page-specific spacing only. Layout/visual work is done entirely by
+ * the reusable components in assets/css/components/ — this file just
+ * provides vertical rhythm between the sections in front-page.php.
+ * Enqueued only on the front page (see inc/enqueue.php).
+ */
+
+.fs-home__intro {
+	padding-block: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-home__section {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}

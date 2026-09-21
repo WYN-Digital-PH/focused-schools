@@ -1,0 +1,38 @@
+/**
+ * Card grid — shared responsive layout utility for arranging repeated
+ * cards (Service/Team/Impact Story). Not a template-part component itself,
+ * just the layout primitive so grid CSS isn't duplicated per page/section.
+ *
+ * Uses auto-fit/minmax rather than fixed column-count breakpoints: columns
+ * form automatically based on available width, and — importantly — when a
+ * section has fewer real posts than would fill a row (e.g. only 1 post
+ * exists in a CPT so far), the existing card(s) stretch to fill the row
+ * instead of leaving empty, invisible column tracks beside them.
+ *
+ * Cards are capped at 380px (below) so a lone card in a full-width track
+ * doesn't render oversized. That cap is paired with justify-items: center
+ * deliberately — capping width alone, without centering, would make the
+ * default grid alignment (stretch) fall back to left-aligning the capped
+ * card, reintroducing a "narrow card, blank space beside it" look. When 3+
+ * cards fill a row, each track is already narrower than 380px, so the cap
+ * and centering have no visible effect there — the equal-column layout is
+ * unchanged.
+ */
+
+.fs-card-grid {
+	display: grid;
+	width: 100%;
+	grid-template-columns: repeat( auto-fit, minmax( 280px, 1fr ) );
+	justify-items: center;
+	align-items: stretch;
+	gap: var( --wp--preset--spacing--large, 2rem );
+}
+
+/* Grid items with flex/content children default to min-width: auto, which
+ * can stop them shrinking to their track. Reset it so columns size evenly
+ * instead of overflowing/squishing unpredictably. */
+.fs-card-grid > * {
+	width: 100%;
+	max-width: 380px;
+	min-width: 0;
+}
