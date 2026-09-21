@@ -6,6 +6,15 @@
 !/.github/
 !/README.md
 !/Focused-Schools-Project-Plan.md
+!/composer.json
+!/composer.lock
+!/phpcs.xml.dist
+!/.editorconfig
+
+# Composer's own installed dependencies stay ignored (regenerated via
+# `composer install`), even though composer.json/composer.lock above are
+# whitelisted.
+/vendor/
 
 !/wp-content/
 /wp-content/*
