@@ -133,10 +133,66 @@ the dry-run/`--write` workflow.
 
 _To be defined._ This section will describe, as they are built:
 
-- Custom post types (e.g. Podcast)
 - Custom taxonomies
 - Custom fields / field groups
 - Relationships between content types
+
+No `fs_podcast` post type exists — the Podcast page's episode list (Buzzsprout audio) is
+still the literal placeholder array documented in §4.11. §3.6 below is a separate,
+non-CPT data source (YouTube video metadata only) layered alongside it.
+
+### 3.6 Podcast — YouTube Playlist Integration
+
+Feature-flagged, non-visual data integration implemented in
+`wp-content/plugins/focused-schools-core/modules/podcast/`. Fetches and normalizes
+YouTube playlist video metadata; deliberately does **not** touch Buzzsprout audio
+handling, `podcast-card.php`, `podcast-video.js`, or any grid markup/CSS — those remain
+entirely the theme's responsibility. Not a custom post type — see §3.5.
+
+- **API key:** read directly from the `FS_YOUTUBE_API_KEY` constant, expected in
+  `wp-config.php`. Never stored in an option, never committed. `wp-config.php` is out of
+  this repo's editable scope (`AGENTS.md` §2) — the site owner must define this constant
+  themselves. Until it is, live fetches fail gracefully (see fail-safe behavior below);
+  nothing else breaks.
+- **Settings storage:** a single namespaced option, `focused_schools_podcast_settings`
+  (feature flag, playlist ID, max videos 1–50, cache duration in seconds — default 21600
+  = 6 hours). Field schema source of truth:
+  `FocusedSchoolsCore\Modules\Podcast\Fields::all()`.
+- **Admin location:** Focused Schools → Podcast (YouTube)
+  (`admin.php?page=focused-schools-podcast`), a submenu of the same shared top-level menu
+  as Site Settings/Team/Services/Impact Stories.
+- **Manual refresh:** a "Refresh Now" button on that page, posting to `admin-post.php`
+  with `current_user_can( 'manage_options' )` and an explicit `wp_verify_nonce()` check
+  (`FocusedSchoolsCore\Modules\Podcast::handle_manual_refresh()`). This is the **only**
+  code path that ever calls the YouTube API.
+- **Cache strategy — two tiers, both required by the fail-safe requirement:**
+  1. A transient (`focused_schools_podcast_videos_cache`) is the fast path, expiring
+     after the configured cache duration.
+  2. A persistent option (`focused_schools_podcast_videos_last_good`, `autoload = no`)
+     holds the last successful payload indefinitely. A failed live fetch (missing/invalid
+     key, quota, network error) leaves **both** caches untouched — stale-but-good data
+     keeps serving rather than being wiped by a bad fetch.
+- **Theme-facing helper:** `FocusedSchoolsCore\get_podcast_youtube_videos()`
+  (`includes/functions-podcast.php`), delegating to
+  `Modules\Podcast::get_cached_videos()`. **Never performs a live HTTP request** — it only
+  reads the fresh transient, or falls back to the last-known-good option, or returns
+  `array()` (feature disabled, or nothing ever fetched successfully). This is what
+  satisfies "zero frontend overhead on standard page loads."
+  Each video: `['video_id' => string, 'title' => string, 'thumbnail_url' => string,
+  'publish_date' => string (ISO 8601)]`.
+- **Not yet wired into `page-podcast.php`:** the task scoped this to the plugin only (no
+  visual grid markup/CSS in the plugin). The placeholder episode array in
+  `page-podcast.php` (§4.11) is unchanged; wiring the two together — deciding how YouTube
+  videos and Buzzsprout audio episodes are merged/ordered on the page — is a follow-up
+  theme-side decision, not made here.
+- **Verified locally** (no real playlist/API key available in this environment — see
+  `AGENTS.md` §2): isolated logic tests against the actual class files (not a mock
+  reimplementation) covering flag-off, empty-cache, fresh-transient,
+  expired-transient-falls-back-to-last-good, and — for `Youtube_Client` — every documented
+  failure branch (missing key, missing playlist ID, network error, non-2xx, malformed
+  body) plus successful normalization (title sanitized, correct thumbnail tier picked,
+  items missing a video ID skipped, `max_videos` clamped to 50). All pass. Live requests
+  against the real YouTube Data API were not exercised — no key is available here.
 
 ## 4. Theme Architecture
 
