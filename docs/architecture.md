@@ -337,6 +337,37 @@ unaffected. When a member has no bio content (confirmed locally with the one rea
 member, who has empty `post_content`), the block is correctly omitted rather than
 rendering empty.
 
+### 4.10 Impact Stories: Landing Page + CPT Single (`page-impact-stories.php`, `single-fs_impact_story.php`)
+
+Spec: [`docs/page-specs/impact-stories.md`](page-specs/impact-stories.md). Two templates:
+
+- **`page-impact-stories.php`** — the landing page (Page 3785, `page-{slug}.php`
+  mechanism, same Elementor-coexistence detection as the other page templates). Its grid
+  is a **unified query**: `fs_impact_story` CPT posts merged in PHP with legacy Pages
+  tagged `_fs_legacy_impact_story = 1` — the exact meta key the Legacy Page Bridge
+  WP-CLI command (`docs/migration-qa-rules.md` §9) was built to set. A single `WP_Query`
+  can't apply a `meta_query` to only one post type within a multi-post-type query, so
+  this is two separate queries merged and sorted (featured CPT stories first, then
+  everything by `post_date` DESC) rather than one. Verified locally end-to-end by tagging
+  the default "Sample Page" as a test legacy story — confirmed both post types render
+  correctly in one grid via the same `impact-story-card.php` component, with the legacy
+  Page correctly showing no Featured badge/meta line (it has none of that CPT-specific
+  meta) rather than anything broken.
+- **`single-fs_impact_story.php`** — WordPress's native `single-{post_type}.php`
+  hierarchy for individual story URLs (`/impact-stories/{slug}/`). Unlike the
+  page-{slug}.php templates, no Elementor-coexistence branch — this CPT is new,
+  Gutenberg-only content per the project plan, never Elementor-authored. Yoast
+  compatibility (unverifiable locally — Yoast isn't installed here) is structural: the
+  standard Loop plus `wp_head()`/`title-tag` support, nothing custom that would fight
+  Yoast's own hooks.
+
+**`single-fs_impact_story.php`'s filename necessarily contains an underscore**
+(matching the registered post type `fs_impact_story` exactly, as WordPress's template
+hierarchy requires) despite WPCS's usual all-hyphens filename convention. An inline
+`phpcs:ignore` does not work for this sniff (it reports against the filename, not a
+line) — `phpcs.xml.dist` has a file-specific `<exclude-pattern>` for
+`WordPress.Files.FileName.NotHyphenatedLowercase` scoped to just this one file instead.
+
 ## 5. Plugin Architecture
 
 _To be defined._ This section will describe:

@@ -118,5 +118,23 @@ function focused_schools_enqueue_assets() {
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
 	}
+
+	if ( is_page( 'impact-stories' ) ) {
+		wp_enqueue_style(
+			'focused-schools-page-impact-stories',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-impact-stories.css',
+			array( 'focused-schools-style' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
+
+	if ( is_singular( 'fs_impact_story' ) ) {
+		wp_enqueue_style(
+			'focused-schools-single-impact-story',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/single-impact-story.css',
+			array( 'focused-schools-style', 'focused-schools-component-card' ),
+			FOCUSED_SCHOOLS_THEME_VERSION
+		);
+	}
 }
 add_action( 'wp_enqueue_scripts', 'focused_schools_enqueue_assets' );

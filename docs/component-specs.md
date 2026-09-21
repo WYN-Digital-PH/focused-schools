@@ -120,6 +120,7 @@ JS: `assets/js/components/site-header.js` (mobile nav toggle),
 - **States:** featured (`fs-impact-story-card--featured`, with visible "Featured" badge, not color-only) vs. standard.
 - **Dependencies:** `focused-schools-core` plugin's `fs_impact_story` post type + `_fs_impact_story_*` meta.
 - **Related design tokens:** accent color (featured badge/border).
+- **Dual post-type support:** also renders legacy Impact Story Pages unchanged (used on the Impact Stories landing page for a unified grid) — every function it calls is post-type-agnostic, so this required no code changes, only a docblock update. See `docs/page-specs/impact-stories.md` §3.
 
 ### Podcast Card
 

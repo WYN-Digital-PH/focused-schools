@@ -10,6 +10,16 @@
  * FocusedSchoolsCore\Modules\Impact_Stories\Meta so this template degrades
  * gracefully if the plugin is deactivated.
  *
+ * Also renders legacy Impact Story Pages unchanged — used on the Impact
+ * Stories landing page (docs/page-specs/impact-stories.md §3) for a unified
+ * grid of fs_impact_story posts and approved legacy Pages together. Every
+ * function called below (get_the_title(), get_permalink(),
+ * has_post_thumbnail(), get_the_excerpt()) is post-type-agnostic; the
+ * _fs_impact_story_* meta lookups simply return empty for a Page, which
+ * correctly omits the district/state/year line and the Featured badge
+ * rather than rendering anything broken. No changes were needed here to
+ * support both post types.
+ *
  * @package FocusedSchools
  */
 
@@ -21,11 +31,11 @@ if ( ! $fs_post instanceof WP_Post ) {
 	return;
 }
 
-$fs_post_id  = $fs_post->ID;
-$fs_district = get_post_meta( $fs_post_id, '_fs_impact_story_district_or_school', true );
-$fs_state    = get_post_meta( $fs_post_id, '_fs_impact_story_state', true );
-$fs_year     = get_post_meta( $fs_post_id, '_fs_impact_story_year', true );
-$fs_featured = get_post_meta( $fs_post_id, '_fs_impact_story_featured', true );
+$fs_post_id   = $fs_post->ID;
+$fs_district  = get_post_meta( $fs_post_id, '_fs_impact_story_district_or_school', true );
+$fs_state     = get_post_meta( $fs_post_id, '_fs_impact_story_state', true );
+$fs_year      = get_post_meta( $fs_post_id, '_fs_impact_story_year', true );
+$fs_featured  = get_post_meta( $fs_post_id, '_fs_impact_story_featured', true );
 $fs_permalink = get_permalink( $fs_post_id );
 ?>
 <article class="fs-card fs-impact-story-card<?php echo $fs_featured ? ' fs-impact-story-card--featured' : ''; ?>">

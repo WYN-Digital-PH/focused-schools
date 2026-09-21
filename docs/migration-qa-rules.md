@@ -91,7 +91,10 @@ A WP-CLI command tags approved, pre-existing legacy Pages with
 `_fs_legacy_impact_story = 1` so they can be recognized as impact stories without
 migrating their content, slug, or post type into the new `fs_impact_story` post type.
 Implemented in `wp-content/plugins/focused-schools-core/modules/impact-stories/`
-(`Legacy_Bridge` class + `CLI_Command` class).
+(`Legacy_Bridge` class + `CLI_Command` class). **Consumer:** the Impact Stories landing
+page (`page-impact-stories.php`, `docs/page-specs/impact-stories.md` §3) queries for
+exactly this meta key/value to include tagged legacy Pages in its unified stories grid
+alongside `fs_impact_story` CPT posts.
 
 ### 9.1 Usage
 
