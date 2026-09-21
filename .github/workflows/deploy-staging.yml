@@ -1,0 +1,85 @@
+name: Deploy to staging
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Sync main to Hostinger staging
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://grey-lemur-550879.hostingersite.com/
+    env:
+      SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+      SSH_PORT: ${{ secrets.STAGING_SSH_PORT }}
+      SSH_USER: ${{ secrets.STAGING_SSH_USER }}
+      WP_PATH: ${{ secrets.STAGING_WP_PATH }}
+      # Project-owned paths only. WordPress core, uploads, and third-party
+      # plugins/themes on staging are never touched.
+      DEPLOY_PATHS: >-
+        wp-content/themes/focused-schools
+        wp-content/plugins/focused-schools-core
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+
+      - name: Verify deployment secrets
+        env:
+          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+        run: |
+          missing=0
+          check() { [ -n "$2" ] || { echo "::error::Repository secret $1 is not set"; missing=1; }; }
+          check STAGING_SSH_HOST "$SSH_HOST"
+          check STAGING_SSH_PORT "$SSH_PORT"
+          check STAGING_SSH_USER "$SSH_USER"
+          check STAGING_WP_PATH "$WP_PATH"
+          check STAGING_SSH_KEY "$SSH_KEY"
+          exit $missing
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          echo "RSYNC_RSH=ssh -i $HOME/.ssh/deploy_key -p $SSH_PORT -o BatchMode=yes" >> "$GITHUB_ENV"
+
+      - name: Verify staging WordPress root
+        run: |
+          $RSYNC_RSH "$SSH_USER@$SSH_HOST" "test -f '$WP_PATH/wp-config.php'" \
+            || { echo "::error::wp-config.php not found at STAGING_WP_PATH"; exit 1; }
+
+      - name: Sync project code
+        run: |
+          set -euo pipefail
+          deployed=0
+          for path in $DEPLOY_PATHS; do
+            if [ ! -d "$path" ]; then
+              echo "::notice::Skipping $path (not in the repository yet)"
+              continue
+            fi
+            echo "Deploying $path"
+            rsync -rlz --delete --chmod=D755,F644 \
+              --exclude='.git*' --exclude='node_modules/' --exclude='.DS_Store' \
+              "$path/" "$SSH_USER@$SSH_HOST:$WP_PATH/$path/"
+            deployed=1
+          done
+          [ "$deployed" = 1 ] || echo "::notice::Nothing to deploy yet."
+
+      - name: Flush WordPress cache
+        run: |
+          $RSYNC_RSH "$SSH_USER@$SSH_HOST" "cd '$WP_PATH' && wp cache flush" \
+            || echo "::warning::Cache flush skipped (WP-CLI unavailable)"

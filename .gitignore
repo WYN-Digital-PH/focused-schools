@@ -1,0 +1,35 @@
+# Whitelist approach: this directory is a full WordPress install, but only
+# project-owned code is tracked. Everything else is ignored by default.
+/*
+!/.gitignore
+!/.gitattributes
+!/.github/
+!/README.md
+!/Focused-Schools-Project-Plan.md
+
+!/wp-content/
+/wp-content/*
+
+!/wp-content/themes/
+/wp-content/themes/*
+!/wp-content/themes/focused-schools/
+
+!/wp-content/plugins/
+/wp-content/plugins/*
+!/wp-content/plugins/focused-schools-core/
+
+# Never commit these, even inside tracked directories.
+*.wpress
+*.sql
+*.sql.gz
+wp-config.php
+.env
+.env.*
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
