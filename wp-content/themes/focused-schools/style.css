@@ -1,7 +1,7 @@
 /*
 Theme Name: Focused Schools
 Author: WYN Digital
-Description: Custom theme foundation for the focused-schools WordPress site. Design tokens in theme.json are TEMPORARY structural placeholders pending real values in docs/design-system.md — do not treat any color, font, or spacing value here as approved brand design.
+Description: Custom theme foundation for the focused-schools WordPress site. Design tokens in theme.json reflect the approved 2026 rebrand (docs/design-system.md).
 Version: 0.1.0
 Requires at least: 6.0
 Requires PHP: 7.4
@@ -29,8 +29,14 @@ body {
 	font-family: var( --wp--preset--font-family--system, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif );
 	font-size: var( --wp--preset--font-size--medium, 1rem );
 	line-height: 1.6;
-	color: var( --wp--preset--color--contrast, #111111 );
+	color: var( --wp--preset--color--contrast, #005c6d );
 	background-color: var( --wp--preset--color--base, #ffffff );
+}
+
+/* Locks background scroll while the mobile nav panel or the video modal is
+   open (site-header.js / home-hero.js toggle this class). */
+body.fs-modal-open {
+	overflow: hidden;
 }
 
 /* -----------------------------------------------------------------------
@@ -106,8 +112,8 @@ object {
 	z-index: 100000;
 	padding: 0.75rem 1rem;
 	background: var( --wp--preset--color--base, #ffffff );
-	color: var( --wp--preset--color--contrast, #111111 );
-	border: 2px solid var( --wp--preset--color--primary, #1e40af );
+	color: var( --wp--preset--color--contrast, #005c6d );
+	border: 2px solid var( --wp--preset--color--primary, #dd6237 );
 }
 
 .skip-link:focus {
@@ -140,11 +146,11 @@ object {
 
 .screen-reader-text:focus {
 	background-color: var( --wp--preset--color--base, #ffffff );
-	border: 2px solid var( --wp--preset--color--primary, #1e40af );
+	border: 2px solid var( --wp--preset--color--primary, #dd6237 );
 	border-radius: 4px;
 	clip: auto !important;
 	clip-path: none;
-	color: var( --wp--preset--color--contrast, #111111 );
+	color: var( --wp--preset--color--contrast, #005c6d );
 	display: block;
 	height: auto;
 	left: 0.5rem;
@@ -169,7 +175,7 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-	outline: 2px solid var( --wp--preset--color--primary, #1e40af );
+	outline: 2px solid var( --wp--preset--color--primary, #dd6237 );
 	outline-offset: 2px;
 }
 

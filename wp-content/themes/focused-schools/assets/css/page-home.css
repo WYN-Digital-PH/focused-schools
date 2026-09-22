@@ -12,3 +12,62 @@
 .fs-home__section {
 	padding-block: var( --wp--preset--spacing--x-large, 3rem );
 }
+
+.fs-eyebrow {
+	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
+	font-size: var( --wp--preset--font-size--small, 0.9rem );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-eyebrow--on-dark {
+	color: var( --wp--preset--color--gold, #f3c145 );
+}
+
+.fs-home__view-all,
+.fs-home__empty {
+	margin-top: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-text-link {
+	display: inline-flex;
+	align-items: center;
+	gap: var( --wp--preset--spacing--small, 0.5rem );
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	text-decoration: none;
+}
+
+.fs-home__contact {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--x-large, 3rem );
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-home__contact-cta {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--medium, 1rem );
+	align-items: flex-start;
+	padding: var( --wp--preset--spacing--large, 2rem );
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+	border-radius: var( --wp--preset--spacing--small, 0.5rem );
+}
+
+.fs-home__contact-cta p {
+	margin: 0;
+}
+
+@media ( min-width: 1024px ) {
+	.fs-home__contact {
+		flex-direction: row;
+	}
+
+	.fs-home__contact-copy,
+	.fs-home__contact-cta {
+		flex: 1 1 50%;
+	}
+}

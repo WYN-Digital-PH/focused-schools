@@ -57,6 +57,27 @@
 	display: block;
 }
 
+.fs-nav--primary__aside {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--small, 0.5rem );
+	margin-top: var( --wp--preset--spacing--medium, 1rem );
+	padding-top: var( --wp--preset--spacing--medium, 1rem );
+	border-top: 1px solid var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-nav--primary__email {
+	font-weight: 700;
+}
+
+.fs-nav--primary__socials {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	gap: var( --wp--preset--spacing--medium, 1rem );
+}
+
 @media ( min-width: 1024px ) {
 	.fs-site-header__toggle {
 		display: none;
@@ -66,5 +87,12 @@
 		flex-basis: auto;
 		order: 2;
 		display: block;
+	}
+
+	/* The aside (email/socials) is mobile-panel-only content — once the nav
+	   is always-visible inline, showing it here too would duplicate what
+	   the footer's Connect column already provides in the persistent layout. */
+	.fs-nav--primary__aside {
+		display: none;
 	}
 }

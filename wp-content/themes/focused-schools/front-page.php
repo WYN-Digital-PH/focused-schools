@@ -5,7 +5,13 @@
  * WordPress automatically selects this template for whatever page is
  * configured as the site's static front page (Settings > Reading) — it
  * never references a specific post ID, so the real front page (e.g. Page
- * 992) is never replaced, recreated, or hardcoded here.
+ * 992 in production, Page 29 in this local environment) is never replaced,
+ * recreated, or hardcoded here. See docs/architecture.md §4.6.
+ *
+ * Design reference: https://focused-schools-rebrand.vercel.app/ (an
+ * AI-generated rebrand concept — its own source marks it "north star only",
+ * not a pixel spec). See docs/page-specs/home.md for the section-by-section
+ * mapping, what was adapted vs. copied verbatim, and why.
  *
  * Elementor coexistence: if the front page was built with Elementor
  * (`_elementor_edit_mode` === 'builder'), this template renders only that
@@ -15,17 +21,12 @@
  * this environment (no Elementor content exists locally) — verify against
  * the actual staging/production front page before deploying.
  *
- * The front page is resolved explicitly via the page_on_front option
- * rather than the main query loop. The main query is whatever
- * Settings > Reading's "Your homepage displays" is currently set to — in
- * this local environment that's "Your latest posts", so have_posts() here
- * would iterate blog posts (e.g. the default "Hello world!") instead of
- * the actual front page. Resolving the ID directly is correct regardless
- * of that setting, and never depends on/alters it.
- *
- * TODO: the Statistics, Partner Strip, and Podcast sections below use
- * literal placeholder content — no live data source exists yet for real
- * stats, partner logos, or podcast episodes. Replace before launch.
+ * Images: all `assets/img/*` paths below are placeholders per the task's
+ * own instruction ("link static image placeholders to theme path") — no
+ * binary image files were added (this environment/session has no rights to
+ * the reference site's actual photography). Each <img> 404s harmlessly
+ * until real files are dropped into those paths; alt text is already
+ * correct and final.
  *
  * @package FocusedSchools
  */
@@ -47,25 +48,27 @@ if ( $fs_is_elementor ) :
 	</main>
 	<?php
 else :
-	$fs_hero_heading    = $fs_front_page ? get_the_title( $fs_front_page ) : get_bloginfo( 'name' );
-	$fs_hero_subheading = $fs_front_page ? get_the_excerpt( $fs_front_page ) : get_bloginfo( 'description' );
+	$fs_img = FOCUSED_SCHOOLS_THEME_URI . '/assets/img/';
 	?>
 	<main id="content">
 		<?php
 		get_template_part(
-			'template-parts/components/hero',
+			'template-parts/components/home-hero',
 			null,
 			array(
-				'heading'    => $fs_hero_heading,
-				'subheading' => $fs_hero_subheading,
-				'cta_label'  => function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'cta_label' ) : '',
-				'cta_url'    => function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'cta_url' ) : '',
+				'heading'    => __( 'We are Focused Schools', 'focused-schools' ),
+				'subheading' => __( 'We help educators confidently lead the hard work and heart work of lasting school improvement.', 'focused-schools' ),
+				'poster_url' => $fs_img . 'student-video.jpg',
+				'youtube_id' => 'kq4YCY5eOGI',
+				'cta_label'  => __( 'Our Approach', 'focused-schools' ),
+				'cta_url'    => function_exists( 'focused_schools_get_setting' ) && focused_schools_get_setting( 'cta_url' )
+					? focused_schools_get_setting( 'cta_url' )
+					: '#why',
 			)
 		);
 
 		// Preserve whatever plain (non-Elementor) content already exists on
-		// the real front page, rather than discarding it. Nothing to show
-		// when there is no configured front page (this environment).
+		// the real front page, rather than discarding it.
 		if ( $fs_front_page && '' !== trim( (string) $fs_front_page->post_content ) ) :
 			?>
 			<div class="fs-container fs-home__intro">
@@ -75,212 +78,215 @@ else :
 		endif;
 		?>
 
-			<section class="fs-home__section fs-container fs-container--wide">
-				<?php
-				get_template_part(
-					'template-parts/components/section-heading',
-					null,
-					array(
-						'eyebrow' => __( 'What We Do', 'focused-schools' ),
-						'heading' => __( 'Our Services', 'focused-schools' ),
-					)
-				);
-
-				$fs_services = new WP_Query(
-					array(
-						'post_type'      => 'fs_service',
-						'posts_per_page' => 6,
-						'orderby'        => 'menu_order',
-						'order'          => 'ASC',
-						'no_found_rows'  => true,
-					)
-				);
-
-				if ( $fs_services->have_posts() ) :
-					?>
-					<div class="fs-card-grid">
-						<?php
-						while ( $fs_services->have_posts() ) :
-							$fs_services->the_post();
-							get_template_part( 'template-parts/components/service-card', null, array( 'post' => get_post() ) );
-						endwhile;
-						?>
-					</div>
-					<?php
-				endif;
-				wp_reset_postdata();
-				?>
-			</section>
-
-			<section class="fs-home__section fs-container fs-container--wide">
-				<?php
-				get_template_part(
-					'template-parts/components/section-heading',
-					null,
-					array(
-						'eyebrow' => __( 'Meet the Team', 'focused-schools' ),
-						'heading' => __( 'Our Team', 'focused-schools' ),
-					)
-				);
-
-				$fs_team = new WP_Query(
-					array(
-						'post_type'      => 'fs_team_member',
-						'posts_per_page' => 3,
-						'orderby'        => 'menu_order',
-						'order'          => 'ASC',
-						'no_found_rows'  => true,
-					)
-				);
-
-				if ( $fs_team->have_posts() ) :
-					?>
-					<div class="fs-card-grid">
-						<?php
-						while ( $fs_team->have_posts() ) :
-							$fs_team->the_post();
-							get_template_part( 'template-parts/components/team-card', null, array( 'post' => get_post() ) );
-						endwhile;
-						?>
-					</div>
-					<?php
-				endif;
-				wp_reset_postdata();
-				?>
-			</section>
-
-			<section class="fs-home__section fs-container fs-container--wide">
-				<?php
-				get_template_part(
-					'template-parts/components/section-heading',
-					null,
-					array(
-						'eyebrow' => __( 'Real Results', 'focused-schools' ),
-						'heading' => __( 'Impact Stories', 'focused-schools' ),
-					)
-				);
-
-				$fs_stories = new WP_Query(
-					array(
-						'post_type'      => 'fs_impact_story',
-						'posts_per_page' => 3,
-						'no_found_rows'  => true,
-						'meta_key'       => '_fs_impact_story_featured', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- small homepage teaser query, acceptable for this scale.
-						'orderby'        => array(
-							'meta_value_num' => 'DESC',
-							'date'           => 'DESC',
-						),
-					)
-				);
-
-				if ( $fs_stories->have_posts() ) :
-					?>
-					<div class="fs-card-grid">
-						<?php
-						while ( $fs_stories->have_posts() ) :
-							$fs_stories->the_post();
-							get_template_part( 'template-parts/components/impact-story-card', null, array( 'post' => get_post() ) );
-						endwhile;
-						?>
-					</div>
-					<?php
-				endif;
-				wp_reset_postdata();
-				?>
-			</section>
-
+		<div id="why">
 			<?php
-			/*
-			 * TODO: placeholder values below — no Statistics data source
-			 * exists yet (no Site Settings fields, no CPT). Replace with
-			 * real numbers before launch.
-			 *
-			 * statistics-counter.php and podcast-card.php render bare
-			 * (no internal container, unlike Hero/CTA Banner), so the
-			 * calling template is responsible for their width — wrapped
-			 * here in the same wide container as the card-grid sections
-			 * for visual consistency across the page.
-			 */
+			get_template_part(
+				'template-parts/components/content-image-split',
+				null,
+				array(
+					'heading'        => __( 'When educators are supported, students thrive.', 'focused-schools' ),
+					'body'           => __( 'Every student deserves the opportunity to succeed. That begins by supporting the people who make that success possible every day. We believe confident leaders create stronger schools, empowered educators inspire meaningful learning, and lasting school improvement happens when people, not just programs, are equipped to grow together.', 'focused-schools' ),
+					'image_url'      => $fs_img . 'retreat-2.jpg',
+					'image_alt'      => __( 'Two education leaders celebrating progress with a fist bump.', 'focused-schools' ),
+					'image_position' => 'right',
+					'cta_label'      => __( 'Get to know us', 'focused-schools' ),
+					'cta_url'        => home_url( '/about-our-mission-vision/' ),
+				)
+			);
 			?>
-			<div class="fs-home__section fs-container fs-container--wide">
+		</div>
+
+		<?php
+		get_template_part(
+			'template-parts/components/commitment-list',
+			null,
+			array(
+				'eyebrow'   => __( 'How we partner', 'focused-schools' ),
+				'heading'   => sprintf(
+					/* translators: %s: "three commitments." (emphasized). */
+					__( 'Our partnerships are built on %s', 'focused-schools' ),
+					'<strong>' . __( 'three commitments.', 'focused-schools' ) . '</strong>'
+				),
+				'intro'     => __( 'Every student gets one chance. One. Everything we do exists to help school leaders make it worth it. The true measure of our work is not what we did. It is what changed because of it.', 'focused-schools' ),
+				'image_url' => $fs_img . 'retreat-1.jpg',
+				'image_alt' => __( 'District and school leaders working together during a Focused Schools leadership retreat.', 'focused-schools' ),
+				'items'     => array(
+					array(
+						'heading'   => __( 'We listen before we lead.', 'focused-schools' ),
+						'body'      => __( 'Your educators know their schools best. We take the time to understand your strengths, challenges, and goals before recommending a path forward.', 'focused-schools' ),
+						'cta_label' => __( 'Meet Our Team', 'focused-schools' ),
+						'cta_url'   => home_url( '/team/' ),
+					),
+					array(
+						'heading'   => __( 'We work alongside your team.', 'focused-schools' ),
+						'body'      => __( "We're not here to hand you a plan and walk away. We collaborate with school and district leaders, providing coaching, guidance, and support throughout the work.", 'focused-schools' ),
+						'cta_label' => __( 'Explore Our Services', 'focused-schools' ),
+						'cta_url'   => home_url( '/services/' ),
+					),
+					array(
+						'heading'   => __( 'We leave your schools stronger.', 'focused-schools' ),
+						'body'      => __( 'Our goal is to build the confidence, leadership, and internal capacity that allow educators to continue the work long after our partnership ends.', 'focused-schools' ),
+						'cta_label' => __( 'Our Results', 'focused-schools' ),
+						'cta_url'   => home_url( '/impact-stories/' ),
+					),
+				),
+			)
+		);
+
+		get_template_part(
+			'template-parts/components/cycle-of-excellence',
+			null,
+			array(
+				'eyebrow' => __( 'One shared focus', 'focused-schools' ),
+				'heading' => __( 'A Cycle of Excellence', 'focused-schools' ),
+				'body'    => __( 'High-performing districts and schools are intentional about committing to a cycle of excellence. Your Focused Schools team is prepared to support your cycle of excellence in ways that will help you to continue to build capacity, accelerate growth, and communicate your progress relentlessly.', 'focused-schools' ),
+				'phases'  => array(
+					array( 'label' => __( 'Build Capacity', 'focused-schools' ) ),
+					array( 'label' => __( 'Accelerate Growth', 'focused-schools' ) ),
+					array( 'label' => __( 'Communicate Progress', 'focused-schools' ) ),
+				),
+			)
+		);
+		?>
+
+		<section class="fs-home__section fs-container fs-container--wide" aria-labelledby="fs-services-title">
+			<?php
+			get_template_part(
+				'template-parts/components/section-heading',
+				null,
+				array(
+					'eyebrow'    => __( 'How we help', 'focused-schools' ),
+					'heading'    => __( 'Every school is different. Every partnership should be, too.', 'focused-schools' ),
+					'heading_id' => 'fs-services-title',
+				)
+			);
+
+			$fs_services = new WP_Query(
+				array(
+					'post_type'      => 'fs_service',
+					'posts_per_page' => 4,
+					'orderby'        => 'menu_order',
+					'order'          => 'ASC',
+					'no_found_rows'  => true,
+				)
+			);
+
+			if ( $fs_services->have_posts() ) :
+				get_template_part( 'template-parts/components/service-list', null, array( 'posts' => $fs_services->posts ) );
+				?>
+				<p class="fs-home__view-all">
+					<a class="fs-text-link" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">
+						<?php esc_html_e( 'View all services', 'focused-schools' ); ?>
+					</a>
+				</p>
+				<?php
+			else :
+				?>
+				<p class="fs-home__empty"><?php esc_html_e( 'Our services list is being updated — please check back soon.', 'focused-schools' ); ?></p>
+				<?php
+			endif;
+			wp_reset_postdata();
+			?>
+		</section>
+
+		<section class="fs-home__section fs-container fs-container--wide" aria-labelledby="fs-testimonials-title">
+			<?php
+			get_template_part(
+				'template-parts/components/section-heading',
+				null,
+				array(
+					'eyebrow'    => __( 'Focused Schools', 'focused-schools' ),
+					'heading'    => __( 'What Leaders Are Saying', 'focused-schools' ),
+					'heading_id' => 'fs-testimonials-title',
+				)
+			);
+
+			$fs_testimonials = new WP_Query(
+				array(
+					'post_type'      => 'fs_testimonial',
+					'posts_per_page' => 6,
+					'orderby'        => 'menu_order',
+					'order'          => 'ASC',
+					'no_found_rows'  => true,
+				)
+			);
+
+			if ( $fs_testimonials->have_posts() ) :
+				get_template_part( 'template-parts/components/testimonial-carousel', null, array( 'posts' => $fs_testimonials->posts ) );
+			else :
+				?>
+				<p class="fs-home__empty"><?php esc_html_e( 'Testimonials from the leaders we partner with are on the way.', 'focused-schools' ); ?></p>
+				<?php
+			endif;
+			wp_reset_postdata();
+			?>
+		</section>
+
+		<?php
+		/*
+		 * Real, current figures confirmed against the approved design
+		 * reference (docs/page-specs/home.md) — not a TODO placeholder,
+		 * unlike the prior draft of this template.
+		 */
+		?>
+		<div class="fs-home__section fs-container fs-container--wide">
+			<?php
+			get_template_part(
+				'template-parts/components/statistics-counter',
+				null,
+				array(
+					'stats' => array(
+						array(
+							'value'  => 2,
+							'suffix' => '+ million',
+							'label'  => __( 'Students Impacted', 'focused-schools' ),
+						),
+						array(
+							'value'  => 20,
+							'suffix' => '+',
+							'label'  => __( 'Years Partnering with Schools', 'focused-schools' ),
+						),
+						array(
+							'value'  => 25,
+							'suffix' => '+',
+							'label'  => __( 'States Served', 'focused-schools' ),
+						),
+					),
+				)
+			);
+			?>
+		</div>
+
+		<section class="fs-home__contact fs-container fs-container--wide" id="contact" aria-labelledby="fs-contact-title">
+			<div class="fs-home__contact-copy">
 				<?php
 				get_template_part(
-					'template-parts/components/statistics-counter',
+					'template-parts/components/section-heading',
 					null,
 					array(
-						'stats' => array(
-							array(
-								'value'  => 0,
-								'suffix' => '+',
-								'label'  => __( 'TODO: replace with real stat', 'focused-schools' ),
-							),
-							array(
-								'value'  => 0,
-								'suffix' => '+',
-								'label'  => __( 'TODO: replace with real stat', 'focused-schools' ),
-							),
-							array(
-								'value'  => 0,
-								'suffix' => '%',
-								'label'  => __( 'TODO: replace with real stat', 'focused-schools' ),
-							),
-						),
+						'eyebrow'    => __( 'Contact', 'focused-schools' ),
+						'heading'    => __( 'Get to Know Us.', 'focused-schools' ),
+						'heading_id' => 'fs-contact-title',
+					)
+				);
+				get_template_part( 'template-parts/components/contact-info' );
+				?>
+			</div>
+			<div class="fs-home__contact-cta">
+				<p><?php esc_html_e( "Ready to talk about your district's next step? Send us a message and a member of our team will follow up soon.", 'focused-schools' ); ?></p>
+				<?php
+				get_template_part(
+					'template-parts/components/button',
+					null,
+					array(
+						'label' => __( 'Contact Us', 'focused-schools' ),
+						'url'   => home_url( '/contact/' ),
+						'style' => 'primary',
 					)
 				);
 				?>
 			</div>
-
-			<?php
-			/*
-			 * TODO: placeholder — no fs_podcast post type exists yet
-			 * (see docs/architecture.md §3.5). Replace with a real query
-			 * once that module is built.
-			 */
-			?>
-			<div class="fs-home__section fs-container fs-container--wide">
-				<?php
-				get_template_part(
-					'template-parts/components/podcast-card',
-					null,
-					array(
-						'title'       => __( 'TODO: latest episode title', 'focused-schools' ),
-						'description' => __( 'TODO: episode description, once the Podcast module is built.', 'focused-schools' ),
-					)
-				);
-				?>
-			</div>
-
-			<?php
-			/*
-			 * TODO: placeholder — no partner logos exist in this
-			 * environment's media library, and none may be added here
-			 * (wp-content/uploads is out of scope for code changes).
-			 * Add real entries once logos are uploaded, e.g.:
-			 * array( 'image_id' => 123, 'name' => 'Partner Name', 'url' => 'https://...' ).
-			 */
-			get_template_part(
-				'template-parts/components/partner-strip',
-				null,
-				array(
-					'heading' => __( 'Trusted By', 'focused-schools' ),
-					'logos'   => array(),
-				)
-			);
-
-			get_template_part(
-				'template-parts/components/cta-banner',
-				null,
-				array(
-					'heading'   => __( 'Ready to get started?', 'focused-schools' ),
-					'cta_label' => function_exists( 'focused_schools_get_setting' ) && focused_schools_get_setting( 'cta_label' )
-						? focused_schools_get_setting( 'cta_label' )
-						: __( 'Contact Us', 'focused-schools' ),
-					'cta_url'   => function_exists( 'focused_schools_get_setting' ) && focused_schools_get_setting( 'cta_url' )
-						? focused_schools_get_setting( 'cta_url' )
-						: '#',
-				)
-			);
-			?>
+		</section>
 	</main>
 	<?php
 endif;

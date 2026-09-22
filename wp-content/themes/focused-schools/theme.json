@@ -11,28 +11,53 @@
 			"palette": [
 				{
 					"slug": "base",
-					"name": "Placeholder – Base (White)",
+					"name": "Paper (White)",
 					"color": "#ffffff"
 				},
 				{
 					"slug": "contrast",
-					"name": "Placeholder – Contrast (Near-Black)",
-					"color": "#111111"
+					"name": "Ink (House Teal)",
+					"color": "#005c6d"
 				},
 				{
 					"slug": "primary",
-					"name": "Placeholder – Primary",
-					"color": "#1e40af"
+					"name": "Coral",
+					"color": "#dd6237"
 				},
 				{
 					"slug": "secondary",
-					"name": "Placeholder – Secondary",
-					"color": "#6b7280"
+					"name": "House Teal",
+					"color": "#005c6d"
 				},
 				{
 					"slug": "accent",
-					"name": "Placeholder – Accent",
-					"color": "#0d9488"
+					"name": "Cerulean",
+					"color": "#0a96cb"
+				},
+				{
+					"slug": "lime",
+					"name": "Lime",
+					"color": "#a7cc14"
+				},
+				{
+					"slug": "gold",
+					"name": "Gold",
+					"color": "#f3c145"
+				},
+				{
+					"slug": "raspberry",
+					"name": "Raspberry",
+					"color": "#bc3e8c"
+				},
+				{
+					"slug": "ink-soft",
+					"name": "Ink Soft",
+					"color": "#51536a"
+				},
+				{
+					"slug": "paper-soft",
+					"name": "Paper Soft",
+					"color": "#f5f6f8"
 				}
 			]
 		},
@@ -40,8 +65,8 @@
 			"fontFamilies": [
 				{
 					"slug": "system",
-					"name": "Placeholder – System UI",
-					"fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
+					"name": "DM Sans",
+					"fontFamily": "\"DM Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif"
 				}
 			],
 			"fontSizes": [
@@ -119,6 +144,6 @@
 		}
 	},
 	"custom": {
-		"tokenStatus": "placeholder-pending-design-system-md"
+		"tokenStatus": "approved-2026-rebrand"
 	}
 }

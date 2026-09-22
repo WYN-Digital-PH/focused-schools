@@ -1,0 +1,88 @@
+/**
+ * Commitment List ("How we partner"). Mobile-first: photo above the list
+ * below 1024px, side-by-side from 1024px.
+ */
+
+.fs-commitments {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-commitments__intro {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--medium, 1rem );
+	margin-bottom: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-commitments__heading {
+	margin: 0;
+	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+	font-weight: 900;
+}
+
+.fs-commitments__heading strong {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-commitments__lead {
+	margin: 0;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-commitments__body {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-commitments__photo img {
+	width: 100%;
+	border-radius: var( --wp--preset--spacing--small, 0.5rem );
+}
+
+.fs-commitments__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-commitments__row {
+	display: flex;
+	gap: var( --wp--preset--spacing--medium, 1rem );
+	padding-block: var( --wp--preset--spacing--medium, 1rem );
+	border-top: 1px solid var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-commitments__index {
+	flex: 0 0 auto;
+	font-size: var( --wp--preset--font-size--large, 1.5rem );
+	font-weight: 900;
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-commitments__copy h3 {
+	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
+}
+
+.fs-commitments__copy p {
+	margin: 0 0 var( --wp--preset--spacing--medium, 1rem );
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+@media ( min-width: 1024px ) {
+	.fs-commitments__body {
+		flex-direction: row;
+		align-items: flex-start;
+	}
+
+	.fs-commitments__photo {
+		flex: 0 0 40%;
+	}
+
+	.fs-commitments__list {
+		flex: 1 1 60%;
+	}
+}

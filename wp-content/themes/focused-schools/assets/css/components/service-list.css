@@ -1,0 +1,75 @@
+/**
+ * Service List: numbered row layout (distinct from the card-grid layout
+ * used on the Services page itself). Mobile-first: stacked columns below
+ * 768px, grid row from 768px.
+ */
+
+.fs-service-list {
+	display: flex;
+	flex-direction: column;
+	margin-top: var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-service-list__row {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: var( --wp--preset--spacing--small, 0.5rem ) var( --wp--preset--spacing--medium, 1rem );
+	align-items: start;
+	padding-block: var( --wp--preset--spacing--large, 2rem );
+	border-top: 1px solid var( --wp--preset--color--paper-soft, #f5f6f8 );
+	color: inherit;
+	text-decoration: none;
+}
+
+.fs-service-list__row:last-child {
+	border-bottom: 1px solid var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-service-list__index {
+	font-size: var( --wp--preset--font-size--large, 1.5rem );
+	font-weight: 900;
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-service-list__title-group h3 {
+	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
+}
+
+.fs-service-list__promise {
+	margin: 0;
+	font-weight: 700;
+	color: var( --wp--preset--color--secondary, #005c6d );
+}
+
+.fs-service-list__description {
+	grid-column: 2;
+	margin: 0;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-service-list__arrow {
+	display: none;
+}
+
+.fs-service-list__arrow svg {
+	width: 24px;
+	height: 24px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+}
+
+@media ( min-width: 768px ) {
+	.fs-service-list__row {
+		grid-template-columns: auto 1fr 1fr auto;
+		align-items: center;
+	}
+
+	.fs-service-list__description {
+		grid-column: auto;
+	}
+
+	.fs-service-list__arrow {
+		display: block;
+	}
+}

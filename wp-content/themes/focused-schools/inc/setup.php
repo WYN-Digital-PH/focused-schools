@@ -49,6 +49,25 @@ function focused_schools_setup() {
 add_action( 'after_setup_theme', 'focused_schools_setup' );
 
 /**
+ * Preconnect to Google Fonts, since inc/enqueue.php loads DM Sans from there.
+ *
+ * @param array  $urls          Existing resource hint URLs.
+ * @param string $relation_type Relation type ('preconnect', 'dns-prefetch', etc.).
+ * @return array
+ */
+function focused_schools_resource_hints( $urls, $relation_type ) {
+	if ( 'preconnect' === $relation_type ) {
+		$urls[] = array(
+			'href' => 'https://fonts.gstatic.com',
+			'crossorigin',
+		);
+	}
+
+	return $urls;
+}
+add_filter( 'wp_resource_hints', 'focused_schools_resource_hints', 10, 2 );
+
+/**
  * Register widget areas.
  *
  * A footer widget area — previously missing entirely from this theme. If

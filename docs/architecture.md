@@ -194,6 +194,27 @@ entirely the theme's responsibility. Not a custom post type — see §3.5.
   items missing a video ID skipped, `max_videos` clamped to 50). All pass. Live requests
   against the real YouTube Data API were not exercised — no key is available here.
 
+### 3.7 Testimonials
+
+Admin-only content type (no public URLs), implemented in
+`wp-content/plugins/focused-schools-core/modules/testimonials/`, for the Home page's
+testimonial carousel (`docs/page-specs/home.md` §5).
+
+- **Post type:** `fs_testimonial`
+- **Visibility:** `public => false`, `publicly_queryable => false`, `has_archive => false`,
+  `rewrite => false` — same no-frontend-URL pattern as Team Members/Services.
+- **Admin location:** nested under Focused Schools → Testimonials (same shared top-level
+  menu as Site Settings/Team/Services/Impact Stories/Podcast).
+- **Supports:** `title` (attribution, e.g. "Superintendent"), `editor` (the quote itself),
+  `page-attributes` (`menu_order`, manual ordering). **No custom meta fields at all** —
+  title/editor already fit the two things a testimonial needs, so unlike Team/Services
+  this module has no meta box, no `save_post` handler, no `register_post_meta()` call.
+- **REST/Gutenberg:** `show_in_rest => true`
+- **Admin columns:** Attribution (renamed Title column), Quote (trimmed excerpt of
+  `post_content`), Order, Modified Date.
+- Empty by default in this environment — `testimonial-carousel.php` shows a graceful
+  "on the way" message until entries exist (verified live).
+
 ## 4. Theme Architecture
 
 The `focused-schools` theme (`wp-content/themes/focused-schools/`) has a foundation
@@ -251,14 +272,17 @@ deferred to future tasks per project scope.
 `theme.json` (schema v2) defines global settings and styles: `appearanceTools`, a
 `layout.contentSize`/`wideSize`, a color palette, font family/sizes, and a spacing scale.
 
-**Every token in `theme.json` is a TEMPORARY structural placeholder**, not an approved
-design decision — see [`docs/design-system.md`](design-system.md), which has no real
-tokens defined yet. Palette and font-family entries are deliberately named
-`"Placeholder – …"` so they're identifiable as such directly in the block editor's color
-picker. A `custom.tokenStatus` key (`"placeholder-pending-design-system-md"`) is set
-specifically so this status is traceable in generated CSS
-(`--wp--custom--token-status`), not just in documentation. When real tokens are approved,
-update `docs/design-system.md` first, then bring `theme.json` in line with it.
+**Status: approved (2026 rebrand)** — see [`docs/design-system.md`](design-system.md).
+Palette (house-teal, coral, cerulean, lime, gold, raspberry) and typography (DM Sans) were
+promoted from the approved rebrand reference (Home page task) and now reflect real brand
+design, not placeholders — this ripples site-wide via the `var(--wp--preset--...)` custom
+properties every component already used, not just the Home page. DM Sans is loaded from
+Google Fonts (`inc/enqueue.php`), with a `wp_resource_hints` preconnect to
+`fonts.gstatic.com` (`inc/setup.php`). `custom.tokenStatus` now reads
+`"approved-2026-rebrand"` (was `"placeholder-pending-design-system-md"`), traceable in
+generated CSS as `--wp--custom--token-status`. Any further palette/typography change
+should update `docs/design-system.md` first, then bring `theme.json` in line with it —
+same workflow as before.
 
 Theme supports registered in `inc/setup.php`: `title-tag`, `align-wide`,
 `responsive-embeds`, `post-thumbnails`, `editor-styles`, and an `html5` markup list
@@ -283,6 +307,11 @@ animation), both respecting `prefers-reduced-motion` where relevant.
 
 ### 4.6 Page Templates: Home (`front-page.php`)
 
+Spec: [`docs/page-specs/home.md`](page-specs/home.md) — full section-by-section mapping
+against the approved 2026 rebrand reference, and the reasoning behind every adaptation
+(merged duplicate sections, no second contact form, `front-page.php` kept instead of a
+new `page-home.php`, etc.). This section only summarizes what's structural.
+
 `front-page.php` is WordPress's native template-hierarchy hook for "whatever page is
 currently configured as the static front page" — it never references a specific post ID.
 This is deliberate: it's how "preserve the existing front Page ID and its slug/canonical
@@ -294,19 +323,26 @@ Settings → Reading configuration decision, out of scope for a code change.
 **Elementor coexistence:** the template checks the front page's own
 `_elementor_edit_mode` post meta at render time. If it's `'builder'`, only `the_content()`
 is rendered (Elementor's own content filter renders exactly as it does today, untouched).
-Otherwise, the full component-based layout renders (Hero, Services/Team/Impact Stories
-grids via `card-grid.css`, Statistics, Podcast teaser, Partner Strip, CTA Banner). Any
-existing plain (non-Elementor) page content is still shown via `the_content()` in an
-intro block, rather than discarded.
+Otherwise, the full component-based layout renders (Hero, Mission, Three Commitments,
+Cycle of Excellence, Services, Testimonials, Impact stats, Contact). Any existing plain
+(non-Elementor) page content is still shown via `the_content()` in an intro block, rather
+than discarded.
 
 **Known limitation:** this detection logic could not be verified against real data. The
 local development database has no Elementor plugin active and no page with the real
 production front-page ID at all (see §6) — verify the Elementor branch actually fires
 correctly against the real staging/production front page before deploying this template.
 
-Statistics, Partner Strip, and Podcast sections on the Home page currently use literal
-placeholder content (marked `TODO` inline in `front-page.php`) — no Site Settings fields,
-CPT, or media exist yet for real stats, partner logos, or podcast episodes.
+**2026 rebrand (current):** rebuilt against `https://focused-schools-rebrand.vercel.app/`
+— see `docs/page-specs/home.md` for the full spec. New components:
+`home-hero.php` (video-poster hero, click-to-load YouTube modal — zero network requests
+before the click, same principle as `podcast-card.php`), `commitment-list.php`,
+`cycle-of-excellence.php`, `service-list.php`, `testimonial-carousel.php` (backed by the
+new `fs_testimonial` CPT — see §3.6). Real, current Impact stats (2M+ students, 20+
+years, 25+ states) replace the old `TODO` placeholder numbers. `content-image-split.php`
+gained an `image_url` prop (theme-static path, additive/backward-compatible alongside its
+existing `image_id` attachment prop). Partner Strip and Podcast teaser sections from the
+prior version were dropped — not part of the approved rebrand's Home page structure.
 
 **Uniform section widths:** `hero.php` and `content-image-split.php` render their own
 container internally (they're "self-contained section" components), independent of

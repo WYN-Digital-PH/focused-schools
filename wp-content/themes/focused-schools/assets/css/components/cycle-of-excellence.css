@@ -1,0 +1,77 @@
+/**
+ * Cycle of Excellence: dark (house-teal) band with a 3-step stepper.
+ * Mobile-first: steps stack below 768px, sit in a row from 768px.
+ */
+
+.fs-cycle {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+	background: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-cycle__intro {
+	max-width: 640px;
+	margin-bottom: var( --wp--preset--spacing--x-large, 3rem );
+}
+
+.fs-cycle__intro h2 {
+	margin: 0 0 var( --wp--preset--spacing--medium, 1rem );
+	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+	font-weight: 900;
+}
+
+.fs-cycle__intro p {
+	margin: 0;
+	color: rgba( 255, 255, 255, 0.78 );
+}
+
+.fs-cycle__steps {
+	display: flex;
+	flex-direction: column;
+	gap: var( --wp--preset--spacing--medium, 1rem );
+}
+
+.fs-cycle__step {
+	padding: var( --wp--preset--spacing--medium, 1rem );
+	border: 1px solid rgba( 255, 255, 255, 0.22 );
+	border-radius: var( --wp--preset--spacing--small, 0.5rem );
+	transition: background-color 0.2s ease;
+}
+
+.fs-cycle__step.is-active {
+	background: rgba( 255, 255, 255, 0.1 );
+	border-color: var( --wp--preset--color--gold, #f3c145 );
+}
+
+.fs-cycle__step-trigger {
+	display: flex;
+	align-items: center;
+	gap: var( --wp--preset--spacing--small, 0.5rem );
+	width: 100%;
+	background: none;
+	border: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.fs-cycle__step-index {
+	font-weight: 900;
+	color: var( --wp--preset--color--gold, #f3c145 );
+}
+
+.fs-cycle__step-description {
+	margin: var( --wp--preset--spacing--small, 0.5rem ) 0 0;
+	color: rgba( 255, 255, 255, 0.78 );
+}
+
+@media ( min-width: 768px ) {
+	.fs-cycle__steps {
+		flex-direction: row;
+	}
+
+	.fs-cycle__step {
+		flex: 1 1 0;
+	}
+}
