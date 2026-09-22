@@ -46,8 +46,9 @@ $fs_count = count( $fs_posts );
 				data-fs-carousel-slide
 				<?php echo 0 !== $fs_index ? 'aria-hidden="true"' : ''; ?>
 			>
+				<span class="fs-testimonial-carousel__marks" aria-hidden="true"><span></span><span></span></span>
 				<blockquote><?php echo wp_kses_post( wpautop( get_the_content( null, false, $fs_post ) ) ); ?></blockquote>
-				<figcaption><?php echo esc_html( get_the_title( $fs_post ) ); ?></figcaption>
+				<figcaption><span class="fs-testimonial-carousel__rule" aria-hidden="true"></span><?php echo esc_html( get_the_title( $fs_post ) ); ?></figcaption>
 			</figure>
 		<?php endforeach; ?>
 	</div>

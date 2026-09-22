@@ -1,0 +1,74 @@
+/**
+ * Rail Text Block. Exact geometry from the approved .dc design: 264px label
+ * column, 84px display heading (steps down at each breakpoint), 19px lead
+ * paragraph body.
+ */
+
+.fs-rail-text {
+	padding: 6rem 0 7.5rem;
+}
+
+.fs-rail-text__inner {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 2.5rem;
+}
+
+.fs-rail-text__label {
+	display: flex;
+	align-items: flex-start;
+	gap: 20px;
+	padding-top: 6px;
+}
+
+.fs-rail-text__label img {
+	flex: 0 0 auto;
+	width: 28px;
+	height: 28px;
+}
+
+.fs-rail-text__label .fs-eyebrow {
+	margin: 0;
+	max-width: 9ch;
+	line-height: 1.6;
+}
+
+.fs-rail-text__content h2 {
+	margin: 0 0 2.125rem;
+	max-width: var( --fs-rail-heading-max, 13ch );
+	font-size: 3.75rem;
+	line-height: 1;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-rail-text__content p {
+	margin: 0 0 2.125rem;
+	max-width: 890px;
+	font-size: 1.1875rem;
+	line-height: 1.65;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+/* Second and later paragraphs run smaller, per the approved .dc source. */
+.fs-rail-text__content p ~ p {
+	font-size: 1.0625rem;
+	line-height: 1.75;
+}
+
+@media ( min-width: 1240px ) {
+	.fs-rail-text__inner {
+		grid-template-columns: 264px minmax( 0, 1fr );
+	}
+
+	.fs-rail-text__content h2 {
+		font-size: 5.25rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-rail-text__content h2 {
+		font-size: 2.25rem;
+	}
+}

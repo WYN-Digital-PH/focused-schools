@@ -1,6 +1,6 @@
 # Component Specifications
 
-Status: **21 components approved and implemented.** Components are
+Status: **25 components approved and implemented.** Components are
 invoked via `get_template_part( 'template-parts/components/{name}', null, $args )`, using
 WordPress's native `$args` support as the prop/contract mechanism — see each spec below
 for its `$args`.
@@ -35,6 +35,10 @@ partials, blocks, or UI patterns) used across `focused-schools`.
 | Cycle of Excellence | `template-parts/components/cycle-of-excellence.php` | 3-phase interactive stepper (generic/args-driven) | Implemented (added for the 2026 rebrand Home page task) |
 | Service List | `template-parts/components/service-list.php` | `fs_service` display integration, numbered row layout | Implemented (added for the 2026 rebrand Home page task) |
 | Testimonial Carousel | `template-parts/components/testimonial-carousel.php` | `fs_testimonial` display integration, prev/next + dots carousel | Implemented (added for the 2026 rebrand Home page task) |
+| Rail Text Block | `template-parts/components/rail-text.php` | Icon + eyebrow label beside heading/body/CTA, no photo (generic/args-driven) | Implemented (added for the About page task) |
+| Partner Districts | `template-parts/components/partner-districts.php` | State-grouped district list + badge + CTA (generic/args-driven) | Implemented (added for the About page task) |
+| Team Bio Modal | `template-parts/components/team-bio-modal.php` | Shared dialog shell, populated per-card from team-card.php's `bio_modal` prop | Implemented (added for the About page task) |
+| Cycle Teaser | `template-parts/components/cycle-teaser.php` | Decorative heading/body/portrait card, precedes Cycle of Excellence (generic/args-driven) | Implemented (added for the Home page correction pass — see `docs/page-specs/home.md` §10) |
 
 Shared CSS: `assets/css/components/card.css` provides the base `.fs-card` styling reused
 by Service/Team/Impact Story/Podcast/Post cards. `assets/css/components/card-grid.css` is
@@ -48,7 +52,10 @@ panel, focus trap, body-scroll lock),
 `assets/js/components/podcast-video.js` (YouTube click-to-load, inline facade),
 `assets/js/components/home-hero.js` (YouTube click-to-load, modal dialog),
 `assets/js/components/cycle-of-excellence.js` (phase stepper),
-`assets/js/components/testimonial-carousel.js` (prev/next + dots, no auto-advance).
+`assets/js/components/testimonial-carousel.js` (prev/next + dots, no auto-advance),
+`assets/js/components/team-bio-modal.js` (modal dialog, populated from a hidden
+`<template>` per card),
+`assets/js/components/team-load-more.js` (reveals `[hidden]` cards beyond the initial 6).
 
 ## 3. Component Specs
 
@@ -74,7 +81,7 @@ panel, focus trap, body-scroll lock),
 
 - **Location:** `template-parts/components/hero.php` / `assets/css/components/hero.css`
 - **Purpose:** Page/section hero with heading, optional subheading, image, and CTA.
-- **Props / Fields:** `heading` (string, required), `subheading` (string), `image_id` (int), `cta_label` (string), `cta_url` (string), `alignment` (`left`\|`center`, default `left`).
+- **Props / Fields:** `heading` (string, required), `eyebrow` (string, added for the About page task), `subheading` (string), `image_id` (int, attachment), `image_url` (string, theme-static URL — used only when `image_id` is not set; added for the About page task, additive/backward-compatible), `image_alt` (string, for `image_url`), `cta_label` (string), `cta_url` (string), `alignment` (`left`\|`center`, default `left`).
 - **States:** stacked (mobile) / side-by-side (≥1024px); with/without image; with/without CTA.
 - **Dependencies:** `template-parts/components/button.php`.
 - **Related design tokens:** typography scale, spacing scale.
@@ -101,7 +108,7 @@ panel, focus trap, body-scroll lock),
 
 - **Location:** `template-parts/components/content-image-split.php` / `assets/css/components/content-image-split.css`
 - **Purpose:** Two-column content + image section, image on either side.
-- **Props / Fields:** `heading` (string), `body` (string, HTML allowed via `wp_kses_post()`), `image_id` (int, attachment), `image_url` (string, theme-static URL — used only when `image_id` is not set; added for the 2026 rebrand Home page task, additive/backward-compatible), `image_alt` (string, for `image_url`), `image_position` (`left`\|`right`, default `right`), `cta_label` (string), `cta_url` (string).
+- **Props / Fields:** `heading` (string), `body` (string, HTML allowed via `wp_kses_post()`), `image_id` (int, attachment), `image_url` (string, theme-static URL — used only when `image_id` is not set; added for the 2026 rebrand Home page task, additive/backward-compatible), `image_alt` (string, for `image_url`), `image_position` (`left`\|`right`, default `right`), `cta_label` (string), `cta_url` (string), `cta2_label`/`cta2_url` (string, optional second CTA rendered in secondary style; added for the About page task's Mission Close section, additive/backward-compatible).
 - **States:** stacked (mobile) / side-by-side (≥1024px), image left or right.
 - **Dependencies:** `template-parts/components/button.php`.
 - **Related design tokens:** typography scale, spacing scale.
@@ -121,8 +128,8 @@ panel, focus trap, body-scroll lock),
 
 - **Location:** `template-parts/components/team-card.php` / `assets/css/components/team-card.css` (+ shared `card.css`)
 - **Purpose:** Display a single `fs_team_member` post.
-- **Props / Fields:** `post` (`WP_Post`\|int, required), `show_bio` (bool, optional, default `false` — renders a bio excerpt from the member's `editor` content; opt-in so existing usages like the Home page teaser are unaffected. Added for the Team page.).
-- **States:** with/without headshot, bio, quote, or LinkedIn URL (each section omitted if empty).
+- **Props / Fields:** `post` (`WP_Post`\|int, required), `show_bio` (bool, optional, default `false` — renders a bio excerpt from the member's `editor` content; opt-in so existing usages like the Home page teaser are unaffected. Added for the Team page.), `bio_modal` (bool, optional, default `false` — renders a "Read bio" button opening the member's full `editor` content in the shared `team-bio-modal.php` dialog, only when that content is non-empty; added for the About page task, additive/backward-compatible).
+- **States:** with/without headshot, bio, quote, LinkedIn URL, or full bio (each section omitted if empty).
 - **Dependencies:** `focused-schools-core` plugin's `fs_team_member` post type + `_fs_team_*` meta.
 - **Related design tokens:** typography, spacing, accent color (quote border).
 
@@ -249,9 +256,46 @@ panel, focus trap, body-scroll lock),
 - **Dependencies:** none.
 - **Related design tokens:** typography, spacing.
 
+### Rail Text Block
+
+- **Location:** `template-parts/components/rail-text.php` / `assets/css/components/rail-text.css`
+- **Purpose:** Narrow icon + eyebrow label beside a heading/body/CTA content column, no photo — distinct from Content/Image Split (always has an image) and Commitment List (always has a numbered list).
+- **Props / Fields:** `eyebrow` (string, required), `icon_url` (string, theme-static path), `heading` (string, required), `body` (string or string[] — one or more paragraphs), `cta_label` (string), `cta_url` (string).
+- **States:** label stacks above content (mobile) / narrow label column beside content (≥1024px).
+- **Dependencies:** `template-parts/components/button.php`.
+- **Related design tokens:** typography, spacing.
+
+### Partner Districts
+
+- **Location:** `template-parts/components/partner-districts.php` / `assets/css/components/partner-districts.css`
+- **Purpose:** State-grouped list of partner district names + an accreditation badge + closing CTA.
+- **Props / Fields:** `eyebrow` (string), `heading` (string, required, HTML allowed via `wp_kses_post()`), `intro` (string), `states` (array, required — each `{name (required), districts: string[] (required)}`), `badge_url`/`badge_alt` (string), `note` (string, HTML allowed via `wp_kses_post()`), `closing_text` (string), `cta_label`/`cta_url` (string).
+- **States:** renders nothing if `$states` is empty; the badge/note/CTA footer row is omitted entirely if none of its parts are provided.
+- **Args-driven, CPT-fed:** the component itself stays generic (the page template owns the query, same as `service-list.php`/`testimonial-carousel.php`) — but `page-about-our-mission-vision.php` now builds `$states` from a real `WP_Query` against the `fs_partner` CPT grouped by the `fs_partner_state` taxonomy (`FocusedSchoolsCore\Modules\Partners`), replacing the original hardcoded 5-state array. Empty state (no `fs_partner` posts yet) shows a graceful "directory is being populated" message instead of calling this component.
+- **Dependencies:** `template-parts/components/button.php`.
+- **Related design tokens:** typography, spacing.
+
+### Team Bio Modal
+
+- **Location:** `template-parts/components/team-bio-modal.php` / `assets/css/components/team-bio-modal.css` / `assets/js/components/team-bio-modal.js`
+- **Purpose:** Shared dialog shell for team-card.php's `bio_modal` prop — one instance per page, populated per-click from whichever card was opened.
+- **Props / Fields:** none — include once on any page using `team-card.php` with `bio_modal: true`.
+- **States:** closed (default, `hidden`) / open (populated from the clicked card's hidden `<template data-fs-bio-content>`, focus moved to its close button, body scroll locked via the shared `fs-modal-open` class). Closes on Escape, backdrop click, or the close button, returning focus to the button that opened it.
+- **Dependencies:** must appear on the same page as one or more `team-card.php` instances rendered with `bio_modal: true`.
+- **Related design tokens:** color, spacing, typography.
+
+### Cycle Teaser
+
+- **Location:** `template-parts/components/cycle-teaser.php` / `assets/css/components/cycle-teaser.css`
+- **Purpose:** Decorative heading/body/portrait card that precedes `cycle-of-excellence.php` on the Home page — see that component's spec and `docs/page-specs/home.md` §10 for why these are two sections, not one.
+- **Props / Fields:** `heading` (string, required), `body` (string), `image_url` (string, theme-static path), `image_alt` (string).
+- **States:** with/without image.
+- **Dependencies:** none.
+- **Related design tokens:** typography, spacing.
+
 ## 4. Notes
 
-All 22 components/utilities (21 template-part components + the shared `card.css` base;
+All 26 components/utilities (25 template-part components + the shared `card.css` base;
 `card-grid.css` is a layout utility, not a component) use only `theme.json` CSS custom
 properties (`var(--wp--preset--...)`) for color/spacing/typography — no hardcoded design
 values. Every interactive element inherits the base stylesheet's `:focus-visible`

@@ -1,49 +1,98 @@
 /**
- * Content/Image Split. Mobile-first: stacked by default, side-by-side from
- * 1024px, with the image ordered per image_position on larger screens.
+ * Content/Image Split — used only by the About page's "Mission Close"
+ * section. Exact geometry from the approved .dc design: 1fr + 460px grid,
+ * 100px gap, 68px heading, 4:5 portrait image with shadow.
  */
 
 .fs-content-split {
-	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+	padding: 7rem 0 7.5rem;
 }
 
 .fs-content-split__inner {
 	display: flex;
 	flex-direction: column;
-	gap: var( --wp--preset--spacing--large, 2rem );
+	gap: 2.5rem;
 }
 
 .fs-content-split__heading {
-	margin-top: 0;
-	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+	margin: 0 0 2.125rem;
+	max-width: 15ch;
+	font-size: 2.75rem;
+	line-height: 1;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-content-split__body {
-	font-size: var( --wp--preset--font-size--medium, 1rem );
+	max-width: 62ch;
+	font-size: 1.0625rem;
+	line-height: 1.75;
+	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
 .fs-content-split__body > :first-child {
 	margin-top: 0;
 }
 
+.fs-content-split__body > :last-child {
+	margin-bottom: 0;
+}
+
+.fs-content-split__media {
+	position: relative;
+	margin: 0;
+	aspect-ratio: 4 / 5;
+	border-radius: var( --fs-r-sm, 8px );
+	overflow: hidden;
+	background: var( --wp--preset--color--teal-deep, #004855 );
+	box-shadow: var( --fs-shadow-2 );
+}
+
 .fs-content-split__image {
+	position: absolute;
+	inset: 0;
 	width: 100%;
-	height: auto;
-	border-radius: 4px;
+	height: 100%;
+	object-fit: cover;
+}
+
+.fs-content-split__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1.25rem;
+	margin-top: 2.5rem;
 }
 
 @media ( min-width: 1024px ) {
 	.fs-content-split__inner {
 		flex-direction: row;
 		align-items: center;
+		gap: 6.25rem;
 	}
 
-	.fs-content-split__content,
+	.fs-content-split__content {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
 	.fs-content-split__media {
-		flex: 1 1 50%;
+		flex: 0 0 460px;
+		width: 460px;
 	}
 
 	.fs-content-split--image-left .fs-content-split__media {
 		order: -1;
+	}
+
+	.fs-content-split__heading {
+		font-size: 4.25rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-content-split__heading {
+		font-size: 2.125rem;
 	}
 }

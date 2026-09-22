@@ -20,6 +20,25 @@ function focused_schools_setup() {
 	add_theme_support( 'responsive-embeds' );
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'editor-styles' );
+
+	/*
+	 * The approved .dc design renders the header/footer brand mark as a real
+	 * logo image (full-logo.svg), not text — WordPress's native Site
+	 * Identity mechanism (Appearance > Customize, or Site Editor > Design >
+	 * Site Identity) is the correct, dynamic way to manage that without
+	 * hardcoding a file path here. site-header.php/site-footer.php already
+	 * fall back to the site title text when no logo is set, so this has zero
+	 * effect until an editor uploads one.
+	 */
+	add_theme_support(
+		'custom-logo',
+		array(
+			'height'      => 46,
+			'width'       => 200,
+			'flex-height' => true,
+			'flex-width'  => true,
+		)
+	);
 	add_theme_support(
 		'html5',
 		array(

@@ -1,88 +1,134 @@
 /**
- * Commitment List ("How we partner"). Mobile-first: photo above the list
- * below 1024px, side-by-side from 1024px.
+ * Commitment List ("How we partner" / About's "What guides us"). Exact
+ * geometry from the approved .dc design: paper ground, 120px section
+ * padding, 430px figure + 96px gap to the list, 40/44px row padding.
  */
 
 .fs-commitments {
-	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+	padding: 7.5rem 0;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
 }
 
 .fs-commitments__intro {
-	display: flex;
-	flex-direction: column;
-	gap: var( --wp--preset--spacing--medium, 1rem );
-	margin-bottom: var( --wp--preset--spacing--x-large, 3rem );
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 2rem;
+	margin-bottom: 6rem;
 }
 
 .fs-commitments__heading {
 	margin: 0;
-	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
-	font-weight: 900;
+	max-width: var( --fs-commitments-heading-max, 9ch );
+	font-size: 3.75rem;
+	line-height: 1;
+	letter-spacing: -0.03em;
+	font-weight: 400;
+	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-commitments__heading strong {
-	color: var( --wp--preset--color--primary, #dd6237 );
+	font-weight: 700;
 }
 
 .fs-commitments__lead {
 	margin: 0;
+	max-width: 560px;
+	font-size: 1.1875rem;
+	line-height: 1.65;
 	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
 .fs-commitments__body {
-	display: flex;
-	flex-direction: column;
-	gap: var( --wp--preset--spacing--x-large, 3rem );
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 2.5rem;
+	align-items: start;
+}
+
+.fs-commitments__photo {
+	position: relative;
+	margin: 0;
+	aspect-ratio: 4 / 5;
+	border-radius: var( --fs-r-sm, 8px );
+	background: var( --wp--preset--color--teal-deep, #004855 );
+	box-shadow: var( --fs-shadow-2 );
 }
 
 .fs-commitments__photo img {
+	position: absolute;
+	inset: 0;
 	width: 100%;
-	border-radius: var( --wp--preset--spacing--small, 0.5rem );
+	height: 100%;
+	object-fit: cover;
+	border-radius: var( --fs-r-sm, 8px );
 }
 
 .fs-commitments__list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	display: flex;
-	flex-direction: column;
-	gap: var( --wp--preset--spacing--large, 2rem );
+	border-top: 1px solid var( --wp--preset--color--rule, #d3dde1 );
 }
 
 .fs-commitments__row {
-	display: flex;
-	gap: var( --wp--preset--spacing--medium, 1rem );
-	padding-block: var( --wp--preset--spacing--medium, 1rem );
-	border-top: 1px solid var( --wp--preset--color--paper-soft, #f5f6f8 );
+	display: grid;
+	grid-template-columns: 56px minmax( 0, 1fr );
+	gap: 34px;
+	padding: 2.5rem 0 2.75rem;
+	border-bottom: 1px solid var( --wp--preset--color--rule, #d3dde1 );
 }
 
 .fs-commitments__index {
-	flex: 0 0 auto;
-	font-size: var( --wp--preset--font-size--large, 1.5rem );
-	font-weight: 900;
-	color: var( --wp--preset--color--primary, #dd6237 );
+	padding-top: 12px;
+	font-size: 0.6875rem;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-commitments__copy h3 {
-	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
+	margin: 0 0 1rem;
+	max-width: 22ch;
+	font-size: 2.25rem;
+	line-height: 1.12;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-commitments__copy p {
-	margin: 0 0 var( --wp--preset--spacing--medium, 1rem );
+	margin: 0 0 1.625rem;
+	max-width: 700px;
+	font-size: 0.9375rem;
+	line-height: 1.7;
 	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
-@media ( min-width: 1024px ) {
+@media ( min-width: 1240px ) {
+	.fs-commitments__intro {
+		grid-template-columns: minmax( 0, 1fr ) minmax( 0, 1fr );
+		align-items: end;
+		gap: 5rem;
+	}
+
+	.fs-commitments__heading {
+		/* 84px — matches rail-text.css's equivalent desktop step; both
+		   headings share the same approved .dc display size. */
+		font-size: 5.25rem;
+	}
+
 	.fs-commitments__body {
-		flex-direction: row;
-		align-items: flex-start;
+		grid-template-columns: 430px minmax( 0, 1fr );
+		gap: 6rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-commitments__heading {
+		font-size: 2.25rem;
 	}
 
-	.fs-commitments__photo {
-		flex: 0 0 40%;
-	}
-
-	.fs-commitments__list {
-		flex: 1 1 60%;
+	.fs-commitments__copy h3 {
+		font-size: 1.625rem;
 	}
 }

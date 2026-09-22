@@ -7,13 +7,15 @@
  * - heading   (string, required)
  * - body      (string)
  * - phases    (array, required) each item: { label (string, required), description (string) }
+ * - mark_url  (string) theme-static cycle mark image, shown as a continuously
+ *   (CSS-only) rotating disc — 40s linear infinite per docs/design-system.md's
+ *   motion tokens, disabled under prefers-reduced-motion
  *
- * Note: the design reference shows this idea twice in slightly different
- * treatments (a teaser card, then a fuller stepper section) — this
- * component intentionally merges them into one section rather than
- * literally duplicating the "A Cycle of Excellence" heading twice on the
- * page, which reads as an editing artifact rather than an intentional
- * repeat.
+ * The design reference shows this idea twice: a teaser card first
+ * (cycle-teaser.php), then this fuller interactive stepper section. Confirmed
+ * as intentional (not a duplication artifact) once a second, independent
+ * capture of the approved design showed the same two-section structure — see
+ * docs/page-specs/home.md.
  *
  * The 3 phase buttons toggle an active phase (assets/js/components/cycle-of-excellence.js)
  * for visual emphasis only — each phase's full label + description is
@@ -29,13 +31,14 @@ $fs_eyebrow = isset( $args['eyebrow'] ) ? $args['eyebrow'] : '';
 $fs_heading = isset( $args['heading'] ) ? $args['heading'] : '';
 $fs_body    = isset( $args['body'] ) ? $args['body'] : '';
 $fs_phases  = isset( $args['phases'] ) && is_array( $args['phases'] ) ? $args['phases'] : array();
+$fs_mark    = isset( $args['mark_url'] ) ? $args['mark_url'] : '';
 
 if ( '' === trim( (string) $fs_heading ) || empty( $fs_phases ) ) {
 	return;
 }
 ?>
 <section class="fs-cycle" aria-labelledby="fs-cycle-title">
-	<div class="fs-container fs-container--wide">
+	<div class="fs-container fs-container--shell fs-cycle__layout">
 		<header class="fs-cycle__intro">
 			<?php if ( $fs_eyebrow ) : ?>
 				<p class="fs-eyebrow fs-eyebrow--on-dark"><?php echo esc_html( $fs_eyebrow ); ?></p>
@@ -45,6 +48,13 @@ if ( '' === trim( (string) $fs_heading ) || empty( $fs_phases ) ) {
 				<p><?php echo esc_html( $fs_body ); ?></p>
 			<?php endif; ?>
 		</header>
+
+		<?php if ( $fs_mark ) : ?>
+			<div class="fs-cycle__mark" aria-hidden="true">
+				<span class="fs-cycle__mark-disc"></span>
+				<img class="fs-cycle__mark-rotor" src="<?php echo esc_url( $fs_mark ); ?>" alt="" />
+			</div>
+		<?php endif; ?>
 
 		<div class="fs-cycle__steps" role="group" aria-label="<?php esc_attr_e( 'Cycle of Excellence phases', 'focused-schools' ); ?>" data-fs-cycle>
 			<?php
@@ -60,10 +70,11 @@ if ( '' === trim( (string) $fs_heading ) || empty( $fs_phases ) ) {
 				<div class="fs-cycle__step<?php echo 0 === $fs_index ? ' is-active' : ''; ?>">
 					<button
 						type="button"
-						class="fs-cycle__step-trigger"
+						class="fs-cycle__step-trigger fs-cycle__step-trigger--<?php echo esc_attr( $fs_index % 3 ); ?>"
 						data-fs-cycle-step="<?php echo esc_attr( $fs_index ); ?>"
 						<?php echo 0 === $fs_index ? 'aria-current="step"' : ''; ?>
 					>
+						<span class="fs-cycle__step-dot" aria-hidden="true"></span>
 						<span class="fs-cycle__step-index" aria-hidden="true"><?php echo esc_html( sprintf( '%02d', $fs_index + 1 ) ); ?></span>
 						<strong><?php echo esc_html( $fs_label ); ?></strong>
 					</button>

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400;1,9..40,700&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #ffffff; color: #005C6D; font-family: "DM Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  * { box-sizing: border-box; }
+  a { color: #005C6D; text-decoration: none; }
+  a:hover { color: #DD6237; }
+  button { font-family: inherit; }
+  @keyframes fsRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  input::placeholder, textarea::placeholder { color: #9aa4a8; }
+
+  /* Parent-hover descendant styling cannot be expressed inline. */
+  @keyframes fs-spin { to { transform: rotate(360deg); } }
+  [data-shape] { transition: transform 620ms cubic-bezier(.2,.7,.2,1); will-change: transform; transform-origin: 50% 50%; }
+  [data-teacher-card]:hover [data-shape-a] { transform: translateY(-10px) rotate(110deg) scale(1.06); }
+  [data-teacher-card]:hover [data-shape-b] { transform: translateY(-14px) rotate(-8deg) scale(1.08); }
+  [data-teacher-card]:hover [data-shape-c] { transform: translateY(-8px) rotate(-28deg) scale(1.12); }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* Media queries cannot be expressed inline. Matched on the inline layout values themselves. */
+  @media (max-width: 1240px) {
+    [data-rail] { grid-template-columns: minmax(0, 1fr) !important; gap: 40px !important; }
+    [data-display] { font-size: 60px !important; }
+    [data-h1] { font-size: 46px !important; }
+    [data-intro] { grid-template-columns: minmax(0, 1fr) !important; gap: 44px !important; }
+    [data-hero-slab] { position: static !important; width: auto !important; max-width: none !important; margin: -45px 0 0 !important; padding: 40px !important; }
+    [data-console] { bottom: 64px !important; }
+    [data-cycle-layout] { grid-template-columns: minmax(0, 1fr) 300px minmax(0, 1fr) !important; gap: 32px !important; }
+  }
+  @media (max-width: 1024px) {
+    [data-nav] { display: none !important; }
+    [data-menu-label] { display: none !important; }
+    [data-partner-body] { grid-template-columns: minmax(0, 1fr) !important; gap: 56px !important; }
+    [data-srow] { grid-template-columns: 56px minmax(0, 1fr) !important; row-gap: 14px !important; column-gap: 24px !important; }
+    [data-srow-desc] { grid-column: 2 !important; }
+    [data-srow-go] { grid-column: 2 !important; justify-self: start !important; margin-top: 8px; }
+    [data-cycle-layout] { grid-template-columns: minmax(0, 1fr) !important; gap: 56px !important; }
+    [data-cycle-mark] { justify-self: center !important; }
+    [data-teacher-card] { padding: 44px 40px !important; min-height: 0 !important; }
+    [data-teacher-copy] { max-width: 36% !important; }
+    [data-teacher-copy] p { font-size: 15px !important; }
+    [data-person] { width: 74% !important; right: -4% !important; }
+    [data-shape] { left: 56.6% !important; top: 29% !important; width: 96px !important; margin: -48px 0 0 -48px !important; }
+    [data-shape-b] { left: 78.7% !important; top: 26% !important; width: 100px !important; margin: -50px 0 0 -50px !important; }
+    [data-shape-c] { left: 72.8% !important; top: 14% !important; width: 36px !important; margin: -18px 0 0 -18px !important; }
+    [data-teacher-copy] [data-h2-lg] { font-size: 36px !important; }
+    [data-footer-grid] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 48px !important; }
+    [data-menu-body] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-strip] { grid-template-columns: 1fr 1fr !important; }
+    [data-strip] > :last-child { display: none !important; }
+    [data-cycle-section] { min-height: 0 !important; }
+    [data-cycle-stage] { position: static !important; height: auto !important; padding: 104px 0 !important; }
+  }
+  @media (max-width: 720px) {
+    [data-shell] { padding-left: 20px !important; padding-right: 20px !important; }
+    [data-h1] { font-size: 34px !important; }
+    [data-display] { font-size: 36px !important; }
+    [data-h2-lg] { font-size: 34px !important; }
+    [data-h2-cycle] { font-size: 34px !important; }
+    [data-h3] { font-size: 26px !important; }
+    [data-space] { padding-top: 64px !important; padding-bottom: 64px !important; }
+    [data-hero-media] { aspect-ratio: 3 / 4 !important; }
+    [data-nav-cta] { display: none !important; }
+    [data-hero-slab] { position: static !important; width: auto !important; max-width: none !important; margin: 0 !important; padding: 28px 24px 32px !important; }
+    [data-console] { left: 12px !important; right: 12px !important; bottom: 20px !important; justify-content: space-between; }
+    [data-proof-grid] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-proof-item] { padding: 32px 0 !important; border-left: 0 !important; border-top: 1px solid #d3dde1 !important; }
+    [data-proof-item]:first-child { border-top: 0 !important; padding-top: 0 !important; }
+    [data-menu-grid] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-menu-cell] { min-height: 96px !important; padding: 20px 24px !important; border-right: 0 !important; }
+    [data-menu-cell] span:first-child { font-size: 30px !important; }
+    [data-footer-grid] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-quote] { font-size: 24px !important; }
+    [data-form-row] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-form-shell] { padding: 26px 22px 30px !important; }
+    [data-contact-layout] { grid-template-columns: minmax(0, 1fr) !important; gap: 48px !important; }
+    [data-strip] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-strip] > :last-child { display: block !important; }
+    [data-strip] img { height: 300px !important; }
+    [data-teacher-card] { padding: 40px 24px 0 !important; min-height: 0 !important; }
+    [data-teacher-copy] { max-width: none !important; }
+    [data-teacher-scene] { position: relative !important; inset: auto !important; width: 100% !important; margin: 28px auto 0 !important; height: auto !important; }
+    [data-person] { position: relative !important; right: auto !important; bottom: auto !important; width: 100% !important; margin: 0 !important; }
+    [data-shape] { left: 34% !important; top: 38% !important; bottom: auto !important; width: 15% !important; margin: -7.5% 0 0 -7.5% !important; }
+    [data-shape-b] { left: 67% !important; top: 35% !important; width: 16% !important; margin: -8% 0 0 -8% !important; }
+    [data-shape-c] { left: 59% !important; top: 24% !important; width: 6% !important; margin: -3% 0 0 -3% !important; }    [data-hold] { min-height: 0 !important; }
+    [data-hold-inner] { position: static !important; padding: 0 !important; }
+    [data-cycle-section] { min-height: 0 !important; }
+    [data-cycle-stage] { position: static !important; height: auto !important; padding: 72px 0 !important; }
+  }
+</style>
+</helmet>
+
+<div id="top">
+  <a href="#main" style="position: absolute; left: -9999px;">Skip to content</a>
+
+  <!-- ===================== HEADER ===================== -->
+  <header style="position: sticky; top: 0; z-index: 70; padding: 16px 0 0;">
+    <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+      <div style="position: relative; height: 74px; background: #ffffff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,92,109,0.08); display: flex; align-items: center; gap: 24px; padding: 0 14px 0 26px; overflow: hidden;">
+        <a href="#top" aria-label="Focused Schools — home" style="display: flex; align-items: center; flex: 0 0 auto;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo.svg?v=palette-2026-3" alt="Focused Schools" style="height: 46px; width: auto; display: block;" />
+        </a>
+        <nav data-nav="" aria-label="Primary navigation" style="display: flex; align-items: center; gap: 40px; margin: 0 auto;">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+            <a href="{{ n.href }}" style="font-size: 14px; font-weight: 500; color: #005C6D; transition: color 160ms cubic-bezier(.2,.7,.2,1);" style-hover="color: #DD6237;">{{ n.label }}</a>
+          </sc-for>
+        </nav>
+        <a data-nav-cta="" href="https://www.focusedschools.com/about-our-mission-vision/" style="display: inline-flex; align-items: center; gap: 12px; height: 46px; padding: 0 24px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; flex: 0 0 auto; margin-left: auto; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Get to Know Us <span style="font-size: 15px;">&rarr;</span></a>
+        <button type="button" onClick="{{ openMenu }}" aria-label="Open menu" aria-expanded="{{ menuOpen }}" style="display: inline-flex; align-items: center; gap: 12px; height: 46px; padding: 0 16px; border-radius: 999px; border: 1px solid #e6eaec; background: #ffffff; cursor: pointer; color: #005C6D; flex: 0 0 auto; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #f5f6f8;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-1.svg?v=palette-2026-3" alt="" style="height: 22px; width: auto; display: block;" />
+          <span data-menu-label="" style="font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Menu</span>
+          <span style="display: flex; flex-direction: column; gap: 5px; width: 18px;">
+            <span style="display: block; height: 2px; background: #005C6D;"></span>
+            <span style="display: block; height: 2px; background: #005C6D;"></span>
+          </span>
+        </button>
+        <span data-nav-progress="" aria-hidden="true" style="position: absolute; left: 0; bottom: 0; height: 2px; width: 0%; background: #DD6237;"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== MENU OVERLAY ===================== -->
+  <div style="{{ menuScrimStyle }}">
+    <div style="min-height: 100%; display: flex; align-items: center; justify-content: center; padding: 48px 28px;">
+      <div style="position: relative; width: 100%; max-width: 1280px;">
+        <div aria-hidden="true" style="position: absolute; left: -16px; top: 16px; right: 16px; bottom: -16px; background: #005C6D; border-radius: 24px;"></div>
+        <div role="dialog" aria-modal="true" aria-label="Explore Focused Schools" style="position: relative; background: #ffffff; border-radius: 24px; overflow: hidden;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 26px 24px 26px 40px;">
+            <p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #005C6D;">Explore Focused Schools</p>
+            <button type="button" onClick="{{ closeMenu }}" aria-label="Close menu" style="width: 48px; height: 48px; border-radius: 12px; border: 0; background: #f0f2f4; color: #005C6D; font-size: 24px; line-height: 1; cursor: pointer; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #e3e8ea;">&times;</button>
+          </div>
+          <div data-menu-body="" style="display: grid; grid-template-columns: minmax(0, 1fr) 380px;">
+            <nav data-menu-grid="" aria-label="Expanded navigation" style="display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #eef1f2;">
+              <sc-for list="{{ menuItems }}" as="m" hint-placeholder-count="9">
+                <a href="{{ m.href }}" onClick="{{ closeMenu }}" data-menu-cell="" style="{{ m.cellStyle }}" style-hover="background: #f5f6f8; color: #005C6D;">
+                  <span style="font-size: 42px; font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; color: #005C6D;">{{ m.label }}</span>
+                  <span style="font-size: 13px; font-weight: 500; letter-spacing: 0.1em; color: #9aa4a8;">{{ m.num }}</span>
+                </a>
+              </sc-for>
+            </nav>
+            <aside data-menu-aside="" style="background: #005C6D; padding: 48px 40px; display: flex; flex-direction: column; align-items: flex-start; gap: 32px;">
+              <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" style="height: 66px; width: auto;" />
+              <p style="margin: 0; font-size: 30px; line-height: 1.2; letter-spacing: -0.02em; font-weight: 700; color: #ffffff;">Every student. Every classroom. Every day. No exceptions.</p>
+              <a href="mailto:hello@focusedschools.com" style="font-size: 16px; font-weight: 400; color: #ffffff;" style-hover="color: #A7CC14;">hello@focusedschools.com</a>
+              <div style="display: flex; flex-wrap: wrap; gap: 16px 28px;">
+                <a href="https://twitter.com/focusedschools" style="font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #ffffff;" style-hover="color: #A7CC14;">X</a>
+                <a href="https://www.facebook.com/focusedschools" style="font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #ffffff;" style-hover="color: #A7CC14;">Facebook</a>
+                <a href="https://www.youtube.com/channel/UCg8W-jIlwxFCrVsU15gWFqA" style="font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #ffffff;" style-hover="color: #A7CC14;">YouTube</a>
+                <a href="https://www.linkedin.com/company/focused-schools" style="font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #ffffff;" style-hover="color: #A7CC14;">LinkedIn</a>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <!-- ===================== HERO ===================== -->
+    <section data-screen-label="Hero" style="background: #ffffff; padding: 14px 0 128px;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; position: relative;">
+        <div data-hero-media="" style="position: relative;">
+          <div data-hero-frame="" style="position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background: #004855;">
+            <img src="https://focused-schools-rebrand.vercel.app/assets/img/student-video.jpg" alt="" style="{{ posterStyle }}" />
+            <iframe src="{{ ambientSrc }}" title="Muted Focused Schools background video" tabindex="-1" aria-hidden="true" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" style="{{ ambientStyle }}"></iframe>
+            <span aria-hidden="true" style="position: absolute; top: 26px; right: 26px; width: 44px; height: 44px; border-top: 2px solid rgba(255,255,255,0.9); border-right: 2px solid rgba(255,255,255,0.9);"></span>
+            <span aria-hidden="true" style="position: absolute; left: 26px; bottom: 26px; width: 44px; height: 44px; border-bottom: 2px solid rgba(255,255,255,0.55); border-left: 2px solid rgba(255,255,255,0.55);"></span>
+            <div data-console="" style="position: absolute; right: 22px; bottom: 22px; display: flex; align-items: center; gap: 4px; background: #ffffff; border-radius: 999px; padding: 6px; box-shadow: 0 8px 24px rgba(0,92,109,0.14); z-index: 3;">
+            <button type="button" onClick="{{ togglePlay }}" aria-pressed="{{ paused }}" style="display: inline-flex; align-items: center; gap: 10px; height: 42px; padding: 0 20px; border-radius: 999px; border: 0; background: #005C6D; color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(1.18);">
+              <span aria-hidden="true" style="{{ glyphStyle }}"><span style="{{ glyphBarA }}"></span><span style="{{ glyphBarB }}"></span></span>{{ playLabel }}
+            </button>
+            <button type="button" onClick="{{ openVideo }}" style="display: inline-flex; align-items: center; gap: 14px; height: 42px; padding: 0 22px; border-radius: 999px; border: 0; background: transparent; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #f0f2f4;">Watch with sound <span style="font-size: 14px;">&rarr;</span></button>
+            </div>
+          </div>
+        </div>
+        <div data-hero-slab="" data-reveal="" style="position: absolute; left: 24px; bottom: -56px; width: 560px; background: #005C6D; padding: 44px; z-index: 2;">
+          <h1 data-h1="" style="margin: 0 0 20px; font-size: 52px; line-height: 0.96; letter-spacing: -0.025em; font-weight: 700; color: #ffffff;">We are Focused Schools</h1>
+          <p style="margin: 0 0 28px; max-width: 400px; font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.92);">We help educators confidently lead the hard work and heart work of lasting school improvement.</p>
+          <a href="https://www.focusedschools.com/about-our-mission-vision/" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 26px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Our Approach <span style="font-size: 15px;">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== MISSION (scroll-held) ===================== -->
+    <section data-screen-label="Beliefs" id="why" style="background: #ffffff;">
+      <div data-hold="" style="min-height: 190vh;">
+        <div data-hold-inner="" style="position: sticky; top: 0; padding: 152px 0 96px;">
+          <div data-shell="" data-rail="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 264px minmax(0, 1fr);">
+            <div style="display: flex; align-items: flex-start; gap: 20px; padding-top: 6px;">
+              <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-1.svg?v=palette-2026-3" alt="" style="height: 28px; width: auto; flex: 0 0 auto;" />
+              <p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D; line-height: 1.6; max-width: 9ch;">What we believe</p>
+            </div>
+            <div>
+              <h2 data-display="" style="margin: 0 0 34px; font-size: 84px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 13ch;">When educators are supported, students thrive.</h2>
+              <p style="margin: 0 0 34px; max-width: 890px; font-size: 19px; line-height: 1.65; color: #51536a;"><em data-emphasis="" style="position: relative; font-style: normal; color: #005C6D;">Every student<span aria-hidden="true" data-emphasis-rule="" style="position: absolute; left: 0; right: auto; bottom: -3px; width: 0%; height: 2px; background: #DD6237;"></span></em> deserves the opportunity to succeed. That begins by supporting the people who make that success possible every day. We believe confident leaders create stronger schools, empowered educators inspire meaningful learning, and lasting school improvement happens when people, not just programs, are equipped to grow together.</p>
+              <a href="https://www.focusedschools.com/about-our-mission-vision/" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 24px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="border-color: #005C6D; background: #f5f6f8; color: #005C6D;">Get to know us <span style="font-size: 14px;">&rarr;</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-strip="" aria-label="Focused Schools leadership retreat" style="display: grid; grid-template-columns: 729fr 482fr 487fr; gap: 6px;">
+        <figure style="margin: 0;"><img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-2.jpg" alt="Two education leaders celebrating progress with a fist bump." style="width: 100%; height: 482px; object-fit: cover; display: block;" /></figure>
+        <figure style="margin: 0;"><img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-3.jpg" alt="A facilitator and district leader discussing a system map." style="width: 100%; height: 482px; object-fit: cover; display: block;" /></figure>
+        <figure style="margin: 0;"><img src="https://focused-schools-rebrand.vercel.app/assets/img/student-video.jpg" alt="Students learning together in a classroom." style="width: 100%; height: 482px; object-fit: cover; display: block;" /></figure>
+      </div>
+    </section>
+
+    <!-- ===================== PARTNERSHIP ===================== -->
+    <section data-screen-label="Commitments" data-space="" style="background: #f5f6f8; padding: 120px 0;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+        <header data-reveal="" data-intro="" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 80px; align-items: end; margin-bottom: 96px;">
+          <div>
+            <p style="margin: 0 0 26px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">How we partner</p>
+            <h2 data-display="" style="margin: 0; font-size: 84px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 400; color: #005C6D; max-width: 9ch;">Our partnerships are built on <strong style="font-weight: 700;">three commitments.</strong></h2>
+          </div>
+          <p style="margin: 0 0 14px; max-width: 560px; font-size: 19px; line-height: 1.65; color: #51536a;">Every student gets one chance. One. Everything we do exists to help school leaders make it worth it. The true measure of our work is not what we did. It is what changed because of it.</p>
+        </header>
+        <div data-partner-body="" style="display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 96px; align-items: start;">
+          <figure data-reveal="" style="position: relative; margin: 0;">
+            <img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-1.jpg" alt="District and school leaders working together during a Focused Schools leadership retreat." style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 8px; display: block; box-shadow: 0 20px 44px rgba(0,92,109,0.14);" />
+            <figcaption style="position: absolute; right: -16px; bottom: 32px; background: #ffffff; border-radius: 8px; padding: 14px 20px; box-shadow: 0 10px 28px rgba(0,92,109,0.14); max-width: 252px;">
+              <span style="display: block; font-size: 10px; font-weight: 700; font-style: italic; letter-spacing: 0.1em; text-transform: uppercase; color: #0A96CB; margin-bottom: 5px;">Focused Schools in practice</span>
+              <strong style="display: block; font-size: 15px; font-weight: 700; line-height: 1.3; color: #005C6D;">Leadership working side by side</strong>
+            </figcaption>
+          </figure>
+          <ol style="margin: 0; padding: 0; list-style: none; border-top: 1px solid #d3dde1;">
+            <sc-for list="{{ commitments }}" as="c" hint-placeholder-count="3">
+              <li data-reveal="" data-srow="" style="display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 34px; padding: 40px 0 44px; border-bottom: 1px solid #d3dde1;">
+                <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: #005C6D; padding-top: 12px;">{{ c.num }}</span>
+                <div>
+                  <h3 data-h3="" style="margin: 0 0 16px; font-size: 36px; line-height: 1.12; letter-spacing: -0.025em; font-weight: 700; color: #005C6D; max-width: 22ch;">{{ c.title }}</h3>
+                  <p style="margin: 0 0 26px; max-width: 700px; font-size: 15px; line-height: 1.7; color: #51536a;">{{ c.body }}</p>
+                  <a href="{{ c.href }}" style="display: inline-flex; align-items: center; gap: 14px; height: 44px; padding: 0 22px; border-radius: 999px; background: #ffffff; border: 1px solid #e3e9eb; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="border-color: #005C6D; background: #f5f6f8; color: #005C6D;">{{ c.cta }} <span style="font-size: 14px;">&rarr;</span></a>
+                </div>
+              </li>
+            </sc-for>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TEACHER CARD ===================== -->
+    <section data-screen-label="Cycle card" data-space="" style="background: #ffffff; padding: 170px 0 120px;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+        <article data-reveal="" data-teacher-card="" style="position: relative; max-width: 1180px; margin: 0 auto; min-height: 380px; background: #005C6D; border-radius: 16px; padding: 56px 56px; overflow: visible;">
+          <span aria-hidden="true" style="position: absolute; inset: 0; border-radius: 16px; overflow: hidden;">
+            <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" style="position: absolute; left: 32px; bottom: -80px; height: 260px; width: auto; opacity: 0.07;" />
+          </span>
+          <div data-teacher-copy="" style="position: relative; z-index: 3; max-width: 500px;">
+            <h2 data-h2-lg="" style="margin: 0 0 22px; font-size: 44px; line-height: 1.08; letter-spacing: -0.025em; font-weight: 700; color: #ffffff;">A Cycle of Excellence</h2>
+            <p style="margin: 0; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.92);">High-performing districts and schools are intentional about committing to a cycle of excellence. Your Focused Schools team is prepared to support your cycle of excellence in ways that will help you to continue to build capacity, accelerate growth, and communicate your progress relentlessly.</p>
+          </div>
+          <div aria-hidden="true" data-teacher-scene="" style="position: absolute; inset: 0; overflow: visible; pointer-events: none;">
+            <img data-shape="" data-shape-a="" src="https://focused-schools-rebrand.vercel.app/assets/shapes/star.svg" alt="" style="position: absolute; left: 62.2%; top: 22%; width: 110px; height: auto; margin: -55px 0 0 -55px; z-index: 1;" />
+            <img data-shape="" data-shape-b="" src="https://focused-schools-rebrand.vercel.app/assets/shapes/circle.svg?v=2" alt="" style="position: absolute; left: 79.9%; top: 18%; width: 120px; height: auto; margin: -60px 0 0 -60px; z-index: 1;" />
+            <img data-shape="" data-shape-c="" src="https://focused-schools-rebrand.vercel.app/assets/shapes/confetti-1.svg?v=2" alt="" style="position: absolute; left: 75.2%; top: 5%; width: 40px; height: auto; margin: -20px 0 0 -20px; z-index: 1;" />
+            <img data-person="" src="https://focused-schools-rebrand.vercel.app/assets/img/teacher-portrait.webp" alt="" style="position: absolute; bottom: 0; right: 0; width: 59%; height: auto; display: block; z-index: 2;" />
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== CYCLE STORY (scroll-scrubbed) ===================== -->
+    <section data-screen-label="Cycle diagram" data-cycle-section="" style="background: #005C6D; min-height: 230vh;">
+      <div data-cycle-stage="" style="position: sticky; top: 0; height: 100vh; display: flex; align-items: center;">
+        <div data-shell="" data-cycle-layout="" style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: minmax(0, 1fr) 400px minmax(0, 1fr); gap: 56px; align-items: center;">
+          <header>
+            <p style="margin: 0 0 22px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #ffffff;">One shared focus</p>
+            <h2 data-h2-cycle="" style="margin: 0 0 26px; font-size: 58px; line-height: 1.02; letter-spacing: -0.025em; font-weight: 700; text-transform: uppercase; color: #ffffff; max-width: 12ch;">A Cycle of Excellence</h2>
+            <p style="margin: 0; max-width: 380px; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.92);">Build capacity, accelerate growth, and communicate your progress relentlessly.</p>
+          </header>
+          <div aria-hidden="true" data-cycle-mark="" style="position: relative; width: 340px; max-width: 100%; aspect-ratio: 1 / 1; justify-self: center;">
+            <span style="position: absolute; inset: 0; border-radius: 999px; background: #ffffff; box-shadow: 0 0 0 12px #005C6D, 0 0 0 14px rgba(255,255,255,0.4);"></span>
+            <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-cycle.svg?v=palette-2026-3" alt="" data-cycle-rotor="" style="position: absolute; left: 19%; top: 19%; width: 62%; height: 62%;" />
+            <span data-cycle-orbit="" style="position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; margin: -5px; border-radius: 999px; background: #A7CC14; transform: translateX(183px); transition: transform 520ms cubic-bezier(.2,.7,.2,1);"></span>
+          </div>
+          <div role="group" aria-label="Cycle of Excellence phases" style="border-top: 1px solid rgba(255,255,255,0.3);">
+            <sc-for list="{{ cycleSteps }}" as="s" hint-placeholder-count="3">
+              <button type="button" onClick="{{ s.go }}" onMouseEnter="{{ s.enter }}" onFocus="{{ s.enter }}" aria-current="{{ s.current }}" style="{{ s.rowStyle }}">
+                <span style="{{ s.dotStyle }}"></span>
+                <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: rgba(255,255,255,0.8);">{{ s.num }}</span>
+                <strong style="{{ s.labelStyle }}">{{ s.label }}</strong>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SERVICES ===================== -->
+    <section data-screen-label="Services" data-space="" style="background: #f5f6f8; padding: 120px 0;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+        <header data-intro="" style="display: grid; grid-template-columns: minmax(0, 1fr) 550px; gap: 120px; align-items: center; margin-bottom: 104px;">
+          <div data-reveal="">
+            <p style="margin: 0 0 26px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">How we help</p>
+            <h2 data-display="" style="margin: 0 0 34px; font-size: 68px; line-height: 1.03; letter-spacing: -0.03em; font-weight: 400; color: #005C6D; max-width: 13ch;">Every school is different. <strong style="font-weight: 700;">Every partnership should be, too.</strong></h2>
+            <p style="margin: 0 0 34px; max-width: 700px; font-size: 17px; line-height: 1.75; color: #51536a;">No two districts face the same challenges, which is why we don't believe in one-size-fits-all solutions. We begin by listening—understanding your goals, your community, and the realities your educators face every day. Together, we develop practical strategies that strengthen leadership, support educators, and create lasting change for students.</p>
+            <a href="https://www.focusedschools.com/services/" style="display: inline-flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #005C6D; transition: gap 240ms cubic-bezier(.2,.7,.2,1), color 160ms cubic-bezier(.2,.7,.2,1);" style-hover="color: #DD6237; gap: 18px;">View all services <span style="font-size: 14px;">&rarr;</span></a>
+          </div>
+          <figure data-reveal="" style="position: relative; margin: 0;">
+            <img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-2.jpg" alt="A Focused Schools facilitator working with district leaders at a strategy session." style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 8px; display: block; box-shadow: 0 20px 44px rgba(0,92,109,0.14);" />
+            <figcaption style="position: absolute; right: -14px; bottom: 30px; background: #ffffff; border-radius: 8px; padding: 14px 20px; box-shadow: 0 10px 28px rgba(0,92,109,0.14); max-width: 252px;">
+              <span style="display: block; font-size: 10px; font-weight: 700; font-style: italic; letter-spacing: 0.1em; text-transform: uppercase; color: #0A96CB; margin-bottom: 5px;">Focused facilitation</span>
+              <strong style="display: block; font-size: 15px; font-weight: 700; line-height: 1.3; color: #005C6D;">Strategies shaped with your team</strong>
+            </figcaption>
+          </figure>
+        </header>
+        <div style="border-top: 1px solid #d3dde1;">
+          <sc-for list="{{ services }}" as="sv" hint-placeholder-count="4">
+            <a href="{{ sv.href }}" data-srow="" style="display: grid; grid-template-columns: 78px 330px minmax(0, 1fr) 60px; gap: 40px; align-items: center; padding: 42px 0; border-bottom: 1px solid #d3dde1; transition: background 240ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #eef1f3; color: #005C6D;">
+              <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: #005C6D;">{{ sv.num }}</span>
+              <div>
+                <h3 data-h3="" style="margin: 0 0 12px; font-size: 32px; line-height: 1.1; letter-spacing: -0.025em; font-weight: 700; color: #005C6D;">{{ sv.title }}</h3>
+                <p style="margin: 0; font-size: 14px; font-weight: 700; line-height: 1.4; color: #005C6D;">{{ sv.lead }}</p>
+              </div>
+              <p data-srow-desc="" style="margin: 0; max-width: 620px; font-size: 14px; line-height: 1.75; color: #51536a;">{{ sv.body }}</p>
+              <span data-srow-go="" aria-hidden="true" style="width: 46px; height: 46px; border-radius: 999px; background: #ffffff; border: 1px solid #e3e9eb; display: flex; align-items: center; justify-content: center; color: #005C6D; font-size: 16px; justify-self: end;">&rarr;</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== IMPACT STORIES ===================== -->
+    <section data-screen-label="Impact stories" data-space="" style="background: #005C6D; padding: 120px 0;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+        <header data-reveal="" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; padding-bottom: 60px;">
+          <div>
+            <p style="margin: 0 0 24px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #ffffff;">Focused Schools</p>
+            <h2 data-display="" style="margin: 0; font-size: 72px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #ffffff;">Impact Stories</h2>
+          </div>
+          <a href="https://www.focusedschools.com/impact-stories/" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 26px; border-radius: 999px; background: #ffffff; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #f5f6f8; color: #005C6D;">View Impact Stories <span style="font-size: 14px;">&rarr;</span></a>
+        </header>
+        <div role="region" aria-roledescription="carousel" style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 72px;">
+          <div style="overflow: hidden;">
+            <div style="{{ trackStyle }}">
+              <sc-for list="{{ quoteSlides }}" as="qs" hint-placeholder-count="3">
+                <figure style="{{ qs.slideStyle }}">
+                  <div style="display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 34px;">
+                    <span aria-hidden="true" style="display: flex; gap: 7px; padding-top: 16px; height: 40px;">
+                      <span style="display: block; width: 10px; height: 38px; background: #DD6237; transform: skewX(-14deg);"></span>
+                      <span style="display: block; width: 10px; height: 38px; background: #DD6237; transform: skewX(-14deg);"></span>
+                    </span>
+                    <div>
+                      <blockquote data-quote="" style="margin: 0 0 40px; max-width: 1020px; font-size: 44px; line-height: 1.26; letter-spacing: -0.02em; font-style: italic; font-weight: 400; color: #ffffff;">{{ qs.text }}</blockquote>
+                      <figcaption style="display: flex; align-items: flex-start; gap: 18px;">
+                        <span aria-hidden="true" style="display: block; width: 26px; height: 2px; background: #DD6237; margin-top: 7px; flex: 0 0 auto;"></span>
+                        <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.5; color: #ffffff; max-width: 34ch;">{{ qs.who }}</span>
+                      </figcaption>
+                    </div>
+                  </div>
+                </figure>
+              </sc-for>
+            </div>
+          </div>
+          <div style="margin-top: 64px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.3); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px;">
+            <span></span>
+            <div style="display: flex; align-items: center; gap: 18px;">
+              <button type="button" onClick="{{ prevQuote }}" aria-label="Previous testimonial" style="width: 44px; height: 44px; border-radius: 999px; border: 0; background: rgba(255,255,255,0.22); color: #ffffff; font-size: 16px; cursor: pointer; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">&lsaquo;</button>
+              <div role="tablist" aria-label="Choose testimonial" style="display: flex; gap: 12px;">
+                <sc-for list="{{ dots }}" as="d" hint-placeholder-count="3">
+                  <button type="button" onClick="{{ d.go }}" role="tab" aria-selected="{{ d.selected }}" aria-label="{{ d.aria }}" style="{{ d.style }}"></button>
+                </sc-for>
+              </div>
+              <button type="button" onClick="{{ nextQuote }}" aria-label="Next testimonial" style="width: 44px; height: 44px; border-radius: 999px; border: 0; background: #ffffff; color: #005C6D; font-size: 16px; cursor: pointer; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92);">&rsaquo;</button>
+            </div>
+            <p aria-live="polite" style="margin: 0; justify-self: end; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: rgba(255,255,255,0.78);">{{ slideCounter }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PROOF ===================== -->
+    <section data-screen-label="Impact stats" data-space="" style="background: #ffffff; padding: 112px 0 120px;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+        <h2 data-reveal="" style="margin: 0 0 56px; font-size: 52px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #005C6D;">Impact</h2>
+        <div data-proof-grid="" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));">
+          <sc-for list="{{ stats }}" as="st" hint-placeholder-count="3">
+            <article data-reveal="" data-proof-item="" style="{{ st.cellStyle }}">
+              <span aria-hidden="true" style="display: block; width: 26px; height: 3px; background: #DD6237; margin-bottom: 34px;"></span>
+              <p style="margin: 0; display: flex; flex-direction: column; gap: 10px;" aria-label="{{ st.aria }}">
+                <span style="font-size: 76px; line-height: 1; letter-spacing: -0.04em; font-weight: 700; color: #DD6237;">{{ st.value }}</span>
+                <strong style="font-size: 26px; line-height: 1.1; letter-spacing: -0.01em; font-weight: 700; text-transform: uppercase; color: #005C6D;">{{ st.unit }}</strong>
+              </p>
+              <h3 style="margin: 24px 0 0; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #005C6D;">{{ st.label }}</h3>
+            </article>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT ===================== -->
+    <section data-screen-label="Contact" id="contact" data-space="" style="background: #f5f6f8; padding: 112px 0 120px;">
+      <div data-shell="" data-contact-layout="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: minmax(0, 1fr) 730px; gap: 100px; align-items: start;">
+        <div data-reveal="">
+          <p style="margin: 0 0 26px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Contact</p>
+          <h2 data-display="" style="margin: 0 0 48px; font-size: 68px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 14ch;">Get to Know Us.</h2>
+          <address style="display: flex; flex-direction: column; gap: 26px; margin-bottom: 44px; font-style: normal;">
+            <a href="mailto:hello@focusedschools.com" style="font-size: 17px; font-weight: 700; color: #005C6D;" style-hover="color: #DD6237;">hello@focusedschools.com</a>
+            <a href="tel:+18449572466" style="font-size: 17px; font-weight: 700; color: #005C6D;" style-hover="color: #DD6237;">844-957-2466</a>
+            <a href="https://goo.gl/maps/oXhEUJVFDYnjgQuV7" style="font-size: 17px; font-weight: 700; line-height: 1.5; color: #005C6D;" style-hover="color: #DD6237;">8429 Lorraine Road, Suite 121<br />Lakewood Ranch, FL 34202</a>
+          </address>
+          <img src="https://focused-schools-rebrand.vercel.app/assets/img/chamber-badge.jpg" alt="2026 Proud Member — Manatee Chamber of Commerce" style="width: 176px; height: auto; display: block;" />
+        </div>
+        <div data-reveal="" data-form-shell="" style="background: #ffffff; border-radius: 16px; padding: 44px 48px 48px;">
+          <form onSubmit="{{ onSubmit }}" style="display: flex; flex-direction: column; gap: 26px;">
+            <div data-form-row="" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+              <label style="display: block;">
+                <span style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                  <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #005C6D;">Name</span>
+                  <small style="font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa4a8;">Required</small>
+                </span>
+                <input type="text" name="name" autocomplete="name" required="" style="width: 100%; height: 48px; border-radius: 8px; border: 1px solid #e0e6e9; background: #ffffff; padding: 0 14px; font-family: inherit; font-size: 15px; color: #005C6D; outline: none; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), box-shadow 160ms cubic-bezier(.2,.7,.2,1);" style-focus="border-color: #0A96CB; box-shadow: 0 0 0 3px rgba(10,150,203,0.18);" />
+              </label>
+              <label style="display: block;">
+                <span style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                  <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #005C6D;">Phone</span>
+                  <small style="font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa4a8;">Optional</small>
+                </span>
+                <input type="tel" name="phone" autocomplete="tel" style="width: 100%; height: 48px; border-radius: 8px; border: 1px solid #e0e6e9; background: #ffffff; padding: 0 14px; font-family: inherit; font-size: 15px; color: #005C6D; outline: none; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), box-shadow 160ms cubic-bezier(.2,.7,.2,1);" style-focus="border-color: #0A96CB; box-shadow: 0 0 0 3px rgba(10,150,203,0.18);" />
+              </label>
+            </div>
+            <label style="display: block;">
+              <span style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #005C6D;">Email</span>
+                <small style="font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa4a8;">Required</small>
+              </span>
+              <input type="email" name="email" autocomplete="email" required="" style="width: 100%; height: 48px; border-radius: 8px; border: 1px solid #e0e6e9; background: #ffffff; padding: 0 14px; font-family: inherit; font-size: 15px; color: #005C6D; outline: none; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), box-shadow 160ms cubic-bezier(.2,.7,.2,1);" style-focus="border-color: #0A96CB; box-shadow: 0 0 0 3px rgba(10,150,203,0.18);" />
+            </label>
+            <label style="display: block;">
+              <span style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #005C6D;">Message</span>
+                <small style="font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa4a8;">Required</small>
+              </span>
+              <textarea name="message" rows="6" required="" style="width: 100%; border-radius: 8px; border: 1px solid #e0e6e9; background: #ffffff; padding: 14px; font-family: inherit; font-size: 15px; line-height: 1.6; color: #005C6D; outline: none; resize: vertical; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), box-shadow 160ms cubic-bezier(.2,.7,.2,1);" style-focus="border-color: #0A96CB; box-shadow: 0 0 0 3px rgba(10,150,203,0.18);"></textarea>
+            </label>
+            <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+              <button type="submit" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 28px; border-radius: 999px; border: 0; background: #DD6237; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; cursor: pointer; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92);">Submit <span style="font-size: 15px;">&rarr;</span></button>
+              <p role="status" aria-live="polite" style="margin: 0; font-size: 14px; font-weight: 700; color: #005C6D;">{{ formStatus }}</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="position: relative; background: #005C6D; color: #ffffff; overflow: hidden; padding: 96px 0 0;">
+    <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" aria-hidden="true" style="position: absolute; right: -50px; top: 56px; height: 400px; width: auto; opacity: 0.06;" />
+    <div data-shell="" data-footer-grid="" style="position: relative; max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr; gap: 60px; padding-bottom: 88px;">
+      <div>
+        <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo-white.svg?v=palette-2026-3" alt="Focused Schools" style="height: 55px; width: auto; display: block; margin-bottom: 44px;" />
+        <p style="margin: 0 0 30px; font-size: 21px; line-height: 1.35; font-weight: 700; color: #ffffff; max-width: 22ch;">Every student. Every classroom. Every day. No exceptions.</p>
+        <a href="https://www.focusedschools.com/contact/" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 26px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Contact Us <span style="font-size: 14px;">&rarr;</span></a>
+      </div>
+      <nav aria-label="Footer navigation">
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Explore</p>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <a href="https://www.focusedschools.com/about-our-mission-vision/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">About</a>
+          <a href="https://www.focusedschools.com/team/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Team</a>
+          <a href="https://www.focusedschools.com/services/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Services</a>
+          <a href="https://www.focusedschools.com/impact-stories/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Impact Stories</a>
+        </div>
+      </nav>
+      <nav aria-label="Resources">
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Resources</p>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <a href="https://www.focusedschools.com/podcast/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Podcast</a>
+          <a href="https://www.focusedschools.com/blog/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Blog</a>
+          <a href="https://www.focusedschools.com/contact/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Contact</a>
+        </div>
+      </nav>
+      <div>
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Connect</p>
+        <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px;">
+          <a href="mailto:hello@focusedschools.com" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">hello@focusedschools.com</a>
+          <a href="tel:+18449572466" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">844-957-2466</a>
+        </div>
+        <div aria-label="Social media" style="display: flex; gap: 10px;">
+          <a href="https://twitter.com/focusedschools" aria-label="X" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">X</a>
+          <a href="https://www.facebook.com/focusedschools" aria-label="Facebook" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">f</a>
+          <a href="https://www.youtube.com/channel/UCg8W-jIlwxFCrVsU15gWFqA" aria-label="YouTube" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 11px; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">&#9654;</a>
+          <a href="https://www.linkedin.com/company/focused-schools" aria-label="LinkedIn" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">in</a>
+        </div>
+      </div>
+    </div>
+    <div style="position: relative; border-top: 1px solid rgba(255,255,255,0.18);">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 26px 24px 30px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+        <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.72);">&copy;2026 Focused Schools. All Rights Reserved.</p>
+        <a href="#top" style="font-size: 12px; color: rgba(255,255,255,0.82);" style-hover="color: #A7CC14;">Back to top &uarr;</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== VIDEO MODAL ===================== -->
+  <div style="{{ videoModalStyle }}">
+    <button type="button" onClick="{{ closeVideo }}" aria-label="Close video" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: rgba(0,72,85,0.72); backdrop-filter: blur(6px); cursor: pointer;"></button>
+    <div role="dialog" aria-modal="true" aria-label="Watch with sound" style="position: relative; width: min(1080px, 92vw); background: #005C6D; border-radius: 16px; overflow: hidden;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 20px;">
+        <p style="margin: 0; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #ffffff;">Watch with sound</p>
+        <button type="button" onClick="{{ closeVideo }}" aria-label="Close video" style="width: 40px; height: 40px; border-radius: 10px; border: 0; background: rgba(255,255,255,0.18); color: #ffffff; font-size: 20px; line-height: 1; cursor: pointer;">&times;</button>
+      </div>
+      <div style="aspect-ratio: 16 / 9; background: #004855;">
+        <sc-if value="{{ videoOpen }}" hint-placeholder-val="{{ false }}">
+          <iframe src="{{ modalSrc }}" title="Focused Schools video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen="" style="width: 100%; height: 100%; border: 0; display: block;"></iframe>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440}}">
+const VIDEO_ID = "kq4YCY5eOGI";
+
+class Component extends DCLogic {
+  state = { menuOpen: false, paused: false, videoOpen: false, quote: 0, step: 0, submitted: false, reduced: false };
+
+  componentDidMount() {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const reduced = mq.matches;
+    if (reduced) this.setState({ reduced: true });
+
+    if (!reduced) {
+      const nodes = Array.from(document.querySelectorAll("[data-reveal]"));
+      nodes.forEach((n) => { n.style.opacity = "0"; });
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          e.target.style.animation = "fsRise 700ms cubic-bezier(.2,.7,.2,1) both";
+          e.target.style.opacity = "";
+          this.io.unobserve(e.target);
+        });
+      }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+      nodes.forEach((n) => this.io.observe(n));
+    }
+
+    this.onScroll = () => {
+      if (this.raf) return;
+      this.raf = requestAnimationFrame(() => { this.raf = null; this.scrub(reduced); });
+    };
+    window.addEventListener("scroll", this.onScroll, { passive: true });
+    window.addEventListener("resize", this.onScroll, { passive: true });
+    this.scrub(reduced);
+  }
+
+  scrub(reduced) {
+    const doc = document.documentElement;
+    const bar = document.querySelector("[data-nav-progress]");
+    if (bar) {
+      const max = doc.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? Math.min(1, window.scrollY / max) * 100 : 0).toFixed(2) + "%";
+    }
+
+    const hold = document.querySelector("[data-hold]");
+    const rule = document.querySelector("[data-emphasis-rule]");
+    if (hold && rule) {
+      const r = hold.getBoundingClientRect();
+      const span = Math.max(1, r.height - window.innerHeight);
+      const p = Math.min(1, Math.max(0, -r.top / span));
+      rule.style.width = (Math.min(1, p * 2.2) * 100).toFixed(1) + "%";
+    }
+
+    const sec = document.querySelector("[data-cycle-section]");
+    const rotor = document.querySelector("[data-cycle-rotor]");
+    const orbit = document.querySelector("[data-cycle-orbit]");
+    if (sec) {
+      const r = sec.getBoundingClientRect();
+      const span = Math.max(1, r.height - window.innerHeight);
+      const p = Math.min(1, Math.max(0, -r.top / span));
+      if (!reduced) {
+        const deg = p * 360;
+        if (rotor) rotor.style.transform = "rotate(" + deg.toFixed(2) + "deg)";
+        if (orbit) orbit.style.transform = "rotate(" + deg.toFixed(2) + "deg) translateX(183px)";
+      }
+      const step = Math.min(2, Math.floor(p * 3));
+      if (step !== this.state.step) this.setState({ step });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.io) this.io.disconnect();
+    if (this.raf) cancelAnimationFrame(this.raf);
+    window.removeEventListener("scroll", this.onScroll);
+    window.removeEventListener("resize", this.onScroll);
+  }
+
+  renderVals() {
+    const open = this.state.menuOpen;
+    const paused = this.state.paused;
+    const vOpen = this.state.videoOpen;
+    const q = this.state.quote;
+    const step = this.state.step;
+
+    const quotes = [
+      { text: "\u201CI would be glad to recommend Focused Schools as an individual who has worked with them as both a high school principal and District Administrator.\u201D", who: "Assistant Superintendent of Finance and Facilities" },
+      { text: "\u201CI appreciate the data-driven approach that we took to arrive at this [Strategic] plan. I also appreciate the engagement that occurred with the community\u2026\u201D", who: "School Committee Member" },
+      { text: "\u201CWe were pleased to collaborate with Focused Schools who assisted us with this process. It was, I thought, a very thorough process that did engage hundreds of our stakeholders in different ways\u2026\u201D", who: "Superintendent" }
+    ];
+    const menu = [
+      ["Home", "01", "https://www.focusedschools.com/"],
+      ["About", "02", "https://www.focusedschools.com/about-our-mission-vision/"],
+      ["Team", "03", "https://www.focusedschools.com/team/"],
+      ["Services", "04", "https://www.focusedschools.com/services/"],
+      ["Impact Stories", "05", "https://www.focusedschools.com/impact-stories/"],
+      ["Podcast", "06", "https://www.focusedschools.com/podcast/"],
+      ["Blog", "07", "https://www.focusedschools.com/blog/"],
+      ["Contact", "08", "https://www.focusedschools.com/contact/"]
+    ];
+    const steps = ["Build Capacity", "Accelerate Growth", "Communicate Progress"];
+    const ambient = "https://www.youtube-nocookie.com/embed/" + VIDEO_ID + "?autoplay=1&mute=1&controls=0&loop=1&playlist=" + VIDEO_ID + "&playsinline=1&modestbranding=1&rel=0&disablekb=1&enablejsapi=1";
+
+    return {
+      navItems: [
+        { label: "About", href: "https://www.focusedschools.com/about-our-mission-vision/" },
+        { label: "Team", href: "https://www.focusedschools.com/team/" },
+        { label: "Services", href: "https://www.focusedschools.com/services/" },
+        { label: "Impact Stories", href: "https://www.focusedschools.com/impact-stories/" }
+      ],
+      menuItems: menu.map((m, i) => ({
+        label: m[0], num: m[1], href: m[2],
+        cellStyle: "display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 152px; padding: 28px 40px; border-bottom: 1px solid #eef1f2; border-right: " + (i % 2 === 0 ? "1px solid #eef1f2" : "0") + "; transition: background 200ms cubic-bezier(.2,.7,.2,1);"
+      })),
+      commitments: [
+        { num: "01", title: "We listen before we lead.", body: "Your educators know their schools best. We take the time to understand your strengths, challenges, and goals before recommending a path forward.", cta: "Meet Our Team", href: "https://www.focusedschools.com/team/" },
+        { num: "02", title: "We work alongside your team.", body: "We're not here to hand you a plan and walk away. We collaborate with school and district leaders, providing coaching, guidance, and support throughout the work.", cta: "Explore Our Services", href: "https://www.focusedschools.com/services/" },
+        { num: "03", title: "We leave your schools stronger.", body: "Our goal is to build the confidence, leadership, and internal capacity that allow educators to continue the work long after our partnership ends.", cta: "Our Results", href: "https://www.focusedschools.com/impact-stories/" }
+      ],
+      cycleSteps: steps.map((label, i) => ({
+        num: "0" + (i + 1), label,
+        current: i === step ? "step" : undefined,
+        go: () => this.setState({ step: i }),
+        enter: () => this.setState({ step: i }),
+        rowStyle: "display: grid; grid-template-columns: 20px 34px minmax(0, 1fr); align-items: center; gap: 10px; width: 100%; text-align: left; padding: 26px 0; background: transparent; border: 0; border-bottom: 1px solid rgba(255,255,255,0.3); cursor: pointer;",
+        dotStyle: "display: block; width: 9px; height: 9px; border-radius: 999px; background: " + ["#A7CC14", "#F2B417", "#2C97D1"][i] + "; opacity: " + (i === step ? "1" : "0") + "; transform: scale(" + (i === step ? "1" : "0.4") + "); transition: opacity 260ms cubic-bezier(.2,.7,.2,1), transform 320ms cubic-bezier(.2,.7,.2,1);",
+        labelStyle: "font-size: 27px; line-height: 1.12; letter-spacing: -0.015em; font-weight: 700; text-transform: uppercase; color: " + (i === step ? "#ffffff" : "#9FC2C9") + "; transition: color 240ms cubic-bezier(.2,.7,.2,1);"
+      })),
+      services: [
+        { num: "01", title: "Strategic Planning", lead: "Build a clear vision for the future.", body: "Develop a strategic plan that aligns your district around a shared vision, establishes meaningful priorities, and creates a roadmap for lasting success over the next three to five years.", href: "https://www.focusedschools.com/services/#strategic" },
+        { num: "02", title: "Leadership Development", lead: "Confident leaders create stronger schools.", body: "Equip school and district leaders with the confidence, skills, and support to lead through complexity, strengthen their teams, and improve outcomes for every student.", href: "https://www.focusedschools.com/services/#leadership" },
+        { num: "03", title: "Educator Development", lead: "Invest in the people who make learning possible.", body: "Support teacher leaders, instructional coaches, and aspiring administrators with professional learning that strengthens instructional leadership and builds capacity from within.", href: "https://www.focusedschools.com/services/#educator" },
+        { num: "04", title: "Technical Assistance", lead: "Build systems that support lasting change.", body: "From data analysis to leader onboarding, we work alongside your team to create practical systems and structures that help your district stay focused on what matters most.", href: "https://www.focusedschools.com/services/#technical" }
+      ],
+      stats: [
+        { value: "2+", unit: "Million", label: "Students Impacted", aria: "More than 2 million students impacted", cellStyle: "padding: 0 48px 0 0;" },
+        { value: "20+", unit: "Years", label: "Partnering with Schools", aria: "More than 20 years partnering with schools", cellStyle: "padding: 0 48px; border-left: 1px solid #d3dde1;" },
+        { value: "25+", unit: "States", label: "Served", aria: "More than 25 states served", cellStyle: "padding: 0 0 0 48px; border-left: 1px solid #d3dde1;" }
+      ],
+
+      menuOpen: open,
+      menuScrimStyle: "position: fixed; inset: 0; z-index: 95; background: rgba(0,72,85,0.46); backdrop-filter: blur(10px); overflow-y: auto; transition: opacity 300ms cubic-bezier(.2,.7,.2,1), visibility 300ms; opacity: " + (open ? "1" : "0") + "; visibility: " + (open ? "visible" : "hidden") + ";",
+      openMenu: () => this.setState({ menuOpen: true }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+
+      ambientSrc: ambient,
+      ambientStyle: "position: absolute; left: 50%; top: 50%; width: 178%; height: 178%; transform: translate(-50%, -50%); border: 0; pointer-events: none; opacity: " + (paused ? "0" : "1") + "; transition: opacity 300ms cubic-bezier(.2,.7,.2,1);",
+      posterStyle: "position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;",
+      paused: paused,
+      playLabel: paused ? "Play" : "Pause",
+      glyphStyle: "display: inline-flex; align-items: center; gap: 3px; width: 10px;",
+      glyphBarA: paused ? "display: block; width: 0; height: 0; border-left: 8px solid #ffffff; border-top: 5px solid transparent; border-bottom: 5px solid transparent;" : "display: block; width: 3px; height: 11px; background: #ffffff;",
+      glyphBarB: paused ? "display: none;" : "display: block; width: 3px; height: 11px; background: #ffffff;",
+      togglePlay: () => {
+        const next = !this.state.paused;
+        const frame = document.querySelector("[data-hero-frame] iframe");
+        if (frame && frame.contentWindow) {
+          frame.contentWindow.postMessage(JSON.stringify({
+            event: "command",
+            func: next ? "pauseVideo" : "playVideo",
+            args: []
+          }), "https://www.youtube-nocookie.com");
+        }
+        this.setState({ paused: next });
+      },
+
+      videoOpen: vOpen,
+      modalSrc: "https://www.youtube-nocookie.com/embed/" + VIDEO_ID + "?autoplay=1&rel=0&modestbranding=1",
+      videoModalStyle: "position: fixed; inset: 0; z-index: 110; display: flex; align-items: center; justify-content: center; padding: 24px; transition: opacity 260ms cubic-bezier(.2,.7,.2,1), visibility 260ms; opacity: " + (vOpen ? "1" : "0") + "; visibility: " + (vOpen ? "visible" : "hidden") + ";",
+      openVideo: () => this.setState({ videoOpen: true }),
+      closeVideo: () => this.setState({ videoOpen: false }),
+
+      quoteSlides: quotes.map((s, i) => ({
+        text: s.text, who: s.who,
+        slideStyle: "margin: 0; flex: 0 0 100%; min-width: 100%; opacity: " + (i === q ? "1" : "0.25") + "; transition: opacity 420ms cubic-bezier(.2,.7,.2,1);"
+      })),
+      trackStyle: "display: flex; transform: translateX(-" + (q * 100) + "%); transition: transform 560ms cubic-bezier(.2,.7,.2,1);",
+      slideCounter: (q + 1) + " / " + quotes.length,
+      prevQuote: () => this.setState((s) => ({ quote: (s.quote + quotes.length - 1) % quotes.length })),
+      nextQuote: () => this.setState((s) => ({ quote: (s.quote + 1) % quotes.length })),
+      dots: quotes.map((_, i) => ({
+        aria: "Testimonial " + (i + 1) + " of " + quotes.length,
+        selected: i === q ? "true" : "false",
+        go: () => this.setState({ quote: i }),
+        style: "width: 10px; height: 10px; border-radius: 999px; border: 0; padding: 0; cursor: pointer; background: " + (i === q ? "#DD6237" : "rgba(255,255,255,0.45)") + "; transition: background 160ms cubic-bezier(.2,.7,.2,1);"
+      })),
+
+      formStatus: this.state.submitted ? "Thank you \u2014 we'll be in touch." : "",
+      onSubmit: (e) => { e.preventDefault(); this.setState({ submitted: true }); }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+/**
+ * Team Bio Modal. Same dialog chrome pattern as home-hero.css's
+ * .fs-video-modal (backdrop + centered dialog + close button), sized for
+ * reading text instead of a 16:9 video.
+ */
+
+.fs-bio-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var( --wp--preset--spacing--medium, 1rem );
+}
+
+.fs-bio-modal[hidden] {
+	display: none;
+}
+
+.fs-bio-modal__backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba( 0, 0, 0, 0.6 );
+	border: none;
+	cursor: pointer;
+}
+
+.fs-bio-modal__dialog {
+	position: relative;
+	width: min( 90vw, 640px );
+	max-height: 85vh;
+	overflow-y: auto;
+	background: var( --wp--preset--color--base, #ffffff );
+	border-radius: var( --wp--preset--spacing--small, 0.5rem );
+	padding: var( --wp--preset--spacing--x-large, 3rem ) var( --wp--preset--spacing--large, 2rem ) var( --wp--preset--spacing--large, 2rem );
+}
+
+.fs-bio-modal__close {
+	position: absolute;
+	top: var( --wp--preset--spacing--small, 0.5rem );
+	right: var( --wp--preset--spacing--small, 0.5rem );
+	background: none;
+	border: none;
+	font-size: 1.75rem;
+	line-height: 1;
+	cursor: pointer;
+	padding: var( --wp--preset--spacing--small, 0.5rem );
+}
+
+.fs-bio-modal__body h3 {
+	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
+	font-size: var( --wp--preset--font-size--large, 1.5rem );
+}
+
+.fs-bio-modal__position {
+	margin: 0 0 var( --wp--preset--spacing--medium, 1rem );
+	font-weight: 700;
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-bio-modal__body p:last-child {
+	margin-bottom: 0;
+}

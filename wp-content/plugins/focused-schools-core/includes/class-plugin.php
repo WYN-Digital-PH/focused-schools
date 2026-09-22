@@ -13,6 +13,7 @@ use FocusedSchoolsCore\Modules\Services;
 use FocusedSchoolsCore\Modules\Impact_Stories;
 use FocusedSchoolsCore\Modules\Podcast;
 use FocusedSchoolsCore\Modules\Testimonials;
+use FocusedSchoolsCore\Modules\Partners;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -72,6 +73,7 @@ class Plugin {
 			'impact-stories' => new Impact_Stories(),
 			'podcast'        => new Podcast(),
 			'testimonials'   => new Testimonials(),
+			'partners'       => new Partners(),
 		);
 
 		foreach ( $this->modules as $module ) {

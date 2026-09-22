@@ -1,35 +1,79 @@
 /**
- * Statistics counter block. Mobile-first: single column, grid from 640px.
+ * Statistics counter block. Exact typography from the approved .dc design:
+ * 76px numeral, 13px uppercase unit, coral top rule + teal unit on light
+ * grounds; gold top rule + lime unit on teal grounds (`on_teal` prop).
  */
 
 .fs-stats {
 	display: grid;
-	grid-template-columns: 1fr;
-	gap: var( --wp--preset--spacing--large, 2rem );
-	text-align: center;
+	grid-template-columns: repeat( 3, minmax( 0, 1fr ) );
+	gap: 3rem;
 }
 
 .fs-stats__item {
+	padding-top: 1.375rem;
+	border-top: 3px solid var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-stats--on-teal .fs-stats__item {
+	border-top-color: var( --wp--preset--color--gold, #f3c145 );
+}
+
+.fs-stats__fig {
+	margin: 0;
 	display: flex;
 	flex-direction: column;
-	gap: var( --wp--preset--spacing--small, 0.5rem );
+	gap: 0.625rem;
 }
 
 .fs-stats__value {
-	margin: 0;
-	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+	font-size: 4.75rem;
+	line-height: 1;
+	letter-spacing: -0.04em;
 	font-weight: 700;
-	color: var( --wp--preset--color--primary, #1e40af );
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-stats--on-teal .fs-stats__value {
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-stats__unit {
+	font-size: 1.625rem;
+	line-height: 1.1;
+	letter-spacing: -0.01em;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-stats--on-teal .fs-stats__unit {
+	font-size: 0.8125rem;
+	letter-spacing: 0.14em;
+	color: var( --wp--preset--color--lime, #a7cc14 );
 }
 
 .fs-stats__label {
-	margin: 0;
-	font-size: var( --wp--preset--font-size--medium, 1rem );
-	color: var( --wp--preset--color--secondary, #6b7280 );
+	margin: 1.5rem 0 0;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
-@media ( min-width: 640px ) {
+.fs-stats--on-teal .fs-stats__label {
+	font-size: 1.0625rem;
+	font-weight: 400;
+	line-height: 1.5;
+	letter-spacing: normal;
+	text-transform: none;
+	color: rgba( 255, 255, 255, 0.88 );
+}
+
+@media ( max-width: 720px ) {
 	.fs-stats {
-		grid-template-columns: repeat( auto-fit, minmax( 160px, 1fr ) );
+		grid-template-columns: minmax( 0, 1fr );
+		gap: 2.5rem;
 	}
 }

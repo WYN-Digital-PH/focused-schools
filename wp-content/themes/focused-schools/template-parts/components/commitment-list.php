@@ -8,6 +8,12 @@
  * - intro      (string)
  * - image_url  (string) static image URL (get_template_directory_uri() . '/assets/img/...')
  * - image_alt  (string)
+ * - image_caption_kicker (string) small italic label on the floating caption chip
+ * - image_caption_text   (string) bold line on the floating caption chip
+ * - heading_max_ch (int) heading's max-width in `ch` units — the Home and
+ *   About `.dc` sources specify different values (9ch / 11ch) for this
+ *   shared component's heading, default 9 (Home's value, the original
+ *   caller).
  * - items      (array, required) each item: {
  *       heading    (string, required)
  *       body       (string)
@@ -24,21 +30,24 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$fs_eyebrow   = isset( $args['eyebrow'] ) ? $args['eyebrow'] : '';
-$fs_heading   = isset( $args['heading'] ) ? $args['heading'] : '';
-$fs_intro     = isset( $args['intro'] ) ? $args['intro'] : '';
-$fs_image_url = isset( $args['image_url'] ) ? $args['image_url'] : '';
-$fs_image_alt = isset( $args['image_alt'] ) ? $args['image_alt'] : '';
-$fs_items     = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] : array();
+$fs_eyebrow        = isset( $args['eyebrow'] ) ? $args['eyebrow'] : '';
+$fs_heading        = isset( $args['heading'] ) ? $args['heading'] : '';
+$fs_intro          = isset( $args['intro'] ) ? $args['intro'] : '';
+$fs_image_url      = isset( $args['image_url'] ) ? $args['image_url'] : '';
+$fs_image_alt      = isset( $args['image_alt'] ) ? $args['image_alt'] : '';
+$fs_kicker         = isset( $args['image_caption_kicker'] ) ? $args['image_caption_kicker'] : '';
+$fs_caption        = isset( $args['image_caption_text'] ) ? $args['image_caption_text'] : '';
+$fs_items          = isset( $args['items'] ) && is_array( $args['items'] ) ? $args['items'] : array();
+$fs_heading_max_ch = isset( $args['heading_max_ch'] ) ? absint( $args['heading_max_ch'] ) : 9;
 
 if ( '' === trim( (string) $fs_heading ) || empty( $fs_items ) ) {
 	return;
 }
 ?>
 <section class="fs-commitments" aria-labelledby="fs-commitments-title">
-	<div class="fs-container fs-container--wide">
+	<div class="fs-container fs-container--shell">
 		<header class="fs-commitments__intro">
-			<div>
+			<div style="--fs-commitments-heading-max: <?php echo esc_attr( $fs_heading_max_ch ); ?>ch;">
 				<?php if ( $fs_eyebrow ) : ?>
 					<p class="fs-eyebrow"><?php echo esc_html( $fs_eyebrow ); ?></p>
 				<?php endif; ?>
@@ -53,6 +62,16 @@ if ( '' === trim( (string) $fs_heading ) || empty( $fs_items ) ) {
 			<?php if ( $fs_image_url ) : ?>
 				<figure class="fs-commitments__photo">
 					<img src="<?php echo esc_url( $fs_image_url ); ?>" alt="<?php echo esc_attr( $fs_image_alt ); ?>" loading="lazy" />
+					<?php if ( $fs_kicker || $fs_caption ) : ?>
+						<figcaption class="fs-figure-caption">
+							<?php if ( $fs_kicker ) : ?>
+								<span class="fs-figure-caption__kicker"><?php echo esc_html( $fs_kicker ); ?></span>
+							<?php endif; ?>
+							<?php if ( $fs_caption ) : ?>
+								<strong><?php echo esc_html( $fs_caption ); ?></strong>
+							<?php endif; ?>
+						</figcaption>
+					<?php endif; ?>
 				</figure>
 			<?php endif; ?>
 

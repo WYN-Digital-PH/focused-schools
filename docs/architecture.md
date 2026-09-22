@@ -36,6 +36,7 @@ WordPress Settings API / Options API in
   | Primary Call To Action | Primary CTA Label, Primary CTA URL |
   | Social Links | Facebook URL, LinkedIn URL, YouTube URL |
   | Footer | Footer Short Text, Copyright Name |
+  | Impact Stats | Students Impacted, Years Partnering, States Served (`number` field type, `absint`-sanitized; defaults 2/20/25) — read by both Home and About so the two pages' stat bands cannot drift (`docs/page-specs/about.md` §10) |
 
 - **Theme retrieval:** `focused_schools_get_setting( $key, $default = '' )` (defined in
   `includes/functions.php`). Returns the sanitized-at-save-time value; the caller must
@@ -215,6 +216,27 @@ testimonial carousel (`docs/page-specs/home.md` §5).
 - Empty by default in this environment — `testimonial-carousel.php` shows a graceful
   "on the way" message until entries exist (verified live).
 
+### 3.8 Partner Districts
+
+Admin-only content type (no public URLs), implemented in
+`wp-content/plugins/focused-schools-core/modules/partners/`, for the About page's
+Partner Districts section (`docs/page-specs/about.md` §10). Replaces an earlier
+hardcoded 5-state array once the `.dc` design source's own developer notes named this
+CPT + taxonomy explicitly as the intended mechanism.
+
+- **Post type:** `fs_partner` — one post per district. **Taxonomy:** `fs_partner_state`
+  (hierarchical, `show_admin_column => true`) groups districts by state.
+- **Visibility:** `public => false`, `publicly_queryable => false`, `has_archive => false`,
+  `rewrite => false` — same no-frontend-URL pattern as Team Members/Services/Testimonials.
+- **Admin location:** nested under Focused Schools → Partner Districts (same shared
+  top-level menu).
+- **Supports:** `title` (district name), `page-attributes` (`menu_order`, manual
+  ordering). No custom meta fields.
+- `page-about-our-mission-vision.php` builds its state-grouped list via `get_terms()` +
+  a per-term `WP_Query`, feeding the result into `partner-districts.php`'s existing
+  `states` prop (`docs/component-specs.md`). Empty by default in this environment — the
+  page shows a graceful "directory is being populated" message until posts exist.
+
 ## 4. Theme Architecture
 
 The `focused-schools` theme (`wp-content/themes/focused-schools/`) has a foundation
@@ -344,6 +366,17 @@ gained an `image_url` prop (theme-static path, additive/backward-compatible alon
 existing `image_id` attachment prop). Partner Strip and Podcast teaser sections from the
 prior version were dropped — not part of the approved rebrand's Home page structure.
 
+**Correction pass (against the fuller `focused-schools-full-site-2f37f011.vercel.app`
+capture):** three gaps fixed — see `docs/page-specs/home.md` §10 for full reasoning.
+Beliefs section now uses `rail-text.php` (built for About) plus a 3-photo documentary
+strip, replacing the earlier `content-image-split.php` approximation. Cycle of Excellence
+was un-merged back into two sections (`cycle-teaser.php`, new, + the existing
+`cycle-of-excellence.php`) once a second independent capture confirmed the two-section
+structure was intentional, not a duplication artifact. Services section gained its
+missing intro paragraph and companion photo. The "no inline contact form" and
+"dynamic nav/CTA instead of hardcoded links" decisions were both explicitly re-confirmed,
+not changed.
+
 **Uniform section widths:** `hero.php` and `content-image-split.php` render their own
 container internally (they're "self-contained section" components), independent of
 whatever wraps their `get_template_part()` call. Both were fixed to render their internal
@@ -367,9 +400,9 @@ still looks intentional. Revisit the `280px` minimum if card content ever needs 
 
 ### 4.7 Page Templates: About (`page-about-our-mission-vision.php`)
 
-Spec: [`docs/page-specs/about.md`](page-specs/about.md). Implements the approved About
-page: Hero, two Content/Image Split sections (Mission, Vision), a Team grid
-(`fs_team_member` CPT query), and a closing CTA Banner.
+Spec: [`docs/page-specs/about.md`](page-specs/about.md) — full section-by-section
+mapping against the approved 2026 rebrand "full site" reference and the reasoning
+behind every adaptation. This section only summarizes what's structural.
 
 Uses WordPress's native `page-{slug}.php` template hierarchy rather than
 `front-page.php`'s `page_on_front`-option approach — a `page-{slug}.php` template is
@@ -382,6 +415,19 @@ staging/production before deploying. A local-only test page (ID 18, slug
 `about-our-mission-vision`) was created directly in this environment's database purely to
 QA the template visually; it is not part of the theme/plugin code and has no bearing on
 the real site.
+
+**2026 rebrand (current):** rebuilt against
+`https://focused-schools-full-site-2f37f011.vercel.app/#/about` — seven sections: Hero,
+Who We Are, What Guides Us (reuses the Home page's `commitment-list.php` unchanged),
+Impact Stats (identical real figures to Home — 2M+ students/20+ years/25+ states,
+reuses `statistics-counter.php`), Partner Districts (new, real state/district data),
+Meet Our Team (real `fs_team_member` query with a new bio-modal "Read bio" interaction
+and a "Load more" reveal beyond the first 6), and a closing Mission section (two CTAs).
+New components: `rail-text.php`, `partner-districts.php`, `team-bio-modal.php`. Three
+existing shared components gained additive, backward-compatible props: `hero.php`
+(`eyebrow`, `image_url`/`image_alt`), `content-image-split.php` (`cta2_label`/`cta2_url`),
+`team-card.php` (`bio_modal`) — every other caller of these three (Home, Services, Team,
+Podcast, Contact, Thanks, Impact Stories) was spot-checked live and confirmed unaffected.
 
 ### 4.8 Page Templates: Services (`page-services.php`)
 

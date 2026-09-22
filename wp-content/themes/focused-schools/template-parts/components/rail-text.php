@@ -1,0 +1,73 @@
+<?php
+/**
+ * Component: Rail Text Block.
+ *
+ * Contract ($args):
+ * - eyebrow    (string, required)
+ * - icon_url   (string) small decorative icon URL, theme-static path
+ * - heading    (string, required)
+ * - body       (string|string[]) one paragraph, or an array of paragraphs
+ * - cta_label  (string)
+ * - cta_url    (string)
+ * - heading_max_ch (int) heading's max-width in `ch` units — the Home and
+ *   About `.dc` sources specify different values (13ch / 15ch) for this
+ *   shared component's heading, default 13 (Home's value, the original
+ *   caller).
+ *
+ * A narrow "rail" label (small icon + eyebrow) beside a content column —
+ * heading, one or more paragraphs, optional CTA. No image/photo (that's
+ * content-image-split.php's job). This exact pattern appears on both the
+ * Home page's Beliefs section and the About page's "Who We Are" section —
+ * added for the About page task, generic/args-driven, no CPT.
+ *
+ * @package FocusedSchools
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+$fs_eyebrow        = isset( $args['eyebrow'] ) ? $args['eyebrow'] : '';
+$fs_icon_url       = isset( $args['icon_url'] ) ? $args['icon_url'] : '';
+$fs_heading        = isset( $args['heading'] ) ? $args['heading'] : '';
+$fs_body           = isset( $args['body'] ) ? $args['body'] : '';
+$fs_body           = is_array( $fs_body ) ? $fs_body : array( $fs_body );
+$fs_cta_label      = isset( $args['cta_label'] ) ? $args['cta_label'] : '';
+$fs_cta_url        = isset( $args['cta_url'] ) ? $args['cta_url'] : '';
+$fs_heading_max_ch = isset( $args['heading_max_ch'] ) ? absint( $args['heading_max_ch'] ) : 13;
+
+if ( '' === trim( (string) $fs_heading ) ) {
+	return;
+}
+?>
+<section class="fs-rail-text">
+	<div class="fs-container fs-container--shell fs-rail-text__inner">
+		<div class="fs-rail-text__label">
+			<?php if ( $fs_icon_url ) : ?>
+				<img src="<?php echo esc_url( $fs_icon_url ); ?>" alt="" width="28" height="28" />
+			<?php endif; ?>
+			<?php if ( $fs_eyebrow ) : ?>
+				<p class="fs-eyebrow"><?php echo esc_html( $fs_eyebrow ); ?></p>
+			<?php endif; ?>
+		</div>
+		<div class="fs-rail-text__content" style="--fs-rail-heading-max: <?php echo esc_attr( $fs_heading_max_ch ); ?>ch;">
+			<h2><?php echo esc_html( $fs_heading ); ?></h2>
+			<?php foreach ( $fs_body as $fs_paragraph ) : ?>
+				<?php if ( '' !== trim( (string) $fs_paragraph ) ) : ?>
+					<p><?php echo esc_html( $fs_paragraph ); ?></p>
+				<?php endif; ?>
+			<?php endforeach; ?>
+			<?php if ( $fs_cta_label && $fs_cta_url ) : ?>
+				<?php
+				get_template_part(
+					'template-parts/components/button',
+					null,
+					array(
+						'label' => $fs_cta_label,
+						'url'   => $fs_cta_url,
+						'style' => 'secondary',
+					)
+				);
+				?>
+			<?php endif; ?>
+		</div>
+	</div>
+</section>

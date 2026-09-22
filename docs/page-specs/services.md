@@ -68,5 +68,43 @@ against real data — verify against staging/production before deploying.
 
 ## 8. Container Widths
 
-All sections use the uniform wide container (`.fs-container.fs-container--wide`,
-1200px), matching the Home/About fix.
+All sections use the uniform shell container (`.fs-container.fs-container--shell`,
+1400px) — see §9.
+
+## 9. Precision Pass: Container Width + Card Language Alignment
+
+A later task ("Implement the approved Services + Team page") found this page had never
+been revisited after the `.dc`-source token pass that touched Home/About
+(`docs/page-specs/home.md` §11) — two concrete, visible drifts were found and fixed:
+
+1. **Container width mismatch.** `hero.php` was updated in that earlier pass to always
+   render its own content in the 1400px shell container, but this page's services-grid
+   section still wrapped in `.fs-container--wide` (1200px) — a real, visible misaligned
+   left/right edge between the hero and the grid below it (confirmed via bounding-box
+   measurement before the fix: hero at x=20/width=1400, grid at x=120/width=1200 in a
+   1440px viewport). Changed to `.fs-container--shell` to match.
+2. **Card language was still the pre-rebrand scaffolding.** `card.css` (the shared base
+   for Service/Team/Impact Story/Podcast cards) had a comment literally flagging its own
+   accent-color mapping as "TEMPORARY... revisit once docs/design-system.md defines real
+   semantic role colors" — colors are now real, but the revisit never happened. Brought
+   the shared base up to the exact geometry documented in `Design System v1.dc.html`'s
+   "Card language" section (16px radius, 1px translucent border, shadow-1, 32px/24px
+   padding, hover = shadow-2 + 2px rise + heading→coral) and fixed the Service card's
+   accent treatment: a short 44×4px rounded bar (not a full-width top border) carrying
+   the lane color — cerulean/coral/lime — replacing the old
+   primary/accent-teal/secondary-gray mapping (`capacity` was wrongly teal, now lime).
+   `page-services.css`'s empty-state message also gets a real gray (`ink-soft`) instead
+   of `secondary`, which now resolves to House Teal, not gray.
+
+**Seed data fix (not a template change):** the one existing `fs_service` post
+("Leadership Development") had its `_fs_service_tagline` meta and `post_excerpt` both
+set to the same long paragraph, rendering as an oversized, duplicated uppercase eyebrow.
+Fixed to the real short tagline + fuller excerpt from the Home page's own `.dc`-sourced
+`services` array, and seeded the 3 other real services named there (Strategic Planning,
+Educator Development, Technical Assistance) that had never been created, so this page's
+grid — and the Home page's own services teaser — can be QA'd against real content.
+
+Re-verified after this pass: desktop/tablet/mobile screenshots reviewed, keyboard/focus
+QA clean (skip link first, zero inaccessible links/buttons), `php -l` + PHPCS clean,
+zero new PHP error-log entries, Impact Stories and Podcast pages (other consumers of the
+shared `card.css` base) spot-checked live with no regression.

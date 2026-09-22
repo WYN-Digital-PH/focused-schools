@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<![CDATA[<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,400;1,9..40,700&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; background: #f5f6f8; font-family: "DM Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: #0A96CB; text-decoration: none; }
+  a:hover { color: #005C6D; text-decoration: underline; }
+  @keyframes fs-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+</style>
+</helmet>
+
+<div style="max-width: 1180px; margin: 0 auto; padding: 0 24px 140px; color: #005C6D;">
+
+  <header style="padding: 72px 0 48px; border-bottom: 1px solid rgba(0,92,109,0.14); display: flex; flex-direction: column; gap: 28px;">
+    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo.svg?v=palette-2026-3" alt="Focused Schools" style="height: 44px; width: auto;" />
+      <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #51536a;">Design System v1 · Reverse-engineered from the approved homepage</span>
+    </div>
+    <h1 style="margin: 0; font-size: 58px; line-height: 1.04; letter-spacing: -0.022em; font-weight: 400; max-width: 20ch;">One homepage, documented as a <strong style="font-weight: 900;">reusable system.</strong></h1>
+    <p style="margin: 0; max-width: 68ch; font-size: 19px; line-height: 1.6; color: #51536a;">Every value below is measured from the approved homepage mockup and the Brand Field Guide. Nothing here is a new art direction: no new colors, no new fonts, no components invented for novelty. Internal-page design begins only after this document is approved by the human designer and Briggs.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <a href="#tokens" style="padding: 12px 22px; border-radius: 999px; background: #DD6237; color: #fff; font-weight: 700; font-size: 15px;">A · Tokens</a>
+      <a href="#components" style="padding: 12px 22px; border-radius: 999px; border: 1.5px solid rgba(0,92,109,0.28); color: #005C6D; font-weight: 700; font-size: 15px;">B · Components</a>
+      <a href="#layout" style="padding: 12px 22px; border-radius: 999px; border: 1.5px solid rgba(0,92,109,0.28); color: #005C6D; font-weight: 700; font-size: 15px;">C · Layout</a>
+      <a href="#responsive" style="padding: 12px 22px; border-radius: 999px; border: 1.5px solid rgba(0,92,109,0.28); color: #005C6D; font-weight: 700; font-size: 15px;">D · Responsive</a>
+      <a href="#ambiguities" style="padding: 12px 22px; border-radius: 999px; border: 1.5px solid rgba(0,92,109,0.28); color: #005C6D; font-weight: 700; font-size: 15px;">F · Ambiguities</a>
+      <a href="#handoff" style="padding: 12px 22px; border-radius: 999px; border: 1.5px solid rgba(0,92,109,0.28); color: #005C6D; font-weight: 700; font-size: 15px;">G · Handoff</a>
+    </div>
+  </header>
+
+  <!-- ============ A. TOKENS ============ -->
+  <section id="tokens" style="padding-top: 72px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+      <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Deliverable A</span>
+      <h2 style="margin: 0; font-size: 40px; line-height: 1.1; letter-spacing: -0.018em; font-weight: 400;">Design <strong style="font-weight: 900;">tokens</strong></h2>
+    </div>
+    <p style="margin: 0 0 36px; max-width: 70ch; font-size: 17px; line-height: 1.65; color: #51536a;">Token names are the contract between this document and the WordPress theme. Ship them once as CSS custom properties on <code style="font-size: 15px;">:root</code>; never hard-code a hex in a template.</p>
+
+    <h3 style="margin: 0 0 6px; font-size: 24px; font-weight: 700; letter-spacing: -0.01em;">Color · six locked brand values</h3>
+    <p style="margin: 0 0 20px; font-size: 15px; line-height: 1.6; color: #51536a;">Locked hexes from the Brand Field Guide. Color carries a role, not decoration.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+      <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <div style="height: 92px; background: #005C6D;"></div>
+        <div style="padding: 16px 18px 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;"><strong style="font-size: 17px;">Teal</strong><code style="font-size: 14px; color: #51536a;">#005C6D</code></div>
+          <div style="font-size: 13px; color: #51536a; margin-top: 2px;">--fs-teal</div>
+          <p style="margin: 8px 0 0; font-size: 14px; line-height: 1.55; color: #51536a;">The house. Dark sections, the Framework, and all body type. Our only true dark.</p>
+        </div>
+      </div>
+      <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <div style="height: 92px; background: #0A96CB;"></div>
+        <div style="padding: 16px 18px 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;"><strong style="font-size: 17px;">Cerulean</strong><code style="font-size: 14px; color: #51536a;">#0A96CB</code></div>
+          <div style="font-size: 13px; color: #51536a; margin-top: 2px;">--fs-cerulean</div>
+          <p style="margin: 8px 0 0; font-size: 14px; line-height: 1.55; color: #51536a;">Strategy and Vision accent. Also the safe link/interactive blue on light grounds.</p>
+        </div>
+      </div>
+      <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <div style="height: 92px; background: #DD6237;"></div>
+        <div style="padding: 16px 18px 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;"><strong style="font-size: 17px;">Coral</strong><code style="font-size: 14px; color: #51536a;">#DD6237</code></div>
+          <div style="font-size: 13px; color: #51536a; margin-top: 2px;">--fs-coral</div>
+          <p style="margin: 8px 0 0; font-size: 14px; line-height: 1.55; color: #51536a;">Leadership and Systems accent — and the homepage's single primary-action color.</p>
+        </div>
+      </div>
+      <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <div style="height: 92px; background: #A7CC14;"></div>
+        <div style="padding: 16px 18px 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;"><strong style="font-size: 17px;">Lime</strong><code style="font-size: 14px; color: #51536a;">#A7CC14</code></div>
+          <div style="font-size: 13px; color: #51536a; margin-top: 2px;">--fs-lime</div>
+          <p style="margin: 8px 0 0; font-size: 14px; line-height: 1.55; color: #51536a;">Capacity and Coaching accent. Fills, rules, and glyphs only — <strong>never text</strong>.</p>
+        </div>
+      </div>
+      <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <div style="height: 92px; background: #F3C145;"></div>
+        <div style="padding: 16px 18px 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;"><strong style="font-size: 17px;">Gold</strong><code style="font-size: 14px; color: #51536a;">#F3C145</code></div>
+          <div style="font-size: 13px; color: #51536a; margin-top: 2px;">--fs-gold</div>
+          <p style="margin: 8px 0 0; font-size: 14px; line-height: 1.55; color: #51536a;">Emphasis, aspiration, star glyph. Fills only — <strong>never text</strong>.</p>
+        </div>
+      </div>
+      <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <div style="height: 92px; background: #BC3E8C;"></div>
+        <div style="padding: 16px 18px 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;"><strong style="font-size: 17px;">Raspberry</strong><code style="font-size: 14px; color: #51536a;">#BC3E8C</code></div>
+          <div style="font-size: 13px; color: #51536a; margin-top: 2px;">--fs-raspberry</div>
+          <p style="margin: 8px 0 0; font-size: 14px; line-height: 1.55; color: #51536a;">Marketing voice: podcast, blog, thought leadership. Never client delivery.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 20px;">
+      <div style="background: #fff; border-radius: 16px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <h4 style="margin: 0 0 14px; font-size: 18px; font-weight: 700;">Interface neutrals (not brand colors)</h4>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: #51536a;">
+          <div style="display: flex; align-items: center; gap: 12px;"><span style="width: 34px; height: 34px; border-radius: 8px; background: #51536a;"></span><span><code>--fs-gray</code> #51536a · secondary body, captions, negative/failure states</span></div>
+          <div style="display: flex; align-items: center; gap: 12px;"><span style="width: 34px; height: 34px; border-radius: 8px; background: #fff; border: 1px solid rgba(0,92,109,0.18);"></span><span><code>--fs-white</code> #ffffff · default page ground, cards</span></div>
+          <div style="display: flex; align-items: center; gap: 12px;"><span style="width: 34px; height: 34px; border-radius: 8px; background: #f5f6f8; border: 1px solid rgba(0,92,109,0.12);"></span><span><code>--fs-paper</code> #f5f6f8 · alternating light section ground</span></div>
+          <div style="display: flex; align-items: center; gap: 12px;"><span style="width: 34px; height: 34px; border-radius: 8px; background: rgba(0,92,109,0.14);"></span><span><code>--fs-rule</code> rgba(0,92,109,0.14) · hairlines, dividers, input borders</span></div>
+          <div style="display: flex; align-items: center; gap: 12px;"><span style="width: 34px; height: 34px; border-radius: 8px; background: #004855;"></span><span><code>--fs-teal-deep</code> #004855 · teal card-on-teal, footer base, hover of teal fills</span></div>
+        </div>
+      </div>
+      <div style="background: #fff; border-radius: 16px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <h4 style="margin: 0 0 14px; font-size: 18px; font-weight: 700;">Brand-role rules (binding)</h4>
+        <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.7; color: #51536a;">
+          <li>Maximum two ground colors per page: white/paper plus teal.</li>
+          <li>Coral is the only primary-button fill site-wide. One primary action per section.</li>
+          <li>Service accents (cerulean / coral / lime) label a lane; they never restyle the component.</li>
+          <li>Lime and gold never set type, never on a link, never on a button label.</li>
+          <li>Raspberry appears only on Podcast and Blog surfaces.</li>
+          <li>Body type is teal on light, white at 88% on teal. No gray on teal.</li>
+          <li>No gradients, no tints of brand colors behind text below 4.5:1.</li>
+        </ol>
+      </div>
+    </div>
+
+    <h3 style="margin: 44px 0 6px; font-size: 24px; font-weight: 700; letter-spacing: -0.01em;">Type · DM Sans only</h3>
+    <p style="margin: 0 0 20px; max-width: 70ch; font-size: 15px; line-height: 1.6; color: #51536a;">One family. Hierarchy comes from weight and scale; italic carries the human note. Headline pattern from the homepage: Regular sets the sentence, <strong style="font-weight: 900;">Black</strong> lands the operative phrase. Weights loaded: 400, 500, 700, 900 + 400/700 italic. No other family, ever.</p>
+    <div style="background: #fff; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,92,109,0.08); overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 24px 26px; border-bottom: 1px solid rgba(0,92,109,0.1); align-items: center;">
+        <div style="font-size: 58px; line-height: 1.04; letter-spacing: -0.022em; font-weight: 400;">We are <strong style="font-weight: 900;">Focused Schools</strong></div>
+        <div style="font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">H1 / Display</strong><br />64px desktop · 58px inner pages · 900 + 400 mix<br />line-height 1.04 · tracking −0.022em<br />max 20ch measure</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 24px 26px; border-bottom: 1px solid rgba(0,92,109,0.1); align-items: center;">
+        <div style="font-size: 40px; line-height: 1.1; letter-spacing: -0.018em; font-weight: 400;">Our partnerships are built on <strong style="font-weight: 900;">three commitments.</strong></div>
+        <div style="font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">H2 / Section</strong><br />40px desktop (48px for full-bleed teal sections)<br />line-height 1.1 · tracking −0.018em · 900 + 400<br />max 26ch measure</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 24px 26px; border-bottom: 1px solid rgba(0,92,109,0.1); align-items: center;">
+        <div style="font-size: 24px; line-height: 1.25; letter-spacing: -0.01em; font-weight: 700;">We listen before we lead.</div>
+        <div style="font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">H3 / Card &amp; block title</strong><br />24px · weight 700 · line-height 1.25 · tracking −0.01em</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 24px 26px; border-bottom: 1px solid rgba(0,92,109,0.1); align-items: center;">
+        <div style="font-size: 18px; line-height: 1.35; font-weight: 700;">Signature offerings</div>
+        <div style="font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">H4 / Label title</strong><br />18px · weight 700 · line-height 1.35 · tracking 0</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 24px 26px; border-bottom: 1px solid rgba(0,92,109,0.1); align-items: center;">
+        <div>
+          <p style="margin: 0 0 10px; font-size: 19px; line-height: 1.6; color: #005C6D;">Lead paragraph: every student gets one chance. One. Everything we do exists to help school leaders make it worth it.</p>
+          <p style="margin: 0; font-size: 17px; line-height: 1.65; color: #51536a;">Body: your educators know their schools best. We take the time to understand your strengths, challenges, and goals before recommending a path forward.</p>
+        </div>
+        <div style="font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">Body</strong><br />Lead 19px / 1.6 · teal<br />Body 17px / 1.65 · gray on light, white 88% on teal<br />Measure 62–70ch, never wider</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 24px 26px; border-bottom: 1px solid rgba(0,92,109,0.1); align-items: center;">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">What we believe</span>
+          <span style="font-size: 15px; line-height: 1.6; color: #51536a;">Small / caption: 20+ years partnering with schools</span>
+        </div>
+        <div style="font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">Eyebrow &amp; Small</strong><br />Eyebrow 13px · 700 · tracking 0.14em · uppercase · coral on light, lime on teal<br />Small 15px / 1.6 · gray</div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 24px 26px; align-items: center;">
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <span style="padding: 15px 28px; border-radius: 999px; background: #DD6237; color: #fff; font-size: 16px; font-weight: 700; letter-spacing: 0.01em;">Our Approach</span>
+          <span style="font-size: 72px; line-height: 1; font-weight: 900; letter-spacing: -0.03em; color: #DD6237;">20+</span>
+        </div>
+        <div style="font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">Button &amp; Stat</strong><br />Button 16px · 700 · tracking 0.01em · no uppercase<br />Stat 72px · 900 · line-height 1 · tracking −0.03em · coral</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 20px;">
+      <div style="background: #fff; border-radius: 16px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <h4 style="margin: 0 0 12px; font-size: 18px; font-weight: 700;">Spacing scale (4px base)</h4>
+        <div style="display: flex; flex-direction: column; gap: 7px; font-size: 14px; color: #51536a;">
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="height: 8px; width: 8px; background: #A7CC14;"></span>8 · icon-to-label</div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="height: 8px; width: 16px; background: #A7CC14;"></span>16 · text stack inside a card</div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="height: 8px; width: 24px; background: #A7CC14;"></span>24 · grid gutter, card padding (mobile)</div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="height: 8px; width: 32px; background: #A7CC14;"></span>32 · card padding (desktop), card-to-card gap</div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="height: 8px; width: 48px; background: #A7CC14;"></span>48 · heading block to content, split column gap</div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="height: 8px; width: 64px; background: #A7CC14;"></span>64 · sub-section separation, mobile section padding</div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="height: 8px; width: 96px; background: #A7CC14;"></span>96 · section padding (tablet)</div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="height: 8px; width: 120px; background: #A7CC14;"></span>120 · section padding (desktop light)</div>
+          <div style="display: flex; align-items: center; gap: 10px;"><span style="height: 8px; width: 160px; background: #A7CC14;"></span>160 · section padding (desktop teal / full-bleed)</div>
+        </div>
+      </div>
+      <div style="background: #fff; border-radius: 16px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <h4 style="margin: 0 0 12px; font-size: 18px; font-weight: 700;">Radius, elevation, rules</h4>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.7; color: #51536a;">
+          <li><code>--fs-r-sm 8px</code> — inputs, chips, small media</li>
+          <li><code>--fs-r-md 16px</code> — cards, stat blocks, accordion rows</li>
+          <li><code>--fs-r-lg 24px</code> — hero overlay card, image panels, teal feature cards</li>
+          <li><code>--fs-r-pill 999px</code> — all buttons, carousel dots, badges</li>
+          <li><code>--fs-shadow-1</code> 0 1px 2px rgba(0,92,109,.08) — resting card</li>
+          <li><code>--fs-shadow-2</code> 0 12px 28px rgba(0,92,109,.12) — hover / floating media</li>
+          <li>Borders: 1px rgba(0,92,109,.14) light; 1px rgba(255,255,255,.18) on teal</li>
+          <li>Never combine a visible border with shadow-2 on the same card</li>
+        </ul>
+      </div>
+      <div style="background: #fff; border-radius: 16px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <h4 style="margin: 0 0 12px; font-size: 18px; font-weight: 700;">Motion tokens</h4>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.7; color: #51536a;">
+          <li><code>--fs-dur-fast 160ms</code> — color/opacity hovers</li>
+          <li><code>--fs-dur-base 240ms</code> — transform hovers, accordion rows</li>
+          <li><code>--fs-dur-slow 520ms</code> — one-time entrances</li>
+          <li><code>--fs-ease</code> cubic-bezier(.2,.7,.2,1)</li>
+          <li>Entrance: fade + 8px rise, once, staggered 60ms max 3 items</li>
+          <li>Cycle of Excellence mark: 40s linear infinite rotation, the only looping motion on the site</li>
+          <li>No parallax, no scroll-jacking, no counters that re-trigger</li>
+          <li><code>prefers-reduced-motion</code>: all entrances and rotation disabled, hovers keep color only</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ C. LAYOUT ============ -->
+  <section id="layout" style="padding-top: 84px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+      <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Deliverable C</span>
+      <h2 style="margin: 0; font-size: 40px; line-height: 1.1; letter-spacing: -0.018em; font-weight: 400;">Layout <strong style="font-weight: 900;">rules</strong></h2>
+    </div>
+    <p style="margin: 0 0 28px; max-width: 70ch; font-size: 17px; line-height: 1.65; color: #51536a;">Three container widths cover every homepage section. Internal pages must not introduce a fourth.</p>
+
+    <div style="background: #fff; border-radius: 16px; padding: 28px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; margin-bottom: 6px;"><span>Full-bleed</span><span style="color: #51536a; font-weight: 400;">100vw · hero media, teal bands, image strip</span></div>
+          <div style="height: 30px; border-radius: 8px; background: #005C6D;"></div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; margin-bottom: 6px;"><span>Wide container</span><span style="color: #51536a; font-weight: 400;">max 1440px · header, footer, image strip inner, carousels</span></div>
+          <div style="height: 30px; border-radius: 8px; background: #0A96CB; width: 96%;"></div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; margin-bottom: 6px;"><span>Standard container</span><span style="color: #51536a; font-weight: 400;">max 1200px · default for all content sections</span></div>
+          <div style="height: 30px; border-radius: 8px; background: #DD6237; width: 82%;"></div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; margin-bottom: 6px;"><span>Text measure</span><span style="color: #51536a; font-weight: 400;">max 720px · intros, story body, legal</span></div>
+          <div style="height: 30px; border-radius: 8px; background: #A7CC14; width: 50%;"></div>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; margin-top: 28px; padding-top: 24px; border-top: 1px solid rgba(0,92,109,0.12); font-size: 14px; line-height: 1.7; color: #51536a;">
+        <div><strong style="color: #005C6D;">Grid</strong><br />12 columns, 24px column gap desktop / 20px tablet. Cards snap to 4-col (thirds), 6-col (halves), or 3-col (quarters). No 5- or 7-column spans.</div>
+        <div><strong style="color: #005C6D;">Gutters</strong><br />48px ≥1280 · 32px 768–1279 · 20px &lt;768. Gutters are page padding and are never overridden per section.</div>
+        <div><strong style="color: #005C6D;">Alignment</strong><br />Everything left-aligns to the container edge. Centered text is reserved for the teal Impact Stories heading and the footer tagline. No justified text, no centered body paragraphs.</div>
+        <div><strong style="color: #005C6D;">Splits</strong><br />Content/Image split is 6+6 at ≥1280, 7+5 when the copy column carries a list. 48–64px column gap. Media may bleed 48px past the container on the outer side only.</div>
+        <div><strong style="color: #005C6D;">Vertical rhythm</strong><br />Light section 120px top/bottom; teal or full-bleed section 160px; adjacent light sections of the same ground collapse to a single 120px seam.</div>
+        <div><strong style="color: #005C6D;">Section heading block</strong><br />Eyebrow → H2 → lead paragraph → optional button, gaps 12 / 20 / 28. Block max width 26ch for the H2, 62ch for the lead.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ B. COMPONENTS ============ -->
+  <section id="components" style="padding-top: 84px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+      <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Deliverable B + E</span>
+      <h2 style="margin: 0; font-size: 40px; line-height: 1.1; letter-spacing: -0.018em; font-weight: 400;">Component <strong style="font-weight: 900;">inventory</strong></h2>
+    </div>
+    <p style="margin: 0 0 32px; max-width: 70ch; font-size: 17px; line-height: 1.65; color: #51536a;">Eighteen components cover every page in the build order. Each specimen below is the approved treatment at desktop; specs sit beside it. Anything an internal page needs that is not here is an escalation, not an invention.</p>
+
+    <!-- Buttons -->
+    <div style="background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 1px 2px rgba(0,92,109,0.08); margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 22px;">
+        <h3 style="margin: 0; font-size: 24px; font-weight: 700;">01 · Buttons</h3>
+        <span style="font-size: 14px; color: #51536a;">Three variants. No fourth.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;">
+        <div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 14px;">
+            <span style="padding: 15px 28px; border-radius: 999px; background: #DD6237; color: #fff; font-size: 16px; font-weight: 700;">Our Approach</span>
+            <span style="padding: 15px 28px; border-radius: 999px; background: #C4522C; color: #fff; font-size: 16px; font-weight: 700;">Hover</span>
+          </div>
+          <p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;"><strong style="color: #005C6D;">Primary</strong> — coral fill, white label, 15px/28px padding, pill. Hover: #C4522C + 1px rise. Focus: 3px cerulean ring, 2px offset. One per section.</p>
+        </div>
+        <div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 14px;">
+            <span style="padding: 14px 27px; border-radius: 999px; border: 1.5px solid #005C6D; color: #005C6D; font-size: 16px; font-weight: 700;">Get to know us</span>
+            <span style="padding: 14px 27px; border-radius: 999px; border: 1.5px solid #005C6D; background: #005C6D; color: #fff; font-size: 16px; font-weight: 700;">Hover</span>
+          </div>
+          <p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;"><strong style="color: #005C6D;">Secondary</strong> — 1.5px teal outline. On teal grounds the outline and label go white and fill to white/teal on hover.</p>
+        </div>
+        <div>
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px;">
+            <span style="font-size: 15px; font-weight: 700; color: #005C6D; display: inline-flex; align-items: center; gap: 8px;">Meet our team <span style="color: #DD6237;">&rarr;</span></span>
+            <span style="font-size: 15px; font-weight: 700; color: #DD6237; display: inline-flex; align-items: center; gap: 12px; border-bottom: 1.5px solid #DD6237; width: fit-content; padding-bottom: 3px;">Meet our team <span>&rarr;</span></span>
+          </div>
+          <p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;"><strong style="color: #005C6D;">Text link / arrow link</strong> — 15px 700, teal label with coral arrow; hover turns the label coral, underlines, arrow shifts 4px right.</p>
+        </div>
+      </div>
+      <p style="margin: 20px 0 0; font-size: 14px; line-height: 1.65; color: #51536a; padding-top: 18px; border-top: 1px solid rgba(0,92,109,0.12);">Shared: min height 50px (44px mobile), label never uppercase, never two primaries adjacent, disabled = gray #51536a at 40% on rgba(0,92,109,.08) with no hover.</p>
+    </div>
+
+    <!-- Header -->
+    <div style="background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 1px 2px rgba(0,92,109,0.08); margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 22px;">
+        <h3 style="margin: 0; font-size: 24px; font-weight: 700;">02 · Header</h3>
+        <span style="font-size: 14px; color: #51536a;">Sticky · white · 88px</span>
+      </div>
+      <div style="border: 1px solid rgba(0,92,109,0.12); border-radius: 12px; overflow: hidden;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 28px; background: #fff; border-bottom: 1px solid rgba(0,92,109,0.12);">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo.svg?v=palette-2026-3" alt="Focused Schools" style="height: 34px; width: auto;" />
+          <div style="display: flex; align-items: center; gap: 26px; font-size: 15px; font-weight: 700; color: #005C6D;">
+            <span>About</span><span>Services</span><span>Impact</span><span>Podcast</span>
+            <span style="padding: 12px 22px; border-radius: 999px; background: #DD6237; color: #fff;">Let's Talk</span>
+            <span style="padding: 11px 20px; border-radius: 999px; border: 1.5px solid rgba(0,92,109,0.28); color: #005C6D;">Login</span>
+          </div>
+        </div>
+        <div style="padding: 16px 28px; background: #f5f6f8; font-size: 14px; line-height: 1.65; color: #51536a;">Height 88px desktop / 72px mobile. Logo 34–40px tall, clear space = half the mark's height. Nav items 15px/700 teal, 26px apart; active item carries a 2px coral underline offset 8px. Scrolled state: same white, shadow-1, no shrink. Mobile: hamburger opens a full-height teal panel, links 22px/700 white, primary button full-width at the bottom.</div>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <div style="background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 1px 2px rgba(0,92,109,0.08); margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 22px;">
+        <h3 style="margin: 0; font-size: 24px; font-weight: 700;">03 · Hero (photo + teal overlay card)</h3>
+        <span style="font-size: 14px; color: #51536a;">16:7 desktop · 4:5 mobile</span>
+      </div>
+      <div style="position: relative; border-radius: 24px; overflow: hidden; min-height: 300px; background-image: url('https://focused-schools-rebrand.vercel.app/assets/img/retreat-1.jpg'); background-size: cover; background-position: center;">
+        <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,72,85,0.78) 0%, rgba(0,72,85,0.25) 62%, rgba(0,72,85,0.08) 100%);"></div>
+        <div style="position: relative; padding: 48px; display: flex; align-items: flex-end; min-height: 300px;">
+          <div style="background: #005C6D; border-radius: 24px; padding: 32px; max-width: 460px; color: #fff;">
+            <h4 style="margin: 0 0 14px; font-size: 38px; line-height: 1.06; letter-spacing: -0.02em; font-weight: 400;">We are <strong style="font-weight: 900;">Focused Schools</strong></h4>
+            <p style="margin: 0 0 22px; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.88);">We help educators confidently lead the hard work and heart work of lasting school improvement.</p>
+            <span style="display: inline-block; padding: 14px 26px; border-radius: 999px; background: #DD6237; color: #fff; font-size: 16px; font-weight: 700;">Our Approach</span>
+          </div>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 22px; font-size: 14px; line-height: 1.7; color: #51536a;">
+        <div><strong style="color: #005C6D;">Structure</strong><br />Full-bleed documentary photo, teal-to-transparent left gradient, solid teal card anchored bottom-left inside the wide container. Card 24px radius, 32px padding, max 460px wide.</div>
+        <div><strong style="color: #005C6D;">Internal-page variant</strong><br />Same card, shorter media (16:5), H1 replaces the wordmark line, no body copy required, eyebrow optional. This is the only hero pattern internal pages may use.</div>
+        <div><strong style="color: #005C6D;">Rules</strong><br />Photo must have a quiet left third. Overlay opacity floor 0.70 behind the card edge. Never place type directly on the photo outside the card.</div>
+      </div>
+    </div>
+
+    <!-- Section heading + content/image split -->
+    <div style="background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 1px 2px rgba(0,92,109,0.08); margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 22px;">
+        <h3 style="margin: 0; font-size: 24px; font-weight: 700;">04 · Section heading &amp; 05 · Content/Image split</h3>
+        <span style="font-size: 14px; color: #51536a;">6+6 · 48–64px gap</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; border: 1px solid rgba(0,92,109,0.12); border-radius: 16px; padding: 32px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">How we help</span>
+          <h4 style="margin: 12px 0 20px; font-size: 34px; line-height: 1.12; letter-spacing: -0.018em; font-weight: 400;">Every school is different. <strong style="font-weight: 900;">Every partnership should be, too.</strong></h4>
+          <p style="margin: 0 0 28px; font-size: 17px; line-height: 1.65; color: #51536a;">We begin by listening — understanding your goals, your community, and the realities your educators face every day.</p>
+          <span style="font-size: 15px; font-weight: 700; color: #005C6D;">Explore our services <span style="color: #DD6237;">&rarr;</span></span>
+        </div>
+        <div style="border-radius: 24px; overflow: hidden; box-shadow: 0 12px 28px rgba(0,92,109,0.12);">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-3.jpg" alt="Facilitator at a flip chart with district leaders" style="display: block; width: 100%; height: 260px; object-fit: cover;" />
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 22px; font-size: 14px; line-height: 1.7; color: #51536a;">
+        <div><strong style="color: #005C6D;">Heading block</strong><br />Eyebrow (13/700/0.14em, coral on light, lime on teal) → H2 → lead → link. Gaps 12 / 20 / 28. Left-aligned always.</div>
+        <div><strong style="color: #005C6D;">Media</strong><br />24px radius, shadow-2, 4:3 or 3:2. Optional floating caption chip: white, 16px radius, shadow-2, 12/18px padding, overlapping the media corner by 24px — max one per page.</div>
+        <div><strong style="color: #005C6D;">Order</strong><br />Alternate media side between consecutive splits; on mobile media always stacks below the copy.</div>
+      </div>
+    </div>
+
+    <!-- Cards: base + service + team + story + podcast -->
+    <div style="background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 1px 2px rgba(0,92,109,0.08); margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+        <h3 style="margin: 0; font-size: 24px; font-weight: 700;">06 · Card language</h3>
+        <span style="font-size: 14px; color: #51536a;">One base card, five content skins</span>
+      </div>
+      <p style="margin: 0 0 24px; max-width: 74ch; font-size: 15px; line-height: 1.65; color: #51536a;">Base card: white ground, 16px radius, 1px rgba(0,92,109,.14) border, shadow-1, 32px padding (24px mobile), internal stack 16px. Hover: shadow-2 + 2px rise + title goes coral, 240ms. The skins below change content and one accent detail — never the geometry.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px;">
+
+        <div style="border: 1px solid rgba(0,92,109,0.14); border-radius: 16px; padding: 28px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+          <div style="height: 4px; width: 44px; background: #0A96CB; border-radius: 999px; margin-bottom: 18px;"></div>
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #51536a;">Service lane</span>
+          <h4 style="margin: 10px 0 10px; font-size: 22px; font-weight: 700; line-height: 1.25;">Strategy and Vision</h4>
+          <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #51536a;">Your district moves in one direction, on a plan everyone owns.</p>
+          <ul style="margin: 0 0 18px; padding-left: 18px; font-size: 14px; line-height: 1.7; color: #51536a;"><li>Multi-year strategic planning</li><li>Portrait of a Learner</li><li>Governance support</li></ul>
+          <span style="font-size: 15px; font-weight: 700; color: #005C6D;">See this lane <span style="color: #DD6237;">&rarr;</span></span>
+          <p style="margin: 18px 0 0; font-size: 13px; line-height: 1.6; color: #51536a; border-top: 1px solid rgba(0,92,109,0.12); padding-top: 14px;"><strong style="color: #005C6D;">Service card</strong> — accent rule at top carries the lane color (cerulean / coral / lime). Same card for all three lanes.</p>
+        </div>
+
+        <div style="border: 1px solid rgba(0,92,109,0.14); border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-2.jpg" alt="Team member portrait placeholder" style="display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;" />
+          <div style="padding: 24px;">
+            <h4 style="margin: 0 0 4px; font-size: 20px; font-weight: 700;">Name Surname</h4>
+            <p style="margin: 0 0 12px; font-size: 15px; line-height: 1.5; color: #51536a;">Senior Partner, Leadership and Systems</p>
+            <span style="font-size: 14px; font-weight: 700; color: #005C6D;">Read bio <span style="color: #DD6237;">&rarr;</span></span>
+            <p style="margin: 16px 0 0; font-size: 13px; line-height: 1.6; color: #51536a; border-top: 1px solid rgba(0,92,109,0.12); padding-top: 14px;"><strong style="color: #005C6D;">Team card</strong> — 4:5 portrait, top-weighted crop. Bio opens in a modal; card is CPT-driven, 3-up desktop / 2-up tablet / 1-up mobile, arbitrary count, no manual duplication.</p>
+          </div>
+        </div>
+
+        <div style="border: 1px solid rgba(0,92,109,0.14); border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+          <div style="position: relative;">
+            <img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-1.jpg" alt="Impact story cover placeholder" style="display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover;" />
+            <span style="position: absolute; top: 14px; left: 14px; padding: 7px 14px; border-radius: 999px; background: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #005C6D;">Massachusetts</span>
+          </div>
+          <div style="padding: 24px;">
+            <h4 style="margin: 0 0 10px; font-size: 20px; font-weight: 700; line-height: 1.3;">District name · what changed</h4>
+            <p style="margin: 0 0 12px; font-size: 15px; line-height: 1.6; color: #51536a;">Two-line excerpt, clamped. Legacy stories without a cover image fall back to a teal ground with the starless mark at 12% opacity.</p>
+            <span style="font-size: 14px; font-weight: 700; color: #005C6D;">Read the story <span style="color: #DD6237;">&rarr;</span></span>
+            <p style="margin: 16px 0 0; font-size: 13px; line-height: 1.6; color: #51536a; border-top: 1px solid rgba(0,92,109,0.12); padding-top: 14px;"><strong style="color: #005C6D;">Impact story card</strong> — 3:2 cover, state/level chip, 2-line clamp. Compatible with legacy and CPT stories.</p>
+          </div>
+        </div>
+
+        <div style="border: 1px solid rgba(0,92,109,0.14); border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+          <div style="position: relative; aspect-ratio: 16 / 9; background: #004855; display: flex; align-items: center; justify-content: center;">
+            <span style="width: 58px; height: 58px; border-radius: 999px; background: #BC3E8C; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px;">&#9654;</span>
+            <span style="position: absolute; bottom: 12px; right: 14px; font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.8);">28 min</span>
+          </div>
+          <div style="padding: 24px;">
+            <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #BC3E8C;">Episode 14</span>
+            <h4 style="margin: 10px 0 10px; font-size: 20px; font-weight: 700; line-height: 1.3;">Episode title runs to two lines here</h4>
+            <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #51536a;">Static thumbnail + play affordance; the iframe or Buzzsprout player mounts only on click.</p>
+            <p style="margin: 16px 0 0; font-size: 13px; line-height: 1.6; color: #51536a; border-top: 1px solid rgba(0,92,109,0.12); padding-top: 14px;"><strong style="color: #005C6D;">Blog / Podcast card</strong> — raspberry eyebrow and play button. No always-loaded iframes; thumbnail is a cached YouTube still.</p>
+          </div>
+        </div>
+
+        <div style="border-radius: 16px; padding: 28px; background: #005C6D; color: #fff;">
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #A7CC14;">Feature</span>
+          <h4 style="margin: 10px 0 10px; font-size: 22px; font-weight: 700; line-height: 1.25;">A Cycle of Excellence</h4>
+          <p style="margin: 0 0 18px; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.88);">Teal card skin: used for framework callouts and one CTA per page. Lime eyebrow, white type, white-outline secondary button.</p>
+          <span style="display: inline-block; padding: 12px 24px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.75); color: #fff; font-size: 15px; font-weight: 700;">Learn the framework</span>
+          <p style="margin: 18px 0 0; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.8); border-top: 1px solid rgba(255,255,255,0.22); padding-top: 14px;"><strong style="color: #fff;">Teal card</strong> — same geometry, no border, no shadow. Never more than two per page.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Numbered commitments list + accordion -->
+    <div style="background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 1px 2px rgba(0,92,109,0.08); margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 22px;">
+        <h3 style="margin: 0; font-size: 24px; font-weight: 700;">07 · Commitment list &amp; 08 · Accordion</h3>
+        <span style="font-size: 14px; color: #51536a;">Same row anatomy</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+        <div style="display: flex; flex-direction: column; gap: 22px;">
+          <div style="display: grid; grid-template-columns: 34px 1fr; gap: 16px;">
+            <span style="font-size: 13px; font-weight: 700; color: #DD6237; letter-spacing: 0.1em; padding-top: 6px;">01</span>
+            <div style="border-left: 2px solid #A7CC14; padding-left: 20px;">
+              <h4 style="margin: 0 0 8px; font-size: 20px; font-weight: 700;">We listen before we lead.</h4>
+              <p style="margin: 0 0 10px; font-size: 15px; line-height: 1.6; color: #51536a;">Your educators know their schools best.</p>
+              <span style="font-size: 14px; font-weight: 700; color: #005C6D;">Meet our team <span style="color: #DD6237;">&rarr;</span></span>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 34px 1fr; gap: 16px;">
+            <span style="font-size: 13px; font-weight: 700; color: #DD6237; letter-spacing: 0.1em; padding-top: 6px;">02</span>
+            <div style="border-left: 2px solid rgba(0,92,109,0.14); padding-left: 20px;">
+              <h4 style="margin: 0 0 8px; font-size: 20px; font-weight: 700;">We work alongside your team.</h4>
+              <p style="margin: 0 0 10px; font-size: 15px; line-height: 1.6; color: #51536a;">Coaching, guidance, and support throughout the work.</p>
+              <span style="font-size: 14px; font-weight: 700; color: #005C6D;">Explore our services <span style="color: #DD6237;">&rarr;</span></span>
+            </div>
+          </div>
+          <p style="margin: 0; font-size: 13px; line-height: 1.65; color: #51536a;"><strong style="color: #005C6D;">Commitment list</strong> — 2-digit coral index, 2px active rule (lime on light, gold on teal), 22px between rows. Max 4 rows.</p>
+        </div>
+        <div>
+          <div style="border-top: 1px solid rgba(0,92,109,0.14);">
+            <div style="padding: 22px 0; border-bottom: 1px solid rgba(0,92,109,0.14);">
+              <div style="display: flex; justify-content: space-between; gap: 20px; align-items: baseline;">
+                <div>
+                  <h4 style="margin: 0 0 6px; font-size: 20px; font-weight: 700; color: #DD6237;">Strategic Planning</h4>
+                  <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #51536a;">Build a vision your whole team owns.</p>
+                </div>
+                <span style="font-size: 22px; color: #DD6237; line-height: 1;">&minus;</span>
+              </div>
+              <p style="margin: 16px 0 0; font-size: 15px; line-height: 1.65; color: #51536a; max-width: 56ch;">Open panel body, 16px above, max 56ch. Only one row open at a time; first row open on load.</p>
+            </div>
+            <div style="padding: 22px 0; border-bottom: 1px solid rgba(0,92,109,0.14); display: flex; justify-content: space-between; gap: 20px; align-items: baseline;">
+              <div>
+                <h4 style="margin: 0 0 6px; font-size: 20px; font-weight: 700;">Leadership Development</h4>
+                <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #51536a;">Equip the people who carry change.</p>
+              </div>
+              <span style="font-size: 22px; color: #005C6D; line-height: 1;">+</span>
+            </div>
+            <div style="padding: 22px 0; border-bottom: 1px solid rgba(0,92,109,0.14); display: flex; justify-content: space-between; gap: 20px; align-items: baseline;">
+              <div>
+                <h4 style="margin: 0 0 6px; font-size: 20px; font-weight: 700;">Educator Development</h4>
+                <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #51536a;">Grow instructional capacity from within.</p>
+              </div>
+              <span style="font-size: 22px; color: #005C6D; line-height: 1;">+</span>
+            </div>
+          </div>
+          <p style="margin: 16px 0 0; font-size: 13px; line-height: 1.65; color: #51536a;"><strong style="color: #005C6D;">Accordion / FAQ</strong> — hairline rows, no card, 22px vertical padding, title turns coral when open, +/&minus; glyph at 22px. Panel animates height 240ms; row is a real <code>&lt;button&gt;</code> with aria-expanded.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teal band: stats, testimonial, partner strip -->
+    <div style="background: #005C6D; border-radius: 20px; padding: 32px; margin-bottom: 20px; color: #fff;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 22px;">
+        <h3 style="margin: 0; font-size: 24px; font-weight: 700;">09 · Statistics &nbsp;10 · Testimonial &nbsp;11 · Partner strip</h3>
+        <span style="font-size: 14px; color: rgba(255,255,255,0.75);">Shown on the teal ground</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,0.22);">
+        <div style="border-top: 3px solid #F3C145; padding-top: 16px;">
+          <div style="font-size: 64px; line-height: 1; font-weight: 900; letter-spacing: -0.03em;">2+</div>
+          <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 10px; color: #A7CC14;">Million</div>
+          <p style="margin: 8px 0 0; font-size: 15px; line-height: 1.5; color: rgba(255,255,255,0.85);">Students impacted</p>
+        </div>
+        <div style="border-top: 3px solid #F3C145; padding-top: 16px;">
+          <div style="font-size: 64px; line-height: 1; font-weight: 900; letter-spacing: -0.03em;">20+</div>
+          <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 10px; color: #A7CC14;">Years</div>
+          <p style="margin: 8px 0 0; font-size: 15px; line-height: 1.5; color: rgba(255,255,255,0.85);">Partnering with schools</p>
+        </div>
+        <div style="border-top: 3px solid #F3C145; padding-top: 16px;">
+          <div style="font-size: 64px; line-height: 1; font-weight: 900; letter-spacing: -0.03em;">25+</div>
+          <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 10px; color: #A7CC14;">States</div>
+          <p style="margin: 8px 0 0; font-size: 15px; line-height: 1.5; color: rgba(255,255,255,0.85);">Served</p>
+        </div>
+        <div style="font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.8);"><strong style="color: #fff;">Statistics</strong><br />64px numeral (72px on light ground, coral), gold 3px top rule, lime uppercase unit, one-line caption. 3-up desktop, 3-up tablet, stacked mobile. Numerals never animate.</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; padding: 28px 0; border-bottom: 1px solid rgba(255,255,255,0.22);">
+        <div>
+          <span style="font-size: 44px; line-height: 0.8; color: #DD6237; font-weight: 900;">&ldquo;</span>
+          <p style="margin: 10px 0 20px; font-size: 24px; line-height: 1.45; font-style: italic; font-weight: 400;">I would be glad to recommend Focused Schools as an individual who has worked with them as both a high school principal and District Administrator.</p>
+          <div style="font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #A7CC14;">Name Surname</div>
+          <div style="font-size: 15px; color: rgba(255,255,255,0.8); margin-top: 4px;">Role, District</div>
+          <div style="display: flex; gap: 8px; margin-top: 22px;">
+            <span style="width: 9px; height: 9px; border-radius: 999px; background: #DD6237;"></span>
+            <span style="width: 9px; height: 9px; border-radius: 999px; background: rgba(255,255,255,0.35);"></span>
+            <span style="width: 9px; height: 9px; border-radius: 999px; background: rgba(255,255,255,0.35);"></span>
+          </div>
+        </div>
+        <div style="font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.8);"><strong style="color: #fff;">Quote / Testimonial</strong><br />Coral quote glyph, 24px italic quote (max 40 words, 46ch–52ch measure), lime attribution eyebrow, role in white 80%. One slide at a time, coral active dot, 8px pill dots. Swipe on mobile; arrows appear ≥1024px. No autoplay.</div>
+      </div>
+      <div style="padding-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; align-items: center;">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+          <span style="padding: 12px 18px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-size: 15px; font-weight: 500;">Downey USD</span>
+          <span style="padding: 12px 18px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-size: 15px; font-weight: 500;">Natick Public Schools</span>
+          <span style="padding: 12px 18px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-size: 15px; font-weight: 500;">CREC</span>
+          <span style="padding: 12px 18px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-size: 15px; font-weight: 500;">Champaign Unit 4</span>
+        </div>
+        <div style="font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.8);"><strong style="color: #fff;">Partner strip</strong><br />Text chips, not logos (district marks are inconsistent and mostly unlicensed). 8px radius, 12/18px padding, grouped by state with a lime state eyebrow above each group. Static — no marquee.</div>
+      </div>
+    </div>
+
+    <!-- CTA + form -->
+    <div style="background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 1px 2px rgba(0,92,109,0.08); margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 22px;">
+        <h3 style="margin: 0; font-size: 24px; font-weight: 700;">12 · CTA section &amp; 13 · Form styles</h3>
+        <span style="font-size: 14px; color: #51536a;">Contact keeps its existing form logic</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; background: #f5f6f8; border-radius: 16px; padding: 32px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Say hello</span>
+          <h4 style="margin: 12px 0 16px; font-size: 34px; line-height: 1.1; letter-spacing: -0.018em; font-weight: 400;">Get to <strong style="font-weight: 900;">Know Us.</strong></h4>
+          <p style="margin: 0 0 20px; font-size: 16px; line-height: 1.65; color: #51536a;">hello@focusedschools.com<br />781 000 0000</p>
+          <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #51536a;">Badges (MA approved provider, memberships) sit here at 64px tall max, grayscale-free, 16px apart.</p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #005C6D; margin-bottom: 7px;">First name</label>
+              <div style="height: 50px; border-radius: 8px; border: 1px solid rgba(0,92,109,0.24); background: #fff;"></div>
+            </div>
+            <div>
+              <label style="display: block; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #005C6D; margin-bottom: 7px;">Last name</label>
+              <div style="height: 50px; border-radius: 8px; border: 1.5px solid #0A96CB; background: #fff; box-shadow: 0 0 0 3px rgba(10,150,203,0.18);"></div>
+            </div>
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #005C6D; margin-bottom: 7px;">Message</label>
+            <div style="height: 110px; border-radius: 8px; border: 1px solid rgba(0,92,109,0.24); background: #fff;"></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <span style="padding: 15px 28px; border-radius: 999px; background: #DD6237; color: #fff; font-size: 16px; font-weight: 700;">Send</span>
+            <span style="font-size: 14px; color: #51536a;">Error state: 1.5px #51536a border + gray helper text below. No red — it is not a brand color.</span>
+          </div>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 22px; font-size: 14px; line-height: 1.7; color: #51536a;">
+        <div><strong style="color: #005C6D;">Fields</strong><br />50px height, 8px radius, 1px rgba(0,92,109,.24) border, 16px input type, 14px internal padding. Focus: cerulean 1.5px border + 3px cerulean 18% ring.</div>
+        <div><strong style="color: #005C6D;">Labels</strong><br />Always visible above the field, 13px/700/0.06em uppercase teal. No placeholder-only fields.</div>
+        <div><strong style="color: #005C6D;">CTA section</strong><br />Paper ground, 0.9+1.1 split, one primary button. A full-width teal CTA band (160px padding) is the alternate for pages that end without a form.</div>
+      </div>
+    </div>
+
+    <!-- Image treatments + motif + footer -->
+    <div style="background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 22px;">
+        <h3 style="margin: 0; font-size: 24px; font-weight: 700;">14 · Image treatments &nbsp;15 · Brand motifs &nbsp;16 · Footer</h3>
+        <span style="font-size: 14px; color: #51536a;">Documentary, never staged</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        <div><img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-1.jpg" alt="Wide participatory room" style="display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 16px;" /><p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #51536a;"><strong style="color: #005C6D;">3:2</strong> cards, story covers, split media</p></div>
+        <div><img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-2.jpg" alt="Hands marking a chart" style="display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 16px;" /><p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #51536a;"><strong style="color: #005C6D;">4:5</strong> team portraits, vertical feature</p></div>
+        <div><img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-3.jpg" alt="Facilitation at a flip chart" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 16px;" /><p style="margin: 10px 0 0; font-size: 14px; line-height: 1.6; color: #51536a;"><strong style="color: #005C6D;">1:1</strong> three-up strip tiles, inline portraits</p></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 22px; padding-top: 20px; border-top: 1px solid rgba(0,92,109,0.12); font-size: 14px; line-height: 1.7; color: #51536a;">
+        <div><strong style="color: #005C6D;">Treatment</strong><br />Colour photography, no filters, no duotone, no grayscale. 16px radius in grids, 24px for feature media, 0 for full-bleed strips. Hero and full-bleed media carry the teal gradient scrim; nothing else does. Every image needs real alt text.</div>
+        <div><strong style="color: #005C6D;">Motifs</strong><br />Only two: the starless mark used in the rotating Cycle of Excellence, and the mark at 6–12% opacity as a large corner watermark on teal bands/footers. No invented shapes, no decorative blobs, no icon-in-circle patterns beyond the four-icon stroke set (guide/align/measure/share).</div>
+        <div><strong style="color: #005C6D;">Footer</strong><br />Teal #005C6D base, 96px top / 40px bottom padding, reverse lockup at 40px, 4 link columns (15px/500, white 85%, hover white + underline), tagline in 18px italic white, watermark mark bottom-right at 8%, 13px legal row above a 1px white-18% rule.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ D. RESPONSIVE ============ -->
+  <section id="responsive" style="padding-top: 84px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+      <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Deliverable D</span>
+      <h2 style="margin: 0; font-size: 40px; line-height: 1.1; letter-spacing: -0.018em; font-weight: 400;">Responsive <strong style="font-weight: 900;">rules</strong></h2>
+    </div>
+    <p style="margin: 0 0 28px; max-width: 70ch; font-size: 17px; line-height: 1.65; color: #51536a;">Four breakpoints, mobile-first. Type scales at two steps only — no fluid clamp per element beyond the H1/H2 pair.</p>
+    <div style="background: #fff; border-radius: 16px; padding: 28px; box-shadow: 0 1px 2px rgba(0,92,109,0.08); display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+      <div>
+        <h4 style="margin: 0 0 10px; font-size: 18px; font-weight: 700;">Desktop ≥1280</h4>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; color: #51536a;"><li>1200px container, 48px gutter</li><li>H1 64 · H2 40 · body 17</li><li>Cards 3-up, splits 6+6</li><li>Section padding 120 / 160 teal</li></ul>
+      </div>
+      <div>
+        <h4 style="margin: 0 0 10px; font-size: 18px; font-weight: 700;">Laptop 1024–1279</h4>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; color: #51536a;"><li>Container fluid, 32px gutter</li><li>H1 52 · H2 36</li><li>Cards 3-up, splits 6+6 with 40px gap</li><li>Section padding 104 / 128</li></ul>
+      </div>
+      <div>
+        <h4 style="margin: 0 0 10px; font-size: 18px; font-weight: 700;">Tablet 768–1023</h4>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; color: #51536a;"><li>32px gutter, 12-col becomes 8-col</li><li>H1 44 · H2 32 · body 17</li><li>Cards 2-up; stats stay 3-up; splits stack</li><li>Hamburger nav begins at 1023</li><li>Section padding 96</li></ul>
+      </div>
+      <div>
+        <h4 style="margin: 0 0 10px; font-size: 18px; font-weight: 700;">Mobile &lt;768</h4>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; color: #51536a;"><li>20px gutter, single column</li><li>H1 34 · H2 28 · H3 21 · body 16</li><li>Hero media 4:5, overlay card full-width with 20px side margins, −40px overlap</li><li>Cards 1-up, 20px gaps; carousels swipe, dots only</li><li>Buttons 44px min height, full-width when alone</li><li>Section padding 64 / 80 teal</li><li>Team/story grids paginate at 9 with a Load more secondary button</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ F. AMBIGUITIES ============ -->
+  <section id="ambiguities" style="padding-top: 84px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+      <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Deliverable F</span>
+      <h2 style="margin: 0; font-size: 40px; line-height: 1.1; letter-spacing: -0.018em; font-weight: 400;">Ambiguities needing <strong style="font-weight: 900;">human judgment</strong></h2>
+    </div>
+    <p style="margin: 0 0 24px; max-width: 70ch; font-size: 17px; line-height: 1.65; color: #51536a;">Each item below is a value I inferred from the mockup rather than read from a source of truth. Confirm or correct before page design starts.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">1 · Exact container width</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">I read ~1200px content inside a ~1440px wide band from the mockup. If the built homepage uses a different max-width, that number wins and I will restate the grid.</p></div>
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">2 · Service accent vs. homepage accordion</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">The copy assigns cerulean / coral / lime to the three lanes, but the homepage "How we help" list shows four items (incl. Technical Assistance) with coral only. Decide: does the homepage list adopt lane accents, or does Services own them alone?</p></div>
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">3 · Lime as an accent on light grounds</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">Lime is a fill-only color and fails contrast as a rule on white at 2px. I have used it for active rules and on teal only. Confirm that lime never appears as a hairline on white.</p></div>
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">4 · Partner display: chips vs. logos</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">I specced text chips because district logos vary wildly and usage rights are unclear. If the client has permission and files, the strip becomes a 5-up logo grid at 40px cap height.</p></div>
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">5 · Team photography</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">4:5 portraits assume consistent headshots exist. If they do not, the fallback is a teal tile with initials in white 900 — needs approval, and the two cannot mix within one grid.</p></div>
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">6 · Legacy impact stories</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">Legacy stories may lack a cover image, state tag, or excerpt. My fallback is the teal watermark tile + auto-excerpt. Confirm whether legacy stories get backfilled instead.</p></div>
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">7 · Podcast source of truth</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">Buzzsprout is preserved, and the video card is designed for a later YouTube playlist feed. Confirm whether episode metadata comes from Buzzsprout RSS or YouTube, since the card shows duration.</p></div>
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">8 · Error/validation color</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">The palette has no red and the guide says use neutral gray for negatives. I specced gray. Confirm that gray-only validation is acceptable to the client on the contact form.</p></div>
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">9 · Login / client portal</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">The header carries a Login button. Is the destination in scope for this refresh, or does it stay as-is?</p></div>
+      <div style="background: #fff; border-left: 3px solid #F3C145; border-radius: 12px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);"><h4 style="margin: 0 0 8px; font-size: 17px; font-weight: 700;">10 · Cycle of Excellence reuse</h4><p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">The rotating Cycle is a homepage signature. May the About and Services pages reuse it, or should internal pages reference the Framework statically?</p></div>
+    </div>
+  </section>
+
+  <!-- ============ G. HANDOFF ============ -->
+  <section id="handoff" style="padding-top: 84px;">
+    <div style="display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px;">
+      <span style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Deliverable G</span>
+      <h2 style="margin: 0; font-size: 40px; line-height: 1.1; letter-spacing: -0.018em; font-weight: 400;">Developer <strong style="font-weight: 900;">handoff notes</strong></h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 24px;">
+      <div style="background: #fff; border-radius: 16px; padding: 24px 26px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <h4 style="margin: 0 0 12px; font-size: 18px; font-weight: 700;">Theme structure</h4>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; color: #51536a;">
+          <li>Tokens live in one <code>_tokens.css</code> on <code>:root</code>; no hex in templates or ACF fields.</li>
+          <li>Each component above maps to one reusable block/pattern (native block or ACF flexible-content layout), not a bespoke page template.</li>
+          <li>Section wrapper takes two controls only: ground (white / paper / teal) and padding (default / tight). Nothing else is editor-configurable.</li>
+          <li>Page templates are compositions of these blocks; a new page should need zero new CSS.</li>
+        </ul>
+      </div>
+      <div style="background: #fff; border-radius: 16px; padding: 24px 26px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <h4 style="margin: 0 0 12px; font-size: 18px; font-weight: 700;">Dynamic content</h4>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; color: #51536a;">
+          <li><strong>Team</strong> — CPT + repeatable card grid; arbitrary count, no manual duplication; grid reflows 3/2/1.</li>
+          <li><strong>Services</strong> — one service template, lane accent stored as a taxonomy/field value mapping to a token.</li>
+          <li><strong>Impact Stories</strong> — archive query populates the card; legacy + CPT share one card partial with documented fallbacks.</li>
+          <li><strong>Podcast</strong> — static thumbnail + lazy iframe on click; Buzzsprout embed preserved; playlist feed cached server-side.</li>
+          <li><strong>Contact</strong> — existing form plugin and business logic untouched; restyled via the form tokens only.</li>
+        </ul>
+      </div>
+      <div style="background: #fff; border-radius: 16px; padding: 24px 26px; box-shadow: 0 1px 2px rgba(0,92,109,0.08);">
+        <h4 style="margin: 0 0 12px; font-size: 18px; font-weight: 700;">Performance &amp; a11y</h4>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; color: #51536a;">
+          <li>DM Sans self-hosted, woff2, weights 400/500/700/900 + 400/700 italic; <code>font-display: swap</code>; subset latin.</li>
+          <li>Hero image eager + <code>fetchpriority=high</code>; all other media lazy with width/height to prevent CLS.</li>
+          <li>Focus visible on every interactive element: 3px cerulean ring, 2px offset — never removed.</li>
+          <li>Accordion and carousel are real buttons with aria-expanded / aria-roledescription; carousel is keyboard-navigable.</li>
+          <li>Honor <code>prefers-reduced-motion</code>: kill entrances and the Cycle rotation.</li>
+          <li>Contrast verified: teal/white 8.4:1, gray/white 6.9:1, white/teal 8.4:1, coral button white label 3.6:1 — so button labels stay ≥16px/700 only.</li>
+        </ul>
+      </div>
+      <div style="background: #005C6D; border-radius: 16px; padding: 24px 26px; color: #fff;">
+        <h4 style="margin: 0 0 12px; font-size: 18px; font-weight: 700;">What happens next</h4>
+        <ol style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; color: rgba(255,255,255,0.88);">
+          <li>Designer + Briggs review this document and resolve the ten ambiguities.</li>
+          <li>I lock v1 with their corrections (no page design before that gate).</li>
+          <li>Page design proceeds in brief order: Services → About → Team → Impact Stories landing → Impact Story single → Podcast → Contact.</li>
+          <li>Each page ships with section hierarchy, desktop + mobile mockups, component mapping, type/spacing specs, image ratios, states, long-content handling, and dev notes.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+</body>
+</html>

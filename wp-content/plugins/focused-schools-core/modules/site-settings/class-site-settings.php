@@ -188,6 +188,15 @@ class Site_Settings implements Module_Interface {
 				);
 				break;
 
+			case 'number':
+				printf(
+					'<input type="number" id="%1$s" name="%2$s" value="%3$s" min="0" class="small-text" />',
+					esc_attr( $id ),
+					esc_attr( $name ),
+					esc_attr( $value )
+				);
+				break;
+
 			default:
 				printf(
 					'<input type="text" id="%1$s" name="%2$s" value="%3$s" class="regular-text" />',

@@ -1,29 +1,28 @@
 /**
- * Home Hero: video-poster broadcast style. Mobile-first: media stacks above
- * copy below 1024px, side-by-side from 1024px. Also styles the video modal
- * dialog this component renders (see home-hero.js).
+ * Home Hero: video-poster media with a teal slab overlapping its
+ * bottom-left corner. Exact geometry from the approved .dc design.
  */
 
 .fs-home-hero {
-	padding-block: var( --wp--preset--spacing--x-large, 3rem );
-	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+	background: var( --wp--preset--color--base, #ffffff );
+	padding: 14px 0 8rem;
 }
 
 .fs-home-hero__shell {
-	display: flex;
-	flex-direction: column;
-	gap: var( --wp--preset--spacing--x-large, 3rem );
+	position: relative;
 }
 
 .fs-home-hero__media {
 	position: relative;
 	aspect-ratio: 16 / 9;
-	border-radius: var( --wp--preset--spacing--small, 0.5rem );
+	border-radius: var( --fs-r-sm, 8px );
 	overflow: hidden;
-	background: var( --wp--preset--color--contrast, #005c6d );
+	background: var( --wp--preset--color--teal-deep, #004855 );
 }
 
 .fs-home-hero__poster {
+	position: absolute;
+	inset: 0;
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
@@ -31,54 +30,95 @@
 
 .fs-home-hero__watch {
 	position: absolute;
-	right: var( --wp--preset--spacing--medium, 1rem );
-	bottom: var( --wp--preset--spacing--medium, 1rem );
+	right: 22px;
+	bottom: 22px;
 	display: inline-flex;
 	align-items: center;
-	gap: var( --wp--preset--spacing--small, 0.5rem );
-	padding: var( --wp--preset--spacing--small, 0.5rem ) var( --wp--preset--spacing--medium, 1rem );
+	gap: 14px;
+	height: 42px;
+	padding: 0 22px;
 	background: var( --wp--preset--color--base, #ffffff );
 	color: var( --wp--preset--color--contrast, #005c6d );
 	border: none;
-	border-radius: 999px;
+	border-radius: var( --fs-r-pill, 999px );
+	box-shadow: 0 8px 24px rgba( 0, 92, 109, 0.14 );
+	font-size: 0.6875rem;
 	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
 	cursor: pointer;
+	transition: background var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-home-hero__watch:hover {
+	background: var( --wp--preset--color--paper-soft, #f0f2f4 );
 }
 
 .fs-home-hero__watch svg {
-	width: 18px;
-	height: 18px;
+	width: 14px;
+	height: 14px;
 	fill: none;
 	stroke: currentColor;
 	stroke-width: 2;
 }
 
+.fs-home-hero__slab {
+	position: relative;
+	margin: -3.5rem 0 0 1.5rem;
+	width: 90%;
+	max-width: 560px;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	padding: 2.75rem;
+	z-index: 2;
+}
+
 .fs-home-hero__heading {
-	margin: 0 0 var( --wp--preset--spacing--medium, 1rem );
-	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
-	font-weight: 900;
-	color: var( --wp--preset--color--contrast, #005c6d );
+	margin: 0 0 1.25rem;
+	font-size: 3.25rem;
+	line-height: 0.96;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	color: var( --wp--preset--color--base, #ffffff );
 }
 
 .fs-home-hero__subheading {
-	margin: 0 0 var( --wp--preset--spacing--large, 2rem );
-	font-size: var( --wp--preset--font-size--large, 1.5rem );
-	color: var( --wp--preset--color--ink-soft, #51536a );
+	margin: 0 0 1.75rem;
+	max-width: 400px;
+	font-size: 1rem;
+	line-height: 1.55;
+	color: rgba( 255, 255, 255, 0.92 );
 }
 
 @media ( min-width: 1024px ) {
-	.fs-home-hero__shell {
-		flex-direction: row;
-		align-items: center;
-	}
-
-	.fs-home-hero__media,
-	.fs-home-hero__copy {
-		flex: 1 1 50%;
+	.fs-home-hero__slab {
+		position: absolute;
+		left: 24px;
+		bottom: -3.5rem;
+		width: 560px;
+		max-width: none;
+		margin: 0;
+		padding: 2.75rem;
 	}
 }
 
-/* Video modal (shared markup rendered once by home-hero.php) */
+@media ( max-width: 720px ) {
+	.fs-home-hero__heading {
+		font-size: 2.125rem;
+	}
+
+	.fs-home-hero__media {
+		aspect-ratio: 3 / 4;
+	}
+
+	.fs-home-hero__slab {
+		margin: 0;
+		padding: 1.75rem 1.5rem 2rem;
+	}
+}
+
+/* -----------------------------------------------------------------------
+ * Video modal (shared markup rendered once by home-hero.php)
+ * --------------------------------------------------------------------- */
 
 .fs-video-modal {
 	position: fixed;
@@ -87,6 +127,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	padding: 24px;
 }
 
 .fs-video-modal[hidden] {
@@ -96,16 +137,16 @@
 .fs-video-modal__backdrop {
 	position: absolute;
 	inset: 0;
-	background: rgba( 0, 0, 0, 0.75 );
+	background: rgba( 0, 72, 85, 0.72 );
 	border: none;
 	cursor: pointer;
 }
 
 .fs-video-modal__dialog {
 	position: relative;
-	width: min( 90vw, 960px );
-	background: var( --wp--preset--color--base, #ffffff );
-	border-radius: var( --wp--preset--spacing--small, 0.5rem );
+	width: min( 1080px, 92vw );
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-radius: var( --fs-r-md, 16px );
 	overflow: hidden;
 }
 
@@ -113,26 +154,35 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: var( --wp--preset--spacing--small, 0.5rem ) var( --wp--preset--spacing--medium, 1rem );
+	gap: 20px;
+	padding: 18px 20px;
 }
 
 .fs-video-modal__title {
 	margin: 0;
+	font-size: 0.6875rem;
 	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--base, #ffffff );
 }
 
 .fs-video-modal__close {
-	background: none;
+	width: 40px;
+	height: 40px;
+	border-radius: var( --fs-r-sm, 8px );
 	border: none;
-	font-size: 1.5rem;
+	background: rgba( 255, 255, 255, 0.18 );
+	color: var( --wp--preset--color--base, #ffffff );
+	font-size: 1.25rem;
 	line-height: 1;
 	cursor: pointer;
-	padding: var( --wp--preset--spacing--small, 0.5rem );
 }
 
 .fs-video-modal__frame {
 	position: relative;
 	aspect-ratio: 16 / 9;
+	background: var( --wp--preset--color--teal-deep, #004855 );
 }
 
 .fs-video-modal__frame iframe {

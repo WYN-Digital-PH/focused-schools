@@ -39,6 +39,10 @@ function focused_schools_component_styles() {
 		'cycle-of-excellence',
 		'service-list',
 		'testimonial-carousel',
+		'rail-text',
+		'partner-districts',
+		'team-bio-modal',
+		'cycle-teaser',
 	);
 }
 
@@ -137,6 +141,19 @@ function focused_schools_enqueue_assets() {
 			array( 'focused-schools-style' ),
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
+
+		foreach ( array( 'team-bio-modal', 'team-load-more' ) as $fs_about_script ) {
+			wp_enqueue_script(
+				'focused-schools-' . $fs_about_script,
+				FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/' . $fs_about_script . '.js',
+				array(),
+				FOCUSED_SCHOOLS_THEME_VERSION,
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
 	}
 
 	if ( is_page( 'services' ) ) {

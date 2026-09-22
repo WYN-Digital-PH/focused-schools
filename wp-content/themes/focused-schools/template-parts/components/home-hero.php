@@ -45,10 +45,10 @@ if ( $fs_youtube_id && ! preg_match( '/^[A-Za-z0-9_-]{11}$/', $fs_youtube_id ) )
 }
 ?>
 <section class="fs-home-hero" aria-labelledby="fs-home-hero-title">
-	<div class="fs-container fs-container--wide fs-home-hero__shell">
+	<div class="fs-container fs-container--shell fs-home-hero__shell">
 		<div class="fs-home-hero__media">
 			<?php if ( $fs_poster_url ) : ?>
-				<img class="fs-home-hero__poster" src="<?php echo esc_url( $fs_poster_url ); ?>" alt="" loading="eager" />
+				<img class="fs-home-hero__poster" src="<?php echo esc_url( $fs_poster_url ); ?>" alt="" loading="eager" fetchpriority="high" />
 			<?php endif; ?>
 
 			<?php if ( $fs_youtube_id ) : ?>
@@ -65,25 +65,23 @@ if ( $fs_youtube_id && ! preg_match( '/^[A-Za-z0-9_-]{11}$/', $fs_youtube_id ) )
 			<?php endif; ?>
 		</div>
 
-		<div class="fs-home-hero__copy">
+		<div class="fs-home-hero__slab">
 			<h1 class="fs-home-hero__heading" id="fs-home-hero-title"><?php echo esc_html( $fs_heading ); ?></h1>
 			<?php if ( $fs_subheading ) : ?>
 				<p class="fs-home-hero__subheading"><?php echo esc_html( $fs_subheading ); ?></p>
 			<?php endif; ?>
 			<?php if ( $fs_cta_label && $fs_cta_url ) : ?>
-				<div class="fs-home-hero__actions">
-					<?php
-					get_template_part(
-						'template-parts/components/button',
-						null,
-						array(
-							'label' => $fs_cta_label,
-							'url'   => $fs_cta_url,
-							'style' => 'primary',
-						)
-					);
-					?>
-				</div>
+				<?php
+				get_template_part(
+					'template-parts/components/button',
+					null,
+					array(
+						'label' => $fs_cta_label,
+						'url'   => $fs_cta_url,
+						'style' => 'primary',
+					)
+				);
+				?>
 			<?php endif; ?>
 		</div>
 	</div>
