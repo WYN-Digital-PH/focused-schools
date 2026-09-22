@@ -43,6 +43,7 @@ class Fields {
 			'social_links'  => __( 'Social Links', 'focused-schools-core' ),
 			'footer'        => __( 'Footer', 'focused-schools-core' ),
 			'impact_stats'  => __( 'Impact Stats', 'focused-schools-core' ),
+			'podcast'       => __( 'Podcast', 'focused-schools-core' ),
 		);
 	}
 
@@ -53,89 +54,119 @@ class Fields {
 	 */
 	public static function all() {
 		return array(
-			'business_name'   => array(
+			'business_name'          => array(
 				'label'       => __( 'Business Name', 'focused-schools-core' ),
 				'section'     => 'business_info',
 				'type'        => 'text',
 				'description' => '',
 			),
-			'phone'           => array(
+			'phone'                  => array(
 				'label'       => __( 'Phone', 'focused-schools-core' ),
 				'section'     => 'business_info',
 				'type'        => 'text',
 				'description' => '',
 			),
-			'email'           => array(
+			'email'                  => array(
 				'label'       => __( 'Email', 'focused-schools-core' ),
 				'section'     => 'business_info',
 				'type'        => 'email',
 				'description' => '',
 			),
-			'address'         => array(
+			'address'                => array(
 				'label'       => __( 'Address', 'focused-schools-core' ),
 				'section'     => 'business_info',
 				'type'        => 'textarea',
 				'description' => '',
 			),
-			'cta_label'       => array(
+			'cta_label'              => array(
 				'label'       => __( 'Primary CTA Label', 'focused-schools-core' ),
 				'section'     => 'primary_cta',
 				'type'        => 'text',
 				'description' => '',
 			),
-			'cta_url'         => array(
+			'cta_url'                => array(
 				'label'       => __( 'Primary CTA URL', 'focused-schools-core' ),
 				'section'     => 'primary_cta',
 				'type'        => 'url',
 				'description' => '',
 			),
-			'facebook_url'    => array(
+			'facebook_url'           => array(
 				'label'       => __( 'Facebook URL', 'focused-schools-core' ),
 				'section'     => 'social_links',
 				'type'        => 'url',
 				'description' => '',
 			),
-			'linkedin_url'    => array(
+			'linkedin_url'           => array(
 				'label'       => __( 'LinkedIn URL', 'focused-schools-core' ),
 				'section'     => 'social_links',
 				'type'        => 'url',
 				'description' => '',
 			),
-			'youtube_url'     => array(
+			'youtube_url'            => array(
 				'label'       => __( 'YouTube URL', 'focused-schools-core' ),
 				'section'     => 'social_links',
 				'type'        => 'url',
 				'description' => '',
 			),
-			'footer_text'     => array(
+			'footer_text'            => array(
 				'label'       => __( 'Footer Short Text', 'focused-schools-core' ),
 				'section'     => 'footer',
 				'type'        => 'textarea',
 				'description' => '',
 			),
-			'copyright_name'  => array(
+			'copyright_name'         => array(
 				'label'       => __( 'Copyright Name', 'focused-schools-core' ),
 				'section'     => 'footer',
 				'type'        => 'text',
 				'description' => '',
 			),
-			'impact_students' => array(
+			'impact_students'        => array(
 				'label'       => __( 'Students Impacted', 'focused-schools-core' ),
 				'section'     => 'impact_stats',
 				'type'        => 'number',
 				'description' => __( 'Shown as "N+ Million" — used on both the Home and About pages, so it never drifts between them.', 'focused-schools-core' ),
 			),
-			'impact_years'    => array(
+			'impact_years'           => array(
 				'label'       => __( 'Years Partnering with Schools', 'focused-schools-core' ),
 				'section'     => 'impact_stats',
 				'type'        => 'number',
 				'description' => __( 'Shown as "N+ Years".', 'focused-schools-core' ),
 			),
-			'impact_states'   => array(
+			'impact_states'          => array(
 				'label'       => __( 'States Served', 'focused-schools-core' ),
 				'section'     => 'impact_stats',
 				'type'        => 'number',
 				'description' => __( 'Shown as "N+ States".', 'focused-schools-core' ),
+			),
+			'podcast_title'          => array(
+				'label'       => __( 'Podcast Show Name', 'focused-schools-core' ),
+				'section'     => 'podcast',
+				'type'        => 'text',
+				'description' => __( 'e.g. "Conversations on Learning". Shown above the episode player.', 'focused-schools-core' ),
+			),
+			'podcast_buzzsprout_id'  => array(
+				'label'       => __( 'Buzzsprout Podcast ID', 'focused-schools-core' ),
+				'section'     => 'podcast',
+				'type'        => 'text',
+				'description' => __( 'The numeric ID from your Buzzsprout dashboard URL. The player embed is built from this — paste the ID only, never a full embed code.', 'focused-schools-core' ),
+			),
+			'podcast_buzzsprout_url' => array(
+				'label'       => __( 'Buzzsprout Show URL', 'focused-schools-core' ),
+				'section'     => 'podcast',
+				'type'        => 'url',
+				'description' => __( 'Public show page, used by the "Open in Buzzsprout" link.', 'focused-schools-core' ),
+			),
+			'podcast_apple_url'      => array(
+				'label'       => __( 'Apple Podcasts URL', 'focused-schools-core' ),
+				'section'     => 'podcast',
+				'type'        => 'url',
+				'description' => '',
+			),
+			'podcast_spotify_url'    => array(
+				'label'       => __( 'Spotify URL', 'focused-schools-core' ),
+				'section'     => 'podcast',
+				'type'        => 'url',
+				'description' => '',
 			),
 		);
 	}

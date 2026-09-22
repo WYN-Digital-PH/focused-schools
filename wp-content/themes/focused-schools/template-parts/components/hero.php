@@ -13,6 +13,9 @@
  * - image_alt  (string) alt text for image_url (image_id already carries its own)
  * - cta_label  (string)
  * - cta_url    (string)
+ * - cta2_label (string) optional second, lower-emphasis CTA beside the first
+ *               (added for the Podcast page, whose hero has two buttons)
+ * - cta2_url   (string) required when cta2_label is set
  * - alignment  (string) 'left'|'center', default 'left'
  *
  * Always renders in the shell (.fs-container--shell, 1400px) container,
@@ -33,6 +36,8 @@ $fs_image_url  = ! $fs_image_id && isset( $args['image_url'] ) ? $args['image_ur
 $fs_image_alt  = isset( $args['image_alt'] ) ? $args['image_alt'] : '';
 $fs_cta_label  = isset( $args['cta_label'] ) ? $args['cta_label'] : '';
 $fs_cta_url    = isset( $args['cta_url'] ) ? $args['cta_url'] : '';
+$fs_cta2_label = isset( $args['cta2_label'] ) ? $args['cta2_label'] : '';
+$fs_cta2_url   = isset( $args['cta2_url'] ) ? $args['cta2_url'] : '';
 $fs_alignment  = isset( $args['alignment'] ) && 'center' === $args['alignment'] ? 'center' : 'left';
 
 if ( '' === trim( (string) $fs_heading ) ) {
@@ -60,17 +65,31 @@ if ( '' === trim( (string) $fs_heading ) ) {
 				<p class="fs-hero__subheading"><?php echo esc_html( $fs_subheading ); ?></p>
 			<?php endif; ?>
 			<?php if ( $fs_cta_label && $fs_cta_url ) : ?>
-				<?php
-				get_template_part(
-					'template-parts/components/button',
-					null,
-					array(
-						'label' => $fs_cta_label,
-						'url'   => $fs_cta_url,
-						'style' => 'primary',
-					)
-				);
-				?>
+				<div class="fs-hero__actions">
+					<?php
+					get_template_part(
+						'template-parts/components/button',
+						null,
+						array(
+							'label' => $fs_cta_label,
+							'url'   => $fs_cta_url,
+							'style' => 'primary',
+						)
+					);
+
+					if ( $fs_cta2_label && $fs_cta2_url ) {
+						get_template_part(
+							'template-parts/components/button',
+							null,
+							array(
+								'label' => $fs_cta2_label,
+								'url'   => $fs_cta2_url,
+								'style' => 'white',
+							)
+						);
+					}
+					?>
+				</div>
 			<?php endif; ?>
 		</div>
 	</div>

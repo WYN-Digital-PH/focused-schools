@@ -49,7 +49,38 @@ class Meta {
 				'type'    => 'select',
 				'options' => self::ACCENT_ROLES,
 			),
+			'offerings'   => array(
+				'label'       => __( 'Signature Offerings', 'focused-schools-core' ),
+				'type'        => 'textarea',
+				'description' => __( 'One offering per line.', 'focused-schools-core' ),
+			),
+			'video_url'   => array(
+				'label'       => __( 'Overview Video URL', 'focused-schools-core' ),
+				'type'        => 'url',
+				'description' => __( 'Optional. Adds a play control over the service photo.', 'focused-schools-core' ),
+			),
+			'proof'       => array(
+				'label'       => __( 'Proof Line', 'focused-schools-core' ),
+				'type'        => 'text',
+				'description' => __( 'Short result shown as the photo caption, e.g. "Seven of nine openings filled from inside the district."', 'focused-schools-core' ),
+			),
 		);
+	}
+
+	/**
+	 * Split the stored offerings textarea into a clean list of lines.
+	 *
+	 * @param string $value Raw stored meta value.
+	 * @return string[]
+	 */
+	public static function offerings_list( $value ) {
+		if ( ! is_string( $value ) || '' === trim( $value ) ) {
+			return array();
+		}
+
+		$lines = preg_split( '/\r\n|\r|\n/', $value );
+
+		return array_values( array_filter( array_map( 'trim', (array) $lines ), 'strlen' ) );
 	}
 
 	/**
@@ -86,6 +117,17 @@ class Meta {
 			return array( self::class, 'sanitize_accent_role' );
 		}
 
+		$fields = self::all();
+		$type   = isset( $fields[ $key ]['type'] ) ? $fields[ $key ]['type'] : 'text';
+
+		if ( 'textarea' === $type ) {
+			return 'sanitize_textarea_field';
+		}
+
+		if ( 'url' === $type ) {
+			return 'esc_url_raw';
+		}
+
 		return 'sanitize_text_field';
 	}
 
@@ -106,17 +148,25 @@ class Meta {
 	 * @return void
 	 */
 	public static function register( $post_type ) {
-		register_post_meta(
-			$post_type,
-			self::meta_key( 'tagline' ),
-			array(
-				'type'              => 'string',
-				'single'            => true,
-				'show_in_rest'      => true,
-				'sanitize_callback' => 'sanitize_text_field',
-				'auth_callback'     => array( self::class, 'auth_callback' ),
-			)
-		);
+		// accent_role is registered separately below: it is the only field
+		// with a constrained REST schema (enum) and a default.
+		foreach ( self::all() as $key => $field ) {
+			if ( 'accent_role' === $key ) {
+				continue;
+			}
+
+			register_post_meta(
+				$post_type,
+				self::meta_key( $key ),
+				array(
+					'type'              => 'string',
+					'single'            => true,
+					'show_in_rest'      => true,
+					'sanitize_callback' => self::sanitizer_for( $key ),
+					'auth_callback'     => array( self::class, 'auth_callback' ),
+				)
+			);
+		}
 
 		register_post_meta(
 			$post_type,

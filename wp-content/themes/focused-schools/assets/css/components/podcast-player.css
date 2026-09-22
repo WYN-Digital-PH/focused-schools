@@ -1,0 +1,18 @@
+/**
+ * Buzzsprout hosted player embed. The iframe is responsive by width; its
+ * height is fixed because Buzzsprout's player does not report its own
+ * content height to the parent frame.
+ */
+
+.fs-podcast-player {
+	border-radius: var( --fs-r-md, 12px );
+	overflow: hidden;
+	background-color: #fff;
+}
+
+.fs-podcast-player__frame {
+	display: block;
+	width: 100%;
+	min-height: 600px;
+	border: 0;
+}

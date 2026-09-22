@@ -25,6 +25,8 @@ function focused_schools_component_styles() {
 		'team-card',
 		'impact-story-card',
 		'podcast-card',
+		'podcast-subscribe',
+		'podcast-player',
 		'statistics-counter',
 		'partner-strip',
 		'form-wrapper',
@@ -38,6 +40,7 @@ function focused_schools_component_styles() {
 		'commitment-list',
 		'cycle-of-excellence',
 		'service-list',
+		'service-lane',
 		'testimonial-carousel',
 		'rail-text',
 		'partner-districts',
@@ -172,6 +175,21 @@ function focused_schools_enqueue_assets() {
 			array( 'focused-schools-style' ),
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
+
+		// Same two behaviours the About page's team grid uses: the shared
+		// bio dialog and the "Load more" reveal.
+		foreach ( array( 'team-bio-modal', 'team-load-more' ) as $fs_team_script ) {
+			wp_enqueue_script(
+				'focused-schools-' . $fs_team_script,
+				FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/' . $fs_team_script . '.js',
+				array(),
+				FOCUSED_SCHOOLS_THEME_VERSION,
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
 	}
 
 	if ( is_page( 'impact-stories' ) ) {

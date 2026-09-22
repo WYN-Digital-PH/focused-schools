@@ -13,13 +13,17 @@
  * `_elementor_edit_mode` === 'builder' on this page, only its filtered
  * content renders; otherwise the sections below render.
  *
- * No fs_podcast post type exists yet (see docs/architecture.md §3.5), so
- * the episodes grid below loops over a defined array rather than a live
- * query — ready to swap for one without changing podcast-card.php. Episode
- * data is clearly-marked placeholder; replace with real Buzzsprout embed
- * codes / YouTube video IDs before launch.
+ * Data sources, both real (this template holds no episode data of its own):
+ *  - Audio: the Buzzsprout hosted player, built from the Buzzsprout podcast
+ *    ID in Site Settings → Podcast. Buzzsprout stays the audio source of
+ *    record per docs/AGENTS.md.
+ *  - Video: FocusedSchoolsCore\get_podcast_youtube_videos(), the
+ *    feature-flagged, cache-only YouTube playlist helper. Returns an empty
+ *    array when the flag is off or nothing has been fetched, which this
+ *    template treats as "no episodes" rather than an error.
  *
- * See docs/page-specs/podcast.md for the full spec.
+ * Design reference: the approved mockup's /#/podcast route. See
+ * docs/page-specs/podcast.md for the full spec.
  *
  * @package FocusedSchools
  */
@@ -27,6 +31,26 @@
 defined( 'ABSPATH' ) || exit;
 
 get_header();
+
+if ( ! function_exists( 'focused_schools_podcast_setting' ) ) {
+	/**
+	 * Read a Site Settings value, tolerating the plugin being deactivated
+	 * and treating a saved-but-empty value the same as unset.
+	 *
+	 * @param string $key      Setting key.
+	 * @param string $fallback Value when unset, empty, or the plugin is inactive.
+	 * @return string
+	 */
+	function focused_schools_podcast_setting( $key, $fallback = '' ) {
+		if ( ! function_exists( 'focused_schools_get_setting' ) ) {
+			return $fallback;
+		}
+
+		$fs_value = (string) focused_schools_get_setting( $key, $fallback );
+
+		return '' !== $fs_value ? $fs_value : $fallback;
+	}
+}
 
 if ( have_posts() ) :
 	while ( have_posts() ) :
@@ -40,6 +64,17 @@ if ( have_posts() ) :
 			<?php
 			continue;
 		endif;
+
+		$fs_img            = FOCUSED_SCHOOLS_THEME_URI . '/assets/img/';
+		$fs_show_title     = focused_schools_podcast_setting( 'podcast_title', __( 'Conversations on Learning', 'focused-schools' ) );
+		$fs_buzzsprout_id  = focused_schools_podcast_setting( 'podcast_buzzsprout_id' );
+		$fs_buzzsprout_url = focused_schools_podcast_setting( 'podcast_buzzsprout_url' );
+		$fs_youtube_url    = focused_schools_podcast_setting( 'youtube_url' );
+
+		// Cache-only helper: never triggers a live HTTP request on page load.
+		$fs_videos = function_exists( 'FocusedSchoolsCore\\get_podcast_youtube_videos' )
+			? FocusedSchoolsCore\get_podcast_youtube_videos()
+			: array();
 		?>
 
 		<main id="content">
@@ -48,10 +83,15 @@ if ( have_posts() ) :
 				'template-parts/components/hero',
 				null,
 				array(
-					'heading'    => get_the_title() ? get_the_title() : __( 'The Podcast', 'focused-schools' ),
-					'subheading' => get_the_excerpt() ? get_the_excerpt() : __( 'Conversations with the leaders doing the work — practical ideas for districts and schools, one episode at a time.', 'focused-schools' ),
-					'cta_label'  => function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'cta_label' ) : '',
-					'cta_url'    => function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'cta_url' ) : '',
+					'eyebrow'    => $fs_show_title,
+					'heading'    => __( 'Podcast', 'focused-schools' ),
+					'subheading' => __( 'Conversations with real leaders, just like you, who come to work each and every day with one goal in mind: to ensure that every student has the opportunity to reach their full potential. Nothing is more important than that.', 'focused-schools' ),
+					'image_url'  => $fs_img . 'student-video.jpg',
+					'image_alt'  => __( 'Recording a Focused Schools podcast conversation.', 'focused-schools' ),
+					'cta_label'  => __( 'Listen Now', 'focused-schools' ),
+					'cta_url'    => '#listen',
+					'cta2_label' => __( 'Watch Episodes', 'focused-schools' ),
+					'cta2_url'   => '#watch',
 				)
 			);
 
@@ -64,61 +104,131 @@ if ( have_posts() ) :
 				</div>
 				<?php
 			endif;
-			?>
 
-			<section class="fs-podcast__section fs-container fs-container--wide" aria-labelledby="fs-podcast-heading">
-				<?php
-				get_template_part(
-					'template-parts/components/section-heading',
-					null,
-					array(
-						'heading'       => __( 'Episodes', 'focused-schools' ),
-						'heading_level' => 2,
-						'heading_id'    => 'fs-podcast-heading',
-					)
-				);
-
-				/*
-				 * TODO: placeholder episode data — no fs_podcast post type
-				 * or feed exists yet (docs/architecture.md §3.5). Replace
-				 * with real Buzzsprout embed codes / YouTube video IDs, or
-				 * a real query, before launch. Looped rather than
-				 * hand-duplicated per episode, so wiring a real source
-				 * later only touches this array.
-				 */
-				$fs_episodes = array(
-					array(
-						'title'          => __( 'TODO: episode title — audio (Buzzsprout)', 'focused-schools' ),
-						'description'    => __( 'TODO: episode description.', 'focused-schools' ),
-						'episode_number' => 1,
-						'duration'       => 'TODO: 00:00',
-						'embed_html'     => '<iframe src="https://www.buzzsprout.com/TODO/episodes/TODO.js" width="100%" height="200" frameborder="0" loading="lazy" title="TODO: episode title"></iframe>',
+			get_template_part(
+				'template-parts/components/podcast-subscribe',
+				null,
+				array(
+					'label' => __( 'Subscribe anywhere', 'focused-schools' ),
+					'links' => array(
+						array(
+							'label' => __( 'Apple Podcasts', 'focused-schools' ),
+							'url'   => focused_schools_podcast_setting( 'podcast_apple_url' ),
+							'kind'  => __( 'Audio', 'focused-schools' ),
+						),
+						array(
+							'label' => __( 'Spotify', 'focused-schools' ),
+							'url'   => focused_schools_podcast_setting( 'podcast_spotify_url' ),
+							'kind'  => __( 'Audio', 'focused-schools' ),
+						),
+						array(
+							'label' => __( 'Buzzsprout', 'focused-schools' ),
+							'url'   => $fs_buzzsprout_url,
+							'kind'  => __( 'All episodes', 'focused-schools' ),
+						),
+						array(
+							'label' => __( 'YouTube', 'focused-schools' ),
+							'url'   => $fs_youtube_url,
+							'kind'  => __( 'Video', 'focused-schools' ),
+						),
 					),
-					array(
-						'title'          => __( 'TODO: episode title — video (YouTube)', 'focused-schools' ),
-						'description'    => __( 'TODO: episode description.', 'focused-schools' ),
-						'episode_number' => 2,
-						'duration'       => 'TODO: 00:00',
-						'youtube_id'     => 'TODOTODOTOD',
-					),
-				);
+				)
+			);
+		?>
 
-				if ( ! empty( $fs_episodes ) ) :
-					?>
-					<div class="fs-card-grid">
+			<section class="fs-podcast__section fs-podcast__listen" id="listen" aria-labelledby="fs-podcast-listen-title">
+				<div class="fs-container fs-container--shell">
+					<header class="fs-podcast__head">
+						<div>
+							<p class="fs-eyebrow"><?php esc_html_e( 'Listen', 'focused-schools' ); ?></p>
+							<h2 id="fs-podcast-listen-title"><?php esc_html_e( 'Every episode, in one place.', 'focused-schools' ); ?></h2>
+						</div>
 						<?php
-						foreach ( $fs_episodes as $fs_episode ) :
-							get_template_part( 'template-parts/components/podcast-card', null, $fs_episode );
-						endforeach;
+						if ( $fs_buzzsprout_url ) {
+							get_template_part(
+								'template-parts/components/button',
+								null,
+								array(
+									'label'  => __( 'Open in Buzzsprout', 'focused-schools' ),
+									'url'    => $fs_buzzsprout_url,
+									'style'  => 'text',
+									'target' => '_blank',
+								)
+							);
+						}
 						?>
-					</div>
+					</header>
+
+					<p class="fs-podcast__hosted">
+						<span class="fs-podcast__show"><?php echo esc_html( $fs_show_title ); ?></span>
+						<span class="fs-podcast__hosted-by"><?php esc_html_e( 'Hosted on Buzzsprout', 'focused-schools' ); ?></span>
+					</p>
+
 					<?php
-				else :
+					get_template_part(
+						'template-parts/components/podcast-player',
+						null,
+						array(
+							'podcast_id' => $fs_buzzsprout_id,
+							/* translators: %s: podcast show name. */
+							'title'      => sprintf( __( '%s episodes', 'focused-schools' ), $fs_show_title ),
+							'empty_text' => __( 'Episodes will appear here once the Buzzsprout podcast ID is set in Site Settings → Podcast.', 'focused-schools' ),
+						)
+					);
 					?>
-					<p class="fs-podcast__empty"><?php esc_html_e( 'New episodes are on the way — check back soon.', 'focused-schools' ); ?></p>
-					<?php
-				endif;
-				?>
+				</div>
+			</section>
+
+			<section class="fs-podcast__section fs-podcast__watch" id="watch" aria-labelledby="fs-podcast-watch-title">
+				<div class="fs-container fs-container--shell">
+					<header class="fs-podcast__head">
+						<div>
+							<p class="fs-eyebrow"><?php esc_html_e( 'Watch', 'focused-schools' ); ?></p>
+							<h2 id="fs-podcast-watch-title"><?php esc_html_e( 'Prefer to watch our podcasts?', 'focused-schools' ); ?></h2>
+							<p class="fs-podcast__lead"><?php esc_html_e( 'Every conversation is recorded on video. Thumbnails load instantly; the YouTube player only starts once you press play.', 'focused-schools' ); ?></p>
+						</div>
+						<?php
+						if ( $fs_youtube_url ) {
+							get_template_part(
+								'template-parts/components/button',
+								null,
+								array(
+									'label'  => __( 'Visit Our YouTube Channel', 'focused-schools' ),
+									'url'    => $fs_youtube_url,
+									'style'  => 'text',
+									'target' => '_blank',
+								)
+							);
+						}
+						?>
+					</header>
+
+					<?php if ( ! empty( $fs_videos ) ) : ?>
+						<div class="fs-card-grid">
+							<?php
+							foreach ( $fs_videos as $fs_video ) :
+								if ( empty( $fs_video['video_id'] ) ) {
+									continue;
+								}
+
+								get_template_part(
+									'template-parts/components/podcast-card',
+									null,
+									array(
+										'title'      => isset( $fs_video['title'] ) ? $fs_video['title'] : '',
+										'youtube_id' => $fs_video['video_id'],
+										'duration'   => ! empty( $fs_video['publish_date'] )
+											? date_i18n( get_option( 'date_format' ), strtotime( $fs_video['publish_date'] ) )
+											: '',
+									)
+								);
+							endforeach;
+							?>
+						</div>
+					<?php else : ?>
+						<p class="fs-podcast__empty"><?php esc_html_e( 'Video episodes will appear here once the YouTube playlist integration is enabled in Site Settings.', 'focused-schools' ); ?></p>
+					<?php endif; ?>
+				</div>
 			</section>
 
 			<?php
@@ -126,13 +236,11 @@ if ( have_posts() ) :
 				'template-parts/components/cta-banner',
 				null,
 				array(
-					'heading'   => __( 'Never miss an episode', 'focused-schools' ),
-					'cta_label' => function_exists( 'focused_schools_get_setting' ) && focused_schools_get_setting( 'cta_label' )
-						? focused_schools_get_setting( 'cta_label' )
-						: __( 'Contact Us', 'focused-schools' ),
-					'cta_url'   => function_exists( 'focused_schools_get_setting' ) && focused_schools_get_setting( 'cta_url' )
-						? focused_schools_get_setting( 'cta_url' )
-						: '#',
+					'eyebrow'     => __( 'Never miss an episode', 'focused-schools' ),
+					'heading'     => __( 'Subscribe wherever you listen.', 'focused-schools' ),
+					'description' => __( 'New conversations with district and school leaders, published regularly.', 'focused-schools' ),
+					'cta_label'   => $fs_buzzsprout_url ? __( 'Open in Buzzsprout', 'focused-schools' ) : __( 'Contact Us', 'focused-schools' ),
+					'cta_url'     => $fs_buzzsprout_url ? $fs_buzzsprout_url : home_url( '/contact/' ),
 				)
 			);
 			?>

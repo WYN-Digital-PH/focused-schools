@@ -1,9 +1,10 @@
 /**
- * Team page-specific spacing only. Layout/visual work is done entirely by
- * the reusable components in assets/css/components/ — this file just
- * provides vertical rhythm and the empty-state message styling for
- * page-team.php. Enqueued only on that page (see inc/enqueue.php).
- * Mirrors assets/css/page-home.css / page-about.css / page-services.css.
+ * Team page-specific spacing and the grid section header. Layout/visual work
+ * is done by the reusable components in assets/css/components/ (hero,
+ * rail-text, team-card, card-grid, cta-banner) — this file provides vertical
+ * rhythm, the 2-column grid header with its "Showing N of M" counter, and
+ * the empty-state message. Enqueued only on that page (see inc/enqueue.php).
+ * Mirrors assets/css/page-services.css / page-podcast.css.
  */
 
 .fs-team__intro {
@@ -14,6 +15,36 @@
 	padding-block: var( --wp--preset--spacing--x-large, 3rem );
 }
 
+.fs-team__grid-section {
+	background-color: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-team__head {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 1rem;
+	align-items: end;
+	margin-bottom: 2.5rem;
+}
+
+.fs-team__head h2 {
+	margin: 0;
+	font-size: 2.25rem;
+	line-height: 1.08;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-team__count {
+	margin: 0;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
 .fs-team__empty {
 	margin: 0;
 	padding: var( --wp--preset--spacing--large, 2rem );
@@ -21,4 +52,20 @@
 	color: var( --wp--preset--color--ink-soft, #51536a );
 	border: 1px dashed var( --wp--preset--color--rule, #d3dde1 );
 	border-radius: var( --fs-r-sm, 8px );
+}
+
+@media ( min-width: 1024px ) {
+
+	.fs-team__section {
+		padding-block: 7.5rem;
+	}
+
+	.fs-team__head {
+		grid-template-columns: minmax( 0, 1fr ) auto;
+		gap: 3rem;
+	}
+
+	.fs-team__head h2 {
+		font-size: 3.25rem;
+	}
 }

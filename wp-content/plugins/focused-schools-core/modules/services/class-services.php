@@ -131,20 +131,53 @@ class Services implements Module_Interface {
 	public function render_meta_box( $post ) {
 		wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME );
 
-		$tagline_key = Meta::meta_key( 'tagline' );
-		$tagline     = get_post_meta( $post->ID, $tagline_key, true );
+		// Every field except accent_role renders from the shared schema, so
+		// adding a field to Meta::all() is all it takes to surface it here.
+		foreach ( Meta::all() as $key => $field ) {
+			if ( 'accent_role' === $key ) {
+				continue;
+			}
 
-		echo '<p>';
-		printf(
-			'<label for="focused_schools_service_tagline"><strong>%s</strong></label><br />',
-			esc_html__( 'Tagline', 'focused-schools-core' )
-		);
-		printf(
-			'<input type="text" id="focused_schools_service_tagline" name="%1$s" value="%2$s" class="large-text" />',
-			esc_attr( $tagline_key ),
-			esc_attr( $tagline )
-		);
-		echo '</p>';
+			$meta_key = Meta::meta_key( $key );
+			$value    = get_post_meta( $post->ID, $meta_key, true );
+			$id       = 'focused_schools_service_' . $key;
+
+			echo '<p>';
+			printf(
+				'<label for="%1$s"><strong>%2$s</strong></label><br />',
+				esc_attr( $id ),
+				esc_html( $field['label'] )
+			);
+
+			if ( 'textarea' === $field['type'] ) {
+				printf(
+					'<textarea id="%1$s" name="%2$s" rows="6" class="large-text">%3$s</textarea>',
+					esc_attr( $id ),
+					esc_attr( $meta_key ),
+					esc_textarea( $value )
+				);
+			} elseif ( 'url' === $field['type'] ) {
+				printf(
+					'<input type="url" id="%1$s" name="%2$s" value="%3$s" class="large-text" />',
+					esc_attr( $id ),
+					esc_attr( $meta_key ),
+					esc_url( $value )
+				);
+			} else {
+				printf(
+					'<input type="text" id="%1$s" name="%2$s" value="%3$s" class="large-text" />',
+					esc_attr( $id ),
+					esc_attr( $meta_key ),
+					esc_attr( $value )
+				);
+			}
+
+			if ( ! empty( $field['description'] ) ) {
+				printf( '<span class="description">%s</span>', esc_html( $field['description'] ) );
+			}
+
+			echo '</p>';
+		}
 
 		$accent_key    = Meta::meta_key( 'accent_role' );
 		$accent_value  = get_post_meta( $post->ID, $accent_key, true );

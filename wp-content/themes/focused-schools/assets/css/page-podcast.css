@@ -1,9 +1,10 @@
 /**
- * Podcast page-specific spacing only. Layout/visual work is done entirely
- * by the reusable components in assets/css/components/ — this file just
- * provides vertical rhythm and the empty-state message styling for
- * page-podcast.php. Enqueued only on that page (see inc/enqueue.php).
- * Mirrors assets/css/page-services.css / page-team.css / page-impact-stories.css.
+ * Podcast page-specific spacing and section headers. Layout/visual work for
+ * the subscribe strip and the Buzzsprout player lives in the reusable
+ * assets/css/components/podcast-subscribe.css and podcast-player.css — this
+ * file provides vertical rhythm, the 2-column section headers, and the
+ * empty-state message styling for page-podcast.php. Enqueued only on that
+ * page (see inc/enqueue.php). Mirrors assets/css/page-services.css.
  */
 
 .fs-podcast__intro {
@@ -14,11 +15,85 @@
 	padding-block: var( --wp--preset--spacing--x-large, 3rem );
 }
 
+.fs-podcast__listen {
+	background-color: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+/*
+ * Heading left, action right — the same 2-column section header pattern the
+ * About page uses for "What Guides Us" and "Partner Districts".
+ */
+.fs-podcast__head {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 1.5rem;
+	align-items: end;
+	margin-bottom: 2.5rem;
+}
+
+.fs-podcast__head h2 {
+	margin: 0;
+	max-width: 18ch;
+	font-size: 2.25rem;
+	line-height: 1.08;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-podcast__lead {
+	margin: 1rem 0 0;
+	max-width: 56ch;
+	font-size: 1.0625rem;
+	line-height: 1.75;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-podcast__hosted {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.5rem 1rem;
+	margin: 0 0 1.25rem;
+	padding-bottom: 1.25rem;
+	border-bottom: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+}
+
+.fs-podcast__show {
+	font-size: 1.125rem;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-podcast__hosted-by {
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
 .fs-podcast__empty {
 	margin: 0;
 	padding: var( --wp--preset--spacing--large, 2rem );
 	text-align: center;
-	color: var( --wp--preset--color--secondary, #6b7280 );
-	border: 1px dashed var( --wp--preset--color--secondary, #6b7280 );
-	border-radius: 4px;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+	border: 1px dashed var( --wp--preset--color--rule, #d3dde1 );
+	border-radius: var( --fs-r-sm, 8px );
+}
+
+@media ( min-width: 1024px ) {
+
+	.fs-podcast__section {
+		padding-block: 7.5rem;
+	}
+
+	.fs-podcast__head {
+		grid-template-columns: minmax( 0, 1fr ) auto;
+		gap: 3rem;
+	}
+
+	.fs-podcast__head h2 {
+		font-size: 3.25rem;
+	}
 }

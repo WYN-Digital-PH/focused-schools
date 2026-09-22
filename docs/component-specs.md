@@ -34,6 +34,9 @@ partials, blocks, or UI patterns) used across `focused-schools`.
 | Commitment List | `template-parts/components/commitment-list.php` | Numbered commitments list + photo (generic/args-driven) | Implemented (added for the 2026 rebrand Home page task) |
 | Cycle of Excellence | `template-parts/components/cycle-of-excellence.php` | 3-phase interactive stepper (generic/args-driven) | Implemented (added for the 2026 rebrand Home page task) |
 | Service List | `template-parts/components/service-list.php` | `fs_service` display integration, numbered row layout | Implemented (added for the 2026 rebrand Home page task) |
+| Service Lane | `template-parts/components/service-lane.php` | `fs_service` display integration, full-width detail band | Implemented (added for the Services page rebuild) |
+| Podcast Subscribe | `template-parts/components/podcast-subscribe.php` | Row of podcast platform links | Implemented (added for the Podcast page rebuild) |
+| Podcast Player | `template-parts/components/podcast-player.php` | Buzzsprout hosted player embed | Implemented (added for the Podcast page rebuild) |
 | Testimonial Carousel | `template-parts/components/testimonial-carousel.php` | `fs_testimonial` display integration, prev/next + dots carousel | Implemented (added for the 2026 rebrand Home page task) |
 | Rail Text Block | `template-parts/components/rail-text.php` | Icon + eyebrow label beside heading/body/CTA, no photo (generic/args-driven) | Implemented (added for the About page task) |
 | Partner Districts | `template-parts/components/partner-districts.php` | State-grouped district list + badge + CTA (generic/args-driven) | Implemented (added for the About page task) |
@@ -246,6 +249,33 @@ panel, focus trap, body-scroll lock),
 - **States:** renders nothing if `$posts` is empty (caller decides the empty-state).
 - **Dependencies:** none directly (duplicates the `_fs_service_tagline` meta key literal, same reasoning as `service-card.php` — never fatals if the plugin is deactivated). Links to `home_url('/services/#{post_name}')`, since `fs_service` has no public URL of its own.
 - **Related design tokens:** typography, spacing.
+
+### Service Lane
+
+- **Location:** `template-parts/components/service-lane.php` / `assets/css/components/service-lane.css`
+- **Purpose:** `fs_service` display integration, full-width detail band — the third display integration alongside `service-card.php` (grid) and `service-list.php` (numbered index rows). Used by the Services page, one band per published service.
+- **Props / Fields:** `post` (`WP_Post`|int, required), `index` (int, the 01/02/03 accent), `reverse` (bool, photo left/copy right — source order unchanged), `cta_label` / `cta_url` (default "Start This Conversation" → `/contact/`), `image_url` / `image_alt` (fallback photo used only when the service has no featured image, same pattern as `hero.php`).
+- **States:** offerings block, play control and proof caption each render only when their meta is set; a missing featured image falls back to `image_url`, then to a solid placeholder block.
+- **Dependencies:** `focused-schools-core`'s `fs_service` post type + `_fs_service_*` meta (key literals duplicated, same reasoning as the two sibling components — never fatals if the plugin is deactivated). Composes `button.php`.
+- **Related design tokens:** typography, spacing, radius, color (`accent` for the bullets and caption kicker).
+
+### Podcast Subscribe
+
+- **Location:** `template-parts/components/podcast-subscribe.php` / `assets/css/components/podcast-subscribe.css`
+- **Purpose:** the row of "subscribe anywhere" platform links under the Podcast hero.
+- **Props / Fields:** `label` (string), `links` (array of `{label, url, kind}`, required).
+- **States:** links missing a label or URL are dropped; the whole strip renders nothing when none remain, so an unconfigured site shows no dead links.
+- **Dependencies:** Site Settings → Podcast (`podcast_apple_url`, `podcast_spotify_url`, `podcast_buzzsprout_url`) plus `youtube_url`.
+- **Related design tokens:** typography, spacing, radius, color (`accent` on hover/arrow).
+
+### Podcast Player
+
+- **Location:** `template-parts/components/podcast-player.php` / `assets/css/components/podcast-player.css`
+- **Purpose:** embeds the Buzzsprout hosted player — Buzzsprout is the audio source of record (`docs/AGENTS.md`), so episode data is never copied into WordPress.
+- **Props / Fields:** `podcast_id` (string|int, required — numeric Buzzsprout ID), `title` (iframe accessible title), `empty_text` (message when unconfigured).
+- **States:** renders the `empty_text` paragraph when no ID is set. The ID is stripped to digits before building the iframe `src`; raw embed HTML is never stored or echoed.
+- **Dependencies:** Site Settings → Podcast (`podcast_buzzsprout_id`).
+- **Related design tokens:** radius.
 
 ### Testimonial Carousel
 

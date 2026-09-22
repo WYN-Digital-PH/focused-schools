@@ -108,3 +108,74 @@ Re-verified after this pass: desktop/tablet/mobile screenshots reviewed, keyboar
 QA clean (skip link first, zero inaccessible links/buttons), `php -l` + PHPCS clean,
 zero new PHP error-log entries, Impact Stories and Podcast pages (other consumers of the
 shared `card.css` base) spot-checked live with no regression.
+
+## 8. Rebuild Against the Approved Mockup (2026 rebrand)
+
+The sections in §2 above describe the **pre-rebrand** build (hero → flat service-card
+grid → generic CTA banner). That structure did not match the approved mockup
+(`/#/services`), so this page was rebuilt against it, the same way Home and About were
+rebuilt against their `.dc` design-comp files. Note that **no `.dc` file exists for this
+page** — the theme root holds only `Design System v1.dc.html`, `Focused Schools
+Homepage.dc.html` and `Focused Schools About.dc.html` — so the source of truth here is
+the deployed mockup itself, with copy taken verbatim and geometry measured from its
+computed styles.
+
+### 8.1 Sections (in order) and component mapping
+
+| # | Section | Component | Notes |
+|---|---------|-----------|-------|
+| 1 | Hero | `hero.php` (unchanged) | Eyebrow "Our services", heading "Support shaped around where your district actually is.", literal mockup copy — not `get_the_title()`/`get_the_excerpt()`, same decision as About §12. CTA "See How We Help" jumps to `#how-we-help`. |
+| 2 | How we help | `section-heading.php` + `service-list.php` (both unchanged) | "Every school is different. So is every plan." The numbered index rows already existed for the Home page and already link to `/services/#{slug}` — those anchors now resolve to the lanes below. |
+| 3–5 | Detail lanes (one per service) | `service-lane.php` (**new**) | One full-width band per published `fs_service`, in `menu_order`. Backgrounds and sides alternate: every second lane gets the paper tint and flips its photo to the left. |
+| 6 | A Cycle of Excellence | `cycle-of-excellence.php` (unchanged) | Same component and phases as the Home page, eyebrow "The method underneath". |
+| 7 | Testimonial | `testimonial-carousel.php` (unchanged) | Real `fs_testimonial` query; the section is omitted entirely when none exist. |
+| 8 | Closing CTA | `cta-banner.php` (**extended**) | "Not sure which lane you need?" with two buttons. |
+
+### 8.2 Component changes
+
+**`service-lane.php` (new)** — the third `fs_service` display integration, alongside
+`service-card.php` (grid) and `service-list.php` (index rows). Renders the accent number,
+title, tagline, full body, a 2-column Signature Offerings list, a CTA, and a photo with an
+optional video control and proof caption. Meta key literals are duplicated rather than
+referenced, matching both sibling components, so the template degrades to empty values
+instead of fataling if the plugin is deactivated.
+
+**`cta-banner.php` (extended, additive)** — gained optional `eyebrow`, `cta2_label` and
+`cta2_url`. Existing single-CTA callers (Team, Podcast, Impact Stories) are unaffected;
+the new actions row simply holds one button for them.
+
+### 8.3 Content model additions
+
+The lanes need data the `fs_service` CPT did not carry. Three fields were added to
+`FocusedSchoolsCore\Modules\Services\Meta` (keys prefixed `_fs_service_`), all sanitized
+on save and again through `register_post_meta`:
+
+- `offerings` (textarea, one per line) — the Signature Offerings list.
+  `Meta::offerings_list()` splits it; the theme duplicates that split for the
+  plugin-deactivated case.
+- `video_url` (url, optional) — adds the play control over the photo. Omitted ⇒ no control.
+- `proof` (text, optional) — the short result shown as the photo caption.
+
+The Service Details meta box now renders every field from `Meta::all()` in a type-driven
+loop (text/textarea/url), so adding a field to that schema is all it takes to surface it
+in wp-admin. `accent_role` is still handled separately: it is the only field with a
+constrained REST enum schema and a default.
+
+### 8.4 Photos
+
+Lane photos use each service's **featured image** when set. Until then the template passes
+theme-bundled fallbacks (`retreat-1.jpg`, `retreat-3.jpg`, `retreat-2.jpg` — the same
+photo set Home and About use) via the component's `image_url` arg, the same pattern
+`hero.php` already uses. Nothing is written to `wp-content/uploads/`.
+
+### 8.5 QA performed
+
+`php -l` and PHPCS clean on every touched file (theme and plugin). Rendered at 1280px and
+measured via computed styles: 3 lane containers with the middle one carrying
+`fs-lane--reverse`, lane grid `1fr / 500px` with a 96px gap matching the mockup, 52px lane
+headings, 2-column offerings, zero broken images, and no horizontal overflow
+(`scrollWidth` 1265 < `innerWidth` 1280). The index-row anchors were confirmed to resolve
+to the lane ids. **Not verified:** screenshot capture failed repeatedly in this
+environment (browser extension timeouts), so tablet/mobile widths were not visually
+reviewed — the responsive rules collapse the lane grid to one column below 1024px and the
+offerings list to one column below 640px, but that has not been seen rendered.

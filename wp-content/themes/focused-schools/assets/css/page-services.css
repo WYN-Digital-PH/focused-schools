@@ -1,9 +1,10 @@
 /**
- * Services page-specific spacing only. Layout/visual work is done entirely
- * by the reusable components in assets/css/components/ — this file just
- * provides vertical rhythm and the empty-state message styling for
- * page-services.php. Enqueued only on that page (see inc/enqueue.php).
- * Mirrors assets/css/page-home.css / page-about.css.
+ * Services page-specific spacing and the detail-lane bands. Layout/visual
+ * work for the lanes themselves lives in the reusable
+ * assets/css/components/service-lane.css — this file only provides the
+ * vertical rhythm, the alternating band background, and the empty-state
+ * message styling for page-services.php. Enqueued only on that page (see
+ * inc/enqueue.php). Mirrors assets/css/page-home.css / page-about.css.
  */
 
 .fs-services__intro {
@@ -14,6 +15,22 @@
 	padding-block: var( --wp--preset--spacing--x-large, 3rem );
 }
 
+/*
+ * Detail lanes. The mockup alternates a paper tint behind every second
+ * lane, full-bleed, with the lane's own grid held to the shell container.
+ */
+.fs-services__lane {
+	padding-block: 5rem;
+}
+
+.fs-services__lane--paper {
+	background-color: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-services__quote {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+}
+
 .fs-services__empty {
 	margin: 0;
 	padding: var( --wp--preset--spacing--large, 2rem );
@@ -21,4 +38,11 @@
 	color: var( --wp--preset--color--ink-soft, #51536a );
 	border: 1px dashed var( --wp--preset--color--rule, #d3dde1 );
 	border-radius: var( --fs-r-sm, 8px );
+}
+
+@media ( min-width: 1024px ) {
+
+	.fs-services__lane {
+		padding-block: 7.5rem;
+	}
 }

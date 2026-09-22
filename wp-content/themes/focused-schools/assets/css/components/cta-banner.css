@@ -28,3 +28,20 @@
 	font-size: var( --wp--preset--font-size--medium, 1rem );
 	color: inherit;
 }
+
+/*
+ * Eyebrow + two-button actions row, added for the Services page's closing
+ * banner. Single-CTA callers (Team/Podcast/Impact Stories) are unaffected:
+ * the row simply holds one button.
+ */
+.fs-cta-banner__eyebrow {
+	margin: 0 0 0.75rem;
+}
+
+.fs-cta-banner__actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem 1.5rem;
+}
