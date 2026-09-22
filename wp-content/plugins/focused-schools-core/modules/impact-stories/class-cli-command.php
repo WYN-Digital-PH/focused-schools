@@ -35,15 +35,19 @@ class CLI_Command {
 	 * [--write]
 	 * : Actually write the meta instead of previewing.
 	 *
+	 * [--yes]
+	 * : Skip the confirmation prompt. Only meaningful alongside --write.
+	 *
 	 * ## EXAMPLES
 	 *
 	 *     wp focused-schools tag-legacy-impact-stories --ids=12,45,67
 	 *     wp focused-schools tag-legacy-impact-stories --ids=12,45,67 --write
+	 *     wp focused-schools tag-legacy-impact-stories --ids=12,45,67 --write --yes
 	 *
 	 * @when after_wp_load
 	 *
 	 * @param array $args       Positional arguments (unused).
-	 * @param array $assoc_args Associative arguments (--ids, --write).
+	 * @param array $assoc_args Associative arguments (--ids, --write, --yes).
 	 * @return void
 	 */
 	public function __invoke( $args, $assoc_args ) {
@@ -86,12 +90,15 @@ class CLI_Command {
 			return;
 		}
 
+		// $assoc_args must be passed through: WP_CLI::confirm() only honors
+		// --yes when it can read the flag from the command's own arguments.
 		\WP_CLI::confirm(
 			sprintf(
 				'Tag %d page(s) with %s = 1?',
 				$eligible_count,
 				Legacy_Bridge::META_KEY
-			)
+			),
+			$assoc_args
 		);
 
 		$applied = Legacy_Bridge::apply( $page_ids );
