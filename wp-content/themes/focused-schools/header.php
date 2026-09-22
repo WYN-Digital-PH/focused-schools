@@ -22,6 +22,6 @@ defined( 'ABSPATH' ) || exit;
 
 <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'focused-schools' ); ?></a>
 
-<header class="fs-site-header">
+<header class="fs-site-header" id="top">
 	<?php get_template_part( 'template-parts/components/site-header' ); ?>
 </header>

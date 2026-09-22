@@ -1,52 +1,164 @@
 /**
- * Footer navigation structure. Mobile-first: stacked, row layout from
- * 640px.
+ * Footer navigation structure. Exact geometry from the approved .dc design:
+ * teal ground, 96px top padding, 4-column grid (1.4/0.8/0.8/1fr, 60px gap),
+ * watermark mark top-right at 6% opacity, base row with a 1px hairline.
  */
 
-.fs-site-footer__inner {
+.fs-site-footer {
+	position: relative;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #ffffff );
+	overflow: hidden;
+	padding-top: 6rem;
+}
+
+.fs-site-footer__watermark {
+	position: absolute;
+	right: -50px;
+	top: 56px;
+	height: 400px;
+	width: auto;
+	opacity: 0.06;
+	pointer-events: none;
+}
+
+.fs-site-footer__grid {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 3rem;
+	padding-bottom: 5.5rem;
+}
+
+.fs-site-footer__brand-name {
+	margin: 0 0 var( --wp--preset--spacing--large, 2rem );
+	font-size: 1.5rem;
+	font-weight: 900;
+}
+
+.fs-site-footer__logo-img {
+	height: 55px;
+	width: auto;
+	display: block;
+	margin: 0 0 var( --wp--preset--spacing--large, 2rem );
+	/* The uploaded logo is one image (teal, for light grounds) — this footer
+	   sits on the teal ground, so render it white via filter rather than
+	   requiring a second "footer logo" upload the editor has to keep in
+	   sync. Works cleanly for a solid-color wordmark/SVG. */
+	filter: brightness( 0 ) invert( 1 );
+}
+
+.fs-site-footer__text {
+	margin: 0 0 var( --wp--preset--spacing--large, 2rem );
+	font-size: 1.3125rem;
+	line-height: 1.35;
+	font-weight: 700;
+	max-width: 22ch;
+}
+
+.fs-site-footer__col-heading {
+	margin: 0 0 var( --wp--preset--spacing--large, 2rem );
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: rgba( 255, 255, 255, 0.72 );
+}
+
+.fs-site-footer__col .fs-nav__list,
+.fs-site-footer__col div.fs-nav__list {
+	flex-direction: column;
+	gap: 1.25rem;
+}
+
+.fs-site-footer__col .fs-nav__list a,
+.fs-site-footer__col div.fs-nav__list a {
+	font-size: 0.9375rem;
+	color: var( --wp--preset--color--base, #ffffff );
+	transition: color var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-site-footer__col .fs-nav__list a:hover,
+.fs-site-footer__col div.fs-nav__list a:hover {
+	color: var( --wp--preset--color--lime, #a7cc14 );
+}
+
+.fs-site-footer__connect {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	gap: var( --wp--preset--spacing--medium, 1rem );
-	padding-block: var( --wp--preset--spacing--x-large, 3rem );
-	text-align: center;
 }
 
-.fs-site-footer__widgets {
-	width: 100%;
-	text-align: left;
-}
-
-.fs-site-footer__widget-title {
-	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
-	font-size: var( --wp--preset--font-size--medium, 1rem );
-}
-
-.fs-site-footer__social {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	display: flex;
-	gap: var( --wp--preset--spacing--medium, 1rem );
-}
-
-.fs-site-footer__social a {
-	color: inherit;
+.fs-site-footer__line {
+	display: block;
+	margin-bottom: 1.25rem;
+	font-size: 0.9375rem;
+	color: var( --wp--preset--color--base, #ffffff );
 	text-decoration: none;
 }
 
-.fs-site-footer__text,
-.fs-site-footer__copyright {
-	margin: 0;
-	font-size: var( --wp--preset--font-size--small, 0.9rem );
-	color: var( --wp--preset--color--secondary, #6b7280 );
+.fs-site-footer__line:hover {
+	color: var( --wp--preset--color--lime, #a7cc14 );
 }
 
-@media ( min-width: 640px ) {
-	.fs-site-footer__inner {
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		text-align: left;
+.fs-site-footer__social {
+	display: flex;
+	gap: 10px;
+	margin-top: 0.5rem;
+}
+
+.fs-site-footer__social a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: var( --fs-r-sm, 8px );
+	background: rgba( 255, 255, 255, 0.16 );
+	color: var( --wp--preset--color--base, #ffffff );
+	font-size: 0.75rem;
+	font-weight: 700;
+	text-decoration: none;
+	transition: background var( --fs-dur-fast, 160ms ) var( --fs-ease, ease ), color var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-site-footer__social a:hover {
+	background: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-site-footer__base {
+	position: relative;
+	border-top: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.fs-site-footer__base-inner {
+	padding-block: 1.625rem 1.875rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1.5rem;
+	flex-wrap: wrap;
+}
+
+.fs-site-footer__copyright {
+	margin: 0;
+	font-size: 0.75rem;
+	color: rgba( 255, 255, 255, 0.72 );
+}
+
+.fs-site-footer__back-to-top {
+	font-size: 0.75rem;
+	color: rgba( 255, 255, 255, 0.82 );
+	text-decoration: none;
+}
+
+.fs-site-footer__back-to-top:hover {
+	color: var( --wp--preset--color--lime, #a7cc14 );
+}
+
+@media ( min-width: 1024px ) {
+	.fs-site-footer__grid {
+		grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr;
+		gap: 3.75rem;
 	}
 }

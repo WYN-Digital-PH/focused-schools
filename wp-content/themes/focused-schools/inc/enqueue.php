@@ -34,6 +34,15 @@ function focused_schools_component_styles() {
 		'card-grid',
 		'contact-info',
 		'post-card',
+		'home-hero',
+		'commitment-list',
+		'cycle-of-excellence',
+		'service-list',
+		'testimonial-carousel',
+		'rail-text',
+		'partner-districts',
+		'team-bio-modal',
+		'cycle-teaser',
 	);
 }
 
@@ -44,9 +53,16 @@ function focused_schools_component_styles() {
  */
 function focused_schools_enqueue_assets() {
 	wp_enqueue_style(
+		'focused-schools-fonts',
+		'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&display=swap',
+		array(),
+		null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- external Google Fonts URL; versioning/caching is Google's own to manage, not ours.
+	);
+
+	wp_enqueue_style(
 		'focused-schools-style',
 		get_stylesheet_uri(),
-		array(),
+		array( 'focused-schools-fonts' ),
 		FOCUSED_SCHOOLS_THEME_VERSION
 	);
 
@@ -103,6 +119,19 @@ function focused_schools_enqueue_assets() {
 			array( 'focused-schools-style' ),
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
+
+		foreach ( array( 'home-hero', 'cycle-of-excellence', 'testimonial-carousel' ) as $fs_home_script ) {
+			wp_enqueue_script(
+				'focused-schools-' . $fs_home_script,
+				FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/' . $fs_home_script . '.js',
+				array(),
+				FOCUSED_SCHOOLS_THEME_VERSION,
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
 	}
 
 	if ( is_page( 'about-our-mission-vision' ) ) {
@@ -112,6 +141,19 @@ function focused_schools_enqueue_assets() {
 			array( 'focused-schools-style' ),
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
+
+		foreach ( array( 'team-bio-modal', 'team-load-more' ) as $fs_about_script ) {
+			wp_enqueue_script(
+				'focused-schools-' . $fs_about_script,
+				FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/' . $fs_about_script . '.js',
+				array(),
+				FOCUSED_SCHOOLS_THEME_VERSION,
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+		}
 	}
 
 	if ( is_page( 'services' ) ) {

@@ -1,32 +1,86 @@
 /**
- * Buttons & CTA blocks.
+ * Buttons & CTA blocks. Exact geometry/typography from the approved .dc
+ * design source: pill (999px), 48px height, 26px horizontal padding, 13px
+ * uppercase label, 0.09em tracking, 14px trailing arrow. No fourth variant.
  */
 
 .fs-btn {
-	display: inline-block;
-	padding: var( --wp--preset--spacing--small, 0.5rem ) var( --wp--preset--spacing--large, 2rem );
-	border-radius: 4px;
-	font-size: var( --wp--preset--font-size--medium, 1rem );
-	line-height: 1.6;
+	display: inline-flex;
+	align-items: center;
+	gap: 14px;
+	height: 48px;
+	padding: 0 26px;
+	border-radius: var( --fs-r-pill, 999px );
+	border: 0;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	letter-spacing: 0.09em;
+	text-transform: uppercase;
+	line-height: 1;
 	text-decoration: none;
-	border: 2px solid transparent;
 	cursor: pointer;
+	transition: filter var( --fs-dur-fast, 160ms ) var( --fs-ease, ease ),
+		border-color var( --fs-dur-fast, 160ms ) var( --fs-ease, ease ),
+		background-color var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-btn__arrow {
+	font-size: 15px;
 }
 
 .fs-btn--primary {
-	background-color: var( --wp--preset--color--primary, #1e40af );
+	background-color: var( --wp--preset--color--primary, #dd6237 );
 	color: var( --wp--preset--color--base, #ffffff );
-	border-color: var( --wp--preset--color--primary, #1e40af );
+}
+
+.fs-btn--primary:hover {
+	filter: brightness( 0.92 );
 }
 
 .fs-btn--secondary {
-	background-color: var( --wp--preset--color--secondary, #6b7280 );
-	color: var( --wp--preset--color--base, #ffffff );
-	border-color: var( --wp--preset--color--secondary, #6b7280 );
+	background-color: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #005c6d );
+	border: 1px solid var( --wp--preset--color--rule, #d3dde1 );
 }
 
-.fs-btn--outline {
-	background-color: transparent;
-	color: var( --wp--preset--color--primary, #1e40af );
-	border-color: var( --wp--preset--color--primary, #1e40af );
+.fs-btn--secondary:hover {
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+	background-color: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+/* Solid white fill, teal label, no border — CTAs on a teal ground. */
+.fs-btn--white {
+	background-color: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-btn--white:hover {
+	background-color: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+/* Bare arrow-link, no pill — "View all services" style. */
+.fs-btn--text {
+	height: auto;
+	padding: 0;
+	background: none;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	text-transform: uppercase;
+	transition: color var( --fs-dur-fast, 160ms ) var( --fs-ease, ease ),
+		gap var( --fs-dur-base, 240ms ) var( --fs-ease, ease );
+}
+
+.fs-btn--text:hover {
+	color: var( --wp--preset--color--primary, #dd6237 );
+	gap: 18px;
+}
+
+.fs-btn--text .fs-btn__arrow {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+@media ( max-width: 720px ) {
+	.fs-btn {
+		min-height: 44px;
+		height: 44px;
+	}
 }

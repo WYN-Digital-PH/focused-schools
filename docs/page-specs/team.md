@@ -58,5 +58,18 @@ against staging/production before deploying.
 
 ## 7. Container Widths
 
-All sections use the uniform wide container (`.fs-container.fs-container--wide`,
-1200px), matching the established pattern.
+All sections use the uniform shell container (`.fs-container.fs-container--shell`,
+1400px) — see §8.
+
+## 8. Precision Pass: Container Width + Card Language Alignment
+
+Same fix, same cause, as `docs/page-specs/services.md` §9 (read that for the full
+account) — this page shares the same drift since both were built before the `.dc`-source
+token pass and never revisited: the services-grid-equivalent team-grid section was still
+`.fs-container--wide` (1200px) against the hero's now-1400px shell, and `card.css`'s base
+geometry was still pre-rebrand scaffolding. Both fixed identically. `team-card.css`
+itself needed no change — it was already using current tokens (`ink-soft`, `contrast`,
+`accent`) and its 4:5 portrait `aspect-ratio` was already rendering correctly (verified
+via bounding-box measurement: 378×472.5px, an exact 4:5 match), unlike some Home-page
+image contexts fixed in an earlier pass — this one sits in a CSS Grid track with a
+definite width, which is what that fix depended on.

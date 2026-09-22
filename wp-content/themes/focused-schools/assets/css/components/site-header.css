@@ -1,70 +1,310 @@
 /**
- * Header navigation structure. Mobile-first: nav is collapsed behind a
- * toggle button below 1024px, always visible from 1024px up.
+ * Header navigation structure. Exact geometry from the approved .dc design:
+ * sticky white pill bar (74px), horizontal nav ≥1024px, always-visible Menu
+ * button opening a full "Explore" overlay (2-col grid + teal aside).
  */
 
-.fs-site-header__inner {
+.fs-site-header {
+	position: sticky;
+	top: 0;
+	z-index: 70;
+	padding-top: 16px;
+}
+
+.fs-site-header__bar {
+	position: relative;
+	height: 74px;
+	background: var( --wp--preset--color--base, #ffffff );
+	border-radius: var( --fs-r-md, 16px );
+	box-shadow: 0 2px 12px rgba( 0, 92, 109, 0.08 );
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
-	justify-content: space-between;
-	gap: var( --wp--preset--spacing--medium, 1rem );
-	padding-block: var( --wp--preset--spacing--medium, 1rem );
+	gap: 24px;
+	padding: 0 14px 0 26px;
+	overflow: hidden;
 }
 
 .fs-site-header__logo {
-	font-size: var( --wp--preset--font-size--large, 1.5rem );
-	font-weight: 700;
+	display: flex;
+	align-items: center;
+	flex: 0 0 auto;
+	font-size: 1.25rem;
+	font-weight: 900;
+	color: var( --wp--preset--color--contrast, #005c6d );
 	text-decoration: none;
-	color: inherit;
+}
+
+.fs-site-header__logo-img {
+	height: 46px;
+	width: auto;
+	display: block;
+}
+
+.fs-nav--primary {
+	display: none;
+	margin: 0 auto;
+}
+
+.fs-nav--primary .fs-nav__list {
+	gap: 40px;
+}
+
+.fs-nav--primary .fs-nav__list a {
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	padding-bottom: 6px;
+	border-bottom: 2px solid transparent;
+	transition: color var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-nav--primary .fs-nav__list a:hover {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-nav--primary .fs-nav__list .current-menu-item a,
+.fs-nav--primary .fs-nav__list a[aria-current="page"] {
+	font-weight: 700;
+	border-bottom-color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-site-header__cta {
+	flex: 0 0 auto;
 }
 
 .fs-site-header__toggle {
 	display: inline-flex;
 	align-items: center;
-	justify-content: center;
-	width: 44px;
-	height: 44px;
-	padding: 0;
-	background: transparent;
-	border: 1px solid var( --wp--preset--color--secondary, #6b7280 );
-	border-radius: 4px;
+	gap: 12px;
+	height: 46px;
+	padding: 0 16px;
+	border-radius: var( --fs-r-pill, 999px );
+	border: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	background: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #005c6d );
 	cursor: pointer;
+	flex: 0 0 auto;
+	transition: background var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
 }
 
-.fs-site-header__toggle-icon,
-.fs-site-header__toggle-icon::before,
-.fs-site-header__toggle-icon::after {
+.fs-site-header__toggle:hover {
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-site-header__toggle-label {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.fs-site-header__toggle-lines {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	width: 18px;
+}
+
+.fs-site-header__toggle-lines span {
 	display: block;
-	width: 20px;
 	height: 2px;
-	background-color: currentColor;
+	background: var( --wp--preset--color--contrast, #005c6d );
 }
 
-.fs-site-header__toggle-icon::before,
-.fs-site-header__toggle-icon::after {
-	content: "";
-	margin-block: 5px;
-}
-
-.fs-nav--primary {
-	flex-basis: 100%;
-	order: 3;
-	display: none;
-}
-
-.fs-nav--primary.is-open {
-	display: block;
+.fs-site-header__progress {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 2px;
+	width: var( --fs-nav-progress, 0% );
+	background: var( --wp--preset--color--primary, #dd6237 );
 }
 
 @media ( min-width: 1024px ) {
-	.fs-site-header__toggle {
+	.fs-nav--primary {
+		display: block;
+	}
+}
+
+/*
+ * The .dc source only shows the header at desktop width (fixed-pixel inline
+ * styles, no responsive rules) — ported as-is, the CTA + Menu toggle overflow
+ * the pill bar's `overflow: hidden` box below ~600px and the toggle becomes
+ * invisible and unreachable. Drop the CTA at narrow widths so the toggle
+ * (the only way to reach navigation on mobile) always stays visible.
+ */
+@media ( max-width: 599px ) {
+	.fs-site-header__bar {
+		gap: 12px;
+		padding: 0 10px 0 20px;
+	}
+
+	.fs-site-header__cta {
 		display: none;
 	}
 
-	.fs-nav--primary {
-		flex-basis: auto;
-		order: 2;
-		display: block;
+	.fs-site-header__toggle {
+		margin-left: auto;
+	}
+}
+
+/* -----------------------------------------------------------------------
+ * "Explore" overlay
+ * --------------------------------------------------------------------- */
+
+.fs-site-menu {
+	position: fixed;
+	inset: 0;
+	z-index: 95;
+	background: rgba( 0, 72, 85, 0.46 );
+	overflow-y: auto;
+	padding: 48px 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.fs-site-menu[hidden] {
+	display: none;
+}
+
+.fs-site-menu__panel {
+	position: relative;
+	width: 100%;
+	max-width: 1280px;
+	background: var( --wp--preset--color--base, #ffffff );
+	border-radius: var( --fs-r-lg, 24px );
+	overflow: hidden;
+}
+
+.fs-site-menu__top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	padding: 26px 24px 26px 40px;
+}
+
+.fs-site-menu__eyebrow {
+	margin: 0;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-site-menu__close {
+	width: 48px;
+	height: 48px;
+	border-radius: var( --fs-r-sm, 8px );
+	border: 0;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+	color: var( --wp--preset--color--contrast, #005c6d );
+	font-size: 1.5rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.fs-site-menu__body {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+}
+
+.fs-site-menu__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	border-top: 1px solid var( --wp--preset--color--paper-soft, #eef1f2 );
+}
+
+.fs-site-menu__cell {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	min-height: 96px;
+	padding: 20px 24px;
+	border-bottom: 1px solid var( --wp--preset--color--paper-soft, #eef1f2 );
+	text-decoration: none;
+	transition: background var( --fs-dur-base, 240ms ) var( --fs-ease, ease );
+}
+
+.fs-site-menu__cell:hover {
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-site-menu__cell-label {
+	font-size: 1.875rem;
+	font-weight: 700;
+	line-height: 1.05;
+	letter-spacing: -0.025em;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-site-menu__cell-num {
+	font-size: 0.8125rem;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	color: var( --wp--preset--color--ink-soft, #9aa4a8 );
+}
+
+.fs-site-menu__aside {
+	background: var( --wp--preset--color--contrast, #005c6d );
+	padding: 48px 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 24px;
+}
+
+.fs-site-menu__tagline {
+	margin: 0;
+	font-size: 1.5rem;
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-site-menu__email {
+	font-size: 1rem;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-site-menu__email:hover {
+	color: var( --wp--preset--color--lime, #a7cc14 );
+}
+
+.fs-site-menu__socials {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px 24px;
+}
+
+.fs-site-menu__socials a {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-site-menu__socials a:hover {
+	color: var( --wp--preset--color--lime, #a7cc14 );
+}
+
+@media ( min-width: 640px ) {
+	.fs-site-menu__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.fs-site-menu__cell:nth-child( odd ) {
+		border-right: 1px solid var( --wp--preset--color--paper-soft, #eef1f2 );
+	}
+}
+
+@media ( min-width: 900px ) {
+	.fs-site-menu__body {
+		grid-template-columns: minmax( 0, 1fr ) 380px;
 	}
 }

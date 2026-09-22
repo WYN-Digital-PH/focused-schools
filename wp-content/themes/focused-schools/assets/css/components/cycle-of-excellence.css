@@ -1,0 +1,175 @@
+/**
+ * Cycle of Excellence: dark (teal) band with a rotating mark and a 3-step
+ * stepper. Exact colors/typography from the approved .dc design. The mark
+ * rotates continuously (CSS animation, 40s linear infinite per
+ * docs/design-system.md's motion tokens) — not scroll-scrubbed, since the
+ * design's own binding motion rules forbid scroll-jacking (see
+ * docs/page-specs/home.md).
+ */
+
+.fs-cycle {
+	background: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #ffffff );
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+}
+
+.fs-cycle__layout {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 3.5rem;
+	align-items: center;
+	padding-block: 4rem;
+}
+
+.fs-cycle__intro h2 {
+	margin: 0 0 1.625rem;
+	max-width: 12ch;
+	font-size: 2.25rem;
+	line-height: 1.02;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.fs-cycle__intro p {
+	margin: 0;
+	max-width: 380px;
+	font-size: 1rem;
+	line-height: 1.6;
+	color: rgba( 255, 255, 255, 0.92 );
+}
+
+.fs-cycle__mark {
+	position: relative;
+	width: 220px;
+	max-width: 100%;
+	aspect-ratio: 1 / 1;
+	justify-self: center;
+}
+
+.fs-cycle__mark-disc {
+	position: absolute;
+	inset: 0;
+	border-radius: 999px;
+	background: var( --wp--preset--color--base, #ffffff );
+	box-shadow: 0 0 0 12px var( --wp--preset--color--contrast, #005c6d ), 0 0 0 14px rgba( 255, 255, 255, 0.4 );
+}
+
+.fs-cycle__mark-rotor {
+	position: absolute;
+	left: 19%;
+	top: 19%;
+	width: 62%;
+	height: 62%;
+	animation: fs-cycle-spin 40s linear infinite;
+}
+
+@keyframes fs-cycle-spin {
+	to {
+		transform: rotate( 360deg );
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.fs-cycle__mark-rotor {
+		animation: none;
+	}
+}
+
+.fs-cycle__steps {
+	border-top: 1px solid rgba( 255, 255, 255, 0.3 );
+}
+
+.fs-cycle__step {
+	border-bottom: 1px solid rgba( 255, 255, 255, 0.3 );
+}
+
+.fs-cycle__step-trigger {
+	display: grid;
+	grid-template-columns: 20px 34px minmax( 0, 1fr );
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	text-align: left;
+	padding: 1.625rem 0;
+	background: transparent;
+	border: 0;
+	cursor: pointer;
+	color: inherit;
+	font: inherit;
+}
+
+.fs-cycle__step-dot {
+	display: block;
+	width: 9px;
+	height: 9px;
+	border-radius: 999px;
+	background: var( --wp--preset--color--lime, #a7cc14 );
+	opacity: 0;
+	transform: scale( 0.4 );
+	transition: opacity var( --fs-dur-base, 260ms ) var( --fs-ease, ease ), transform var( --fs-dur-slow, 320ms ) var( --fs-ease, ease );
+}
+
+.fs-cycle__step-trigger--1 .fs-cycle__step-dot {
+	background: var( --wp--preset--color--gold, #f2b417 );
+}
+
+.fs-cycle__step-trigger--2 .fs-cycle__step-dot {
+	background: var( --wp--preset--color--accent, #2c97d1 );
+}
+
+.fs-cycle__step.is-active .fs-cycle__step-dot {
+	opacity: 1;
+	transform: scale( 1 );
+}
+
+.fs-cycle__step-index {
+	font-size: 0.6875rem;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	color: rgba( 255, 255, 255, 0.8 );
+}
+
+.fs-cycle__step-trigger strong {
+	font-size: 1.5rem;
+	line-height: 1.12;
+	letter-spacing: -0.015em;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #9fc2c9;
+	transition: color var( --fs-dur-base, 240ms ) var( --fs-ease, ease );
+}
+
+.fs-cycle__step.is-active .fs-cycle__step-trigger strong {
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-cycle__step-description {
+	margin: 0 0 1.5rem;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+	color: rgba( 255, 255, 255, 0.85 );
+}
+
+@media ( min-width: 1024px ) {
+	.fs-cycle__layout {
+		grid-template-columns: minmax( 0, 1fr ) 340px minmax( 0, 1fr );
+		gap: 3.5rem;
+	}
+
+	.fs-cycle__mark {
+		width: 340px;
+	}
+
+	.fs-cycle__step-trigger strong {
+		font-size: 1.6875rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-cycle__intro h2 {
+		font-size: 2.125rem;
+	}
+}

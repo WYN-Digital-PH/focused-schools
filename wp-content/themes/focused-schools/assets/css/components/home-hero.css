@@ -1,0 +1,194 @@
+/**
+ * Home Hero: video-poster media with a teal slab overlapping its
+ * bottom-left corner. Exact geometry from the approved .dc design.
+ */
+
+.fs-home-hero {
+	background: var( --wp--preset--color--base, #ffffff );
+	padding: 14px 0 8rem;
+}
+
+.fs-home-hero__shell {
+	position: relative;
+}
+
+.fs-home-hero__media {
+	position: relative;
+	aspect-ratio: 16 / 9;
+	border-radius: var( --fs-r-sm, 8px );
+	overflow: hidden;
+	background: var( --wp--preset--color--teal-deep, #004855 );
+}
+
+.fs-home-hero__poster {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.fs-home-hero__watch {
+	position: absolute;
+	right: 22px;
+	bottom: 22px;
+	display: inline-flex;
+	align-items: center;
+	gap: 14px;
+	height: 42px;
+	padding: 0 22px;
+	background: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #005c6d );
+	border: none;
+	border-radius: var( --fs-r-pill, 999px );
+	box-shadow: 0 8px 24px rgba( 0, 92, 109, 0.14 );
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-home-hero__watch:hover {
+	background: var( --wp--preset--color--paper-soft, #f0f2f4 );
+}
+
+.fs-home-hero__watch svg {
+	width: 14px;
+	height: 14px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+}
+
+.fs-home-hero__slab {
+	position: relative;
+	margin: -3.5rem 0 0 1.5rem;
+	width: 90%;
+	max-width: 560px;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	padding: 2.75rem;
+	z-index: 2;
+}
+
+.fs-home-hero__heading {
+	margin: 0 0 1.25rem;
+	font-size: 3.25rem;
+	line-height: 0.96;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-home-hero__subheading {
+	margin: 0 0 1.75rem;
+	max-width: 400px;
+	font-size: 1rem;
+	line-height: 1.55;
+	color: rgba( 255, 255, 255, 0.92 );
+}
+
+@media ( min-width: 1024px ) {
+	.fs-home-hero__slab {
+		position: absolute;
+		left: 24px;
+		bottom: -3.5rem;
+		width: 560px;
+		max-width: none;
+		margin: 0;
+		padding: 2.75rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-home-hero__heading {
+		font-size: 2.125rem;
+	}
+
+	.fs-home-hero__media {
+		aspect-ratio: 3 / 4;
+	}
+
+	.fs-home-hero__slab {
+		margin: 0;
+		padding: 1.75rem 1.5rem 2rem;
+	}
+}
+
+/* -----------------------------------------------------------------------
+ * Video modal (shared markup rendered once by home-hero.php)
+ * --------------------------------------------------------------------- */
+
+.fs-video-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+}
+
+.fs-video-modal[hidden] {
+	display: none;
+}
+
+.fs-video-modal__backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba( 0, 72, 85, 0.72 );
+	border: none;
+	cursor: pointer;
+}
+
+.fs-video-modal__dialog {
+	position: relative;
+	width: min( 1080px, 92vw );
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-radius: var( --fs-r-md, 16px );
+	overflow: hidden;
+}
+
+.fs-video-modal__bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	padding: 18px 20px;
+}
+
+.fs-video-modal__title {
+	margin: 0;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-video-modal__close {
+	width: 40px;
+	height: 40px;
+	border-radius: var( --fs-r-sm, 8px );
+	border: none;
+	background: rgba( 255, 255, 255, 0.18 );
+	color: var( --wp--preset--color--base, #ffffff );
+	font-size: 1.25rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.fs-video-modal__frame {
+	position: relative;
+	aspect-ratio: 16 / 9;
+	background: var( --wp--preset--color--teal-deep, #004855 );
+}
+
+.fs-video-modal__frame iframe {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}

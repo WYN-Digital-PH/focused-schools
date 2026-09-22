@@ -1,7 +1,7 @@
 /*
 Theme Name: Focused Schools
 Author: WYN Digital
-Description: Custom theme foundation for the focused-schools WordPress site. Design tokens in theme.json are TEMPORARY structural placeholders pending real values in docs/design-system.md — do not treat any color, font, or spacing value here as approved brand design.
+Description: Custom theme foundation for the focused-schools WordPress site. Design tokens in theme.json reflect the approved 2026 rebrand (docs/design-system.md).
 Version: 0.1.0
 Requires at least: 6.0
 Requires PHP: 7.4
@@ -9,6 +9,27 @@ License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: focused-schools
 */
+
+/* -----------------------------------------------------------------------
+ * Tokens not modelled by theme.json (radius, shadow, motion) — colors,
+ * font sizes, and spacing live in theme.json (docs/design-system.md is the
+ * source of truth, itself sourced from the approved .dc design files).
+ * Names match the .dc files' own token names for traceability.
+ * --------------------------------------------------------------------- */
+
+:root {
+	--fs-r-sm: 8px;
+	--fs-r-md: 16px;
+	--fs-r-lg: 24px;
+	--fs-r-pill: 999px;
+	--fs-shadow-1: 0 1px 2px rgba( 0, 92, 109, 0.08 );
+	--fs-shadow-2: 0 12px 28px rgba( 0, 92, 109, 0.12 );
+	--fs-dur-fast: 160ms;
+	--fs-dur-base: 240ms;
+	--fs-dur-slow: 520ms;
+	--fs-ease: cubic-bezier( 0.2, 0.7, 0.2, 1 );
+	--fs-shell: 1400px;
+}
 
 /* -----------------------------------------------------------------------
  * Base reset
@@ -29,8 +50,14 @@ body {
 	font-family: var( --wp--preset--font-family--system, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif );
 	font-size: var( --wp--preset--font-size--medium, 1rem );
 	line-height: 1.6;
-	color: var( --wp--preset--color--contrast, #111111 );
+	color: var( --wp--preset--color--contrast, #005c6d );
 	background-color: var( --wp--preset--color--base, #ffffff );
+}
+
+/* Locks background scroll while the mobile nav panel or the video modal is
+   open (site-header.js / home-hero.js toggle this class). */
+body.fs-modal-open {
+	overflow: hidden;
 }
 
 /* -----------------------------------------------------------------------
@@ -65,6 +92,12 @@ object {
 	max-width: var( --wp--style--global--wide-size, 1200px );
 }
 
+/* The widest tier (1400px) — header/footer, hero, and full-bleed-adjacent
+   sections per the approved design's own "shell" container. */
+.fs-container--shell {
+	max-width: var( --fs-shell, 1400px );
+}
+
 @media ( min-width: 640px ) {
 	.fs-container {
 		padding-inline: var( --wp--preset--spacing--large, 2rem );
@@ -75,6 +108,76 @@ object {
 	.fs-container {
 		padding-inline: var( --wp--preset--spacing--x-large, 3rem );
 	}
+}
+
+/* -----------------------------------------------------------------------
+ * Eyebrow label (small label above a heading) — global, since hero.php and
+ * several other components use it across multiple pages, not just Home.
+ * --------------------------------------------------------------------- */
+
+.fs-eyebrow {
+	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
+	font-size: var( --wp--preset--font-size--small, 0.9rem );
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-eyebrow--on-dark {
+	color: var( --wp--preset--color--gold, #f3c145 );
+}
+
+/* Floating caption chip on a figure — shared by commitment-list.php's
+   photo and any page-composed figure with the same treatment (e.g. the
+   Home/About services/pillars photos). At most one per page per the
+   approved design. */
+.fs-figure-caption {
+	position: absolute;
+	right: -16px;
+	bottom: 32px;
+	max-width: 252px;
+	background: var( --wp--preset--color--base, #ffffff );
+	border-radius: var( --fs-r-sm, 8px );
+	padding: 14px 20px;
+	box-shadow: 0 10px 28px rgba( 0, 92, 109, 0.14 );
+}
+
+.fs-figure-caption__kicker {
+	display: block;
+	margin-bottom: 5px;
+	font-size: 0.625rem;
+	font-weight: 700;
+	font-style: italic;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--accent, #0a96cb );
+}
+
+.fs-figure-caption strong {
+	display: block;
+	font-size: 0.9375rem;
+	font-weight: 700;
+	line-height: 1.3;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-text-link {
+	display: inline-flex;
+	align-items: center;
+	gap: var( --wp--preset--spacing--small, 0.5rem );
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	text-decoration: none;
+	background: none;
+	border: none;
+	font: inherit;
+	cursor: pointer;
+	padding: 0;
+}
+
+.fs-text-link span[aria-hidden] {
+	color: var( --wp--preset--color--primary, #dd6237 );
 }
 
 /* -----------------------------------------------------------------------
@@ -106,8 +209,8 @@ object {
 	z-index: 100000;
 	padding: 0.75rem 1rem;
 	background: var( --wp--preset--color--base, #ffffff );
-	color: var( --wp--preset--color--contrast, #111111 );
-	border: 2px solid var( --wp--preset--color--primary, #1e40af );
+	color: var( --wp--preset--color--contrast, #005c6d );
+	border: 2px solid var( --wp--preset--color--primary, #dd6237 );
 }
 
 .skip-link:focus {
@@ -140,11 +243,11 @@ object {
 
 .screen-reader-text:focus {
 	background-color: var( --wp--preset--color--base, #ffffff );
-	border: 2px solid var( --wp--preset--color--primary, #1e40af );
+	border: 2px solid var( --wp--preset--color--primary, #dd6237 );
 	border-radius: 4px;
 	clip: auto !important;
 	clip-path: none;
-	color: var( --wp--preset--color--contrast, #111111 );
+	color: var( --wp--preset--color--contrast, #005c6d );
 	display: block;
 	height: auto;
 	left: 0.5rem;
@@ -169,7 +272,7 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 [tabindex]:focus-visible {
-	outline: 2px solid var( --wp--preset--color--primary, #1e40af );
+	outline: 3px solid var( --wp--preset--color--accent, #0a96cb );
 	outline-offset: 2px;
 }
 

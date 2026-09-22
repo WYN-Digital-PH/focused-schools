@@ -1,0 +1,99 @@
+/**
+ * Service List: numbered row layout. Exact grid from the approved .dc
+ * design: 78px index / 330px title-group / 1fr description / 60px arrow.
+ */
+
+.fs-service-list {
+	border-top: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+}
+
+.fs-service-list__row {
+	display: grid;
+	grid-template-columns: 56px minmax( 0, 1fr );
+	row-gap: 0.875rem;
+	column-gap: 1.5rem;
+	align-items: center;
+	padding: 1.75rem 0;
+	border-bottom: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	color: inherit;
+	text-decoration: none;
+	transition: background var( --fs-dur-base, 240ms ) var( --fs-ease, ease );
+}
+
+.fs-service-list__row:hover {
+	background: var( --wp--preset--color--paper-soft, #eef1f3 );
+}
+
+.fs-service-list__index {
+	font-size: 0.6875rem;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-service-list__title-group {
+	grid-column: 2;
+}
+
+.fs-service-list__title-group h3 {
+	margin: 0 0 0.75rem;
+	font-size: 2rem;
+	line-height: 1.1;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-service-list__promise {
+	margin: 0;
+	font-size: 0.875rem;
+	font-weight: 700;
+	line-height: 1.4;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-service-list__description {
+	grid-column: 2;
+	margin: 0;
+	max-width: 620px;
+	font-size: 0.875rem;
+	line-height: 1.75;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-service-list__arrow {
+	display: none;
+}
+
+.fs-service-list__arrow svg {
+	width: 16px;
+	height: 16px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+}
+
+@media ( min-width: 1024px ) {
+	.fs-service-list__row {
+		grid-template-columns: 78px 330px minmax( 0, 1fr ) 60px;
+		column-gap: 2.5rem;
+	}
+
+	.fs-service-list__title-group,
+	.fs-service-list__description {
+		grid-column: auto;
+	}
+
+	.fs-service-list__arrow {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 46px;
+		height: 46px;
+		border-radius: var( --fs-r-pill, 999px );
+		background: var( --wp--preset--color--base, #ffffff );
+		border: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+		color: var( --wp--preset--color--contrast, #005c6d );
+		justify-self: end;
+	}
+}

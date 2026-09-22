@@ -1,46 +1,106 @@
 /**
- * Hero block. Mobile-first: stacked by default, side-by-side from 1024px.
+ * Hero block. Exact geometry from the approved .dc design: media (when
+ * present) with a teal slab overlapping its bottom-left corner — same
+ * pattern as home-hero.css, without the video console. Pages that call this
+ * component without an image (Contact/Impact Stories/Podcast/Services/Team/
+ * Thanks currently don't pass one) get a plain in-flow teal block instead —
+ * `.fs-hero__media + .fs-hero__slab` (the adjacent-sibling selector) scopes
+ * the overlap treatment to only when media actually precedes the slab, so
+ * nothing floats or collapses when there's no image.
  */
 
 .fs-hero {
-	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+	padding: 14px 0 8rem;
+	background: var( --wp--preset--color--base, #ffffff );
 }
 
-.fs-hero__inner {
-	display: flex;
-	flex-direction: column;
-	gap: var( --wp--preset--spacing--large, 2rem );
+/* The .dc source's hero eyebrow is lime, not the shared on-dark default
+   (gold) other dark-ground eyebrows use elsewhere on the site. */
+.fs-hero__slab .fs-eyebrow--on-dark {
+	color: var( --wp--preset--color--lime, #a7cc14 );
 }
 
-.fs-hero--align-center .fs-hero__content {
+.fs-hero--align-center .fs-hero__slab {
 	text-align: center;
 }
 
+.fs-hero__inner {
+	position: relative;
+}
+
+.fs-hero__media {
+	position: relative;
+	aspect-ratio: 21 / 9;
+	border-radius: var( --fs-r-sm, 8px );
+	overflow: hidden;
+	background: var( --wp--preset--color--teal-deep, #004855 );
+}
+
+.fs-hero__image {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.fs-hero__slab {
+	position: relative;
+	margin: -3.5rem 0 0 1.5rem;
+	width: 90%;
+	max-width: 560px;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	padding: 2.75rem;
+	z-index: 2;
+}
+
+/* No media before the slab: plain in-flow block, no overlap. */
+.fs-hero__slab:first-child {
+	margin: 0;
+	width: 100%;
+	max-width: 680px;
+	padding: var( --wp--preset--spacing--x-large, 3rem );
+}
+
 .fs-hero__heading {
-	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
-	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+	margin: 0 0 1.25rem;
+	font-size: 3.25rem;
+	line-height: 0.98;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	color: var( --wp--preset--color--base, #ffffff );
 }
 
 .fs-hero__subheading {
-	margin: 0 0 var( --wp--preset--spacing--medium, 1rem );
-	font-size: var( --wp--preset--font-size--large, 1.5rem );
-	color: var( --wp--preset--color--secondary, #6b7280 );
-}
-
-.fs-hero__media img {
-	width: 100%;
-	height: auto;
-	border-radius: 4px;
+	margin: 0 0 1.75rem;
+	max-width: 500px;
+	font-size: 1rem;
+	line-height: 1.55;
+	color: rgba( 255, 255, 255, 0.92 );
 }
 
 @media ( min-width: 1024px ) {
-	.fs-hero__inner {
-		flex-direction: row;
-		align-items: center;
+	.fs-hero__media + .fs-hero__slab {
+		position: absolute;
+		left: 24px;
+		bottom: -3.5rem;
+		width: 680px;
+		max-width: none;
+		margin: 0;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-hero__heading {
+		font-size: 2.125rem;
 	}
 
-	.fs-hero__content,
 	.fs-hero__media {
-		flex: 1 1 50%;
+		aspect-ratio: 4 / 5;
+	}
+
+	.fs-hero__slab {
+		margin: 0;
+		padding: 1.75rem 1.5rem 2rem;
 	}
 }

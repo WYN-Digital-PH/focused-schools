@@ -67,7 +67,7 @@ if ( have_posts() ) :
 			endif;
 			?>
 
-			<section class="fs-team__section fs-container fs-container--wide" aria-labelledby="fs-team-heading">
+			<section class="fs-team__section fs-container fs-container--shell" aria-labelledby="fs-team-heading">
 				<?php
 				get_template_part(
 					'template-parts/components/section-heading',

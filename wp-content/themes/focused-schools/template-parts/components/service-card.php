@@ -38,6 +38,7 @@ $fs_accent  = in_array( $fs_accent, array( 'strategy', 'leadership', 'capacity' 
 		</div>
 	<?php endif; ?>
 	<div class="fs-card__body">
+		<span class="fs-service-card__bar" aria-hidden="true"></span>
 		<?php if ( $fs_tagline ) : ?>
 			<p class="fs-card__eyebrow"><?php echo esc_html( $fs_tagline ); ?></p>
 		<?php endif; ?>

@@ -1,0 +1,152 @@
+/**
+ * Testimonial Carousel. Exact typography from the approved .dc design: 44px
+ * italic quote, coral skewed quote-glyph bars, lime uppercase attribution.
+ * Only the active slide is visible (testimonial-carousel.js toggles
+ * .is-active; every slide stays in the DOM for no-JS/screen-reader access).
+ */
+
+.fs-testimonial-carousel {
+	border-top: 1px solid rgba( 255, 255, 255, 0.3 );
+	padding-top: 4.5rem;
+}
+
+.fs-testimonial-carousel__track {
+	position: relative;
+	min-height: 10rem;
+}
+
+.fs-testimonial-carousel__slide {
+	margin: 0;
+	display: none;
+	grid-template-columns: 78px minmax( 0, 1fr );
+	gap: 2.125rem;
+}
+
+.fs-testimonial-carousel__slide.is-active {
+	display: grid;
+}
+
+.fs-testimonial-carousel__marks {
+	display: flex;
+	gap: 7px;
+	padding-top: 16px;
+	height: 40px;
+}
+
+.fs-testimonial-carousel__marks span {
+	display: block;
+	width: 10px;
+	height: 38px;
+	background: var( --wp--preset--color--primary, #dd6237 );
+	transform: skewX( -14deg );
+}
+
+.fs-testimonial-carousel__slide blockquote {
+	margin: 0 0 2.5rem;
+	max-width: 1020px;
+	font-size: 1.75rem;
+	line-height: 1.26;
+	letter-spacing: -0.02em;
+	font-style: italic;
+	font-weight: 400;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-testimonial-carousel__slide figcaption {
+	display: flex;
+	align-items: flex-start;
+	gap: 18px;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	line-height: 1.5;
+	max-width: 34ch;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-testimonial-carousel__rule {
+	display: block;
+	flex: 0 0 auto;
+	width: 26px;
+	height: 2px;
+	margin-top: 7px;
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-testimonial-carousel__controls {
+	margin-top: 4rem;
+	padding-top: 2rem;
+	border-top: 1px solid rgba( 255, 255, 255, 0.3 );
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
+	align-items: center;
+	gap: 20px;
+}
+
+.fs-testimonial-carousel__arrow {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border-radius: var( --fs-r-pill, 999px );
+	border: none;
+	background: rgba( 255, 255, 255, 0.22 );
+	color: var( --wp--preset--color--base, #ffffff );
+	cursor: pointer;
+	transition: background var( --fs-dur-fast, 160ms ) var( --fs-ease, ease ), color var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-testimonial-carousel__arrow:hover {
+	background: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-testimonial-carousel__arrow svg {
+	width: 16px;
+	height: 16px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+}
+
+.fs-testimonial-carousel__dots {
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+}
+
+.fs-testimonial-carousel__dot {
+	width: 10px;
+	height: 10px;
+	padding: 0;
+	border: none;
+	border-radius: 999px;
+	background: rgba( 255, 255, 255, 0.45 );
+	cursor: pointer;
+}
+
+.fs-testimonial-carousel__dot.is-active {
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-testimonial-carousel__status {
+	margin: 0;
+	justify-self: end;
+	font-size: 0.6875rem;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	color: rgba( 255, 255, 255, 0.78 );
+}
+
+@media ( max-width: 720px ) {
+	.fs-testimonial-carousel__slide blockquote {
+		font-size: 1.5rem;
+	}
+
+	.fs-testimonial-carousel__slide {
+		grid-template-columns: minmax( 0, 1fr );
+		gap: 1rem;
+	}
+}
