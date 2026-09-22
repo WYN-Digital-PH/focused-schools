@@ -14,6 +14,7 @@ use FocusedSchoolsCore\Modules\Impact_Stories;
 use FocusedSchoolsCore\Modules\Podcast;
 use FocusedSchoolsCore\Modules\Testimonials;
 use FocusedSchoolsCore\Modules\Partners;
+use FocusedSchoolsCore\Modules\Provisioning;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -74,6 +75,7 @@ class Plugin {
 			'podcast'        => new Podcast(),
 			'testimonials'   => new Testimonials(),
 			'partners'       => new Partners(),
+			'provisioning'   => new Provisioning(),
 		);
 
 		foreach ( $this->modules as $module ) {

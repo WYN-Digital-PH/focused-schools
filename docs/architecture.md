@@ -100,6 +100,38 @@ Admin-only content type (no public URLs) for the services list, implemented in
 - **Admin columns:** Tagline, Accent Role, Order, Modified Date.
 - No demo content is created on plugin activation.
 
+### 3.3b Provisioning (WP-CLI only)
+
+`wp-content/plugins/focused-schools-core/modules/provisioning/` adds no hooks, no post
+type and no admin UI. It registers one dry-run-by-default WP-CLI command that brings a
+fresh environment (staging, a new local site) up to the structure the theme expects:
+
+```
+wp focused-schools seed-site              # preview, changes nothing
+wp focused-schools seed-site --write      # asks to confirm
+wp focused-schools seed-site --write --yes
+```
+
+It creates **only what is missing**: the Pages the theme's `page-{slug}.php` templates
+attach to (`about-our-mission-vision`, `services`, `team`, `impact-stories`, `podcast`,
+`contact`, `thanks`), the Primary and Footer nav menus, their items, and the theme menu
+location assignment.
+
+**Why this exists:** page templates bind to a Page by *slug*. A deploy ships templates but
+no Pages, so on a fresh site the templates silently never load and the old content keeps
+rendering — which is exactly how the About page went unnoticed for so long. Menus are the
+same: the header and footer render empty until a menu is assigned to a location.
+
+**Safety by construction** (`Site_Seeder`): it is additive-only. There is no code path that
+edits, renames, re-slugs, re-IDs, trashes or reorders an existing Page, menu or menu item;
+a menu location that already has a menu is left alone, and Settings > Reading
+(`show_on_front` / `page_for_posts`) is never touched. Existing Page IDs, slugs and the
+Blog Posts Page are therefore safe, per "URL Preservation" in `docs/AGENTS.md`. Re-running
+is a no-op ("Nothing to do").
+
+It does **not** create content — services, team members, partners, testimonials and the
+podcast settings are real editorial content and belong in wp-admin.
+
 ### 3.4 Impact Stories
 
 Public content type, implemented in
