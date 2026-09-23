@@ -50,6 +50,28 @@ function focused_schools_component_styles() {
 }
 
 /**
+ * Cache-busting version for a theme asset.
+ *
+ * Returns the file's modification time, so the ?ver= query changes by itself
+ * whenever the file changes. A fixed version string cannot do this: assets are
+ * served with a long max-age, so an edge or browser cache keyed on an
+ * unchanged ?ver= keeps serving the old file after a deploy — which is exactly
+ * how staging ended up rendering new markup against an old stylesheet twice.
+ *
+ * Falls back to the theme version if the file is unreadable, so a missing file
+ * can never take the page down.
+ *
+ * @param string $relative_path Path relative to the theme root, e.g. '/assets/css/components/site-header.css'.
+ * @return string
+ */
+function focused_schools_asset_version( $relative_path ) {
+	$file = FOCUSED_SCHOOLS_THEME_DIR . $relative_path;
+	$time = is_readable( $file ) ? filemtime( $file ) : false;
+
+	return $time ? (string) $time : FOCUSED_SCHOOLS_THEME_VERSION;
+}
+
+/**
  * Enqueue the main stylesheet and all reusable component styles.
  *
  * @return void
@@ -66,7 +88,7 @@ function focused_schools_enqueue_assets() {
 		'focused-schools-style',
 		get_stylesheet_uri(),
 		array( 'focused-schools-fonts' ),
-		FOCUSED_SCHOOLS_THEME_VERSION
+		focused_schools_asset_version( '/style.css' )
 	);
 
 	foreach ( focused_schools_component_styles() as $fs_component ) {
@@ -78,7 +100,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-component-' . $fs_component,
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/components/' . $fs_component . '.css',
 			$fs_deps,
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/components/' . $fs_component . '.css' )
 		);
 	}
 
@@ -86,7 +108,7 @@ function focused_schools_enqueue_assets() {
 		'focused-schools-site-header',
 		FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/site-header.js',
 		array(),
-		FOCUSED_SCHOOLS_THEME_VERSION,
+		focused_schools_asset_version( '/assets/js/components/site-header.js' ),
 		array(
 			'in_footer' => true,
 			'strategy'  => 'defer',
@@ -97,7 +119,7 @@ function focused_schools_enqueue_assets() {
 		'focused-schools-statistics-counter',
 		FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/statistics-counter.js',
 		array(),
-		FOCUSED_SCHOOLS_THEME_VERSION,
+		focused_schools_asset_version( '/assets/js/components/statistics-counter.js' ),
 		array(
 			'in_footer' => true,
 			'strategy'  => 'defer',
@@ -108,7 +130,7 @@ function focused_schools_enqueue_assets() {
 		'focused-schools-podcast-video',
 		FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/podcast-video.js',
 		array(),
-		FOCUSED_SCHOOLS_THEME_VERSION,
+		focused_schools_asset_version( '/assets/js/components/podcast-video.js' ),
 		array(
 			'in_footer' => true,
 			'strategy'  => 'defer',
@@ -120,7 +142,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-page-home',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-home.css',
 			array( 'focused-schools-style' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/page-home.css' )
 		);
 
 		foreach ( array( 'home-hero', 'home-hold', 'cycle-of-excellence', 'testimonial-carousel' ) as $fs_home_script ) {
@@ -128,7 +150,7 @@ function focused_schools_enqueue_assets() {
 				'focused-schools-' . $fs_home_script,
 				FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/' . $fs_home_script . '.js',
 				array(),
-				FOCUSED_SCHOOLS_THEME_VERSION,
+				focused_schools_asset_version( '/assets/js/components/' . $fs_home_script . '.js' ),
 				array(
 					'in_footer' => true,
 					'strategy'  => 'defer',
@@ -142,7 +164,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-page-about',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-about.css',
 			array( 'focused-schools-style' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/page-about.css' )
 		);
 
 		foreach ( array( 'team-bio-modal', 'team-load-more' ) as $fs_about_script ) {
@@ -150,7 +172,7 @@ function focused_schools_enqueue_assets() {
 				'focused-schools-' . $fs_about_script,
 				FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/' . $fs_about_script . '.js',
 				array(),
-				FOCUSED_SCHOOLS_THEME_VERSION,
+				focused_schools_asset_version( '/assets/js/components/' . $fs_about_script . '.js' ),
 				array(
 					'in_footer' => true,
 					'strategy'  => 'defer',
@@ -164,7 +186,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-page-services',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-services.css',
 			array( 'focused-schools-style' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/page-services.css' )
 		);
 	}
 
@@ -173,7 +195,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-page-team',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-team.css',
 			array( 'focused-schools-style' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/page-team.css' )
 		);
 
 		// Same two behaviours the About page's team grid uses: the shared
@@ -183,7 +205,7 @@ function focused_schools_enqueue_assets() {
 				'focused-schools-' . $fs_team_script,
 				FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/' . $fs_team_script . '.js',
 				array(),
-				FOCUSED_SCHOOLS_THEME_VERSION,
+				focused_schools_asset_version( '/assets/js/components/' . $fs_team_script . '.js' ),
 				array(
 					'in_footer' => true,
 					'strategy'  => 'defer',
@@ -197,7 +219,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-page-impact-stories',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-impact-stories.css',
 			array( 'focused-schools-style' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/page-impact-stories.css' )
 		);
 	}
 
@@ -206,7 +228,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-single-impact-story',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/single-impact-story.css',
 			array( 'focused-schools-style', 'focused-schools-component-card' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/single-impact-story.css' )
 		);
 	}
 
@@ -215,7 +237,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-page-podcast',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-podcast.css',
 			array( 'focused-schools-style' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/page-podcast.css' )
 		);
 	}
 
@@ -224,7 +246,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-page-contact',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-contact.css',
 			array( 'focused-schools-style', 'focused-schools-component-contact-info' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/page-contact.css' )
 		);
 	}
 
@@ -233,7 +255,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-page-thanks',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-thanks.css',
 			array( 'focused-schools-style' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/page-thanks.css' )
 		);
 	}
 
@@ -242,7 +264,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-blog-archive',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/blog-archive.css',
 			array( 'focused-schools-style', 'focused-schools-component-post-card' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/blog-archive.css' )
 		);
 	}
 
@@ -255,7 +277,7 @@ function focused_schools_enqueue_assets() {
 			'focused-schools-blog-single',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/blog-single.css',
 			array( 'focused-schools-style', 'focused-schools-component-post-card' ),
-			FOCUSED_SCHOOLS_THEME_VERSION
+			focused_schools_asset_version( '/assets/css/blog-single.css' )
 		);
 	}
 }
