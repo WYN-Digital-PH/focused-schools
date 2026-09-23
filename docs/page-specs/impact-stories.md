@@ -150,3 +150,71 @@ state says so in plain language rather than showing a dead grid.
 environment will not resize, so the responsive rules are written but unseen. Production
 Pages 3785 and the real legacy Stories do not exist locally, so the merged grid has only
 been proven against seeded fixtures.
+
+## Single Story Template
+
+Built from the mockup's `impact-story-single.md`. Narrative order is what happened → what
+changed → how: breadcrumb, hero with meta chips, At a glance, story body beside a sticky
+detail rail, related stories.
+
+### Content model additions
+
+Three fields were needed and added to `FocusedSchoolsCore\Modules\Impact_Stories\Meta`:
+
+| Field | Type | Purpose |
+|---|---|---|
+| Service Lane | text | Detail rail row; also matches related stories |
+| Partnership Length | text | Detail rail row |
+| At a Glance Results | textarea | One per line, `value \| unit \| label`, capped at four |
+
+`Meta::results_list()` parses the results; the template duplicates that split so it degrades
+rather than fatals with the plugin off. The metabox gained textarea and description support,
+which it previously lacked.
+
+### Degradation, verified
+
+| Story | Glance | Rail rows | Prose | Chips |
+|---|---|---|---|---|
+| Full metadata | shown, 3 results | 5 | 66ch | 3 |
+| One detail only | omitted | rail dropped | 72ch wide | 1 |
+| No metadata at all | omitted | rail dropped | 72ch wide | 0 |
+
+A missing featured image leaves the slab on a plain teal band at the same height — never a
+stretched upscale. Related stories match state → service lane → recency, always excluding the
+current story, and the section is omitted when nothing matches.
+
+Each result carries a full-sentence `aria-label` because the values are abbreviated:
+`"400+ Educators Coached across eight campuses"`. The numerals never animate.
+
+### A bug this surfaced
+
+The Impact Stories meta class had **no `textarea` sanitizer**, so the new multi-line results
+field fell through to `sanitize_text_field` and every newline was silently stripped — three
+results collapsed into one. Added `'textarea' => 'sanitize_textarea_field'` to the map.
+Worth knowing because any future multi-line field on this CPT would have hit the same thing.
+
+### Legacy
+
+Legacy Pages keep their own root-level URLs, post type, slugs and content. Nothing in this
+work writes to them; the diff contains no `wp_update_post`, `set_post_type` or `post_name`
+change. They appear in the listing only through the existing additive
+`_fs_legacy_impact_story` flag.
+
+**Not built:** the spec's optional `page-impact-story-legacy.php`, which would give legacy
+Pages the new breadcrumb and Related grid on their own URLs. It needs either a template
+assignment written to each Page or a `template_include` filter; neither was in scope here,
+and legacy singles currently render through the normal page template.
+
+### QA performed
+
+23 records seeded (16 new + 7 legacy), including a legacy Page with a 160-character title, a
+story with no image/state/year/results, and a story with a single detail value.
+
+Landing: 23 cards, 7 legacy, count "Showing 9 of 23". Singles: all URLs 200 at
+`/impact-stories/{slug}/`; all seven legacy URLs still 200 at root level as `page`. Rail
+sticky at `top: 160px`, body grid `300px / 908px`, results 3-up, one `h1`, zero interactive
+elements without an accessible name, no broken images, no horizontal overflow, zero console
+errors, no new PHP log entries, full-project PHPCS clean.
+
+**Not verified:** tablet and mobile were not rendered — the browser in this environment will
+not resize.

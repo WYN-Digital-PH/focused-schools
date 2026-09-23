@@ -1,49 +1,358 @@
 /**
- * fs_impact_story single template styling. Enqueued only on that CPT's
- * single view (see inc/enqueue.php, is_singular( 'fs_impact_story' )).
+ * Single Impact Story.
+ *
+ * Geometry from docs/page-specs/impact-story-single.md: 21:9 hero with a
+ * 720px teal slab overhanging it, a teal At a glance band, then a 300px
+ * sticky detail rail beside a 66ch prose column, and the related grid.
+ *
+ * The prose scope owns all body typography, so legacy markup pasted into a
+ * story inherits the same treatment without being rewritten.
  */
 
-.fs-impact-story-single__media img {
+/* Breadcrumb ------------------------------------------------------------- */
+
+.fs-story__crumb {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	padding: 18px 0 22px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.fs-story__crumb a {
+	color: var( --wp--preset--color--contrast, #005c6d );
+	text-decoration: none;
+}
+
+.fs-story__crumb a:hover {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-story__crumb span[aria-hidden] {
+	color: var( --wp--preset--color--rule, #d3dde1 );
+}
+
+.fs-story__crumb-current {
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+/* Hero ------------------------------------------------------------------- */
+
+.fs-story__hero {
+	padding: 14px 0 128px;
+}
+
+.fs-story__hero-inner {
+	position: relative;
+}
+
+.fs-story__media {
+	aspect-ratio: 21 / 9;
+	border-radius: var( --fs-r-sm, 8px );
+	overflow: hidden;
+	/* Also the no-image state: a plain teal band at the same height, never a
+	   stretched upscale. */
+	background: var( --wp--preset--color--teal-deep, #004855 );
+}
+
+.fs-story__image {
 	width: 100%;
-	height: auto;
-	display: block;
-	max-height: 480px;
+	height: 100%;
 	object-fit: cover;
+	display: block;
 }
 
-.fs-impact-story-single__content {
-	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+.fs-story__slab {
+	position: relative;
+	margin-top: -45px;
+	padding: 40px;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #fff );
+	z-index: 2;
 }
 
-.fs-impact-story-single__badge {
-	display: inline-block;
-	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
-	padding: 0.15rem 0.6rem;
-	font-size: var( --wp--preset--font-size--small, 0.9rem );
-	background-color: var( --wp--preset--color--accent, #0d9488 );
-	color: var( --wp--preset--color--base, #ffffff );
-	border-radius: 999px;
+.fs-story__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 0 0 26px;
 }
 
-.fs-impact-story-single__title {
-	margin: 0 0 var( --wp--preset--spacing--small, 0.5rem );
-	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+.fs-story__chips span {
+	padding: 8px 14px;
+	border-radius: var( --fs-r-sm, 8px );
+	background: rgba( 255, 255, 255, 0.14 );
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
 }
 
-.fs-impact-story-single__meta {
-	margin: 0 0 var( --wp--preset--spacing--large, 2rem );
-	font-size: var( --wp--preset--font-size--small, 0.9rem );
-	color: var( --wp--preset--color--secondary, #6b7280 );
+/*
+ * No clamp: a story title is never truncated on its own page. Long titles
+ * grow the slab downward and the hero's bottom padding absorbs it, so the
+ * media never moves and the type never shrinks.
+ */
+.fs-story__title {
+	margin: 0 0 1rem;
+	font-size: 2.125rem;
+	line-height: 1.04;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	color: var( --wp--preset--color--base, #fff );
 }
 
-.fs-impact-story-single__body {
-	font-size: var( --wp--preset--font-size--medium, 1rem );
+.fs-story__standfirst {
+	margin: 0;
+	max-width: 560px;
+	font-size: 1.0625rem;
+	line-height: 1.6;
+	color: rgba( 255, 255, 255, 0.92 );
 }
 
-.fs-impact-story-single__body > :first-child {
-	margin-top: 0;
+/* At a glance ------------------------------------------------------------ */
+
+.fs-story__glance {
+	position: relative;
+	overflow: hidden;
+	padding-block: 4rem;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #fff );
 }
 
-.fs-impact-story-single__back {
-	margin-top: var( --wp--preset--spacing--large, 2rem );
+.fs-story__watermark {
+	position: absolute;
+	right: -60px;
+	top: 30px;
+	height: 360px;
+	opacity: 0.06;
+	pointer-events: none;
+}
+
+.fs-story__glance .fs-eyebrow {
+	margin: 0 0 3rem;
+}
+
+.fs-story__results {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 2rem;
+}
+
+.fs-story__result {
+	padding-top: 22px;
+	border-top: 3px solid var( --wp--preset--color--gold, #f3c145 );
+}
+
+/* Never animated — the figures are evidence, not decoration. */
+.fs-story__result-value {
+	margin: 0;
+	font-size: 3rem;
+	line-height: 1;
+	letter-spacing: -0.04em;
+	font-weight: 700;
+}
+
+.fs-story__result-unit {
+	margin: 0.25rem 0 0;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--lime, #a7cc14 );
+}
+
+.fs-story__result-label {
+	margin: 14px 0 0;
+	font-size: 1.0625rem;
+	line-height: 1.5;
+	color: rgba( 255, 255, 255, 0.88 );
+}
+
+/* Body ------------------------------------------------------------------- */
+
+.fs-story__body {
+	padding-block: 5rem;
+}
+
+.fs-story__body-inner {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 3.5rem;
+	align-items: start;
+}
+
+.fs-story__prose {
+	max-width: 66ch;
+	/* Prose first, details after — the rail is supporting material. */
+	order: 1;
+}
+
+.fs-story__body--wide .fs-story__prose {
+	max-width: 72ch;
+}
+
+.fs-story__prose > * {
+	margin-bottom: 30px;
+}
+
+.fs-story__prose p {
+	font-size: 1.1875rem;
+	line-height: 1.75;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-story__prose h2 {
+	margin-top: 26px;
+	margin-bottom: 26px;
+	max-width: 26ch;
+	font-size: 2.125rem;
+	line-height: 1.12;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-story__prose blockquote {
+	margin: 56px 0;
+	padding-left: 34px;
+	border-left: 3px solid var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-story__prose blockquote p {
+	max-width: 34ch;
+	font-size: 1.625rem;
+	line-height: 1.26;
+	letter-spacing: -0.02em;
+	font-style: italic;
+	font-weight: 400;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-story__prose img {
+	border-radius: var( --fs-r-sm, 8px );
+}
+
+.fs-story__prose figcaption {
+	margin-top: 16px;
+	max-width: 56ch;
+	font-size: 0.8125rem;
+	line-height: 1.6;
+	font-style: italic;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-story__rail {
+	order: 2;
+}
+
+.fs-story__rail dl {
+	margin: 22px 0 32px;
+	border-top: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+}
+
+.fs-story__rail dl > div {
+	padding: 16px 0;
+	border-bottom: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+}
+
+.fs-story__rail dt {
+	margin-bottom: 6px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-story__rail dd {
+	margin: 0;
+	font-size: 0.9375rem;
+	line-height: 1.5;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+/* Related ---------------------------------------------------------------- */
+
+.fs-story__related {
+	padding-block: 5rem;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+/* Breakpoints ------------------------------------------------------------ */
+
+@media ( min-width: 768px ) {
+
+	.fs-story__results {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+		gap: 3rem;
+	}
+}
+
+@media ( min-width: 1241px ) {
+
+	.fs-story__slab {
+		position: absolute;
+		left: 24px;
+		bottom: -56px;
+		width: 720px;
+		max-width: calc( 100% - 48px );
+		margin-top: 0;
+		padding: 44px;
+	}
+
+	.fs-story__title {
+		font-size: 3rem;
+	}
+
+	.fs-story__glance {
+		margin-top: 96px;
+		padding-block: 6rem;
+	}
+
+	.fs-story__results {
+		grid-template-columns: repeat( 3, minmax( 0, 1fr ) );
+	}
+
+	.fs-story__result-value {
+		font-size: 4.25rem;
+	}
+
+	.fs-story__body {
+		padding: 7rem 0 7.5rem;
+	}
+
+	.fs-story__body-inner {
+		grid-template-columns: 300px minmax( 0, 1fr );
+		gap: 6rem;
+	}
+
+	.fs-story__body--wide .fs-story__body-inner {
+		grid-template-columns: minmax( 0, 1fr );
+	}
+
+	.fs-story__prose {
+		order: 2;
+	}
+
+	.fs-story__rail {
+		order: 1;
+		position: sticky;
+		/* Clears the sticky header with breathing room. */
+		top: 160px;
+	}
+
+	.fs-story__prose h2 {
+		font-size: 2.125rem;
+	}
+
+	.fs-story__prose blockquote p {
+		font-size: 2.25rem;
+	}
 }
