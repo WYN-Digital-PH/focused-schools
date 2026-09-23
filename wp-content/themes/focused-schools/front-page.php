@@ -283,8 +283,9 @@ else :
 		 */
 		$fs_has_settings = function_exists( 'focused_schools_get_setting' );
 		?>
-		<div class="fs-home__section">
+		<section class="fs-home__section fs-home__proof" aria-labelledby="fs-home-proof-title">
 			<div class="fs-container fs-container--shell">
+				<h2 class="fs-home__proof-title" id="fs-home-proof-title"><?php esc_html_e( 'Our Impact', 'focused-schools' ); ?></h2>
 				<?php
 				get_template_part(
 					'template-parts/components/statistics-counter',
@@ -314,7 +315,7 @@ else :
 				);
 				?>
 			</div>
-		</div>
+		</section>
 
 		<section class="fs-home__contact fs-container fs-container--shell" id="contact" aria-labelledby="fs-contact-title">
 			<div class="fs-home__contact-copy">

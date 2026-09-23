@@ -46,22 +46,43 @@ if ( $fs_youtube_id && ! preg_match( '/^[A-Za-z0-9_-]{11}$/', $fs_youtube_id ) )
 ?>
 <section class="fs-home-hero" aria-labelledby="fs-home-hero-title">
 	<div class="fs-container fs-container--shell fs-home-hero__shell">
-		<div class="fs-home-hero__media">
+		<div class="fs-home-hero__media" data-fs-hero-frame data-paused="false">
 			<?php if ( $fs_poster_url ) : ?>
 				<img class="fs-home-hero__poster" src="<?php echo esc_url( $fs_poster_url ); ?>" alt="" loading="eager" fetchpriority="high" />
 			<?php endif; ?>
 
+			<?php
+			/*
+			 * Slot for the ambient loop. The iframe is created by
+			 * home-hero.js rather than printed here so it is never requested
+			 * under prefers-reduced-motion, and so a no-JS visitor simply
+			 * keeps the poster.
+			 */
+			?>
+			<div class="fs-home-hero__video-slot" data-fs-hero-video></div>
+
 			<?php if ( $fs_youtube_id ) : ?>
-				<button
-					type="button"
-					class="fs-home-hero__watch"
-					data-fs-video-open
-					data-fs-video-id="<?php echo esc_attr( $fs_youtube_id ); ?>"
-					data-fs-video-title="<?php echo esc_attr( $fs_heading ); ?>"
-				>
-					<?php esc_html_e( 'Watch with sound', 'focused-schools' ); ?>
-					<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
-				</button>
+				<div class="fs-home-hero__console">
+					<button
+						type="button"
+						class="fs-home-hero__toggle"
+						aria-pressed="false"
+						data-fs-hero-play
+					>
+						<span class="fs-home-hero__glyph" aria-hidden="true"><span></span><span></span></span>
+						<span data-fs-hero-play-label><?php esc_html_e( 'Pause', 'focused-schools' ); ?></span>
+					</button>
+					<button
+						type="button"
+						class="fs-home-hero__watch"
+						data-fs-video-open
+						data-fs-video-id="<?php echo esc_attr( $fs_youtube_id ); ?>"
+						data-fs-video-title="<?php echo esc_attr( $fs_heading ); ?>"
+					>
+						<?php esc_html_e( 'Watch with sound', 'focused-schools' ); ?>
+						<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+					</button>
+				</div>
 			<?php endif; ?>
 		</div>
 

@@ -1,16 +1,27 @@
 /**
- * Cycle of Excellence: dark (teal) band with a rotating mark and a 3-step
- * stepper. Exact colors/typography from the approved .dc design. The mark
- * rotates continuously (CSS animation, 40s linear infinite per
- * docs/design-system.md's motion tokens) — not scroll-scrubbed, since the
- * design's own binding motion rules forbid scroll-jacking (see
- * docs/page-specs/home.md).
+ * Cycle of Excellence: dark (teal) band carrying a scroll-scrubbed diagram.
+ *
+ * The section is deliberately taller than the viewport and its stage is
+ * sticky, so the diagram holds still on screen while the page scrolls past.
+ * cycle-of-excellence.js reads that progress and drives the mark's rotation,
+ * the orbiting dot, and the active phase row together. The mark is not a
+ * decorative spinner — it turns through exactly 360° across the section, so
+ * its angle always reports where the reader is.
+ *
+ * --fs-cycle-orbit-r is the orbit radius, read by the script so the dot
+ * tracks the mark at every breakpoint rather than a hardcoded desktop value.
  */
 
 .fs-cycle {
 	background: var( --wp--preset--color--contrast, #005c6d );
 	color: var( --wp--preset--color--base, #ffffff );
-	min-height: 100vh;
+	min-height: 230vh;
+}
+
+.fs-cycle__stage {
+	position: sticky;
+	top: 0;
+	height: 100vh;
 	display: flex;
 	align-items: center;
 }
@@ -43,10 +54,11 @@
 
 .fs-cycle__mark {
 	position: relative;
-	width: 220px;
+	width: 200px;
 	max-width: 100%;
 	aspect-ratio: 1 / 1;
 	justify-self: center;
+	--fs-cycle-orbit-r: 108px;
 }
 
 .fs-cycle__mark-disc {
@@ -63,18 +75,44 @@
 	top: 19%;
 	width: 62%;
 	height: 62%;
-	animation: fs-cycle-spin 40s linear infinite;
 }
 
-@keyframes fs-cycle-spin {
-	to {
-		transform: rotate( 360deg );
-	}
+/*
+ * The orbiting dot. Its transform is written by the script as
+ * rotate(angle) translateX(var(--fs-cycle-orbit-r)), so the rotation happens
+ * about the mark's centre and the translate pushes it out to the rim.
+ */
+.fs-cycle__mark-orbit {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 10px;
+	height: 10px;
+	margin: -5px;
+	border-radius: 999px;
+	background: var( --wp--preset--color--lime, #a7cc14 );
+	transform: translateX( var( --fs-cycle-orbit-r, 108px ) );
 }
 
+/*
+ * Reduced motion: the stage stops pinning and nothing rotates. The phase
+ * rows still step, so no content depends on the motion.
+ */
 @media ( prefers-reduced-motion: reduce ) {
-	.fs-cycle__mark-rotor {
-		animation: none;
+
+	.fs-cycle {
+		min-height: 0;
+	}
+
+	.fs-cycle__stage {
+		position: static;
+		height: auto;
+		padding-block: 4rem;
+	}
+
+	.fs-cycle__mark-rotor,
+	.fs-cycle__mark-orbit {
+		transition: none;
 	}
 }
 
@@ -161,6 +199,7 @@
 
 	.fs-cycle__mark {
 		width: 340px;
+		--fs-cycle-orbit-r: 183px;
 	}
 
 	.fs-cycle__step-trigger strong {
@@ -168,8 +207,28 @@
 	}
 }
 
+@media ( min-width: 721px ) and ( max-width: 1023px ) {
+
+	.fs-cycle__mark {
+		width: 240px;
+		--fs-cycle-orbit-r: 129px;
+	}
+}
+
 @media ( max-width: 720px ) {
+
 	.fs-cycle__intro h2 {
 		font-size: 2.125rem;
+	}
+
+	/* Too little height to pin against — the stage scrolls normally. */
+	.fs-cycle {
+		min-height: 0;
+	}
+
+	.fs-cycle__stage {
+		position: static;
+		height: auto;
+		padding-block: 4rem;
 	}
 }

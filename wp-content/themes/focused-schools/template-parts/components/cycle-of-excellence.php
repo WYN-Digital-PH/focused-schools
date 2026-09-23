@@ -7,9 +7,12 @@
  * - heading   (string, required)
  * - body      (string)
  * - phases    (array, required) each item: { label (string, required), description (string) }
- * - mark_url  (string) theme-static cycle mark image, shown as a continuously
- *   (CSS-only) rotating disc — 40s linear infinite per docs/design-system.md's
- *   motion tokens, disabled under prefers-reduced-motion
+ * - mark_url  (string) theme-static cycle mark image. It is not a decorative
+ *   spinner: the section pins itself for its scroll length and the mark is
+ *   *scrubbed* by scroll position — the mark rotates through exactly 360°
+ *   across the section, an orbiting dot tracks the same angle at the mark's
+ *   radius, and the phase rows step in time with it. Under
+ *   prefers-reduced-motion nothing rotates and the rows step alone.
  *
  * The design reference shows this idea twice: a teaser card first
  * (cycle-teaser.php), then this fuller interactive stepper section. Confirmed
@@ -37,7 +40,8 @@ if ( '' === trim( (string) $fs_heading ) || empty( $fs_phases ) ) {
 	return;
 }
 ?>
-<section class="fs-cycle" aria-labelledby="fs-cycle-title">
+<section class="fs-cycle" aria-labelledby="fs-cycle-title" data-fs-cycle-section>
+	<div class="fs-cycle__stage">
 	<div class="fs-container fs-container--shell fs-cycle__layout">
 		<header class="fs-cycle__intro">
 			<?php if ( $fs_eyebrow ) : ?>
@@ -52,7 +56,8 @@ if ( '' === trim( (string) $fs_heading ) || empty( $fs_phases ) ) {
 		<?php if ( $fs_mark ) : ?>
 			<div class="fs-cycle__mark" aria-hidden="true">
 				<span class="fs-cycle__mark-disc"></span>
-				<img class="fs-cycle__mark-rotor" src="<?php echo esc_url( $fs_mark ); ?>" alt="" />
+				<img class="fs-cycle__mark-rotor" src="<?php echo esc_url( $fs_mark ); ?>" alt="" data-fs-cycle-rotor />
+				<span class="fs-cycle__mark-orbit" data-fs-cycle-orbit></span>
 			</div>
 		<?php endif; ?>
 
@@ -87,5 +92,6 @@ if ( '' === trim( (string) $fs_heading ) || empty( $fs_phases ) ) {
 			endforeach;
 			?>
 		</div>
+	</div>
 	</div>
 </section>

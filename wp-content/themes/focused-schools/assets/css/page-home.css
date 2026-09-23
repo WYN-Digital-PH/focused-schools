@@ -167,3 +167,24 @@
 		flex: 0 0 45.625rem;
 	}
 }
+
+/*
+ * "Our Impact" proof heading. The mockup sets this section's heading at 52px
+ * with a 56px gap to the figures, distinct from the smaller section headings
+ * elsewhere on the page.
+ */
+.fs-home__proof-title {
+	margin: 0 0 3.5rem;
+	font-size: 2.25rem;
+	line-height: 1.04;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+@media ( min-width: 1024px ) {
+
+	.fs-home__proof-title {
+		font-size: 3.25rem;
+	}
+}

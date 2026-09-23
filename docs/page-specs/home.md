@@ -249,3 +249,68 @@ carousel demonstrates correctly.
 **Stats data:** re-checked against the `.dc` source's `stats` array — the existing values
 (2+ Million Students Impacted / 20+ Years Partnering with Schools / 25+ States Served)
 match exactly. No change made.
+
+## Hero Ambient Video and the Scroll-Scrubbed Cycle (mockup-source pass)
+
+Built against the mockup folder's own `site/index.html`, `site/assets/home.css` and
+`site/assets/home.js`, which are the literal source rather than the deployed capture.
+
+### Hero ambient video — was missing entirely
+
+The hero had only a poster and a "Watch with sound" modal. The mockup also runs a **muted
+ambient loop** behind the poster, which is what "the hero video autoplay" refers to; it had
+never been implemented, so there was nothing to autoplay.
+
+Implemented to the mockup's own approach: `home-hero.js` creates the iframe rather than the
+markup printing it, so it is **never requested under `prefers-reduced-motion`** and a no-JS
+visitor simply keeps the poster. The embed is youtube-nocookie with
+`autoplay=1&mute=1&controls=0&loop=1&playlist={id}&playsinline=1&enablejsapi=1`, is
+`tabindex="-1"`, `aria-hidden`, `pointer-events: none`, and is sized to 178% and centred so
+YouTube's letterboxing is cropped out of the 16:9 frame.
+
+A playback console sits over the frame: a teal Pause/Play pill whose glyph flips from two
+bars to a triangle via `aria-pressed`, and the existing "Watch with sound" button. Playback
+is driven through the YouTube iframe API by `postMessage`. Opening the sound modal pauses
+the ambient loop so two soundtracks never compete, and closing it resumes — unless the
+visitor had paused it themselves, which is remembered.
+
+### Cycle of Excellence — scroll-scrubbed, not a spinner
+
+Previously a decorative CSS spin (40s linear infinite), documented as deliberately
+not-scroll-scrubbed. The mockup's own source shows the opposite: this section is the
+homepage's one piece of scroll-driven motion.
+
+- The section is **230vh** and its stage is **`position: sticky; top: 0; height: 100vh`**,
+  so the diagram holds still on screen while the page scrolls past it.
+- Scroll progress through the extra height drives three things in step: the mark rotates
+  through **exactly 360°** across the section; a **10px lime dot orbits** at the mark's
+  radius on the same angle; and the phase rows advance one per equal slice.
+- The orbit radius is a custom property (`--fs-cycle-orbit-r`: 183px at 340px, 129px at
+  240px, 108px at 200px) read by the script, so the dot tracks the mark at every
+  breakpoint instead of being pinned to the desktop value.
+- Hover, focus or click on a phase row takes over from the scroll position, so the diagram
+  is usable without scrolling.
+- Under `prefers-reduced-motion` nothing rotates and the stage stops pinning; the rows
+  still step, so no content is gated behind motion. Same on <=720px, where there is too
+  little height to pin against.
+
+### "Our Impact" heading restored
+
+The stats band rendered without its `<h2>`, so the homepage had 8 headings against the
+mockup's 9. Added at 52px desktop / 36px below with a 56px gap to the figures.
+
+### QA performed
+
+`php -l` and full-project PHPCS clean. In-browser: the ambient iframe is created with the
+expected autoplay/mute/loop/controls/jsapi parameters against youtube-nocookie, `tabindex`
+-1 and `aria-hidden` true; the Pause/Play toggle flips `data-paused`, `aria-pressed` and
+the label both ways. Cycle verified under genuine scroll at 78% progress: rotor
+`rotate(282.27deg)` (0.784 x 360), orbit on the same angle measured **183px from the mark
+centre** (dx 39, dy -179), phase 3 active, orbit filled lime `#a7cc14`. All 9 homepage
+headings now match the mockup in order.
+
+**Not verified:** programmatic scrolling in the automation context does not reliably emit
+scroll events, so intermediate scrub positions were confirmed from one genuine wheel scroll
+plus computed progress rather than a full sweep. Reduced-motion and mobile were not
+rendered. The rest of the homepage beyond these three items has not yet been audited
+section by section against `Focused Schools Homepage.dc.html`.

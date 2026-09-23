@@ -29,25 +29,21 @@
 }
 
 .fs-home-hero__watch {
-	position: absolute;
-	right: 22px;
-	bottom: 22px;
 	display: inline-flex;
 	align-items: center;
-	gap: 14px;
+	gap: 10px;
 	height: 42px;
 	padding: 0 22px;
-	background: var( --wp--preset--color--base, #ffffff );
-	color: var( --wp--preset--color--contrast, #005c6d );
-	border: none;
+	border: 0;
 	border-radius: var( --fs-r-pill, 999px );
-	box-shadow: 0 8px 24px rgba( 0, 92, 109, 0.14 );
-	font-size: 0.6875rem;
+	background: transparent;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	font-size: 11px;
 	font-weight: 700;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	cursor: pointer;
-	transition: background var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+	transition: background var( --fs-dur-fast, 150ms ) var( --fs-ease, ease );
 }
 
 .fs-home-hero__watch:hover {
@@ -191,4 +187,98 @@
 	width: 100%;
 	height: 100%;
 	border: 0;
+}
+
+/* -----------------------------------------------------------------------
+ * Ambient background loop + playback console.
+ *
+ * The iframe is oversized to 178% and centred so YouTube's letterboxing is
+ * cropped out of the 16:9 frame, matching the mockup. It sits above the
+ * poster and fades out when paused, which is also the reduced-motion and
+ * no-JS state — the poster then carries the frame on its own.
+ * --------------------------------------------------------------------- */
+
+.fs-home-hero__video {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 178%;
+	height: 178%;
+	transform: translate( -50%, -50% );
+	border: 0;
+	pointer-events: none;
+	opacity: 1;
+	transition: opacity 300ms var( --fs-ease, ease );
+}
+
+.fs-home-hero__media[data-paused="true"] .fs-home-hero__video {
+	opacity: 0;
+}
+
+.fs-home-hero__console {
+	position: absolute;
+	right: 22px;
+	bottom: 22px;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 6px;
+	border-radius: var( --fs-r-pill, 999px );
+	background: var( --wp--preset--color--base, #fff );
+	box-shadow: 0 8px 24px rgba( 0, 92, 109, 0.14 );
+}
+
+.fs-home-hero__watch:hover {
+	background: #f0f2f4;
+}
+
+.fs-home-hero__toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	height: 42px;
+	padding: 0 20px;
+	border: 0;
+	border-radius: var( --fs-r-pill, 999px );
+	background: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #fff );
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: filter var( --fs-dur-fast, 150ms ) var( --fs-ease, ease );
+}
+
+.fs-home-hero__toggle:hover {
+	filter: brightness( 1.18 );
+}
+
+/* Two bars while playing; a single triangle once paused. */
+.fs-home-hero__glyph {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	width: 10px;
+}
+
+.fs-home-hero__glyph span {
+	display: block;
+	width: 3px;
+	height: 11px;
+	background: var( --wp--preset--color--base, #fff );
+}
+
+.fs-home-hero__toggle[aria-pressed="true"] .fs-home-hero__glyph span:first-child {
+	width: 0;
+	height: 0;
+	background: transparent;
+	border-left: 8px solid var( --wp--preset--color--base, #fff );
+	border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent;
+}
+
+.fs-home-hero__toggle[aria-pressed="true"] .fs-home-hero__glyph span:last-child {
+	display: none;
 }
