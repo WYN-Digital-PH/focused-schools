@@ -28,6 +28,10 @@
 		"ctaLabel": {
 			"type": "string",
 			"default": "Contact Us"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": "/contact/"
 		}
 	},
 	"editorScript": "focused-schools-blocks-editor",

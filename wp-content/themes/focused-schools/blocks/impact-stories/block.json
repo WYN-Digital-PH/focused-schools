@@ -28,6 +28,10 @@
 		"limit": {
 			"type": "number",
 			"default": 6
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": "/impact-stories/"
 		}
 	},
 	"editorScript": "focused-schools-blocks-editor",

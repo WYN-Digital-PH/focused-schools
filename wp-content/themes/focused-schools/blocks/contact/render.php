@@ -12,6 +12,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+$fs_cta = isset( $attributes['ctaUrl'] ) ? (string) $attributes['ctaUrl'] : '/contact/';
+$fs_cta = 0 === strpos( $fs_cta, '/' ) ? home_url( $fs_cta ) : $fs_cta;
 ?>
 <section class="fs-home__contact fs-container fs-container--shell" id="contact" aria-labelledby="fs-contact-title">
 	<div class="fs-home__contact-copy">
@@ -37,7 +39,7 @@ defined( 'ABSPATH' ) || exit;
 				null,
 				array(
 					'label' => $attributes['ctaLabel'],
-					'url'   => home_url( '/contact/' ),
+					'url'   => $fs_cta,
 					'style' => 'primary',
 				)
 			);

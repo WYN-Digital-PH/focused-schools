@@ -6,7 +6,11 @@
 	"category": "design",
 	"icon": "text",
 	"description": "The scroll-held belief statement: rail label, display heading, body with an emphasised opening phrase, and a CTA.",
-	"keywords": [ "beliefs", "rail", "home" ],
+	"keywords": [
+		"beliefs",
+		"rail",
+		"home"
+	],
 	"textdomain": "focused-schools",
 	"supports": {
 		"html": false,
@@ -14,12 +18,66 @@
 		"multiple": false
 	},
 	"attributes": {
-		"eyebrow":   { "type": "string", "default": "What we believe" },
-		"heading":   { "type": "string", "default": "When educators are supported, students thrive." },
-		"body":      { "type": "string", "default": "" },
-		"emphasis":  { "type": "string", "default": "Every student" },
-		"ctaLabel":  { "type": "string", "default": "Get to know us" },
-		"ctaUrl":    { "type": "string", "default": "" }
+		"eyebrow": {
+			"type": "string",
+			"default": "What we believe"
+		},
+		"heading": {
+			"type": "string",
+			"default": "When educators are supported, students thrive."
+		},
+		"body": {
+			"type": "string",
+			"default": ""
+		},
+		"emphasis": {
+			"type": "string",
+			"default": "Every student"
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "Get to know us"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"strip1Id": {
+			"type": "number",
+			"default": 0
+		},
+		"strip1Url": {
+			"type": "string",
+			"default": ""
+		},
+		"strip1Alt": {
+			"type": "string",
+			"default": "Two education leaders celebrating progress with a fist bump."
+		},
+		"strip2Id": {
+			"type": "number",
+			"default": 0
+		},
+		"strip2Url": {
+			"type": "string",
+			"default": ""
+		},
+		"strip2Alt": {
+			"type": "string",
+			"default": "A facilitator and district leader discussing a system map."
+		},
+		"strip3Id": {
+			"type": "number",
+			"default": 0
+		},
+		"strip3Url": {
+			"type": "string",
+			"default": ""
+		},
+		"strip3Alt": {
+			"type": "string",
+			"default": "Students learning together in a classroom."
+		}
 	},
 	"editorScript": "focused-schools-blocks-editor",
 	"render": "file:./render.php"

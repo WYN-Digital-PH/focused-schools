@@ -40,6 +40,22 @@
 		"limit": {
 			"type": "number",
 			"default": 4
+		},
+		"imageId": {
+			"type": "number",
+			"default": 0
+		},
+		"imageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": "A Focused Schools facilitator working with district leaders at a strategy session."
+		},
+		"linkUrl": {
+			"type": "string",
+			"default": "/services/"
 		}
 	},
 	"editorScript": "focused-schools-blocks-editor",

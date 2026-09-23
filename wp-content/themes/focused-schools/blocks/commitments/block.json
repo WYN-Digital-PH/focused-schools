@@ -84,6 +84,18 @@
 		"item3CtaUrl": {
 			"type": "string",
 			"default": "/impact-stories/"
+		},
+		"imageId": {
+			"type": "number",
+			"default": 0
+		},
+		"imageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": "District and school leaders working together during a Focused Schools leadership retreat."
 		}
 	},
 	"editorScript": "focused-schools-blocks-editor",

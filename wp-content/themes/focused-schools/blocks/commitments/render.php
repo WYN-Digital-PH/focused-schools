@@ -13,6 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $fs_a     = $attributes;
+$fs_photo = focused_schools_block_image( $fs_a, 'image', '/assets/img/retreat-1.jpg', __( 'District and school leaders working together during a Focused Schools leadership retreat.', 'focused-schools' ) );
 $fs_items = array();
 
 for ( $fs_i = 1; $fs_i <= 3; $fs_i++ ) {
@@ -45,8 +46,8 @@ get_template_part(
 			'<strong>' . esc_html( isset( $fs_a['headingEmphasis'] ) ? $fs_a['headingEmphasis'] : '' ) . '</strong>'
 		),
 		'intro'                => isset( $fs_a['intro'] ) ? $fs_a['intro'] : '',
-		'image_url'            => FOCUSED_SCHOOLS_THEME_URI . '/assets/img/retreat-1.jpg',
-		'image_alt'            => __( 'District and school leaders working together during a Focused Schools leadership retreat.', 'focused-schools' ),
+		'image_url'            => $fs_photo['url'],
+		'image_alt'            => $fs_photo['alt'],
 		'image_caption_kicker' => isset( $fs_a['captionKicker'] ) ? $fs_a['captionKicker'] : '',
 		'image_caption_text'   => isset( $fs_a['captionText'] ) ? $fs_a['captionText'] : '',
 		'items'                => $fs_items,

@@ -13,6 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $fs_img    = FOCUSED_SCHOOLS_THEME_URI . '/assets/img/';
+$fs_photo  = focused_schools_block_image( $attributes, 'image', '/assets/img/teacher-portrait.webp' );
 $fs_shapes = FOCUSED_SCHOOLS_THEME_URI . '/assets/shapes/';
 
 get_template_part(
@@ -21,8 +22,8 @@ get_template_part(
 	array(
 		'heading'       => isset( $attributes['heading'] ) ? $attributes['heading'] : '',
 		'body'          => isset( $attributes['body'] ) ? $attributes['body'] : '',
-		'image_url'     => $fs_img . 'teacher-portrait.webp',
-		'image_alt'     => '',
+		'image_url'     => $fs_photo['url'],
+		'image_alt'     => $fs_photo['alt'],
 		'watermark_url' => $fs_img . 'mark-white.svg',
 		'shape_urls'    => array(
 			$fs_shapes . 'star.svg',

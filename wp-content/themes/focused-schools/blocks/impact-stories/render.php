@@ -13,6 +13,8 @@
 defined( 'ABSPATH' ) || exit;
 
 $fs_limit = isset( $attributes['limit'] ) ? max( 1, (int) $attributes['limit'] ) : 6;
+$fs_cta   = isset( $attributes['ctaUrl'] ) ? (string) $attributes['ctaUrl'] : '/impact-stories/';
+$fs_cta   = 0 === strpos( $fs_cta, '/' ) ? home_url( $fs_cta ) : $fs_cta;
 
 $fs_testimonials = new WP_Query(
 	array(
@@ -39,7 +41,7 @@ $fs_testimonials = new WP_Query(
 					null,
 					array(
 						'label' => $attributes['ctaLabel'],
-						'url'   => home_url( '/impact-stories/' ),
+						'url'   => $fs_cta,
 						'style' => 'white',
 					)
 				);

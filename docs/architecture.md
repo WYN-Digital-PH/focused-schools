@@ -682,6 +682,19 @@ page and the hardcoded layout render identical markup — verified marker by mar
 `WP_Query`, and `proof` reads the figures from Site Settings, so publishing a service or
 editing a stat updates the page with no page edit. Only the copy is stored on the block.
 
+**What an editor can change.** Every block exposes its copy, its link targets and its
+photographs. Images use a `<name>Id` / `<name>Url` / `<name>Alt` trio resolved by
+`focused_schools_block_image()`, in that order of precedence, falling back to the
+theme-bundled photo — so a site that has never opened the editor still renders correct,
+described images. Alt text falls back to the attachment's own alt, then to a written
+default. URL fields accept a site path (`/team/`) or a full URL.
+
+**What is deliberately not editable.** The brand marks and decorative shapes — the rail
+icon, the cycle mark, the watermark, the confetti — are design furniture, not content.
+Exposing them would invite a broken layout for no editorial gain. The three impact figures
+stay in Site Settings so this page and About cannot drift, and the commitments and cycle
+phases are fixed at three each, matching the approved design.
+
 **`page-home.php`** applies to any page with the slug `home` and renders its blocks bare —
 no container, no page title. Without it the generic `index.php` fallback wrapped the
 full-bleed sections in the 720px content container and printed the page title above them.

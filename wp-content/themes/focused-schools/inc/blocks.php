@@ -79,3 +79,41 @@ function focused_schools_register_blocks() {
 	}
 }
 add_action( 'init', 'focused_schools_register_blocks' );
+
+/**
+ * Resolve an editable image slot on a block.
+ *
+ * Precedence: a picked media library item, then a pasted URL, then the
+ * theme-bundled default. Alt text follows the same idea — the block's own alt
+ * wins, then the attachment's, then the supplied default — so a site that has
+ * never opened the editor still renders correct, described images.
+ *
+ * @param array  $attributes   Block attributes.
+ * @param string $prefix       Attribute prefix, e.g. 'image' for imageId/imageUrl/imageAlt.
+ * @param string $default_file Theme-relative fallback, e.g. '/assets/img/retreat-1.jpg'.
+ * @param string $default_alt  Fallback alt text.
+ * @return array{url:string,alt:string}
+ */
+function focused_schools_block_image( $attributes, $prefix, $default_file, $default_alt = '' ) {
+	$id  = isset( $attributes[ $prefix . 'Id' ] ) ? (int) $attributes[ $prefix . 'Id' ] : 0;
+	$url = isset( $attributes[ $prefix . 'Url' ] ) ? trim( (string) $attributes[ $prefix . 'Url' ] ) : '';
+	$alt = isset( $attributes[ $prefix . 'Alt' ] ) ? trim( (string) $attributes[ $prefix . 'Alt' ] ) : '';
+	if ( $id ) {
+		$from_library = wp_get_attachment_image_url( $id, 'full' );
+		if ( $from_library ) {
+			$url = $from_library;
+			if ( '' === $alt ) {
+				$alt = (string) get_post_meta( $id, '_wp_attachment_image_alt', true );
+			}
+		}
+	}
+
+	if ( '' === $url ) {
+		$url = FOCUSED_SCHOOLS_THEME_URI . $default_file;
+	}
+
+	return array(
+		'url' => $url,
+		'alt' => '' !== $alt ? $alt : $default_alt,
+	);
+}

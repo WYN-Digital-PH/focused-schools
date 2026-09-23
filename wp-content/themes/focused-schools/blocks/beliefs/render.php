@@ -13,6 +13,12 @@
 defined( 'ABSPATH' ) || exit;
 
 $fs_body = isset( $attributes['body'] ) ? trim( (string) $attributes['body'] ) : '';
+
+$fs_strip = array(
+	focused_schools_block_image( $attributes, 'strip1', '/assets/img/retreat-2.jpg', __( 'Two education leaders celebrating progress with a fist bump.', 'focused-schools' ) ),
+	focused_schools_block_image( $attributes, 'strip2', '/assets/img/retreat-3.jpg', __( 'A facilitator and district leader discussing a system map.', 'focused-schools' ) ),
+	focused_schools_block_image( $attributes, 'strip3', '/assets/img/student-video.jpg', __( 'Students learning together in a classroom.', 'focused-schools' ) ),
+);
 ?>
 <div class="fs-home__hold" data-fs-home-hold>
 	<div class="fs-home__hold-inner">
@@ -35,7 +41,7 @@ $fs_body = isset( $attributes['body'] ) ? trim( (string) $attributes['body'] ) :
 </div>
 
 <div class="fs-home__strip" aria-label="<?php esc_attr_e( 'Focused Schools leadership retreat', 'focused-schools' ); ?>">
-	<figure><img src="<?php echo esc_url( FOCUSED_SCHOOLS_THEME_URI . '/assets/img/retreat-2.jpg' ); ?>" alt="<?php esc_attr_e( 'Two education leaders celebrating progress with a fist bump.', 'focused-schools' ); ?>" loading="lazy" /></figure>
-	<figure><img src="<?php echo esc_url( FOCUSED_SCHOOLS_THEME_URI . '/assets/img/retreat-3.jpg' ); ?>" alt="<?php esc_attr_e( 'A facilitator and district leader discussing a system map.', 'focused-schools' ); ?>" loading="lazy" /></figure>
-	<figure><img src="<?php echo esc_url( FOCUSED_SCHOOLS_THEME_URI . '/assets/img/student-video.jpg' ); ?>" alt="<?php esc_attr_e( 'Students learning together in a classroom.', 'focused-schools' ); ?>" loading="lazy" /></figure>
+	<?php foreach ( $fs_strip as $fs_photo ) : ?>
+		<figure><img src="<?php echo esc_url( $fs_photo['url'] ); ?>" alt="<?php echo esc_attr( $fs_photo['alt'] ); ?>" loading="lazy" /></figure>
+	<?php endforeach; ?>
 </div>

@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$fs_img = FOCUSED_SCHOOLS_THEME_URI . '/assets/img/';
+$fs_poster = focused_schools_block_image( $attributes, 'poster', '/assets/img/student-video.jpg' );
 
 get_template_part(
 	'template-parts/components/home-hero',
@@ -20,7 +20,7 @@ get_template_part(
 	array(
 		'heading'    => isset( $attributes['heading'] ) ? $attributes['heading'] : '',
 		'subheading' => isset( $attributes['subheading'] ) ? $attributes['subheading'] : '',
-		'poster_url' => ! empty( $attributes['posterUrl'] ) ? $attributes['posterUrl'] : $fs_img . 'student-video.jpg',
+		'poster_url' => $fs_poster['url'],
 		'youtube_id' => isset( $attributes['youtubeId'] ) ? $attributes['youtubeId'] : '',
 		'cta_label'  => isset( $attributes['ctaLabel'] ) ? $attributes['ctaLabel'] : '',
 		'cta_url'    => ! empty( $attributes['ctaUrl'] ) ? $attributes['ctaUrl'] : '#why',
