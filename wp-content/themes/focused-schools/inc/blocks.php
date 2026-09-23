@@ -35,6 +35,13 @@ function focused_schools_block_names() {
 	return array(
 		'home-hero',
 		'beliefs',
+		'commitments',
+		'cycle-teaser',
+		'cycle',
+		'services',
+		'impact-stories',
+		'proof',
+		'contact',
 	);
 }
 

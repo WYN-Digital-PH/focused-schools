@@ -1,0 +1,47 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/services",
+	"title": "Services Teaser",
+	"category": "design",
+	"icon": "screenoptions",
+	"description": "The How-we-help header with its photo, over the live list of published services.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "How we help"
+		},
+		"heading": {
+			"type": "string",
+			"default": "Every school is different. Every partnership should be, too."
+		},
+		"description": {
+			"type": "string",
+			"default": "No two districts face the same challenges, which is why we don't believe in one-size-fits-all solutions. We begin by listening\u2014understanding your goals, your community, and the realities your educators face every day. Together, we develop practical strategies that strengthen leadership, support educators, and create lasting change for students."
+		},
+		"linkLabel": {
+			"type": "string",
+			"default": "View all services"
+		},
+		"captionKicker": {
+			"type": "string",
+			"default": "Focused facilitation"
+		},
+		"captionText": {
+			"type": "string",
+			"default": "Strategies shaped with your team"
+		},
+		"limit": {
+			"type": "number",
+			"default": 4
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

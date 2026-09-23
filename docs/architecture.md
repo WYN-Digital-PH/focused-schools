@@ -674,7 +674,19 @@ contains `<!-- wp:focused-schools/`) → the hardcoded layout. The hardcoded lay
 the default, so no existing site changes behaviour until someone builds the page with
 blocks.
 
-**Status: partial.** Built so far: `home-hero`, `beliefs`. Still hardcoded, and still to be
-converted: commitments, cycle teaser, cycle diagram, services intro, impact stories, proof
-stats, contact. **Because block mode replaces the whole layout, a page must not be switched
-to blocks until every section has one** — otherwise the missing sections simply vanish.
+**Status: complete.** All nine sections are blocks: `home-hero`, `beliefs`, `commitments`,
+`cycle-teaser`, `cycle`, `services`, `impact-stories`, `proof`, `contact`. A block-built
+page and the hardcoded layout render identical markup — verified marker by marker.
+
+**Dynamic content stays dynamic.** `services` and `impact-stories` run their own live
+`WP_Query`, and `proof` reads the figures from Site Settings, so publishing a service or
+editing a stat updates the page with no page edit. Only the copy is stored on the block.
+
+**`page-home.php`** applies to any page with the slug `home` and renders its blocks bare —
+no container, no page title. Without it the generic `index.php` fallback wrapped the
+full-bleed sections in the 720px content container and printed the page title above them.
+
+**`focused_schools_is_home_layout()`** in `inc/enqueue.php` decides which requests get the
+homepage CSS/JS: the front page, plus any singular page whose content contains
+`<!-- wp:focused-schools/`. Without it a block-built page rendered the right markup with
+none of its stylesheet or scroll/video behaviour.

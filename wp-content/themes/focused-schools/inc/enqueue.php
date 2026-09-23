@@ -72,6 +72,31 @@ function focused_schools_asset_version( $relative_path ) {
 }
 
 /**
+ * Whether the current request renders the homepage layout.
+ *
+ * True for the front page, and for any page built with the homepage blocks —
+ * they render the same components, so they need the same stylesheet and the
+ * same scroll/video behaviour. Without this, a block-built Home page rendered
+ * its markup with none of its CSS or JS.
+ *
+ * @return bool
+ */
+function focused_schools_is_home_layout() {
+	if ( is_front_page() ) {
+		return true;
+	}
+
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	$post = get_post();
+
+	return $post instanceof WP_Post
+		&& false !== strpos( (string) $post->post_content, '<!-- wp:focused-schools/' );
+}
+
+/**
  * Enqueue the main stylesheet and all reusable component styles.
  *
  * @return void
@@ -137,7 +162,7 @@ function focused_schools_enqueue_assets() {
 		)
 	);
 
-	if ( is_front_page() ) {
+	if ( focused_schools_is_home_layout() ) {
 		wp_enqueue_style(
 			'focused-schools-page-home',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-home.css',

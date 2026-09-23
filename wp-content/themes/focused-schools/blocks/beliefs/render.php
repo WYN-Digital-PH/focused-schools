@@ -33,3 +33,9 @@ $fs_body = isset( $attributes['body'] ) ? trim( (string) $attributes['body'] ) :
 		?>
 	</div>
 </div>
+
+<div class="fs-home__strip" aria-label="<?php esc_attr_e( 'Focused Schools leadership retreat', 'focused-schools' ); ?>">
+	<figure><img src="<?php echo esc_url( FOCUSED_SCHOOLS_THEME_URI . '/assets/img/retreat-2.jpg' ); ?>" alt="<?php esc_attr_e( 'Two education leaders celebrating progress with a fist bump.', 'focused-schools' ); ?>" loading="lazy" /></figure>
+	<figure><img src="<?php echo esc_url( FOCUSED_SCHOOLS_THEME_URI . '/assets/img/retreat-3.jpg' ); ?>" alt="<?php esc_attr_e( 'A facilitator and district leader discussing a system map.', 'focused-schools' ); ?>" loading="lazy" /></figure>
+	<figure><img src="<?php echo esc_url( FOCUSED_SCHOOLS_THEME_URI . '/assets/img/student-video.jpg' ); ?>" alt="<?php esc_attr_e( 'Students learning together in a classroom.', 'focused-schools' ); ?>" loading="lazy" /></figure>
+</div>

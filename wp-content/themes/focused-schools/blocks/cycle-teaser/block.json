@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/cycle-teaser",
+	"title": "Cycle Teaser",
+	"category": "design",
+	"icon": "format-image",
+	"description": "The portrait card that introduces the Cycle of Excellence.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": "A Cycle of Excellence"
+		},
+		"body": {
+			"type": "string",
+			"default": "High-performing districts and schools are intentional about committing to a cycle of excellence. Your Focused Schools team is prepared to support your cycle of excellence in ways that will help you to continue to build capacity, accelerate growth, and communicate your progress relentlessly."
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

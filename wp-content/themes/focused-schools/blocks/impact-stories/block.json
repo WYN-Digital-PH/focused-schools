@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/impact-stories",
+	"title": "Impact Stories Band",
+	"category": "design",
+	"icon": "format-quote",
+	"description": "The teal band: heading, link, and the live testimonial carousel.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Focused Schools"
+		},
+		"heading": {
+			"type": "string",
+			"default": "Impact Stories"
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "View Impact Stories"
+		},
+		"limit": {
+			"type": "number",
+			"default": 6
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}
