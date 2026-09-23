@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'FOCUSED_SCHOOLS_THEME_VERSION' ) ) {
-	define( 'FOCUSED_SCHOOLS_THEME_VERSION', '0.1.0' );
+	define( 'FOCUSED_SCHOOLS_THEME_VERSION', '0.2.0' );
 }
 
 if ( ! defined( 'FOCUSED_SCHOOLS_THEME_DIR' ) ) {

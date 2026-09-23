@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Focused Schools Core
  * Description:       Site-specific core functionality for the focused-schools WordPress site.
- * Version:           0.1.0
+ * Version:           0.2.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            WYN Digital
@@ -15,7 +15,7 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'FOCUSED_SCHOOLS_CORE_VERSION' ) ) {
-	define( 'FOCUSED_SCHOOLS_CORE_VERSION', '0.1.0' );
+	define( 'FOCUSED_SCHOOLS_CORE_VERSION', '0.2.0' );
 }
 
 if ( ! defined( 'FOCUSED_SCHOOLS_CORE_FILE' ) ) {
