@@ -1,31 +1,16 @@
 /**
- * Service Card — adds the accent_role -> lane color modifier on top of the
- * shared .fs-card base (see card.css). Matches the approved Design System's
- * "Service card" skin: a short accent bar (not a full-width border) carries
- * the lane color — cerulean / coral / lime across the three lanes.
+ * Service Card — the grid/teaser skin on top of the shared .fs-card base
+ * (see card.css). The accent is carried by the shared .fs-rule utility
+ * (style.css), driven by the record's design-system accent token, so this
+ * file holds no lane colors and a new accent needs no rule here.
  */
 
 .fs-service-card {
 	/* Keeps an anchor-jumped card (id="{service-slug}") clear of the header. */
-	scroll-margin-top: var( --wp--preset--spacing--large, 2rem );
+	scroll-margin-top: 106px;
 }
 
 .fs-service-card__bar {
-	display: block;
-	width: 44px;
-	height: 4px;
-	border-radius: var( --fs-r-pill, 999px );
-	background: var( --wp--preset--color--primary, #dd6237 );
-}
-
-.fs-service-card.fs-card--accent-strategy .fs-service-card__bar {
-	background: var( --wp--preset--color--primary, #dd6237 );
-}
-
-.fs-service-card.fs-card--accent-leadership .fs-service-card__bar {
-	background: var( --wp--preset--color--accent, #0a96cb );
-}
-
-.fs-service-card.fs-card--accent-capacity .fs-service-card__bar {
-	background: var( --wp--preset--color--lime, #a7cc14 );
+	/* Width/height/background come from .fs-rule; only spacing is local. */
+	margin-bottom: 1.25rem;
 }

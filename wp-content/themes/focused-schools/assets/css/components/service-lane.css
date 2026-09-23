@@ -1,96 +1,121 @@
 /**
  * Service Lane — the Services page's full detail band for one fs_service.
- * Geometry measured from the approved mockup: 1fr / 500px grid with a 96px
- * gap, 52px lane heading, 21px tagline, 17px body, and a 2-column signature
- * offerings list above a rule.
  *
- * Lanes alternate sides down the page (the mockup flips every second one)
- * via .fs-lane--reverse, which the page template applies on even lanes.
+ * Geometry is the approved mockup's own, taken from its site.css rather than
+ * measured: 1fr / 500px grid at 96px gap, 52px title at -0.03em capped to
+ * 18ch, 21px tagline at 30ch, 17px body at 62ch, and a floating caption chip
+ * pinned to the photo. See docs/page-specs/services.md §8.
+ *
+ * The accent token reaches this file only through .fs-rule (the bar) and
+ * inline custom properties on the bullets and caption kicker. No rule here
+ * sets a lane color, so a new accent needs no CSS.
  */
 
 .fs-lane {
 	display: grid;
 	grid-template-columns: minmax( 0, 1fr );
-	gap: 2.5rem;
+	gap: 3rem;
 	align-items: start;
+	/* Clears the sticky header when an index row jumps to this lane. */
+	scroll-margin-top: 106px;
 }
 
 .fs-lane__accent {
-	margin: 0 0 1.875rem;
-	font-size: 1.0625rem;
-	line-height: 1;
-	color: var( --wp--preset--color--contrast, #005c6d );
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	margin-bottom: 30px;
+}
+
+.fs-lane__accent span:last-child {
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
 .fs-lane__copy h2 {
-	margin: 0 0 1.375rem;
+	margin: 0 0 22px;
+	max-width: 18ch;
 	font-size: 2.25rem;
 	line-height: 1.04;
-	letter-spacing: -0.02em;
+	letter-spacing: -0.03em;
 	font-weight: 700;
 	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-lane__tagline {
-	margin: 0 0 1.625rem;
-	max-width: 28ch;
-	font-size: 1.3125rem;
+	margin: 0 0 26px;
+	max-width: 30ch;
+	font-size: 1.1875rem;
 	line-height: 1.35;
 	font-weight: 700;
 	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-lane__desc {
-	margin: 0 0 2.5rem;
+	margin: 0 0 40px;
 	max-width: 62ch;
-	font-size: 1.0625rem;
+	font-size: 1rem;
 	line-height: 1.75;
 	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-lane__desc p {
+	margin: 0 0 1em;
+}
+
+.fs-lane__desc p:last-child {
+	margin-bottom: 0;
+}
+
+/*
+ * No featured image: the figure is absent from the markup entirely and the
+ * copy column spans full width at a longer measure, rather than leaving a
+ * placeholder block behind. Spec §6.
+ */
+.fs-lane--no-media .fs-lane__desc {
+	max-width: 70ch;
 }
 
 /* Signature offerings ---------------------------------------------------- */
 
 .fs-offerings {
-	margin: 0 0 2.5rem;
-	padding-top: 1.875rem;
+	margin: 0 0 40px;
+	padding-top: 30px;
 	border-top: 1px solid var( --wp--preset--color--rule, #d3dde1 );
 }
 
 .fs-offerings__label {
-	margin: 0 0 1.25rem;
-	font-size: 0.75rem;
-	font-weight: 700;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	color: var( --wp--preset--color--contrast, #005c6d );
+	margin: 0 0 22px;
 }
 
-.fs-offerings__list {
+.fs-offerings ul {
 	display: grid;
 	grid-template-columns: minmax( 0, 1fr );
-	gap: 1rem 2.5rem;
+	row-gap: 16px;
+	column-gap: 40px;
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-.fs-offerings__list li {
-	position: relative;
-	padding-left: 1.125rem;
+.fs-offerings li {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
 	font-size: 0.9375rem;
 	line-height: 1.5;
 	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
-.fs-offerings__list li::before {
-	content: "";
-	position: absolute;
-	left: 0;
-	top: 0.5rem;
+/* 6×6px square, not a disc — the accent is set inline from the token. */
+.fs-offerings li span {
+	display: block;
 	width: 6px;
 	height: 6px;
-	border-radius: 50%;
-	background-color: var( --wp--preset--color--accent, #0d9488 );
+	margin-top: 8px;
+	flex: 0 0 auto;
 }
 
 /* Media ------------------------------------------------------------------ */
@@ -103,98 +128,105 @@
 .fs-lane__media .fs-photo {
 	display: block;
 	width: 100%;
-	aspect-ratio: 500 / 560;
+	aspect-ratio: 4 / 5;
 	object-fit: cover;
-	border-radius: var( --fs-r-md, 12px );
+	border-radius: 8px;
+	box-shadow: 0 20px 44px rgba( 0, 92, 109, 0.14 );
 }
 
-.fs-photo--placeholder {
-	background-color: var( --wp--preset--color--rule, #d3dde1 );
-}
-
-.fs-playover {
-	position: absolute;
-	left: 1.25rem;
-	top: 1.25rem;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.625rem;
-	padding: 0.625rem 1.125rem;
-	border-radius: var( --fs-r-pill, 999px );
-	background-color: rgba( 255, 255, 255, 0.92 );
-	color: var( --wp--preset--color--contrast, #005c6d );
-	font-size: 0.75rem;
-	font-weight: 700;
-	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	text-decoration: none;
-	transition: background-color var( --fs-dur-fast, 150ms ) var( --fs-ease, ease );
-}
-
-.fs-playover:hover,
-.fs-playover:focus-visible {
-	background-color: #fff;
-}
-
-.fs-playover__glyph {
-	font-size: 0.6875rem;
-	line-height: 1;
-}
-
+/*
+ * Floating caption chip. Pinned to the photo's outer corner so it breaks the
+ * image edge, and mirrored when the lane is flipped.
+ */
 .fs-figure__caption {
-	margin-top: 1rem;
-	display: grid;
-	gap: 0.25rem;
+	position: absolute;
+	right: -16px;
+	bottom: 32px;
+	max-width: 252px;
+	padding: 14px 20px;
+	border-radius: 8px;
+	background: var( --wp--preset--color--base, #fff );
+	box-shadow: 0 10px 28px rgba( 0, 92, 109, 0.14 );
+}
+
+.fs-figure__caption--left {
+	left: -16px;
+	right: auto;
 }
 
 .fs-figure__kicker {
-	font-size: 0.6875rem;
+	display: block;
+	margin-bottom: 5px;
+	font-size: 10px;
 	font-weight: 700;
-	letter-spacing: 0.12em;
+	font-style: italic;
+	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	color: var( --wp--preset--color--accent, #0d9488 );
 }
 
-.fs-figure__text {
-	font-size: 0.9375rem;
-	line-height: 1.5;
-	color: var( --wp--preset--color--ink-soft, #51536a );
+.fs-figure__caption strong {
+	display: block;
+	font-size: 15px;
+	line-height: 1.3;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-btn-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 1rem;
 }
 
 /* Breakpoints ------------------------------------------------------------ */
 
-@media ( min-width: 640px ) {
+@media ( min-width: 768px ) {
 
-	.fs-offerings__list {
+	.fs-offerings ul {
 		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	}
+
+	/* Fewer than four offerings stay in one column at every width. */
+	.fs-offerings--single ul {
+		grid-template-columns: minmax( 0, 1fr );
 	}
 }
 
 @media ( min-width: 1024px ) {
 
+	.fs-lane__copy h2 {
+		font-size: 2.75rem;
+	}
+}
+
+@media ( min-width: 1241px ) {
+
 	.fs-lane {
 		grid-template-columns: minmax( 0, 1fr ) 500px;
-		gap: 6rem;
+		gap: 96px;
+	}
+
+	.fs-lane--flip .fs-lane__copy {
+		order: 2;
+	}
+
+	.fs-lane--flip .fs-lane__media {
+		order: 1;
+	}
+
+	.fs-lane--no-media {
+		grid-template-columns: minmax( 0, 1fr );
 	}
 
 	.fs-lane__copy h2 {
 		font-size: 3.25rem;
 	}
 
-	/*
-	 * The mockup flips every second lane: copy right, photo left. Source
-	 * order stays copy-then-figure so the heading always precedes its
-	 * description for screen readers and keyboard order.
-	 */
-	.fs-lane--reverse {
-		grid-template-columns: 500px minmax( 0, 1fr );
+	.fs-lane__tagline {
+		font-size: 1.3125rem;
 	}
 
-	.fs-lane--reverse .fs-lane__copy {
-		order: 2;
-	}
-
-	.fs-lane--reverse .fs-lane__media {
-		order: 1;
+	.fs-lane__desc {
+		font-size: 1.0625rem;
 	}
 }

@@ -179,3 +179,74 @@ to the lane ids. **Not verified:** screenshot capture failed repeatedly in this
 environment (browser extension timeouts), so tablet/mobile widths were not visually
 reviewed — the responsive rules collapse the lane grid to one column below 1024px and the
 offerings list to one column below 640px, but that has not been seen rendered.
+
+## 8.6 Exact-Fidelity Pass Against the Mockup Folder
+
+§8 above was built from the **deployed** mockup SPA by measuring computed styles, because
+the `.dc` source for this page was believed not to exist. It does: the
+`Focused Schools Mockup/` folder carries `Focused Schools Services.dc.html`, its own
+authoritative `docs/page-specs/services.md`, and the mockup's real `site/assets/site.css`
+and `data.js`. This pass rebuilt the lane against those literal sources.
+
+### Accent became a design-system token (approved change)
+
+The mockup's spec §2 and its own `data.js` agree, and the theme disagreed with both:
+
+| Lane | Mockup | Was |
+|---|---|---|
+| Strategy and Vision | cerulean `#0A96CB` | coral ❌ |
+| Leadership and Systems | coral `#DD6237` | cerulean ❌ |
+| Capacity and Coaching | lime `#A7CC14` | lime ✅ |
+
+Strategy and Leadership were swapped. Rather than swap two CSS rules, the field now stores
+what the spec says it stores — a **token key** (`cerulean`/`coral`/`lime`/`teal`), not a
+lane name. Colour is no longer coupled to lane identity, so a fourth service picks any
+accent with no CSS or template change. The fallback is teal. `Meta::LEGACY_ACCENTS` maps
+the three old lane names forward so existing records resolve correctly rather than
+silently going teal.
+
+### Accent placement is now enforced
+
+The accent appears in exactly three places and nowhere else: the 26×3px `.fs-rule` bar
+beside the lane numeral, the 6×6px square offering bullets, and the caption kicker. It
+never sets body copy, headings, taglines, buttons or section grounds. **The lime
+exception** is codified in the component, not left to the editor: lime fails contrast for
+type, so in the Capacity lane the kicker falls back to cerulean while bar and bullets stay
+lime.
+
+### Geometry taken from the mockup's own site.css
+
+Lane grid `1fr / 500px` at 96px gap (≥1241px); title 52px / 1.04 / −0.03em capped at 18ch,
+stepping to 44px at 1024–1240px; tagline 21px at 30ch; body 17px at 62ch; offerings rule
+at 30px padding-top with 16px/40px gaps and a 22px label gap; photo 4:5 with an 8px radius
+and `0 20px 44px rgba(0,92,109,.14)`; `scroll-margin-top: 106px` on each lane anchor.
+
+### Structural corrections
+
+- **Floating caption chip.** The proof caption was a static block under the photo; it is
+  now an absolutely-positioned white card breaking the photo's outer edge
+  (`right: -16px; bottom: 32px`, 252px max), mirrored to the left when the lane flips.
+- **Square bullets.** Were 6px discs, now 6×6px squares.
+- **Accent bar + numeral row.** Did not exist. The numeral is 11px/500/0.1em in ink, not a
+  display figure.
+- **Offerings columns.** Two columns only from four items up; one column below that.
+- **Missing featured image.** The figure is now omitted entirely and the copy column spans
+  full width at a 70ch measure, instead of rendering a grey placeholder block.
+- **Flip modifier** renamed `fs-lane--reverse` → `fs-lane--flip`, matching the mockup.
+- **`.fs-rule` utility** added to `style.css` with cerulean/coral/lime/teal/gold/rasp
+  modifiers, since the design system uses it beyond this page.
+
+### QA performed
+
+`php -l` and PHPCS clean. Rendered output verified: accent bars cerulean/coral/lime in
+order, lane 2 carrying `fs-lane--flip` and its caption mirrored left, 6 bullets per lane in
+the right accent, and the Capacity lane's kicker resolving to cerulean while its bullets
+stay lime. Computed styles at 1163px confirmed the 1024–1240px tier exactly: 44px title,
+26×3px rule, 6×6px square bullets at `border-radius: 0`, caption `absolute` at
+`right:-16px / bottom:32px / max-width:252px`, photo `4/5` at `8px`, `scroll-margin-top:
+106px`, no horizontal overflow.
+
+**Not verified:** the browser window in this environment would not grow past 1163px, so
+the ≥1241px desktop tier (1fr/500px at 96px gap, 52px title) was confirmed by reading the
+media block out of the CSSOM rather than by rendering it. Mobile (<768px) was not
+rendered either.

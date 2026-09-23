@@ -87,7 +87,7 @@ Admin-only content type (no public URLs) for the services list, implemented in
   | Field | Type | Sanitizer | Notes |
   | ----- | ---- | --------- | ----- |
   | Tagline | text | `sanitize_text_field` | — |
-  | Accent Role | enum | `Meta::sanitize_accent_role()` | Strictly whitelisted to `strategy`, `leadership`, or `capacity` — no hex colors or arbitrary strings. Enforced both in the admin `<select>` and in the REST meta schema (`enum` in `show_in_rest`), plus a manual sanitize pass in the classic save handler. Defaults to `strategy` when unset. |
+  | Accent | enum | `Meta::sanitize_accent_role()` | Strictly whitelisted to the design-system token keys `cerulean`, `coral`, `lime`, `teal` — never a lane name and never a hex color, so the palette cannot drift and a fourth service needs no code change. Enforced in the admin `<select>`, in the REST meta schema (`enum`), and by a manual sanitize pass on save. **Falls back to `teal`**, never to a random or cycling color. Pre-token values (`strategy`/`leadership`/`capacity`) are mapped forward by `Meta::LEGACY_ACCENTS` so older records resolve correctly. Meta key remains `_fs_service_accent_role`. See [`docs/page-specs/services.md`](page-specs/services.md) §8.6. |
   | Signature Offerings | textarea | `sanitize_textarea_field` | One offering per line. `Meta::offerings_list()` splits it into a clean array. Added for the Services page rebuild — see [`docs/page-specs/services.md`](page-specs/services.md) §8.3. |
   | Overview Video URL | url | `esc_url_raw` | Optional. Adds a play control over the service photo; omitted ⇒ no control. |
   | Proof Line | text | `sanitize_text_field` | Optional. Short result rendered as the photo caption on the Services page lane. |
@@ -97,7 +97,7 @@ Admin-only content type (no public URLs) for the services list, implemented in
   the meta box and REST automatically. `accent_role` stays separate because it is the
   only field with a constrained REST enum schema and a default.
 
-- **Admin columns:** Tagline, Accent Role, Order, Modified Date.
+- **Admin columns:** Tagline, Accent, Order, Modified Date.
 - No demo content is created on plugin activation.
 
 ### 3.3b Provisioning (WP-CLI only)

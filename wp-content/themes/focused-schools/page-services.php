@@ -138,7 +138,7 @@ if ( have_posts() ) :
 								array(
 									'post'      => $fs_service_post,
 									'index'     => $fs_lane_index,
-									'reverse'   => $fs_alt,
+									'flip'      => $fs_alt,
 									'image_url' => $fs_img . $fs_photo,
 									'image_alt' => sprintf(
 										/* translators: %s: service name. */

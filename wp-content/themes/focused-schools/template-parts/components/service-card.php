@@ -29,16 +29,25 @@ if ( ! $fs_post instanceof WP_Post ) {
 $fs_post_id = $fs_post->ID;
 $fs_tagline = get_post_meta( $fs_post_id, '_fs_service_tagline', true );
 $fs_accent  = get_post_meta( $fs_post_id, '_fs_service_accent_role', true );
-$fs_accent  = in_array( $fs_accent, array( 'strategy', 'leadership', 'capacity' ), true ) ? $fs_accent : 'strategy';
+// Design-system accent token, with pre-token lane names mapped forward and
+// anything unrecognized falling back to teal — same rule as service-lane.php
+// and FocusedSchoolsCore\Modules\Services\Meta.
+$fs_accent_legacy = array(
+	'strategy'   => 'cerulean',
+	'leadership' => 'coral',
+	'capacity'   => 'lime',
+);
+$fs_accent        = isset( $fs_accent_legacy[ $fs_accent ] ) ? $fs_accent_legacy[ $fs_accent ] : $fs_accent;
+$fs_accent        = in_array( $fs_accent, array( 'cerulean', 'coral', 'lime', 'teal' ), true ) ? $fs_accent : 'teal';
 ?>
-<div class="fs-card fs-service-card fs-card--accent-<?php echo esc_attr( $fs_accent ); ?>" id="<?php echo esc_attr( $fs_post->post_name ); ?>">
+<div class="fs-card fs-service-card" id="<?php echo esc_attr( $fs_post->post_name ); ?>">
 	<?php if ( has_post_thumbnail( $fs_post_id ) ) : ?>
 		<div class="fs-card__media">
 			<?php echo get_the_post_thumbnail( $fs_post_id, 'medium', array( 'class' => 'fs-card__image' ) ); ?>
 		</div>
 	<?php endif; ?>
 	<div class="fs-card__body">
-		<span class="fs-service-card__bar" aria-hidden="true"></span>
+		<span class="fs-service-card__bar fs-rule fs-rule--<?php echo esc_attr( $fs_accent ); ?>" aria-hidden="true"></span>
 		<?php if ( $fs_tagline ) : ?>
 			<p class="fs-card__eyebrow"><?php echo esc_html( $fs_tagline ); ?></p>
 		<?php endif; ?>

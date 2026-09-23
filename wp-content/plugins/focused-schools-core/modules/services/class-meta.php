@@ -26,12 +26,37 @@ class Meta {
 	const PREFIX = '_fs_service_';
 
 	/**
-	 * Strict whitelist of allowed accent_role values. No arbitrary strings
-	 * or hex colors are ever accepted.
+	 * Strict whitelist of allowed accent values. These are design-system
+	 * token keys, not lane names and never hex colors: the template maps
+	 * 'cerulean' to var(--wp--preset--color--accent), so an editor can never
+	 * enter a color and the palette cannot drift. A fourth service can pick
+	 * any of these without a code change — see docs/page-specs/services.md
+	 * §2 and §11 in the approved mockup.
 	 *
 	 * @var string[]
 	 */
-	const ACCENT_ROLES = array( 'strategy', 'leadership', 'capacity' );
+	const ACCENT_ROLES = array( 'cerulean', 'coral', 'lime', 'teal' );
+
+	/**
+	 * Fallback accent when the field is empty or unrecognized. The approved
+	 * spec is explicit that this is teal — never a random or cycling color.
+	 *
+	 * @var string
+	 */
+	const ACCENT_FALLBACK = 'teal';
+
+	/**
+	 * Pre-token lane names, mapped to the token they became. Kept so a record
+	 * saved before this changed resolves to the right color instead of
+	 * silently falling back to teal.
+	 *
+	 * @var array<string, string>
+	 */
+	const LEGACY_ACCENTS = array(
+		'strategy'   => 'cerulean',
+		'leadership' => 'coral',
+		'capacity'   => 'lime',
+	);
 
 	/**
 	 * Field definitions, in display order.
@@ -45,7 +70,7 @@ class Meta {
 				'type'  => 'text',
 			),
 			'accent_role' => array(
-				'label'   => __( 'Accent Role', 'focused-schools-core' ),
+				'label'   => __( 'Accent', 'focused-schools-core' ),
 				'type'    => 'select',
 				'options' => self::ACCENT_ROLES,
 			),
@@ -84,15 +109,16 @@ class Meta {
 	}
 
 	/**
-	 * Human-readable labels for the accent_role options.
+	 * Human-readable labels for the accent token options.
 	 *
 	 * @return array<string, string>
 	 */
 	public static function accent_role_labels() {
 		return array(
-			'strategy'   => __( 'Strategy', 'focused-schools-core' ),
-			'leadership' => __( 'Leadership', 'focused-schools-core' ),
-			'capacity'   => __( 'Capacity', 'focused-schools-core' ),
+			'cerulean' => __( 'Cerulean', 'focused-schools-core' ),
+			'coral'    => __( 'Coral', 'focused-schools-core' ),
+			'lime'     => __( 'Lime', 'focused-schools-core' ),
+			'teal'     => __( 'Teal', 'focused-schools-core' ),
 		);
 	}
 
@@ -132,13 +158,21 @@ class Meta {
 	}
 
 	/**
-	 * Strictly whitelist accent_role: only strategy, leadership, or capacity.
+	 * Strictly whitelist the accent token: cerulean, coral, lime or teal.
+	 * A pre-token lane name is mapped forward; anything else falls back to
+	 * teal, per the approved spec.
 	 *
 	 * @param mixed $value Raw submitted value.
 	 * @return string
 	 */
 	public static function sanitize_accent_role( $value ) {
-		return in_array( $value, self::ACCENT_ROLES, true ) ? $value : '';
+		$value = is_string( $value ) ? $value : '';
+
+		if ( isset( self::LEGACY_ACCENTS[ $value ] ) ) {
+			$value = self::LEGACY_ACCENTS[ $value ];
+		}
+
+		return in_array( $value, self::ACCENT_ROLES, true ) ? $value : self::ACCENT_FALLBACK;
 	}
 
 	/**
@@ -174,7 +208,7 @@ class Meta {
 			array(
 				'type'              => 'string',
 				'single'            => true,
-				'default'           => 'strategy',
+				'default'           => self::ACCENT_FALLBACK,
 				'show_in_rest'      => array(
 					'schema' => array(
 						'type' => 'string',

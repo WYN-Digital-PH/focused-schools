@@ -181,13 +181,13 @@ class Services implements Module_Interface {
 
 		$accent_key    = Meta::meta_key( 'accent_role' );
 		$accent_value  = get_post_meta( $post->ID, $accent_key, true );
-		$accent_value  = in_array( $accent_value, Meta::ACCENT_ROLES, true ) ? $accent_value : 'strategy';
+		$accent_value  = Meta::sanitize_accent_role( $accent_value );
 		$accent_labels = Meta::accent_role_labels();
 
 		echo '<p>';
 		printf(
 			'<label for="focused_schools_service_accent_role"><strong>%s</strong></label><br />',
-			esc_html__( 'Accent Role', 'focused-schools-core' )
+			esc_html__( 'Accent', 'focused-schools-core' )
 		);
 		printf( '<select id="focused_schools_service_accent_role" name="%s">', esc_attr( $accent_key ) );
 		foreach ( Meta::ACCENT_ROLES as $role ) {
@@ -259,7 +259,7 @@ class Services implements Module_Interface {
 		}
 
 		$new_columns['fs_tagline']     = __( 'Tagline', 'focused-schools-core' );
-		$new_columns['fs_accent_role'] = __( 'Accent Role', 'focused-schools-core' );
+		$new_columns['fs_accent_role'] = __( 'Accent', 'focused-schools-core' );
 		$new_columns['fs_order']       = __( 'Order', 'focused-schools-core' );
 		$new_columns['fs_modified']    = __( 'Modified Date', 'focused-schools-core' );
 

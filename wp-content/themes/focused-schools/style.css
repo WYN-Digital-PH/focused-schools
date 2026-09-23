@@ -290,3 +290,42 @@ textarea:focus-visible,
 		scroll-behavior: auto !important;
 	}
 }
+
+/* -----------------------------------------------------------------------
+ * Accent rule — the 26×3px bar the approved design uses to carry a
+ * design-system accent token (service lanes, section heads). Coral is the
+ * default; the modifier picks the token. Values from the mockup's own
+ * site.css, see docs/page-specs/services.md §2.
+ * --------------------------------------------------------------------- */
+
+.fs-rule {
+	display: block;
+	width: 26px;
+	height: 3px;
+	flex: 0 0 auto;
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-rule--coral {
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-rule--cerulean {
+	background: var( --wp--preset--color--accent, #0a96cb );
+}
+
+.fs-rule--lime {
+	background: var( --wp--preset--color--lime, #a7cc14 );
+}
+
+.fs-rule--teal {
+	background: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-rule--gold {
+	background: var( --wp--preset--color--gold, #f3c145 );
+}
+
+.fs-rule--rasp {
+	background: var( --wp--preset--color--raspberry, #bc3e8c );
+}
