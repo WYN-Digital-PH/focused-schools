@@ -52,7 +52,16 @@ if ( '' === trim( (string) $fs_heading ) ) {
 					<?php endforeach; ?>
 					<?php if ( $fs_image_url ) : ?>
 						<div class="fs-cycle-teaser__person">
-							<img src="<?php echo esc_url( $fs_image_url ); ?>" alt="<?php echo esc_attr( $fs_image_alt ); ?>" loading="lazy" />
+							<?php
+							/*
+							 * Not lazy-loaded. At desktop the portrait is shown
+							 * at its natural aspect with no box around it, so
+							 * before it loads it has no height — and a
+							 * zero-height lazy image never trips the loader,
+							 * leaving the portrait permanently blank.
+							 */
+							?>
+							<img src="<?php echo esc_url( $fs_image_url ); ?>" alt="<?php echo esc_attr( $fs_image_alt ); ?>" decoding="async" />
 						</div>
 					<?php endif; ?>
 				</div>
