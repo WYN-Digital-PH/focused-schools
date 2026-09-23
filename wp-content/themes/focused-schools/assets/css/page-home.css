@@ -139,6 +139,26 @@
 	padding-block: 7rem 7.5rem;
 }
 
+.fs-home__contact-badge {
+	display: block;
+	width: 176px;
+	height: auto;
+	margin-top: 2rem;
+}
+
+.fs-home__contact-form-link {
+	margin: 2rem 0 0;
+	font-size: 0.9375rem;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-home__contact-form-link a {
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	border-bottom: 1px solid var( --wp--preset--color--primary, #dd6237 );
+	text-decoration: none;
+}
+
 .fs-home__contact-cta {
 	display: flex;
 	flex-direction: column;

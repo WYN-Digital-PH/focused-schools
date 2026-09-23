@@ -1,7 +1,9 @@
 /**
- * Header navigation structure. Exact geometry from the approved .dc design:
- * sticky white pill bar (74px), horizontal nav ≥1024px, always-visible Menu
- * button opening a full "Explore" overlay (2-col grid + teal aside).
+ * Header navigation structure. Matches the live reference site (the
+ * mockup's own source, which supersedes the earlier Design System v1.dc
+ * mock for this element): sticky white pill bar (74px), horizontal nav
+ * ≥1024px, always-visible Menu button opening a dropdown panel anchored
+ * under the bar (nav items + Contact, over a full-width CTA).
  */
 
 .fs-site-header {
@@ -164,10 +166,6 @@
 		margin-left: auto;
 	}
 }
-
-/* -----------------------------------------------------------------------
- * "Explore" overlay
- * --------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------
  * Menu panel — a dropdown anchored under the bar, not a full-screen dialog.

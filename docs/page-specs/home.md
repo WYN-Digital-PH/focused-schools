@@ -371,3 +371,18 @@ not rendered.
 **Still not carried over from the mockup:** the header keeps a scroll-progress bar
 (`.fs-site-header__progress`) that the mockup's header does not have. Left in place rather
 than removed unasked.
+
+## Home Contact Section: Chamber Badge + "Prefer the Full Form" Link
+
+A separate pass (working from `frontpage.html`, a browser "Save As" capture of the live
+reference site's rendered DOM — largely superseded by §12 above, which used the mockup's
+own more-authoritative `site/` source for the same header work) found the Home Contact
+section was missing two things present in that capture: the Chamber of Commerce badge
+(176px, alt "2026 Proud Member — Manatee Chamber of Commerce") and a
+"Prefer the full form? → Go to our contact page" link to `/contact/`. Both added, below
+`contact-info.php`, as `.fs-home__contact-badge` / `.fs-home__contact-form-link`.
+
+**Local-environment fix surfaced during that pass, still relevant:** the 'primary' WP nav
+menu had no menu assigned in this environment, so the header's nav rendered empty — not a
+code bug, but it blocked visual QA of any header work. Seeded a real "Primary Menu"
+(About/Team/Services/Impact Stories/Podcast) and assigned it to the `primary` location.

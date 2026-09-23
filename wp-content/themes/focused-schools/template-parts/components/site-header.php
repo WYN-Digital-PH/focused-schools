@@ -6,11 +6,13 @@
  * email, social links). Falls back gracefully if the focused-schools-core
  * plugin is inactive.
  *
- * Matches the approved .dc design: a sticky white pill bar (logo, horizontal
- * nav ≥1024px, CTA, an always-visible "Menu" button) plus a full "Explore"
- * overlay the Menu button opens — a two-column grid of the same 'primary'
- * nav items (rendered larger) beside a teal aside with tagline/email/socials.
- * One real WP nav menu, two presentations — no second nav location
+ * Matches the live reference site (frontpage.html DOM capture, which
+ * supersedes the earlier Design System v1.dc.html mock for this specific
+ * element — confirmed with the project owner): a sticky white pill bar
+ * (logo, horizontal nav ≥1024px, CTA, an always-visible "Menu" button) plus
+ * a simple full-screen overlay the Menu button opens — a flat vertical list
+ * of the same 'primary' nav items plus a Contact link, with one CTA button
+ * beneath. One real WP nav menu, two presentations — no second nav location
  * registered. Accessible mechanics (focus trap, Escape-to-close, body-scroll
  * lock) are unchanged from the previous toggle implementation.
  *
@@ -21,22 +23,6 @@ defined( 'ABSPATH' ) || exit;
 
 $fs_cta_label = function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'cta_label' ) : '';
 $fs_cta_url   = function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'cta_url' ) : '';
-$fs_email     = function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'email' ) : '';
-
-$fs_socials = array(
-	'facebook' => array(
-		'url'   => function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'facebook_url' ) : '',
-		'label' => __( 'Facebook', 'focused-schools' ),
-	),
-	'linkedin' => array(
-		'url'   => function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'linkedin_url' ) : '',
-		'label' => __( 'LinkedIn', 'focused-schools' ),
-	),
-	'youtube'  => array(
-		'url'   => function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'youtube_url' ) : '',
-		'label' => __( 'YouTube', 'focused-schools' ),
-	),
-);
 
 $fs_contact_page = get_page_by_path( 'contact' );
 $fs_contact_url  = $fs_contact_page instanceof WP_Post ? get_permalink( $fs_contact_page ) : '';
