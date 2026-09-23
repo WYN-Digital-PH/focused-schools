@@ -1,0 +1,47 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/team-grid",
+	"title": "Team Grid",
+	"category": "design",
+	"icon": "groups",
+	"description": "The team grid, built live from Team Members. Read bio opens the shared dialog; Load more reveals the rest.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Meet our team"
+		},
+		"heading": {
+			"type": "string",
+			"default": "We're educators first."
+		},
+		"headingEmphasis": {
+			"type": "string",
+			"default": "That's what makes us different."
+		},
+		"intro": {
+			"type": "string",
+			"default": "Before we became consultants, we were principals, teachers, district leaders, and instructional coaches. We've celebrated student successes, supported educators through difficult seasons, and made the tough decisions that come with leading schools and districts."
+		},
+		"visibleCount": {
+			"type": "number",
+			"default": 9
+		},
+		"linkLabel": {
+			"type": "string",
+			"default": "See the full team"
+		},
+		"linkUrl": {
+			"type": "string",
+			"default": "/team/"
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

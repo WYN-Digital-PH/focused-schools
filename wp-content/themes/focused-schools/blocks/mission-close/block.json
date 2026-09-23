@@ -1,0 +1,55 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/mission-close",
+	"title": "Closing Split",
+	"category": "design",
+	"icon": "align-pull-right",
+	"description": "The closing content and image split, with up to two buttons.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": "Support the educators who shape students' lives."
+		},
+		"body": {
+			"type": "string",
+			"default": "By strengthening leadership, developing people, and building sustainable systems, we help schools create lasting change so every student can reach their full potential."
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "Get to Know Us"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": "/contact/"
+		},
+		"cta2Label": {
+			"type": "string",
+			"default": "Explore Our Services"
+		},
+		"cta2Url": {
+			"type": "string",
+			"default": "/services/"
+		},
+		"imageId": {
+			"type": "number",
+			"default": 0
+		},
+		"imageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": "Two education leaders celebrating progress together."
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

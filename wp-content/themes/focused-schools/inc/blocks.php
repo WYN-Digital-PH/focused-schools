@@ -42,6 +42,12 @@ function focused_schools_block_names() {
 		'impact-stories',
 		'proof',
 		'contact',
+		'page-hero',
+		'rail-text',
+		'stats-band',
+		'partner-districts',
+		'team-grid',
+		'mission-close',
 	);
 }
 

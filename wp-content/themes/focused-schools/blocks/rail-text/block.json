@@ -1,0 +1,47 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/rail-text",
+	"title": "Rail Statement",
+	"category": "design",
+	"icon": "editor-alignleft",
+	"description": "Icon and label on a rail beside a display heading, body copy and a CTA.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Who we are"
+		},
+		"heading": {
+			"type": "string",
+			"default": "Every student, every classroom, every day \u2014 no exceptions."
+		},
+		"headingMaxCh": {
+			"type": "number",
+			"default": 15
+		},
+		"body": {
+			"type": "string",
+			"default": "Since 2000, Focused Schools has partnered with districts and schools across the country to strengthen leadership, support educators, and create learning environments where every student can thrive. Founded by educators and still led by educators today, we provide professional development, IMPACT coaching, technical assistance, and strategic support tailored to each community's unique goals and challenges.\n\nOver the past two decades, we've partnered with hundreds of schools across urban, rural, public, private, and charter settings, helping educators build the confidence, systems, and leadership needed to create lasting change."
+		},
+		"emphasis": {
+			"type": "string",
+			"default": ""
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "Explore Our Services"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": "/services/"
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

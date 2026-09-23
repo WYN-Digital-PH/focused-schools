@@ -267,6 +267,66 @@
 		{ name: 'ctaLabel', label: __( 'Button label', 'focused-schools' ) },
 		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP }
 	] );
+	/* ------------------------------------------------------ About page --- */
+
+	registerServerBlock( 'focused-schools/page-hero', __( 'Hero', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'subheading', label: __( 'Subheading', 'focused-schools' ), type: 'textarea' },
+		{ name: 'image', label: __( 'Hero image', 'focused-schools' ), type: 'image' },
+		{ name: 'ctaLabel', label: __( 'Button label', 'focused-schools' ) },
+		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP }
+	] );
+
+	registerServerBlock( 'focused-schools/rail-text', __( 'Rail Statement', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Rail label', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'headingMaxCh', label: __( 'Heading width in characters', 'focused-schools' ), help: __( 'Controls where the heading wraps. 15 on About, 13 on Home.', 'focused-schools' ) },
+		{ name: 'body', label: __( 'Body', 'focused-schools' ), type: 'textarea', help: __( 'Blank line between paragraphs.', 'focused-schools' ) },
+		{ name: 'emphasis', label: __( 'Emphasised opening phrase', 'focused-schools' ), help: __( 'Optional. Must be how the body begins, or it renders plain.', 'focused-schools' ) },
+		{ name: 'ctaLabel', label: __( 'Button label', 'focused-schools' ) },
+		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP }
+	] );
+
+	registerServerBlock( 'focused-schools/stats-band', __( 'Impact Stats Band', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ), help: __( 'The three figures come from Site Settings → Impact Stats, so this page and Home cannot drift.', 'focused-schools' ) },
+		{ name: 'ctaLabel', label: __( 'Button label', 'focused-schools' ) },
+		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP }
+	] );
+
+	registerServerBlock( 'focused-schools/partner-districts', __( 'Partner Districts', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'headingEmphasis', label: __( 'Heading, bold tail', 'focused-schools' ) },
+		{ name: 'intro', label: __( 'Intro', 'focused-schools' ), type: 'textarea' },
+		{ name: 'badge', label: __( 'Badge image', 'focused-schools' ), type: 'image' },
+		{ name: 'note', label: __( 'Note', 'focused-schools' ) },
+		{ name: 'noteEmphasis', label: __( 'Note, bold tail', 'focused-schools' ) },
+		{ name: 'closingText', label: __( 'Closing line', 'focused-schools' ) },
+		{ name: 'ctaLabel', label: __( 'Button label', 'focused-schools' ) },
+		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP }
+	] );
+
+	registerServerBlock( 'focused-schools/team-grid', __( 'Team Grid', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'headingEmphasis', label: __( 'Heading, bold tail', 'focused-schools' ) },
+		{ name: 'intro', label: __( 'Intro', 'focused-schools' ), type: 'textarea' },
+		{ name: 'visibleCount', label: __( 'Cards before Load more', 'focused-schools' ) },
+		{ name: 'linkLabel', label: __( 'Link label', 'focused-schools' ) },
+		{ name: 'linkUrl', label: __( 'Link URL', 'focused-schools' ), help: URL_HELP }
+	] );
+
+	registerServerBlock( 'focused-schools/mission-close', __( 'Closing Split', 'focused-schools' ), [
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'body', label: __( 'Body', 'focused-schools' ), type: 'textarea' },
+		{ name: 'image', label: __( 'Photo', 'focused-schools' ), type: 'image' },
+		{ name: 'ctaLabel', label: __( 'Primary button label', 'focused-schools' ) },
+		{ name: 'ctaUrl', label: __( 'Primary button URL', 'focused-schools' ), help: URL_HELP },
+		{ name: 'cta2Label', label: __( 'Second button label', 'focused-schools' ) },
+		{ name: 'cta2Url', label: __( 'Second button URL', 'focused-schools' ), help: URL_HELP }
+	] );
 } )(
 	window.wp.blocks,
 	window.wp.element,

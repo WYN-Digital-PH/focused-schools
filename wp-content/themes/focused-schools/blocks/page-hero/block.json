@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/page-hero",
+	"title": "Page Hero",
+	"category": "design",
+	"icon": "cover-image",
+	"description": "The standard page hero: media with a teal copy slab. Used by About and any other page that needs one.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "About Focused Schools"
+		},
+		"heading": {
+			"type": "string",
+			"default": "From the boardroom to the classroom, every educator has a cape that they wear."
+		},
+		"subheading": {
+			"type": "string",
+			"default": "Every student deserves the opportunity to learn, grow, and succeed. We believe the best way to make that possible is by supporting the superheroes who make it happen every day."
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "Meet Our Team"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": "/team/"
+		},
+		"imageId": {
+			"type": "number",
+			"default": 0
+		},
+		"imageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": "Educators and district leaders working together in a Focused Schools session."
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

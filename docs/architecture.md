@@ -674,7 +674,18 @@ contains `<!-- wp:focused-schools/`) → the hardcoded layout. The hardcoded lay
 the default, so no existing site changes behaviour until someone builds the page with
 blocks.
 
-**Status: complete.** All nine sections are blocks: `home-hero`, `beliefs`, `commitments`,
+**About page.** `page-about-our-mission-vision.php` renders the page's blocks directly with
+no wrapper, so the Page starts empty and is built in the editor. Six further blocks cover
+its sections — `page-hero`, `rail-text`, `stats-band`, `partner-districts`, `team-grid`,
+`mission-close` — and it reuses `commitments` from the Home set. Each renders through the
+same component the approved About layout used.
+
+Their dynamic sources are unchanged: `team-grid` queries Team Members and carries the bio
+dialog and Load more, `partner-districts` builds its state groups from the Partners records
+and taxonomy, and `stats-band` reads the three figures from Site Settings so About and Home
+cannot drift.
+
+**Status: complete.** All nine Home sections are blocks: `home-hero`, `beliefs`, `commitments`,
 `cycle-teaser`, `cycle`, `services`, `impact-stories`, `proof`, `contact`. A block-built
 page and the hardcoded layout render identical markup — verified marker by marker.
 
