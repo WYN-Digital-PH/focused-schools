@@ -7,6 +7,8 @@
  * - icon_url   (string) small decorative icon URL, theme-static path
  * - heading    (string, required)
  * - body       (string|string[]) one paragraph, or an array of paragraphs
+ * - emphasis   (string) optional opening phrase of the first paragraph, given
+ *               a coral underline that the Home page's script grows on scroll
  * - cta_label  (string)
  * - cta_url    (string)
  * - heading_max_ch (int) heading's max-width in `ch` units — the Home and
@@ -33,6 +35,7 @@ $fs_body           = is_array( $fs_body ) ? $fs_body : array( $fs_body );
 $fs_cta_label      = isset( $args['cta_label'] ) ? $args['cta_label'] : '';
 $fs_cta_url        = isset( $args['cta_url'] ) ? $args['cta_url'] : '';
 $fs_heading_max_ch = isset( $args['heading_max_ch'] ) ? absint( $args['heading_max_ch'] ) : 13;
+$fs_emphasis       = isset( $args['emphasis'] ) ? trim( (string) $args['emphasis'] ) : '';
 
 if ( '' === trim( (string) $fs_heading ) ) {
 	return;
@@ -50,11 +53,40 @@ if ( '' === trim( (string) $fs_heading ) ) {
 		</div>
 		<div class="fs-rail-text__content" style="--fs-rail-heading-max: <?php echo esc_attr( $fs_heading_max_ch ); ?>ch;">
 			<h2><?php echo esc_html( $fs_heading ); ?></h2>
-			<?php foreach ( $fs_body as $fs_paragraph ) : ?>
-				<?php if ( '' !== trim( (string) $fs_paragraph ) ) : ?>
-					<p><?php echo esc_html( $fs_paragraph ); ?></p>
-				<?php endif; ?>
-			<?php endforeach; ?>
+			<?php
+			$fs_first = true;
+
+			foreach ( $fs_body as $fs_paragraph ) :
+				$fs_paragraph = (string) $fs_paragraph;
+
+				if ( '' === trim( $fs_paragraph ) ) {
+					continue;
+				}
+
+				/*
+				 * Optional opening emphasis: the phrase keeps a coral rule
+				 * beneath it that the page script grows as the section is
+				 * scrolled. Only the first paragraph, and only when it really
+				 * starts with that phrase — otherwise the copy renders plain,
+				 * so a content edit can never produce mismatched markup.
+				 */
+				$fs_use_emphasis = $fs_first && '' !== $fs_emphasis && 0 === strpos( $fs_paragraph, $fs_emphasis );
+				$fs_first        = false;
+				?>
+				<p>
+					<?php if ( $fs_use_emphasis ) : ?>
+						<em class="fs-emph">
+							<?php echo esc_html( $fs_emphasis ); ?>
+							<span class="fs-emph__rule" aria-hidden="true" data-fs-emph-rule></span>
+						</em>
+						<?php echo esc_html( substr( $fs_paragraph, strlen( $fs_emphasis ) ) ); ?>
+					<?php else : ?>
+						<?php echo esc_html( $fs_paragraph ); ?>
+					<?php endif; ?>
+				</p>
+				<?php
+			endforeach;
+			?>
 			<?php if ( $fs_cta_label && $fs_cta_url ) : ?>
 				<?php
 				get_template_part(

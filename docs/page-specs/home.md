@@ -314,3 +314,60 @@ scroll events, so intermediate scrub positions were confirmed from one genuine w
 plus computed progress rather than a full sweep. Reduced-motion and mobile were not
 rendered. The rest of the homepage beyond these three items has not yet been audited
 section by section against `Focused Schools Homepage.dc.html`.
+
+## Beliefs Section — Scroll-Held Statement
+
+The mockup's `#why` section is also scroll-driven, and was not implemented. `.hm-hold` is
+190vh with a sticky inner block, so the belief statement holds on screen while the reader
+scrolls past it, and a coral rule under the opening phrase **"Every student"** grows across
+that travel (progress x 2.2, clamped, so it completes near the midpoint rather than still
+creeping as the reader leaves).
+
+Implemented as `.fs-home__hold` / `.fs-home__hold-inner` on the Home template plus
+`home-hold.js`. `rail-text.php` gained an optional **`emphasis`** arg: when the first
+paragraph really starts with that phrase it is wrapped in `<em class="fs-emph">` with the
+rule span, otherwise the copy renders plain — so a content edit can never produce
+mismatched markup. The About page's use of the component is unaffected.
+
+Below 1024px, and under `prefers-reduced-motion`, the section stops holding and the rule is
+simply shown complete, so the emphasis still reads without motion.
+
+## Header and Menu Panel
+
+The header's "Menu" button opened a full-screen `role="dialog"` overlay with a numbered
+two-column grid and a teal aside carrying tagline/email/socials. The mockup has none of
+that: it is a **dropdown panel anchored under the bar**.
+
+| | Mockup | Was |
+|---|---|---|
+| Presentation | Panel, `position: absolute; top: calc(100% + 10px)`, 16px radius, 22px padding | Full-screen modal dialog |
+| Contents | Primary nav items **plus Contact**, each a 52px row at 18px/700 with a coral arrow and a hairline | Numbered cells + tagline/email/socials aside |
+| Footer | Full-width primary CTA | none |
+| Button | Logo mark + "Menu" + two lines | "Menu" + two lines |
+| Open state | Lines pinch `±3.5px` and tilt `±12°` — a shallow bowtie, not a 45° cross | no change |
+| Dismissal | Escape **or a click outside the header** | Escape or close button |
+| <=1023px | Inline nav and the button's text label both hide | inline nav hid |
+
+Because it is a dropdown rather than a modal, it deliberately does **not** trap focus or
+lock body scrolling; it toggles `data-open` alongside `aria-expanded` and swaps the
+button's `aria-label` between "Open menu" and "Close menu". `.fs-site-header__bar` also
+lost its `overflow: hidden`, which would have clipped the panel — the mockup's bar has no
+such clip either.
+
+### QA performed
+
+Full-project PHPCS clean, all routes 200, header renders on inner pages too. In-browser:
+the panel is `display: none` closed and `block` open with `position: absolute`, 16px
+radius, 22px padding on white; `aria-expanded` and `aria-label` flip both ways; the seven
+rows read About / Team / Services / Impact Stories / Podcast / Blog / Contact, each with a
+coral arrow; the footer CTA spans the panel (1125px inside 1169px, less 2x22px padding);
+and the burger's lines visibly pinch into the shallow bowtie when open (confirmed by zoomed
+screenshot — `getComputedStyle` reported an identity matrix in the automation context, so
+the visual check is the reliable evidence here).
+
+**Not verified:** below-1023px behaviour, where the inline nav and button label drop, was
+not rendered.
+
+**Still not carried over from the mockup:** the header keeps a scroll-progress bar
+(`.fs-site-header__progress`) that the mockup's header does not have. Left in place rather
+than removed unasked.

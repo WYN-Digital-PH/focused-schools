@@ -1,84 +1,57 @@
 /**
- * Header: the "Explore" overlay toggle, plus the scroll-progress bar.
+ * Header: the menu panel toggle, plus the scroll-progress bar.
  *
- * - Manages aria-expanded on the toggle button; shows/hides the overlay via
- *   the `hidden` attribute (same pattern as home-hero.js's video modal and
- *   team-bio-modal.js).
- * - Locks body scroll while open, traps focus (Tab/Shift+Tab wrap), closes
- *   on Escape or the close button, and returns focus to the toggle button.
- * - Scroll progress: a thin bar under the header bar, width tied to how far
- *   down the page the visitor has scrolled. Passive listener, rAF-throttled.
+ * The panel is a dropdown anchored under the bar, matching the mockup — not a
+ * full-screen dialog — so it deliberately does not trap focus or lock body
+ * scrolling. It toggles data-open alongside aria-expanded, swaps the button's
+ * aria-label between Open/Close menu, and closes on Escape or a click outside
+ * the header.
+ *
+ * Scroll progress: a thin bar under the header bar, width tied to how far down
+ * the page the visitor has scrolled. Passive listener, rAF-throttled.
  */
 ( function () {
 	'use strict';
 
 	var toggle = document.querySelector( '[data-fs-nav-toggle]' );
 	var menu = toggle ? document.getElementById( toggle.getAttribute( 'aria-controls' ) ) : null;
+	var header = toggle ? toggle.closest( '.fs-site-header' ) : null;
 
 	if ( toggle && menu ) {
-		var closeButtons = menu.querySelectorAll( '[data-fs-nav-close]' );
-
-		function focusableElements() {
-			return Array.prototype.slice.call(
-				menu.querySelectorAll( 'a[href], button:not([disabled])' )
+		var setOpen = function ( open ) {
+			menu.setAttribute( 'data-open', open ? 'true' : 'false' );
+			toggle.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+			toggle.setAttribute(
+				'aria-label',
+				open
+					? toggle.getAttribute( 'data-label-close' ) || 'Close menu'
+					: toggle.getAttribute( 'data-label-open' ) || 'Open menu'
 			);
-		}
-
-		function closeMenu() {
-			menu.hidden = true;
-			toggle.setAttribute( 'aria-expanded', 'false' );
-			document.body.classList.remove( 'fs-modal-open' );
-			document.removeEventListener( 'keydown', trapFocus );
-			toggle.focus();
-		}
-
-		function openMenu() {
-			menu.hidden = false;
-			toggle.setAttribute( 'aria-expanded', 'true' );
-			document.body.classList.add( 'fs-modal-open' );
-			document.addEventListener( 'keydown', trapFocus );
-		}
-
-		function trapFocus( event ) {
-			if ( event.key === 'Escape' ) {
-				closeMenu();
-				return;
-			}
-
-			if ( event.key !== 'Tab' ) {
-				return;
-			}
-
-			var focusable = focusableElements();
-
-			if ( ! focusable.length ) {
-				return;
-			}
-
-			var first = focusable[ 0 ];
-			var last = focusable[ focusable.length - 1 ];
-
-			if ( event.shiftKey && document.activeElement === first ) {
-				event.preventDefault();
-				last.focus();
-			} else if ( ! event.shiftKey && document.activeElement === last ) {
-				event.preventDefault();
-				first.focus();
-			}
-		}
+		};
 
 		toggle.addEventListener( 'click', function () {
-			var isOpen = toggle.getAttribute( 'aria-expanded' ) === 'true';
-
-			if ( isOpen ) {
-				closeMenu();
-			} else {
-				openMenu();
-			}
+			setOpen( 'true' !== menu.getAttribute( 'data-open' ) );
 		} );
 
-		closeButtons.forEach( function ( button ) {
-			button.addEventListener( 'click', closeMenu );
+		// Anywhere outside the header closes it — the panel is a dropdown,
+		// not a modal, so it never traps focus or locks scrolling.
+		document.addEventListener( 'click', function ( event ) {
+			if ( 'true' !== menu.getAttribute( 'data-open' ) ) {
+				return;
+			}
+
+			if ( header && header.contains( event.target ) ) {
+				return;
+			}
+
+			setOpen( false );
+		} );
+
+		document.addEventListener( 'keydown', function ( event ) {
+			if ( 'Escape' === event.key && 'true' === menu.getAttribute( 'data-open' ) ) {
+				setOpen( false );
+				toggle.focus();
+			}
 		} );
 	}
 

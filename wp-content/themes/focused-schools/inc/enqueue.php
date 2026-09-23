@@ -123,7 +123,7 @@ function focused_schools_enqueue_assets() {
 			FOCUSED_SCHOOLS_THEME_VERSION
 		);
 
-		foreach ( array( 'home-hero', 'cycle-of-excellence', 'testimonial-carousel' ) as $fs_home_script ) {
+		foreach ( array( 'home-hero', 'home-hold', 'cycle-of-excellence', 'testimonial-carousel' ) as $fs_home_script ) {
 			wp_enqueue_script(
 				'focused-schools-' . $fs_home_script,
 				FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/' . $fs_home_script . '.js',

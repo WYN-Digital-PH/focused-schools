@@ -188,3 +188,72 @@
 		font-size: 3.25rem;
 	}
 }
+
+/* -----------------------------------------------------------------------
+ * Beliefs section — scroll-held statement.
+ *
+ * The block sticks for the section's extra height, so the statement holds on
+ * screen while the reader scrolls it. home-hold.js grows the coral rule under
+ * the opening phrase across that travel.
+ * --------------------------------------------------------------------- */
+
+.fs-home__hold {
+	min-height: 190vh;
+}
+
+.fs-home__hold-inner {
+	position: sticky;
+	top: 0;
+	padding: 9.5rem 0 6rem;
+}
+
+.fs-emph {
+	position: relative;
+	font-style: normal;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-emph__rule {
+	position: absolute;
+	left: 0;
+	bottom: -3px;
+	width: 0;
+	height: 2px;
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+/*
+ * No room to hold against, or motion is unwelcome: the section scrolls
+ * normally and the rule is simply shown complete.
+ */
+@media ( max-width: 1023px ) {
+
+	.fs-home__hold {
+		min-height: 0;
+	}
+
+	.fs-home__hold-inner {
+		position: static;
+		padding: 6rem 0 4.5rem;
+	}
+
+	.fs-emph__rule {
+		width: 100%;
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+
+	.fs-home__hold {
+		min-height: 0;
+	}
+
+	.fs-home__hold-inner {
+		position: static;
+		padding: 6rem 0 4.5rem;
+	}
+
+	.fs-emph__rule {
+		width: 100%;
+	}
+}

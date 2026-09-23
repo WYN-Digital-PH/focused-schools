@@ -82,19 +82,32 @@ else :
 
 		<div id="why">
 			<?php
-			get_template_part(
-				'template-parts/components/rail-text',
-				null,
-				array(
-					'eyebrow'   => __( 'What we believe', 'focused-schools' ),
-					'icon_url'  => $fs_img . 'mark-1.svg',
-					'heading'   => __( 'When educators are supported, students thrive.', 'focused-schools' ),
-					'body'      => __( 'Every student deserves the opportunity to succeed. That begins by supporting the people who make that success possible every day. We believe confident leaders create stronger schools, empowered educators inspire meaningful learning, and lasting school improvement happens when people, not just programs, are equipped to grow together.', 'focused-schools' ),
-					'cta_label' => __( 'Get to know us', 'focused-schools' ),
-					'cta_url'   => home_url( '/about-our-mission-vision/' ),
-				)
-			);
+			/*
+			 * Scroll-held: the section is taller than the viewport and its
+			 * inner block sticks, so the belief statement holds on screen
+			 * while the reader scrolls it. home-hold.js grows the coral rule
+			 * under "Every student" across that travel.
+			 */
 			?>
+			<div class="fs-home__hold" data-fs-home-hold>
+				<div class="fs-home__hold-inner">
+					<?php
+					get_template_part(
+						'template-parts/components/rail-text',
+						null,
+						array(
+							'eyebrow'   => __( 'What we believe', 'focused-schools' ),
+							'icon_url'  => $fs_img . 'mark-1.svg',
+							'heading'   => __( 'When educators are supported, students thrive.', 'focused-schools' ),
+							'body'      => __( 'Every student deserves the opportunity to succeed. That begins by supporting the people who make that success possible every day. We believe confident leaders create stronger schools, empowered educators inspire meaningful learning, and lasting school improvement happens when people, not just programs, are equipped to grow together.', 'focused-schools' ),
+							'emphasis'  => __( 'Every student', 'focused-schools' ),
+							'cta_label' => __( 'Get to know us', 'focused-schools' ),
+							'cta_url'   => home_url( '/about-our-mission-vision/' ),
+						)
+					);
+					?>
+				</div>
+			</div>
 			<div class="fs-home__strip" aria-label="<?php esc_attr_e( 'Focused Schools leadership retreat', 'focused-schools' ); ?>">
 				<figure><img src="<?php echo esc_url( $fs_img . 'retreat-2.jpg' ); ?>" alt="<?php esc_attr_e( 'Two education leaders celebrating progress with a fist bump.', 'focused-schools' ); ?>" loading="lazy" /></figure>
 				<figure><img src="<?php echo esc_url( $fs_img . 'retreat-3.jpg' ); ?>" alt="<?php esc_attr_e( 'A facilitator and district leader discussing a system map.', 'focused-schools' ); ?>" loading="lazy" /></figure>
