@@ -647,3 +647,34 @@ test," not as evidence the real site differs from what was originally understood
 ## 7. Open Questions
 
 - (none yet — add items here as they arise)
+
+### 4.x Homepage Blocks (theme)
+
+The homepage sections are being converted to **dynamic blocks** so editors own the copy and
+the section order. `wp-content/themes/focused-schools/blocks/<name>/` holds each block's
+`block.json` and `render.php`; `inc/blocks.php` registers them.
+
+**Each block's render callback calls the same `template-parts/components/*` the hardcoded
+layout uses.** There is one implementation of every component, so block-built and
+template-built output cannot drift.
+
+**Why custom blocks rather than core blocks or patterns:** these sections are not
+expressible as core blocks — an ambient-video hero with a playback console, a scroll-pinned
+scrubbed cycle diagram. Core genuinely cannot meet the requirement, which is the bar
+`docs/AGENTS.md` sets before building custom blocks.
+
+**No build step.** `assets/js/blocks-editor.js` is plain ES5 using
+`wp.element.createElement` and `wp.serverSideRender` — no JSX, bundler or `node_modules`.
+Editors see the real front-end markup in the canvas and edit the copy in the sidebar. Being
+server-rendered, saved content is only the attribute record, so a later design change
+updates every page at once with no block invalidation and nothing to re-save.
+
+**`front-page.php` precedence:** Elementor content → homepage blocks (when the page content
+contains `<!-- wp:focused-schools/`) → the hardcoded layout. The hardcoded layout remains
+the default, so no existing site changes behaviour until someone builds the page with
+blocks.
+
+**Status: partial.** Built so far: `home-hero`, `beliefs`. Still hardcoded, and still to be
+converted: commitments, cycle teaser, cycle diagram, services intro, impact stories, proof
+stats, contact. **Because block mode replaces the whole layout, a page must not be switched
+to blocks until every section has one** — otherwise the missing sections simply vanish.

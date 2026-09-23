@@ -34,9 +34,16 @@ class Site_Seeder {
 	 * binds each template to its page, so these must match the template
 	 * filenames in the theme.
 	 *
+	 * 'home' is the exception: it has no page-home.php. It exists so a site
+	 * can be switched to a static front page, which front-page.php then
+	 * renders. This command creates the Page only — it never touches
+	 * Settings > Reading, so making it the front page stays a deliberate
+	 * manual step (see docs/AGENTS.md "URL Preservation").
+	 *
 	 * @var array<string, string>
 	 */
 	const PAGES = array(
+		'home'                     => 'Home',
 		'about-our-mission-vision' => 'About Our Mission & Vision',
 		'services'                 => 'Services',
 		'team'                     => 'Team',

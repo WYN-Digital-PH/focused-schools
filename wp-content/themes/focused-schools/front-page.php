@@ -43,10 +43,31 @@ $fs_front_page    = $fs_front_page_id ? get_post( $fs_front_page_id ) : null;
 $fs_is_elementor = $fs_front_page instanceof WP_Post
 	&& 'builder' === get_post_meta( $fs_front_page->ID, '_elementor_edit_mode', true );
 
+/*
+ * Three ways this page can be built, in order of precedence:
+ *
+ * 1. Elementor — render its own saved output, untouched.
+ * 2. Block-built — the page content holds this theme's homepage blocks, so
+ *    the editor owns the copy and the section order. Each block renders
+ *    through the same component the hardcoded layout below uses, so the two
+ *    produce identical markup.
+ * 3. Neither — the hardcoded layout below, which is what every site gets
+ *    until someone builds the page with blocks. Nothing breaks on upgrade.
+ */
+$fs_has_blocks = $fs_front_page instanceof WP_Post
+	&& has_blocks( $fs_front_page->post_content )
+	&& false !== strpos( $fs_front_page->post_content, '<!-- wp:focused-schools/' );
+
 if ( $fs_is_elementor ) :
 	?>
 	<main id="content">
 		<?php echo apply_filters( 'the_content', $fs_front_page->post_content ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- standard the_content filter output (Elementor's own rendering), same trust level as the_content(). ?>
+	</main>
+	<?php
+elseif ( $fs_has_blocks ) :
+	?>
+	<main id="content">
+		<?php echo apply_filters( 'the_content', $fs_front_page->post_content ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- standard the_content filter output; the homepage blocks escape their own attributes in their components. ?>
 	</main>
 	<?php
 else :

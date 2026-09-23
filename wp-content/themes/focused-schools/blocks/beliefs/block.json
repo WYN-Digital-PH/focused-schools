@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/beliefs",
+	"title": "Beliefs Statement",
+	"category": "design",
+	"icon": "text",
+	"description": "The scroll-held belief statement: rail label, display heading, body with an emphasised opening phrase, and a CTA.",
+	"keywords": [ "beliefs", "rail", "home" ],
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow":   { "type": "string", "default": "What we believe" },
+		"heading":   { "type": "string", "default": "When educators are supported, students thrive." },
+		"body":      { "type": "string", "default": "" },
+		"emphasis":  { "type": "string", "default": "Every student" },
+		"ctaLabel":  { "type": "string", "default": "Get to know us" },
+		"ctaUrl":    { "type": "string", "default": "" }
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}
