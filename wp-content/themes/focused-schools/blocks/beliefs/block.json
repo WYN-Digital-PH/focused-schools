@@ -46,37 +46,25 @@
 			"type": "number",
 			"default": 0
 		},
-		"strip1Url": {
-			"type": "string",
-			"default": ""
-		},
 		"strip1Alt": {
 			"type": "string",
-			"default": "Two education leaders celebrating progress with a fist bump."
+			"default": ""
 		},
 		"strip2Id": {
 			"type": "number",
 			"default": 0
 		},
-		"strip2Url": {
-			"type": "string",
-			"default": ""
-		},
 		"strip2Alt": {
 			"type": "string",
-			"default": "A facilitator and district leader discussing a system map."
+			"default": ""
 		},
 		"strip3Id": {
 			"type": "number",
 			"default": 0
 		},
-		"strip3Url": {
-			"type": "string",
-			"default": ""
-		},
 		"strip3Alt": {
 			"type": "string",
-			"default": "Students learning together in a classroom."
+			"default": ""
 		}
 	},
 	"editorScript": "focused-schools-blocks-editor",

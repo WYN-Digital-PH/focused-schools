@@ -1,0 +1,189 @@
+/**
+ * Impact Story Card — one presentation for both new fs_impact_story records
+ * and approved legacy Pages. Geometry from docs/page-specs/impact-stories.md
+ * §4.3: fixed 16:9 ratio box so rows never jag, 3-line clamps on title and
+ * excerpt, and a footer pinned with margin-top so Read story and the source
+ * pill line up across a row whatever the copy length.
+ */
+
+.fs-story-card {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid #e3e9eb;
+	border-radius: var( --fs-r-md, 16px );
+	background: var( --wp--preset--color--base, #fff );
+	box-shadow: var( --fs-shadow-1, 0 2px 12px rgba( 0, 92, 109, 0.08 ) );
+	overflow: hidden;
+}
+
+.fs-story-card__media {
+	position: relative;
+	aspect-ratio: 16 / 9;
+	background: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-story-card__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Legacy record with no photograph: the mark at 12%, never a broken frame. */
+.fs-story-card__placeholder {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.fs-story-card__placeholder img {
+	width: 44%;
+	opacity: 0.12;
+}
+
+.fs-story-card__year {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	padding: 5px 12px;
+	border-radius: var( --fs-r-pill, 999px );
+	background: rgba( 0, 72, 85, 0.72 );
+	color: var( --wp--preset--color--base, #fff );
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+}
+
+.fs-story-card__body {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	padding: 28px 28px 30px;
+}
+
+.fs-story-card__place {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	/* Reserved so cards with no district still align. */
+	min-height: 16px;
+	margin: 0 0 10px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-story-card__dot {
+	width: 6px;
+	height: 6px;
+	flex: 0 0 auto;
+	border-radius: 50%;
+	background: var( --wp--preset--color--accent, #0a96cb );
+}
+
+.fs-story-card--legacy .fs-story-card__dot {
+	background: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-story-card__title {
+	margin: 0 0 14px;
+	font-size: 1.5rem;
+	line-height: 1.18;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.fs-story-card__title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.fs-story-card__title a:hover {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-story-card__excerpt {
+	margin: 0 0 1.5rem;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.fs-story-card__foot {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	/* Pins the row to the card bottom so footers align across a row. */
+	margin-top: auto;
+	padding-top: 18px;
+	border-top: 1px solid #eef1f2;
+}
+
+.fs-story-card__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 44px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	text-decoration: none;
+}
+
+.fs-story-card__link span[aria-hidden] {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-story-card__source {
+	padding: 4px 10px;
+	border-radius: var( --fs-r-pill, 999px );
+	background: #eef1f3;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.fs-story-card--legacy .fs-story-card__source {
+	background: #f0f2f4;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+@media ( max-width: 767px ) {
+
+	.fs-story-card__body {
+		padding: 24px 22px;
+	}
+
+	.fs-story-card__title {
+		font-size: 1.375rem;
+	}
+
+	.fs-story-card__excerpt {
+		font-size: 0.875rem;
+	}
+
+	/* The pill moves under the place line to save width. */
+	.fs-story-card__foot {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+}

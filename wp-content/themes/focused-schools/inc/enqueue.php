@@ -24,6 +24,9 @@ function focused_schools_component_styles() {
 		'service-card',
 		'team-card',
 		'impact-story-card',
+		'story-card',
+		'story-filters',
+		'story-spotlight',
 		'podcast-card',
 		'podcast-subscribe',
 		'podcast-player',
@@ -245,6 +248,17 @@ function focused_schools_enqueue_assets() {
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-impact-stories.css',
 			array( 'focused-schools-style' ),
 			focused_schools_asset_version( '/assets/css/page-impact-stories.css' )
+		);
+
+		wp_enqueue_script(
+			'focused-schools-story-filters',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/story-filters.js',
+			array(),
+			focused_schools_asset_version( '/assets/js/components/story-filters.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
 		);
 	}
 

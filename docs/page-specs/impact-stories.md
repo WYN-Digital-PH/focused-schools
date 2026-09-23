@@ -86,3 +86,67 @@ preserved by construction:
 
 All sections use the uniform wide container (`.fs-container.fs-container--wide`,
 1200px), matching the established pattern.
+
+## Implementation Notes (build against the approved mockup)
+
+Built from the mockup folder's own `impact-stories.md`. Section order, card hierarchy,
+degradation rules, pagination and the empty state follow that spec.
+
+### Components
+
+- **`impact-story-card.php` (rewritten)** — one presentation for both sources. 16:9 ratio box
+  so rows never jag, year badge, place line with a source dot, 3-line clamps on title and
+  excerpt, footer pinned with `margin-top: auto`, and a Story/Legacy pill.
+- **`story-filters.php` (new)** — the filter bar. 120px label rail + chip area, one row per
+  taxonomy, `role="group"` with an accessible name, chips clearing 44px.
+- **`story-spotlight.php` (new)** — the featured split, full-bleed teal.
+
+### Degradation, as built
+
+A legacy Page with no photograph gets the teal mark tile at 12% rather than a broken frame;
+its year badge is **omitted entirely** (no "Undated"); its state is omitted so the place line
+shortens; its auto-excerpt is trimmed to 180 characters on a word boundary. The dot and pill
+mark the source. As a Page is backfilled and converted, it gains a badge and drops the pill
+with no template change.
+
+### Two deviations from the spec, both deliberate
+
+1. **`story_year`, not `year`, in the URL.** `year` is a reserved WordPress query var for
+   date archives — `?year=2025` on a Page URL resolves as a date archive and returns **404**.
+   Confirmed in testing before the rename. `state` is not reserved and is used as specified.
+2. **Filter chips are built from meta values, not taxonomy terms.** The CPT stores state and
+   year as post meta; the spec assumes taxonomies. Chips are still generated only from values
+   that exist on published stories, so the contract — never offer an option that returns
+   nothing — holds. Moving to real taxonomies would be a content-model change needing
+   approval.
+
+### Filtering behaviour
+
+Server-rendered on first paint: every chip is a real link carrying the filter in the URL, so
+a filtered view is shareable, back-button safe, and works with JavaScript off. A narrowing
+filter correctly excludes legacy Pages, which carry no structured state or year; the empty
+state says so in plain language rather than showing a dead grid.
+
+### QA performed
+
+16 stories (13 new + 3 legacy) seeded to exercise real behaviour.
+
+| Check | Result |
+|---|---|
+| Grid mixes both sources | 16 cards, 3 legacy |
+| Year badges | 13 — new records only |
+| Source pills | 16, all cards |
+| Dot colour | cerulean for new, gray for legacy |
+| Spotlight | present, newest Featured only |
+| Filters | `state=Illinois` → 3; `story_year=2025` → 3; `Vermont+2021` → 1 |
+| No-match combination | empty-state panel, not a dead grid |
+| Load more | 9 → 16, count "Showing 9 of 16" → "Showing 16 of 16", button hides |
+| Card geometry | 16:9 media, 3-line clamp |
+| New story URLs | `/impact-stories/{slug}/` → 200 |
+| Legacy URLs and post types | unchanged, all 200, still `page` |
+| Console / PHPCS | zero errors, full project clean |
+
+**Not verified:** tablet and mobile widths were not rendered — the browser in this
+environment will not resize, so the responsive rules are written but unseen. Production
+Pages 3785 and the real legacy Stories do not exist locally, so the merged grid has only
+been proven against seeded fixtures.
