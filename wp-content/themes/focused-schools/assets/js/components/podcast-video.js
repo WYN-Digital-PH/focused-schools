@@ -1,43 +1,65 @@
 /**
- * Podcast video facade: defers loading the (heavy) YouTube iframe until a
- * visitor actually clicks to play it, rather than on initial page load.
+ * Podcast video facade: plays the episode in the card rather than loading a
+ * YouTube iframe on page load.
  *
- * The facade button and the eventual iframe both fill the same
- * aspect-ratio-locked .fs-podcast-card__video container (see
- * podcast-card.css), so swapping one for the other never shifts layout.
+ * The card ships a still thumbnail and a real link to YouTube, so it works
+ * with no JavaScript at all and the page requests nothing from YouTube until
+ * a reader asks. This upgrades that link: the first click swaps the
+ * thumbnail for a player in the same aspect-locked shell, so nothing shifts.
+ *
+ * Modifier-clicks and middle-clicks are left alone, because someone doing
+ * that is deliberately opening YouTube in a new tab.
  */
 ( function () {
 	'use strict';
 
-	function loadVideo( container ) {
-		var youtubeId = container.getAttribute( 'data-youtube-id' );
+	function play( card, shell ) {
+		var videoId = card.getAttribute( 'data-video' );
 
-		if ( ! youtubeId ) {
-			return;
+		if ( ! /^[A-Za-z0-9_-]{11}$/.test( videoId ) ) {
+			return false;
 		}
 
-		var iframe = document.createElement( 'iframe' );
-		iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent( youtubeId ) + '?autoplay=1';
-		iframe.title = container.getAttribute( 'data-youtube-title' ) || 'YouTube video';
-		iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-		iframe.allowFullscreen = true;
-		iframe.setAttribute( 'loading', 'lazy' );
+		var title = card.querySelector( '.fs-video__title' );
 
-		container.innerHTML = '';
-		container.appendChild( iframe );
+		var iframe = document.createElement( 'iframe' );
+		iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent( videoId ) + '?autoplay=1&rel=0&playsinline=1';
+		iframe.title = title ? title.textContent.trim() : 'YouTube video';
+		iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+		iframe.setAttribute( 'allowfullscreen', '' );
+
+		shell.innerHTML = '';
+		shell.appendChild( iframe );
+
+		return true;
 	}
 
 	document.addEventListener( 'click', function ( event ) {
-		var facade = event.target.closest( '.fs-podcast-card__video-facade' );
-
-		if ( ! facade ) {
+		if ( event.metaKey || event.ctrlKey || event.shiftKey || 1 === event.button ) {
 			return;
 		}
 
-		var container = facade.closest( '.fs-podcast-card__video' );
+		var trigger = event.target.closest( '[data-video-play]' );
 
-		if ( container ) {
-			loadVideo( container );
+		if ( ! trigger ) {
+			return;
+		}
+
+		var card = trigger.closest( '[data-video]' );
+
+		if ( ! card ) {
+			return;
+		}
+
+		var shell = card.querySelector( '[data-video-shell]' );
+
+		if ( ! shell ) {
+			return;
+		}
+
+		// Only swallow the navigation if the player actually mounted.
+		if ( play( card, shell ) ) {
+			event.preventDefault();
 		}
 	} );
 } )();

@@ -147,19 +147,22 @@ if ( have_posts() ) :
 			$fs_latest_id = focused_schools_podcast_setting( 'podcast_latest_episode_id' );
 
 			if ( $fs_buzzsprout_id && $fs_latest_id ) :
-				$fs_latest_src = add_query_arg(
+				/*
+				 * Buzzsprout's own single-episode embed, captured so the
+				 * spotlight panel can be drawn around it. Same script the
+				 * full player uses, addressed at one episode.
+				 */
+				ob_start();
+				get_template_part(
+					'template-parts/components/podcast-player',
+					null,
 					array(
-						'client_source' => 'small_player',
-						'iframe'        => 'true',
-					),
-					'https://www.buzzsprout.com/' . rawurlencode( $fs_buzzsprout_id ) . '/' . rawurlencode( $fs_latest_id )
+						'podcast_id' => $fs_buzzsprout_id,
+						'episode_id' => $fs_latest_id,
+						'player'     => 'small',
+					)
 				);
-
-				$fs_latest_player = sprintf(
-					'<iframe class="fs-spotlight__frame" src="%1$s" title="%2$s" loading="lazy" width="100%%" height="200" frameborder="0" scrolling="no"></iframe>',
-					esc_url( $fs_latest_src ),
-					esc_attr__( 'Latest episode player', 'focused-schools' )
-				);
+				$fs_latest_player = ob_get_clean();
 				?>
 				<section class="fs-podcast__section fs-podcast__latest" aria-labelledby="fs-podcast-latest-title">
 					<div class="fs-container fs-container--shell">
@@ -284,7 +287,10 @@ if ( have_posts() ) :
 									array(
 										'title'      => isset( $fs_video['title'] ) ? $fs_video['title'] : '',
 										'youtube_id' => $fs_video['video_id'],
-										'duration'   => ! empty( $fs_video['publish_date'] )
+										// The playlist API returns no runtime, so the
+										// card shows the publish date and leaves the
+										// duration badge off rather than inventing one.
+										'published'  => ! empty( $fs_video['publish_date'] )
 											? date_i18n( get_option( 'date_format' ), strtotime( $fs_video['publish_date'] ) )
 											: '',
 									)
