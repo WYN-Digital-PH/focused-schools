@@ -7,11 +7,15 @@
  * gracefully if the focused-schools-core plugin is inactive.
  *
  * 4-column layout per the approved .dc design (Brand / Explore / Resources /
- * Connect): "Explore" is the existing 'footer' nav menu (whatever the admin
- * has assigned). "Resources" (Podcast/Blog/Contact) is internal cross-links
- * via home_url() — matching how every other internal CTA in this theme is
- * already built (Home/About templates), not a second nav menu location.
- * "Connect" is Site Settings contact info + socials.
+ * Connect): "Explore" is the 'footer' nav menu if one is assigned, falling
+ * back to 'primary' so this column is never an empty-looking blank space —
+ * the approved design's Explore list mirrors the primary nav anyway.
+ * "Resources" (Podcast/Blog/Contact) is internal cross-links via home_url()
+ * — matching how every other internal CTA in this theme is already built
+ * (Home/About templates), not a second nav menu location. "Connect" is Site
+ * Settings contact info + socials. The brand CTA ("Contact Us" -> /contact/)
+ * is this component's own fixed copy per the .dc source, not the shared
+ * Site Settings CTA the header/hero use (which has different text there).
  *
  * The footer-widgets sidebar (inc/setup.php) is still registered but no
  * longer rendered here — the approved design's Resources column is fixed
@@ -28,24 +32,39 @@ $fs_footer_text  = $fs_has_settings ? focused_schools_get_setting( 'footer_text'
 $fs_copyright    = $fs_has_settings ? focused_schools_get_setting( 'copyright_name' ) : '';
 $fs_email        = $fs_has_settings ? focused_schools_get_setting( 'email' ) : '';
 $fs_phone        = $fs_has_settings ? focused_schools_get_setting( 'phone' ) : '';
-$fs_cta_label    = $fs_has_settings ? focused_schools_get_setting( 'cta_label' ) : '';
-$fs_cta_url      = $fs_has_settings ? focused_schools_get_setting( 'cta_url' ) : '';
 $fs_phone_href   = $fs_phone ? preg_replace( '/[^0-9+]/', '', $fs_phone ) : '';
 
+// The footer's own brand CTA ("Contact Us" -> /contact/) is fixed per the
+// approved .dc design, distinct from the header's/hero's separately
+// configurable Site Settings CTA — same "hardcode page-chrome-specific
+// copy" convention used for every other component's fixed button text.
+$fs_footer_cta_label = __( 'Contact Us', 'focused-schools' );
+$fs_footer_cta_url   = home_url( '/contact/' );
+
+// "Explore" (nav) order matches the .dc source's social row: Facebook,
+// YouTube, LinkedIn (there is no X/Twitter Site Settings field yet).
 $fs_socials = array(
 	'facebook' => array(
 		'url'   => $fs_has_settings ? focused_schools_get_setting( 'facebook_url' ) : '',
 		'label' => __( 'Facebook', 'focused-schools' ),
-	),
-	'linkedin' => array(
-		'url'   => $fs_has_settings ? focused_schools_get_setting( 'linkedin_url' ) : '',
-		'label' => __( 'LinkedIn', 'focused-schools' ),
+		'glyph' => 'f',
 	),
 	'youtube'  => array(
 		'url'   => $fs_has_settings ? focused_schools_get_setting( 'youtube_url' ) : '',
 		'label' => __( 'YouTube', 'focused-schools' ),
+		'glyph' => '▶',
+	),
+	'linkedin' => array(
+		'url'   => $fs_has_settings ? focused_schools_get_setting( 'linkedin_url' ) : '',
+		'label' => __( 'LinkedIn', 'focused-schools' ),
+		'glyph' => 'in',
 	),
 );
+
+// Fall back to the 'primary' menu when no 'footer' menu is assigned, so
+// "Explore" never renders as an empty column — the approved design's
+// Explore list mirrors the primary nav anyway.
+$fs_footer_menu_location = has_nav_menu( 'footer' ) ? 'footer' : 'primary';
 ?>
 <img class="fs-site-footer__watermark" src="<?php echo esc_url( FOCUSED_SCHOOLS_THEME_URI . '/assets/img/mark-white.svg' ); ?>" alt="" aria-hidden="true" />
 
@@ -64,24 +83,22 @@ $fs_socials = array(
 			);
 			?>
 		<?php else : ?>
-			<p class="fs-site-footer__brand-name"><?php bloginfo( 'name' ); ?></p>
+			<img class="fs-site-footer__logo-img" src="<?php echo esc_url( FOCUSED_SCHOOLS_THEME_URI . '/assets/img/full-logo.svg' ); ?>" alt="<?php bloginfo( 'name' ); ?>" />
 		<?php endif; ?>
 		<?php if ( $fs_footer_text ) : ?>
 			<p class="fs-site-footer__text"><?php echo esc_html( $fs_footer_text ); ?></p>
 		<?php endif; ?>
-		<?php if ( $fs_cta_label && $fs_cta_url ) : ?>
-			<?php
-			get_template_part(
-				'template-parts/components/button',
-				null,
-				array(
-					'label' => $fs_cta_label,
-					'url'   => $fs_cta_url,
-					'style' => 'primary',
-				)
-			);
-			?>
-		<?php endif; ?>
+		<?php
+		get_template_part(
+			'template-parts/components/button',
+			null,
+			array(
+				'label' => $fs_footer_cta_label,
+				'url'   => $fs_footer_cta_url,
+				'style' => 'primary',
+			)
+		);
+		?>
 	</div>
 
 	<nav class="fs-site-footer__col fs-nav fs-nav--footer" aria-label="<?php esc_attr_e( 'Footer navigation', 'focused-schools' ); ?>">
@@ -89,7 +106,7 @@ $fs_socials = array(
 		<?php
 		wp_nav_menu(
 			array(
-				'theme_location' => 'footer',
+				'theme_location' => $fs_footer_menu_location,
 				'container'      => false,
 				'fallback_cb'    => false,
 				'menu_class'     => 'fs-nav__list',
@@ -98,7 +115,7 @@ $fs_socials = array(
 		?>
 	</nav>
 
-	<nav class="fs-site-footer__col" aria-label="<?php esc_attr_e( 'Resources', 'focused-schools' ); ?>">
+	<nav class="fs-site-footer__col fs-nav" aria-label="<?php esc_attr_e( 'Resources', 'focused-schools' ); ?>">
 		<p class="fs-site-footer__col-heading"><?php esc_html_e( 'Resources', 'focused-schools' ); ?></p>
 		<div class="fs-nav__list">
 			<a href="<?php echo esc_url( home_url( '/podcast/' ) ); ?>"><?php esc_html_e( 'Podcast', 'focused-schools' ); ?></a>
@@ -118,13 +135,13 @@ $fs_socials = array(
 		<?php if ( array_filter( wp_list_pluck( $fs_socials, 'url' ) ) ) : ?>
 			<div class="fs-site-footer__social" aria-label="<?php esc_attr_e( 'Social media', 'focused-schools' ); ?>">
 				<?php
-				foreach ( $fs_socials as $fs_key => $fs_social ) :
+				foreach ( $fs_socials as $fs_social ) :
 					if ( empty( $fs_social['url'] ) ) {
 						continue;
 					}
 					?>
 					<a href="<?php echo esc_url( $fs_social['url'] ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( $fs_social['label'] ); ?>">
-						<?php echo esc_html( 'facebook' === $fs_key ? 'f' : ( 'linkedin' === $fs_key ? 'in' : substr( $fs_social['label'], 0, 1 ) ) ); ?>
+						<?php echo esc_html( $fs_social['glyph'] ); ?>
 					</a>
 				<?php endforeach; ?>
 			</div>

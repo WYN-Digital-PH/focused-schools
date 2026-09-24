@@ -260,6 +260,192 @@ A follow-up review caught two more gaps the first fidelity pass missed:
   .fs-eyebrow--on-dark` in `hero.css` rather than changing the shared class (which other
   contexts still need at gold).
 
+## 13. Responsive Fidelity Pass Against `Focused Schools About.dc.html`'s Literal Breakpoints
+
+Re-read `Design System v1.dc.html` in full first (per explicit request), then re-read the
+About `.dc` file's embedded `<style>` block line-by-line to extract its exact `max-width`
+breakpoint rules (1240/1024/720px), and audited every current WP value against them via
+live `getComputedStyle` checks across 320–1440px. Found the six `data-space`-marked main
+sections (Who We Are, What Guides Us, Impact Stats, Partner Districts, Meet Our Team,
+Mission Close — Hero is not one of these, it has its own breakpoint treatment) were all
+flat ~120px top/bottom padding at every width, with no mobile step-down at all, plus
+several smaller gap/breakpoint mismatches. **Fixed:**
+
+- **Mobile section padding (≤720px)**: added `padding-block: 4rem` (64px, matches the
+  `.dc` source's `[data-space]` rule exactly) to all six sections — `rail-text.css`
+  (`.fs-rail-text`), `commitment-list.css` (`.fs-commitments`), `page-about.css`
+  (`.fs-about__stats-band`, `.fs-about__team`), `partner-districts.css`
+  (`.fs-partner-districts`), and `content-image-split.css` (`.fs-content-split`).
+- **Global shell padding at ≤720px**: `.fs-container`'s responsive padding scale in
+  `style.css` jumped straight from 1rem to 2rem at the 640px breakpoint, giving 32px at
+  720px width — the `.dc` source (Home's and About's files independently agree) specifies
+  20px at ≤720px. Added a `@media(max-width:720px){padding-inline:1.25rem}` override.
+  Site-wide fix (affects every page), verified via a 5-page regression sweep (Home/About/
+  Services/Team/Contact at 320–1440px) — zero overflow anywhere.
+- **Hero slab breakpoint**: the absolute-overlap desktop treatment was triggering at
+  `min-width:1024px`; the `.dc` source's cutoff is 1241px (`max-width:1240px` for the
+  static state). Rewrote `hero.css`'s base `.fs-hero__slab` rule to the `.dc` source's
+  721–1240px static values (`margin:-2.8125rem 0 0` i.e. -45px, `width:auto`,
+  `max-width:none`, `padding:2.5rem` i.e. 40px — dropping the previous ad hoc `width:90%;
+  max-width:560px` values, which also turned out to be silently leaking into the already-
+  correct ≤720px override, since that block never set its own width/max-width) and moved
+  the absolute-overlap rule to `@media(min-width:1241px)`. `position:relative` (not the
+  source's literal `static`) is kept deliberately — the slab needs a stacking context for
+  its `z-index`, and produces an identical visual result with no offsets set.
+- **Commitment List gaps**: `.fs-commitments__intro` gap 32px→44px and
+  `.fs-commitments__body` gap 40px→56px below 1240px (matching `[data-intro]`/
+  `[data-guide-body]`); `.fs-commitments__photo` gained `max-width:430px` (was uncapped,
+  matching `[data-guide-media]`); `.fs-commitments__row` gained a
+  `@media(max-width:1024px)` split from its flat 34px gap to `row-gap:14px;
+  column-gap:24px` (matching `[data-srow]`).
+- **Partner Districts row gap**: `.fs-partner-districts__row` base gap 16px→48px below
+  1024px (matching `[data-map-grid]`) — not live-verifiable in this environment since no
+  `fs_partner` terms/posts are seeded yet (see §10), so the row markup doesn't render;
+  fixed from direct source comparison instead.
+- **Content/Image Split gap**: `.fs-content-split__inner` gap 40px→48px below 1024px
+  (matching `[data-cta-grid]`).
+
+Verified via a scripted multi-width sweep (13 breakpoints, 320–1440px) reading live
+`getComputedStyle` values for every changed property plus `scrollWidth` vs `innerWidth` —
+all values matched their `.dc`-specified targets exactly at every width, zero overflow
+anywhere. Regression-swept Home, Services, Team, and Contact (all affected by the global
+container-padding fix; Home and Contact/Services/Team also share `hero.css`) — zero
+overflow, zero console errors on any page.
+
+## 14. "Meet Our Team" Grid + Heading Fidelity, and a Footer Tablet-Grid Bug
+
+The client reported the "Meet Our Team" section still didn't match. Re-reading the `.dc`
+source's team-grid markup (`[data-team-grid]`) found it uses a fixed 3-column grid
+(`repeat(3, minmax(0,1fr))`, 2-up ≤1024px, 1-up ≤720px), not the shared `.fs-card-grid`
+utility's `repeat(auto-fit, minmax(280px,1fr))` used elsewhere on the site — the `.dc`
+source's own designer-handoff note is explicit: "a trailing row of one or two cards is
+left-aligned, never stretched," which only a fixed column count produces. Scoped a
+`#fs-about-team-grid` override in `page-about.css` (fixed 3/2/1-up columns,
+`justify-items:stretch`, no per-card `max-width` cap) rather than changing the shared
+`.fs-card-grid` class, since Services/Impact-Story/Podcast grids elsewhere still use the
+auto-fit behavior and weren't in scope. Verified live and via screenshot at 1440/900/320px
+— the one real team member now sits left-aligned at natural column width instead of
+centered and width-capped, matching the source's stated intent.
+
+This also surfaced a **systemic breakpoint bug**: every `data-display`-tagged heading on
+this page is supposed to follow one shared 3-tier scale (own literal desktop size ≥1241px
+→ 60px at 721–1240px → 36px at ≤720px, per the `.dc` source's `[data-display]` rule, applied
+uniformly regardless of each heading's own desktop size) and every `data-intro`-tagged
+2-column header (heading + paragraph) is supposed to collapse to 1 column with a 44px gap
+below 1241px. The first fidelity pass (§11) only applied this to Rail Text and Commitment
+List; Partner Districts, "Meet Our Team," Impact Stats, and Mission Close were still using
+ad hoc sizes and the wrong breakpoint (1024px instead of 1241px) — so "Meet Our Team"'s
+heading was 44px at tablet widths and 44px at mobile (larger than the target 36px), instead
+of the correct 68px → 60px → 36px steps. Fixed all four:
+
+- `.fs-partner-districts__intro` gained the missing 2-column desktop state (was single-column
+  at every width) and correct base gap (44px); its heading now steps 68px → 60px → 36px
+  instead of a flat 40px below 1024px with no mobile step at all.
+- `.fs-about__team-intro` (`page-about.css`): gap corrected to 44px, heading now steps
+  68px → 60px → 36px instead of 44px → 68px with no mobile step.
+- `.fs-about__stats-head h2`: gained the missing 60px/36px steps (was flat 58px at every
+  width).
+- `.fs-content-split__heading` (Mission Close): now steps 68px → 60px → 36px (was
+  44px → 68px → 34px — the 34px mobile value belonged to a different token, `[data-h1]`,
+  not this heading's `[data-display]`).
+- Also completed the same 1240px middle tier for `.fs-hero__heading` (`[data-h1]`, was
+  missing entirely — jumped straight from 52px to 34px with no 46px step) and tightened the
+  Rail Text / Commitment List desktop breakpoint from `min-width:1240px` to `1241px` so it
+  doesn't overlap the `.dc` source's own `max-width:1240px` rule by one pixel.
+
+**Footer bug found while checking "identical to Home" per the client's request**: since the
+footer is one shared template-part (`site-footer.php`/`site-footer.css`) with no
+About-specific override, it was already structurally identical between the two pages — but
+both were wrong the same way. `.fs-site-footer__grid` had no tablet state at all: single
+column from 0 all the way to 1023px, jumping straight to the 4-column desktop layout at
+1024px. The `.dc` source's `[data-footer-grid]` rule specifies 2-up at ≤1024px, 1-up only at
+≤720px. Restructured to a proper 3-tier grid (1-up ≤720 / 2-up 721–1024 / 4-up ≥1025) —
+confirmed via live computed-style checks that Home and About now report identical column
+counts at every tested width.
+
+Re-verified end-to-end: a 13-breakpoint sweep (320–1441px) of every heading/grid listed
+above on both About and Home confirms all values match their `.dc` targets exactly and the
+two pages are pixel-identical wherever they share a component; zero overflow on About, Home,
+Services, Team, or Contact at any width; zero console errors or failed requests (aside from
+Home's own pre-existing YouTube-embed autoplay probe, unrelated to this pass); `php -l`
+clean on every PHP file touched by today's verification (no PHP was changed — this pass was
+CSS-only).
+
+## 15. Footer Content-Accuracy Pass (shared component, affects every page)
+
+The client compared a live screenshot directly against the `.dc` design and flagged several
+real content/markup bugs in `site-footer.php`/`.css` — since the footer has no About-specific
+override, every fix here applies site-wide, not just to About. All verified live and via
+screenshot before/after; `php -l` clean on every touched file.
+
+- **Footer CTA showed the wrong label** ("Get to Know Us" instead of "Contact Us"): the
+  footer's brand-column button was reusing the header's/hero's shared Site Settings CTA
+  fields, but the `.dc` source wants fixed, footer-specific copy ("Contact Us" → `/contact/`)
+  independent of whatever the admin sets the global CTA to. Hardcoded the footer's own CTA
+  copy, same convention already used for every other component's fixed button text.
+- **"Explore" column rendered completely empty**: no menu is assigned to the theme's `footer`
+  nav location in this environment, and `wp_nav_menu()` was given `fallback_cb => false` with
+  no other fallback. Added a `has_nav_menu('footer') ? 'footer' : 'primary'` fallback so the
+  column is never a blank space just because a menu wasn't assigned — the approved design's
+  Explore list mirrors the primary nav's items anyway.
+- **Social icons wrong**: order was Facebook/LinkedIn/YouTube (should be Facebook/YouTube/
+  LinkedIn per the `.dc` source's relative order — there's no X/Twitter Site Settings field
+  yet, so that tile is still omitted) and YouTube rendered as a literal letter "Y" instead of
+  the design's play-triangle glyph (`▶`). Replaced the fragile inline ternary that derived each
+  tile's letter from `substr($label, 0, 1)` with an explicit `glyph` key per social entry.
+- **Logo showed as plain site-name text** instead of the real mark+wordmark image, in both the
+  header and the footer, whenever no Custom Logo is set in Site Identity (true in this local
+  environment). Both `else` branches now render the theme's own bundled
+  `assets/img/full-logo.svg` as a sane default — a theme asset, not an `wp-content/uploads/`
+  file, so this doesn't touch anything `AGENTS.md` restricts. The footer's existing CSS filter
+  (`brightness(0) invert(1)`) automatically renders it in white on the teal ground; the header
+  needs no filter since it already sits on a white ground matching the logo's teal ink.
+- **"Resources" column links were underlined**, unlike every other footer link. Root cause:
+  the sitewide link reset (`style.css`'s `.fs-nav a { text-decoration: none }`) is scoped to
+  descendants of an element carrying the `.fs-nav` class — the "Explore" `<nav>` has it,
+  "Resources" `<nav>` didn't (a plain `.fs-site-footer__col` with no `.fs-nav`), so its raw
+  `<a>` tags fell through to the browser's default underline. Added the missing class.
+- Also fixed a latent bug this pass's fallback surfaced: the "Resources" column's `<div
+  class="fs-nav__list">` links weren't stacking vertically at all (rendered as one inline
+  line) — `.fs-site-footer__col .fs-nav__list` set `flex-direction: column` and `gap` but
+  never set `display: flex`, so it was a no-op. It happened to look correct for "Explore"
+  only because `wp_nav_menu()`'s `<ul>/<li>` output stacks via the browser's own block/
+  list-item defaults regardless. Added the missing `display: flex`.
+
+Two more discrepancies visible in the same client screenshot were confirmed to be **content
+data**, not code, and intentionally left for the client to correct directly in Site Settings:
+the `footer_text` field holds the Partner Districts intro copy instead of the intended
+tagline, and `copyright_name` holds a whole pre-formatted "©2026 Focused Schools All Rights
+Reserved." line instead of just "Focused Schools" (the template already prepends its own
+"©[year]" and appends its own "All Rights Reserved.", so the stored value doubles both).
+
+## 16. Team Card: About's Card Was Silently Inheriting the Team Page's Extended Design
+
+The client compared the live "Meet Our Team" section against `Focused Schools About.dc.html`
+directly and flagged a real structural mismatch: the live card showed a quote block ("Every
+Student. Every Day. No Exceptions.") that has no equivalent anywhere in About's own `.dc`
+source. Tracing it: `team-card.php` is a shared component, and its quote block + LinkedIn
+tile + bordered footer row turn out to belong to a *different* page's design —
+`Focused Schools Team.dc.html`'s own designer-handoff notes explicitly call this "DS v1's
+team card gains a quote block... and a card footer row holding Read bio and LinkedIn," an
+intentional *extension* for the Team page specifically. About's `.dc` source's card is the
+plain base version: portrait, name, role, and a "Read bio" inline link — no quote, no
+LinkedIn tile, no footer hairline at all.
+
+Since both pages call the same `team-card.php` with the same args (`bio_modal => true`, no
+distinguishing flag), About's cards were inheriting Team's richer design wholesale. Added a
+`compact` prop (default `false`, so the Team page's existing correct output is untouched) that
+About now passes: it suppresses the quote and LinkedIn tile, renders "Read bio" as a plain
+11px/700/uppercase inline link (`.fs-team-card__read-bio`) instead of inside the bordered
+`.fs-team-card__foot` row, and applies the fixed 28/28/30px padding + 6px/18px name/position
+margins `Focused Schools About.dc.html`'s card literally specifies, via a scoped
+`.fs-team-card--compact` modifier rather than changing the shared card's defaults.
+
+Verified live: About's card now shows no quote and no footer row (confirmed via DOM query,
+not just visual inspection); the Team page's card was re-checked and still has
+`compact` unset and renders exactly as before (no regression). Full 5-page overflow sweep
+stayed clean; `php -l` clean on `team-card.php`, `page-about-our-mission-vision.php`.
+
 ## Partner Map (built)
 
 The Partner Districts section now carries the interactive map from the approved mockup. It

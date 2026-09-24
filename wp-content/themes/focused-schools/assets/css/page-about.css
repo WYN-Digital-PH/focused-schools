@@ -21,14 +21,14 @@
 .fs-about__team-intro {
 	display: grid;
 	grid-template-columns: minmax( 0, 1fr );
-	gap: 2rem;
+	gap: 2.75rem;
 	margin-bottom: 3.5rem;
 }
 
 .fs-about__team-intro h2 {
 	margin: 0;
 	max-width: 14ch;
-	font-size: 2.75rem;
+	font-size: 3.75rem;
 	line-height: 1.03;
 	letter-spacing: -0.03em;
 	font-weight: 400;
@@ -47,7 +47,7 @@
 	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
-@media ( min-width: 1024px ) {
+@media ( min-width: 1241px ) {
 	.fs-about__team-intro {
 		grid-template-columns: minmax( 0, 1fr ) minmax( 0, 1fr );
 		align-items: end;
@@ -57,6 +57,38 @@
 
 	.fs-about__team-intro h2 {
 		font-size: 4.25rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-about__team-intro h2 {
+		font-size: 2.25rem;
+	}
+}
+
+/* Fixed 3/2/1-column grid per the .dc source's own [data-team-grid] rules —
+   overrides the shared .fs-card-grid utility's auto-fit/center behavior
+   (built for grids that don't specify an exact column count), since the
+   .dc spec calls for a lone/partial trailing row to sit left-aligned at its
+   natural column width instead of centered and width-capped. */
+#fs-about-team-grid {
+	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	justify-items: stretch;
+}
+
+#fs-about-team-grid > * {
+	max-width: none;
+}
+
+@media ( min-width: 1025px ) {
+	#fs-about-team-grid {
+		grid-template-columns: repeat( 3, minmax( 0, 1fr ) );
+	}
+}
+
+@media ( max-width: 720px ) {
+	#fs-about-team-grid {
+		grid-template-columns: minmax( 0, 1fr );
 	}
 }
 
@@ -99,6 +131,18 @@
 	font-weight: 700;
 }
 
+@media ( max-width: 1240px ) {
+	.fs-about__stats-head h2 {
+		font-size: 3.75rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-about__stats-head h2 {
+		font-size: 2.25rem;
+	}
+}
+
 .fs-loadmore {
 	margin-top: var( --wp--preset--spacing--large, 2rem );
 	text-align: center;
@@ -113,5 +157,12 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-about__team,
+	.fs-about__stats-band {
+		padding-block: 4rem;
 	}
 }

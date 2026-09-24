@@ -365,6 +365,14 @@ else :
 				);
 				get_template_part( 'template-parts/components/contact-info' );
 				?>
+				<img class="fs-home__contact-badge" src="<?php echo esc_url( $fs_img . 'chamber-badge.jpg' ); ?>" alt="<?php esc_attr_e( '2026 Proud Member — Manatee Chamber of Commerce', 'focused-schools' ); ?>" loading="lazy" />
+				<p class="fs-home__contact-form-link">
+					<?php esc_html_e( 'Prefer the full form?', 'focused-schools' ); ?>
+					<a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">
+						<?php esc_html_e( 'Go to our contact page', 'focused-schools' ); ?>
+						<span aria-hidden="true">&rarr;</span>
+					</a>
+				</p>
 			</div>
 			<div class="fs-home__contact-cta">
 				<p><?php esc_html_e( "Ready to talk about your district's next step? Send us a message and a member of our team will follow up soon.", 'focused-schools' ); ?></p>

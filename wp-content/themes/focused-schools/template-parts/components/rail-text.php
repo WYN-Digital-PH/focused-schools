@@ -11,10 +11,20 @@
  *               a coral underline that the Home page's script grows on scroll
  * - cta_label  (string)
  * - cta_url    (string)
- * - heading_max_ch (int) heading's max-width in `ch` units — the Home and
- *   About `.dc` sources specify different values (13ch / 15ch) for this
- *   shared component's heading, default 13 (Home's value, the original
- *   caller).
+ * - heading_max_ch (int) heading's max-width in `ch` units — the Home,
+ *   About, and Team `.dc` sources each specify a different value (13ch /
+ *   15ch / 18ch) for this shared component's heading, default 13 (Home's
+ *   value, the original caller).
+ * - padding_bottom (int) section's bottom padding in px — Home/About use
+ *   120px (the default); Team's own `.dc` source specifies 112px.
+ * - heading_weight (int) heading's base font-weight, default 700
+ *   (Home/About render the whole heading bold). Team's `.dc` source uses a
+ *   400 base weight with `<strong>` at 700 for the emphasized clause.
+ *
+ * `heading` allows basic HTML (run through wp_kses_post()) so a caller can
+ * mix regular/bold weight within it, e.g. Team's "We have sat in the seat
+ * <strong>you are sitting in.</strong>" — plain-text headings render
+ * identically to before.
  *
  * A narrow "rail" label (small icon + eyebrow) beside a content column —
  * heading, one or more paragraphs, optional CTA. No image/photo (that's
@@ -35,13 +45,15 @@ $fs_body           = is_array( $fs_body ) ? $fs_body : array( $fs_body );
 $fs_cta_label      = isset( $args['cta_label'] ) ? $args['cta_label'] : '';
 $fs_cta_url        = isset( $args['cta_url'] ) ? $args['cta_url'] : '';
 $fs_heading_max_ch = isset( $args['heading_max_ch'] ) ? absint( $args['heading_max_ch'] ) : 13;
+$fs_padding_bottom = isset( $args['padding_bottom'] ) ? absint( $args['padding_bottom'] ) : 120;
+$fs_heading_weight = isset( $args['heading_weight'] ) ? absint( $args['heading_weight'] ) : 700;
 $fs_emphasis       = isset( $args['emphasis'] ) ? trim( (string) $args['emphasis'] ) : '';
 
 if ( '' === trim( (string) $fs_heading ) ) {
 	return;
 }
 ?>
-<section class="fs-rail-text">
+<section class="fs-rail-text" style="--fs-rail-padding-bottom: <?php echo esc_attr( $fs_padding_bottom ); ?>px; --fs-rail-heading-weight: <?php echo esc_attr( $fs_heading_weight ); ?>;">
 	<div class="fs-container fs-container--shell fs-rail-text__inner">
 		<div class="fs-rail-text__label">
 			<?php if ( $fs_icon_url ) : ?>
@@ -52,7 +64,7 @@ if ( '' === trim( (string) $fs_heading ) ) {
 			<?php endif; ?>
 		</div>
 		<div class="fs-rail-text__content" style="--fs-rail-heading-max: <?php echo esc_attr( $fs_heading_max_ch ); ?>ch;">
-			<h2><?php echo esc_html( $fs_heading ); ?></h2>
+			<h2><?php echo wp_kses_post( $fs_heading ); ?></h2>
 			<?php
 			$fs_first = true;
 

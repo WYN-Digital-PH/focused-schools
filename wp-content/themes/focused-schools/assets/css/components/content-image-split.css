@@ -11,13 +11,13 @@
 .fs-content-split__inner {
 	display: flex;
 	flex-direction: column;
-	gap: 2.5rem;
+	gap: 3rem;
 }
 
 .fs-content-split__heading {
 	margin: 0 0 2.125rem;
 	max-width: 15ch;
-	font-size: 2.75rem;
+	font-size: 3.75rem;
 	line-height: 1;
 	letter-spacing: -0.03em;
 	font-weight: 700;
@@ -85,14 +85,20 @@
 	.fs-content-split--image-left .fs-content-split__media {
 		order: -1;
 	}
+}
 
+@media ( min-width: 1241px ) {
 	.fs-content-split__heading {
 		font-size: 4.25rem;
 	}
 }
 
 @media ( max-width: 720px ) {
+	.fs-content-split {
+		padding: 4rem 0;
+	}
+
 	.fs-content-split__heading {
-		font-size: 2.125rem;
+		font-size: 2.25rem;
 	}
 }

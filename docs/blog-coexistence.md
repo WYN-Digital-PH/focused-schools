@@ -117,3 +117,46 @@ auto-generated `<h2 class="screen-reader-text">Post navigation</h2>` would have 
 as a fully visible heading. Added the standard WP-core utility class to `style.css`
 (global, not blog-specific) and confirmed live: present for screen readers, visually
 1×1px/`position: absolute`.
+
+## 8. Re-Verification Pass (Legacy Blog Compatibility Audit)
+
+A later task re-ran this entire audit end-to-end with live browser automation (not
+available in the original pass), for two reasons: to confirm nothing here regressed after
+extensive unrelated work this session touched the *shared* `site-header.php`/
+`site-footer.php`/`style.css` that every one of these templates depends on via
+`get_header()`/`get_footer()`, and to close the "not verified" gaps the original pass
+left open (images, video, featured images — the original 4 test fixtures had none).
+
+**Regression check**: all 4 fixture posts (§6) plus `/blog/`, `/blog/page/2/`, and
+`/category/uncategorized/` re-tested live. Zero change in behavior — Elementor posts
+still bail to bare `the_content()` (confirmed via DOM: zero `.fs-post-single__title`/
+`__meta`/`.nav-links`/`__related` present), native/Gutenberg posts still get full
+chrome, pagination and archive titles still correct, zero console errors, zero horizontal
+overflow at any width tested (320–1440px). The nav-link CSS fix and `.screen-reader-text`
+utility from §7 are both still intact.
+
+**Closed the images/video/featured-image gap**: reused two of the three real media
+library attachments already present in this environment (IDs 11/13 — not new uploads,
+`wp-content/uploads/` untouched) to add a featured image to `standard-native-post` and an
+inline `<img>` + a real YouTube oEmbed URL to `new-gutenberg-post`'s content. Verified
+live: featured image renders full-width above the title (`the_post_thumbnail('large')`
+path), inline Gutenberg image loads correctly, the oEmbed URL resolves to a real embedded
+YouTube iframe (`the_content()`'s core oEmbed handling — no custom video code exists or
+was needed), and `the_post_navigation()`'s prev/next correctly links to the
+chronologically-adjacent post. Screenshots reviewed at both desktop and mobile (375px) —
+clean stacking, zero overflow, footer/header render correctly beneath the new media.
+
+**Fixed a documentation-integrity issue found in passing**: `docs/06-url-seo-preservation.md`
+had binary/corrupted content in its "Risks" section (not a tool-read error — confirmed via
+`git log`, the one existing commit for that file already contains the same corruption, so
+there was no clean version to recover). Truncated the unreadable tail and left an
+editorial note rather than fabricating replacement risk-list content.
+
+**Still not verifiable in this environment** (unchanged from §6/§4): Elementor Pro's
+Theme Builder (a site-wide override mechanism that could take precedence over these
+templates on the real site — architecturally separate from the per-post check this task
+implements) and Yoast SEO's actual canonical/meta/schema output, since neither Elementor
+nor Yoast is installed locally. The structural compatibility argument (standard Loop,
+`wp_head()`, `title-tag` support, nothing overriding Yoast's own hooks) stands, but is
+unverified against the real plugins. **Both must be checked directly against
+staging/production before this is considered fully verified.**

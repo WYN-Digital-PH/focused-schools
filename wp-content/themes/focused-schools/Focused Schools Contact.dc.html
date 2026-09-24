@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400;1,9..40,700&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #ffffff; color: #005C6D; font-family: "DM Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  * { box-sizing: border-box; }
+  a { color: #005C6D; text-decoration: none; }
+  a:hover { color: #DD6237; }
+  button { font-family: inherit; }
+  input::placeholder, textarea::placeholder { color: #9aa4a8; }
+  select { appearance: none; -webkit-appearance: none; }
+  @keyframes fsRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* Focus rings and invalid states cannot be expressed as inline styles. */
+  input:focus-visible, textarea:focus-visible, select:focus-visible { outline: none; border-color: #005C6D !important; box-shadow: 0 0 0 3px rgba(10,150,203,0.22); }
+  a:focus-visible, button:focus-visible { outline: 3px solid #0A96CB; outline-offset: 2px; }
+
+  /* Media queries cannot be expressed inline. Breakpoints match the approved homepage. */
+  @media (max-width: 1240px) {
+    [data-display] { font-size: 60px !important; }
+    [data-h1] { font-size: 46px !important; }
+    [data-contact-grid] { grid-template-columns: minmax(0, 1fr) !important; gap: 56px !important; }
+    [data-aside] { position: static !important; order: 2 !important; }
+    [data-form-col] { order: 1 !important; }
+    [data-rail] { grid-template-columns: minmax(0, 1fr) !important; gap: 40px !important; }
+  }
+  @media (max-width: 1023px) {
+    [data-nav] { display: none !important; }
+    [data-menu-label] { display: none !important; }
+    [data-footer-grid] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 48px !important; }
+    [data-reach] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  }
+  @media (max-width: 900px) {
+    [data-spec-grid] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-spec-mobile] { grid-template-columns: minmax(0, 1fr) !important; }
+  }
+  @media (max-width: 767px) {
+    [data-shell] { padding-left: 20px !important; padding-right: 20px !important; }
+    [data-h1] { font-size: 34px !important; }
+    [data-display] { font-size: 36px !important; }
+    [data-space] { padding-top: 64px !important; padding-bottom: 64px !important; }
+    [data-nav-cta] { display: none !important; }
+    [data-form-row] { grid-template-columns: minmax(0, 1fr) !important; gap: 22px !important; }
+    [data-form-shell] { padding: 28px 24px 32px !important; }
+    [data-footer-grid] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-reach] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-btn-full] { width: 100% !important; justify-content: center !important; }
+    [data-submit-row] { flex-direction: column !important; align-items: stretch !important; gap: 16px !important; }
+  }
+</style>
+</helmet>
+
+<div id="top">
+  <a href="#main" style="position: absolute; left: -9999px;">Skip to content</a>
+
+  <!-- ===================== HEADER (reused, Contact active) ===================== -->
+  <header style="position: sticky; top: 0; z-index: 70; padding: 16px 0 0;">
+    <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+      <div style="position: relative; height: 74px; background: #ffffff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,92,109,0.08); display: flex; align-items: center; gap: 24px; padding: 0 14px 0 26px; overflow: hidden;">
+        <a href="https://www.focusedschools.com/" aria-label="Focused Schools — home" style="display: flex; align-items: center; flex: 0 0 auto;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo.svg?v=palette-2026-3" alt="Focused Schools" style="height: 46px; width: auto; display: block;" />
+        </a>
+        <nav data-nav="" aria-label="Primary navigation" style="display: flex; align-items: center; gap: 36px; margin: 0 auto;">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+            <a href="{{ n.href }}" aria-current="{{ n.current }}" style="{{ n.style }}" style-hover="color: #DD6237;">{{ n.label }}</a>
+          </sc-for>
+        </nav>
+        <a data-nav-cta="" href="#form" style="display: inline-flex; align-items: center; gap: 12px; height: 46px; padding: 0 24px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; flex: 0 0 auto; margin-left: auto; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Let's Talk <span style="font-size: 15px;">&rarr;</span></a>
+        <button type="button" aria-label="Open menu" style="display: inline-flex; align-items: center; gap: 12px; height: 46px; padding: 0 16px; border-radius: 999px; border: 1px solid #e6eaec; background: #ffffff; cursor: pointer; color: #005C6D; flex: 0 0 auto; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #f5f6f8;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-1.svg?v=palette-2026-3" alt="" style="height: 22px; width: auto; display: block;" />
+          <span data-menu-label="" style="font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Menu</span>
+          <span style="display: flex; flex-direction: column; gap: 5px; width: 18px;">
+            <span style="display: block; height: 2px; background: #005C6D;"></span>
+            <span style="display: block; height: 2px; background: #005C6D;"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ===================== 1 · HERO (compact — no 21:9 media) ===================== -->
+    <section data-screen-label="Contact hero" data-space="" style="background: #ffffff; padding: 72px 0 80px;">
+      <div data-shell="" data-rail="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 264px minmax(0, 1fr); align-items: start;">
+        <div style="display: flex; align-items: flex-start; gap: 20px; padding-top: 6px;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-1.svg?v=palette-2026-3" alt="" style="height: 28px; width: auto; flex: 0 0 auto;" />
+          <p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D; line-height: 1.6; max-width: 9ch;">Contact us</p>
+        </div>
+        <div data-reveal="">
+          <h1 data-h1="" style="margin: 0 0 26px; font-size: 68px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 18ch;">Let's start a conversation.</h1>
+          <p style="margin: 0; max-width: 62ch; font-size: 19px; line-height: 1.65; color: #51536a;">Tell us where your district is headed and what is getting in the way. We will read every word, and a real person from our team will reply &mdash; usually within two business days.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 2 · FORM + ASIDE ===================== -->
+    <section data-screen-label="Contact form" id="form" data-space="" style="background: #f5f6f8; padding: 96px 0 112px;">
+      <div data-shell="" data-contact-grid="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 80px; align-items: start;">
+
+        <!-- FORM COLUMN -->
+        <div data-form-col="">
+          <sc-if value="{{ showSuccess }}" hint-placeholder-val="{{ false }}">
+            <div role="status" aria-live="polite" data-reveal="" style="background: #ffffff; border-radius: 16px; border: 1px solid #e3e9eb; box-shadow: 0 1px 2px rgba(0,92,109,0.08); padding: 56px 52px 60px;">
+              <span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 999px; background: #005C6D; color: #ffffff; font-size: 28px; margin-bottom: 32px;">&#10003;</span>
+              <p style="margin: 0 0 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Message sent</p>
+              <h2 style="margin: 0 0 20px; font-size: 42px; line-height: 1.06; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 22ch;">Thank you &mdash; we have your message.</h2>
+              <p style="margin: 0 0 34px; max-width: 58ch; font-size: 17px; line-height: 1.75; color: #51536a;">A member of our team will reply within two business days. If your question is time-sensitive, call us at <a href="tel:+18449572466" style="font-weight: 700; color: #005C6D; border-bottom: 1px solid #DD6237;" style-hover="color: #DD6237;">844-957-2466</a>.</p>
+              <div style="border-top: 1px solid #eef1f2; padding-top: 32px;">
+                <p style="margin: 0 0 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">While you wait</p>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                  <a href="https://www.focusedschools.com/impact-stories/" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 24px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="border-color: #005C6D; background: #f5f6f8; color: #005C6D;">Read Impact Stories <span style="font-size: 14px;">&rarr;</span></a>
+                  <a href="https://www.focusedschools.com/podcast/" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 24px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="border-color: #005C6D; background: #f5f6f8; color: #005C6D;">Listen to the Podcast <span style="font-size: 14px;">&rarr;</span></a>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+            <div data-reveal="" data-form-shell="" style="background: #ffffff; border-radius: 16px; border: 1px solid #e3e9eb; box-shadow: 0 1px 2px rgba(0,92,109,0.08); padding: 44px 48px 48px;">
+              <header style="padding-bottom: 32px; margin-bottom: 34px; border-bottom: 1px solid #eef1f2;">
+                <h2 style="margin: 0 0 12px; font-size: 32px; line-height: 1.12; letter-spacing: -0.025em; font-weight: 700; color: #005C6D;">Send us a message</h2>
+                <p style="margin: 0; max-width: 56ch; font-size: 15px; line-height: 1.65; color: #51536a;">Fields marked <span style="color: #C0392B; font-weight: 700;">*</span> are required. Everything else helps us route your message to the right person.</p>
+              </header>
+
+              <sc-if value="{{ showErrorSummary }}" hint-placeholder-val="{{ false }}">
+                <div role="alert" tabindex="-1" style="display: flex; gap: 16px; padding: 20px 22px; border-radius: 12px; background: #fdf3f1; border: 1px solid #f0c8c1; margin-bottom: 30px;">
+                  <span aria-hidden="true" style="flex: 0 0 auto; width: 24px; height: 24px; border-radius: 999px; background: #C0392B; color: #ffffff; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center;">!</span>
+                  <div>
+                    <p style="margin: 0 0 8px; font-size: 15px; font-weight: 700; line-height: 1.4; color: #8E2A1E;">{{ errorHeadline }}</p>
+                    <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.7; color: #8E2A1E;">
+                      <sc-for list="{{ errorList }}" as="er" hint-placeholder-count="2">
+                        <li><a href="{{ er.href }}" style="color: #8E2A1E; border-bottom: 1px solid #C0392B;" style-hover="color: #C0392B;">{{ er.label }}</a></li>
+                      </sc-for>
+                    </ul>
+                  </div>
+                </div>
+              </sc-if>
+
+              <form onSubmit="{{ onSubmit }}" novalidate="" style="display: flex; flex-direction: column; gap: 26px;">
+                <div data-form-row="" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                  <div data-field-error="{{ f.name.err }}">
+                    <label for="c-name" style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D;">Full name <span style="color: #C0392B;">*</span></span>
+                    </label>
+                    <input id="c-name" type="text" name="name" autocomplete="name" aria-required="true" aria-invalid="{{ f.name.invalid }}" aria-describedby="c-name-msg" placeholder="Jane Rivera" style="{{ f.name.inputStyle }}" />
+                    <p id="c-name-msg" style="{{ f.name.msgStyle }}">{{ f.name.msg }}</p>
+                  </div>
+                  <div data-field-error="{{ f.role.err }}">
+                    <label for="c-role" style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D;">Role / title</span>
+                      <small style="font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa4a8;">Optional</small>
+                    </label>
+                    <input id="c-role" type="text" name="role" autocomplete="organization-title" placeholder="Assistant Superintendent" style="{{ fieldStyle }}" />
+                  </div>
+                </div>
+
+                <div data-form-row="" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                  <div data-field-error="{{ f.email.err }}">
+                    <label for="c-email" style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D;">Email <span style="color: #C0392B;">*</span></span>
+                    </label>
+                    <input id="c-email" type="email" name="email" autocomplete="email" inputmode="email" aria-required="true" aria-invalid="{{ f.email.invalid }}" aria-describedby="c-email-msg" placeholder="jrivera@district.org" style="{{ f.email.inputStyle }}" />
+                    <p id="c-email-msg" style="{{ f.email.msgStyle }}">{{ f.email.msg }}</p>
+                  </div>
+                  <div>
+                    <label for="c-phone" style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D;">Phone</span>
+                      <small style="font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa4a8;">Optional</small>
+                    </label>
+                    <input id="c-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="(844) 957-2466" style="{{ fieldStyle }}" />
+                  </div>
+                </div>
+
+                <div data-form-row="" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                  <div data-field-error="{{ f.org.err }}">
+                    <label for="c-org" style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D;">District or school <span style="color: #C0392B;">*</span></span>
+                    </label>
+                    <input id="c-org" type="text" name="organization" autocomplete="organization" aria-required="true" aria-invalid="{{ f.org.invalid }}" aria-describedby="c-org-msg" placeholder="Natick Public Schools" style="{{ f.org.inputStyle }}" />
+                    <p id="c-org-msg" style="{{ f.org.msgStyle }}">{{ f.org.msg }}</p>
+                  </div>
+                  <div>
+                    <label for="c-interest" style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D;">What can we help with?</span>
+                      <small style="font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa4a8;">Optional</small>
+                    </label>
+                    <div style="position: relative;">
+                      <select id="c-interest" name="interest" style="{{ selectStyle }}">
+                        <sc-for list="{{ interests }}" as="i" hint-placeholder-count="5">
+                          <option value="{{ i }}">{{ i }}</option>
+                        </sc-for>
+                      </select>
+                      <span aria-hidden="true" style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 11px; color: #005C6D; pointer-events: none;">&#9662;</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div data-field-error="{{ f.message.err }}">
+                  <label for="c-message" style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+                    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D;">How can we help? <span style="color: #C0392B;">*</span></span>
+                    <small style="font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #9aa4a8;">{{ f.message.count }}</small>
+                  </label>
+                  <textarea id="c-message" name="message" rows="6" aria-required="true" aria-invalid="{{ f.message.invalid }}" aria-describedby="c-message-msg" placeholder="Tell us about your district's goals, the challenge you're facing, and any timeline you're working toward." style="{{ f.message.inputStyle }}"></textarea>
+                  <p id="c-message-msg" style="{{ f.message.msgStyle }}">{{ f.message.msg }}</p>
+                </div>
+
+                <div style="display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px; border-radius: 12px; background: #f7f9fa; border: 1px solid #eef1f2;">
+                  <input id="c-consent" type="checkbox" name="consent" style="width: 20px; height: 20px; margin: 2px 0 0; accent-color: #005C6D; flex: 0 0 auto;" />
+                  <label for="c-consent" style="font-size: 14px; line-height: 1.6; color: #51536a;">Send me occasional updates from Focused Schools &mdash; new Impact Stories, podcast episodes, and practical resources. No more than once a month.</label>
+                </div>
+
+                <div data-submit-row="" style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding-top: 4px;">
+                  <button type="submit" data-btn-full="" style="{{ submitStyle }}">{{ submitLabel }}</button>
+                  <p style="margin: 0; max-width: 34ch; font-size: 13px; line-height: 1.6; color: #51536a;">We reply within two business days. We never share your information.</p>
+                </div>
+              </form>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- ASIDE COLUMN -->
+        <aside data-aside="" style="position: sticky; top: 118px; display: flex; flex-direction: column; gap: 20px;">
+          <div data-reveal="" style="background: #005C6D; border-radius: 16px; padding: 36px 34px 38px; color: #ffffff; position: relative; overflow: hidden;">
+            <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" aria-hidden="true" style="position: absolute; right: -40px; bottom: -30px; height: 190px; width: auto; opacity: 0.08;" />
+            <p style="margin: 0 0 24px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #A7CC14; position: relative;">Reach us directly</p>
+            <div style="position: relative; display: flex; flex-direction: column; gap: 0;">
+              <sc-for list="{{ directLines }}" as="d" hint-placeholder-count="3">
+                <a href="{{ d.href }}" style="{{ d.rowStyle }}" style-hover="color: #A7CC14;">
+                  <span style="display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.66); margin-bottom: 6px;">{{ d.k }}</span>
+                  <span style="display: block; font-size: 19px; font-weight: 700; line-height: 1.3;">{{ d.v }}</span>
+                </a>
+              </sc-for>
+            </div>
+          </div>
+
+          <div data-reveal="" style="background: #ffffff; border-radius: 16px; border: 1px solid #e3e9eb; box-shadow: 0 1px 2px rgba(0,92,109,0.08); padding: 32px 34px 34px;">
+            <p style="margin: 0 0 22px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">What happens next</p>
+            <ol style="margin: 0; padding: 0; list-style: none; border-top: 1px solid #eef1f2;">
+              <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+                <li style="display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-bottom: 1px solid #eef1f2;">
+                  <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: #DD6237; padding-top: 3px;">{{ s.num }}</span>
+                  <div>
+                    <strong style="display: block; font-size: 15px; font-weight: 700; line-height: 1.35; color: #005C6D; margin-bottom: 4px;">{{ s.title }}</strong>
+                    <span style="font-size: 14px; line-height: 1.6; color: #51536a;">{{ s.note }}</span>
+                  </div>
+                </li>
+              </sc-for>
+            </ol>
+          </div>
+
+          <div data-reveal="" style="background: #ffffff; border-radius: 16px; border: 1px solid #e3e9eb; box-shadow: 0 1px 2px rgba(0,92,109,0.08); padding: 32px 34px 34px;">
+            <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Credentials</p>
+            <div style="display: flex; align-items: flex-start; gap: 22px;">
+              <img src="https://focused-schools-rebrand.vercel.app/assets/img/chamber-badge.jpg" alt="2026 Proud Member — Manatee Chamber of Commerce" style="width: 92px; height: auto; display: block; flex: 0 0 auto;" />
+              <p style="margin: 0; font-size: 14px; line-height: 1.65; color: #51536a;">Massachusetts DESE <strong style="color: #005C6D;">Approved Provider.</strong> Partnering with districts nationwide since 2000.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===================== 3 · OTHER WAYS TO REACH US ===================== -->
+    <section data-screen-label="Other ways to connect" data-space="" style="background: #ffffff; padding: 112px 0 120px;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+        <header data-reveal="" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; margin-bottom: 48px;">
+          <div>
+            <p style="margin: 0 0 24px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Not ready to write yet?</p>
+            <h2 data-display="" style="margin: 0; font-size: 58px; line-height: 1.02; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 18ch;">Get to know how we work first.</h2>
+          </div>
+        </header>
+        <div data-reach="" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;">
+          <sc-for list="{{ reach }}" as="r" hint-placeholder-count="4">
+            <a href="{{ r.href }}" data-reveal="" style="display: flex; flex-direction: column; justify-content: space-between; gap: 40px; min-height: 220px; padding: 30px 32px 32px; border-radius: 16px; background: #ffffff; border: 1px solid #e3e9eb; box-shadow: 0 1px 2px rgba(0,92,109,0.08); transition: box-shadow 240ms cubic-bezier(.2,.7,.2,1), transform 240ms cubic-bezier(.2,.7,.2,1), border-color 160ms cubic-bezier(.2,.7,.2,1);" style-hover="box-shadow: 0 12px 28px rgba(0,92,109,0.12); transform: translateY(-2px); border-color: #005C6D; color: #005C6D;">
+              <span>
+                <span aria-hidden="true" style="{{ r.barStyle }}"></span>
+                <strong style="display: block; font-size: 24px; line-height: 1.18; letter-spacing: -0.02em; font-weight: 700; color: #005C6D; margin-bottom: 10px;">{{ r.title }}</strong>
+                <span style="display: block; font-size: 15px; line-height: 1.6; color: #51536a;">{{ r.note }}</span>
+              </span>
+              <span style="display: inline-flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #005C6D;">{{ r.cta }} <span aria-hidden="true" style="color: #DD6237; font-size: 14px;">&rarr;</span></span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER (reused) ===================== -->
+  <footer style="position: relative; background: #005C6D; color: #ffffff; overflow: hidden; padding: 96px 0 0;">
+    <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" aria-hidden="true" style="position: absolute; right: -50px; top: 56px; height: 400px; width: auto; opacity: 0.06;" />
+    <div data-shell="" data-footer-grid="" style="position: relative; max-width: 1400px; margin: 0 auto; padding: 0 24px 88px; display: grid; grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr; gap: 60px;">
+      <div>
+        <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo-white.svg?v=palette-2026-3" alt="Focused Schools" style="height: 55px; width: auto; display: block; margin-bottom: 44px;" />
+        <p style="margin: 0 0 30px; font-size: 21px; line-height: 1.35; font-weight: 700; color: #ffffff; max-width: 22ch;">Every student. Every classroom. Every day. No exceptions.</p>
+        <a href="#form" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 26px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Send a Message <span style="font-size: 14px;">&rarr;</span></a>
+      </div>
+      <nav aria-label="Footer navigation">
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Explore</p>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <a href="https://www.focusedschools.com/about-our-mission-vision/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">About</a>
+          <a href="https://www.focusedschools.com/team/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Team</a>
+          <a href="https://www.focusedschools.com/services/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Services</a>
+          <a href="https://www.focusedschools.com/impact-stories/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Impact Stories</a>
+        </div>
+      </nav>
+      <nav aria-label="Resources">
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Resources</p>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <a href="https://www.focusedschools.com/podcast/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Podcast</a>
+          <a href="https://www.focusedschools.com/blog/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Blog</a>
+          <a href="https://www.focusedschools.com/contact/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Contact</a>
+        </div>
+      </nav>
+      <div>
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Connect</p>
+        <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px;">
+          <a href="mailto:hello@focusedschools.com" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">hello@focusedschools.com</a>
+          <a href="tel:+18449572466" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">844-957-2466</a>
+        </div>
+        <div aria-label="Social media" style="display: flex; gap: 10px;">
+          <a href="https://twitter.com/focusedschools" aria-label="X" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">X</a>
+          <a href="https://www.facebook.com/focusedschools" aria-label="Facebook" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">f</a>
+          <a href="https://www.youtube.com/channel/UCg8W-jIlwxFCrVsU15gWFqA" aria-label="YouTube" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 11px; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">&#9654;</a>
+          <a href="https://www.linkedin.com/company/focused-schools" aria-label="LinkedIn" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">in</a>
+        </div>
+      </div>
+    </div>
+    <div style="position: relative; border-top: 1px solid rgba(255,255,255,0.18);">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 26px 24px 30px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+        <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.72);">&copy;2026 Focused Schools. All Rights Reserved.</p>
+        <a href="#top" style="font-size: 12px; color: rgba(255,255,255,0.82);" style-hover="color: #A7CC14;">Back to top &uarr;</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== SPEC APPENDIX ===================== -->
+  <sc-if value="{{ showSpecs }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Handoff specs" style="background: #f5f6f8; padding: 120px 0 140px; border-top: 1px solid #d3dde1;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+
+        <header style="padding-bottom: 48px; border-bottom: 1px solid #d3dde1; margin-bottom: 56px;">
+          <p style="margin: 0 0 22px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Designer handoff · Contact</p>
+          <h2 style="margin: 0 0 20px; font-size: 52px; line-height: 1.04; letter-spacing: -0.03em; font-weight: 400; color: #005C6D; max-width: 26ch;">Same form, same fields, <strong style="font-weight: 700;">a page that earns the send.</strong></h2>
+          <p style="margin: 0 0 24px; max-width: 74ch; font-size: 17px; line-height: 1.75; color: #51536a;">The existing form's purpose and required fields are preserved exactly. What changes is everything around them: a compact hero instead of a hero image, a sticky aside that answers &ldquo;who am I writing to and when will they reply?&rdquo;, and a fully specified validation and success system that the old page did not have.</p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <sc-for list="{{ stateTabs }}" as="t" hint-placeholder-count="4">
+              <button type="button" onClick="{{ t.select }}" style="{{ t.style }}">{{ t.label }}</button>
+            </sc-for>
+          </div>
+          <p style="margin: 16px 0 0; font-size: 13px; line-height: 1.6; color: #51536a;">Use these to preview each form state in the mockup above. Review chrome only &mdash; not shipped.</p>
+        </header>
+
+        <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; margin-bottom: 20px;">
+          <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px;">
+            <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Section hierarchy</h3>
+            <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: #51536a;">Four sections. The form is above the fold on desktop and never competes with a hero image.</p>
+            <ol style="margin: 0; padding: 0; list-style: none;">
+              <sc-for list="{{ hierarchy }}" as="h" hint-placeholder-count="4">
+                <li style="display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 18px; padding: 18px 0; border-top: 1px solid #eef1f2;">
+                  <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: #DD6237; padding-top: 4px;">{{ h.num }}</span>
+                  <div>
+                    <strong style="display: block; font-size: 17px; font-weight: 700; color: #005C6D; margin-bottom: 4px;">{{ h.title }}</strong>
+                    <span style="font-size: 14px; line-height: 1.6; color: #51536a;">{{ h.note }}</span>
+                  </div>
+                </li>
+              </sc-for>
+            </ol>
+            <p style="margin: 22px 0 0; padding-top: 18px; border-top: 1px solid #d3dde1; font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">No hero photograph.</strong> Every other page opens on 21:9 media; a contact page should open on the form. The compact label-rail hero keeps the family resemblance without pushing the fields below the fold.</p>
+          </div>
+          <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px;">
+            <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Component mapping</h3>
+            <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: #51536a;">Eleven blocks. Nine reused, one extended, one new.</p>
+            <div>
+              <sc-for list="{{ mapping }}" as="m" hint-placeholder-count="11">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 15px 0; border-top: 1px solid #eef1f2;">
+                  <div>
+                    <strong style="display: block; font-size: 15px; font-weight: 700; color: #005C6D;">{{ m.name }}</strong>
+                    <span style="font-size: 13px; line-height: 1.5; color: #51536a;">{{ m.source }}</span>
+                  </div>
+                  <span style="{{ m.tagStyle }}">{{ m.tag }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin: 24px 0 0; padding-top: 20px; border-top: 1px solid #d3dde1; font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">New:</strong> the success panel &mdash; the only state in the system with no precedent on the homepage. <strong style="color: #005C6D;">Extended:</strong> the homepage form field, which already defines the 48px height, 8px radius, and hairline border; I added the label row, help text slot, error state, select, and character counter.</p>
+          </div>
+        </div>
+
+        <!-- Field styling -->
+        <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Field styling &amp; states</h3>
+          <p style="margin: 0 0 30px; max-width: 80ch; font-size: 15px; line-height: 1.65; color: #51536a;">One field definition, six states. Geometry comes straight from the approved homepage form: 48px height, 8px radius, 1px <code>#e0e6e9</code> hairline, 15px input text, 14px horizontal padding.</p>
+          <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 30px;">
+            <sc-for list="{{ fieldStates }}" as="fs" hint-placeholder-count="6">
+              <div>
+                <p style="margin: 0 0 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">{{ fs.label }}</p>
+                <div style="margin-bottom: 10px;">
+                  <span style="display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D; margin-bottom: 10px;">Email <span style="color: #C0392B;">*</span></span>
+                  <div style="{{ fs.boxStyle }}">{{ fs.value }}</div>
+                </div>
+                <p style="{{ fs.msgStyle }}">{{ fs.msg }}</p>
+                <p style="margin: 10px 0 0; font-size: 13px; line-height: 1.6; color: #51536a;">{{ fs.spec }}</p>
+              </div>
+            </sc-for>
+          </div>
+          <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Field specification</p>
+              <div>
+                <sc-for list="{{ fieldSpec }}" as="fp" hint-placeholder-count="10">
+                  <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 11px 0; border-top: 1px solid #eef1f2; font-size: 14px; line-height: 1.5;">
+                    <span style="color: #51536a;">{{ fp.what }}</span>
+                    <code style="font-size: 13px; font-weight: 700; color: #005C6D; white-space: nowrap;">{{ fp.value }}</code>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Validation rules</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+                <li><strong style="color: #005C6D;">Validate on blur, never on keystroke.</strong> Nobody should be told their email is invalid while they are still typing it.</li>
+                <li><strong style="color: #005C6D;">Re-validate on input only once a field is already in error</strong> &mdash; so the error clears the moment it is fixed, giving immediate reward for the correction.</li>
+                <li><strong style="color: #005C6D;">On submit:</strong> validate everything, render the error summary, move focus to the summary (not to the first field), and let the reader choose where to go.</li>
+                <li><strong style="color: #005C6D;">Messages name the fix, not the failure:</strong> &ldquo;Enter a valid email address so we can reply&rdquo; &mdash; not &ldquo;Invalid input&rdquo;.</li>
+                <li><strong style="color: #005C6D;">Never color alone:</strong> every error carries a border change, a tinted ground, an icon in the summary, and text. Passes 1.4.1.</li>
+                <li><strong style="color: #005C6D;">Required:</strong> name, email, district/school, message. Role, phone, interest, and consent are optional &mdash; matching the current form's purpose, plus routing fields.</li>
+                <li><strong style="color: #005C6D;">Message minimum</strong> 20 characters, counter appears past 20, soft limit 1500. Never blocks typing.</li>
+                <li><strong style="color: #005C6D;">novalidate</strong> on the form so our messages replace the browser's inconsistent bubbles &mdash; but keep the real <code>type</code> attributes for mobile keyboards.</li>
+              </ul>
+            </div>
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Success &amp; failure guidance</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+                <li><strong style="color: #005C6D;">Success replaces the form in place</strong> &mdash; no redirect. The page keeps its URL, the aside stays, and the reader is not thrown to a bare thank-you page.</li>
+                <li><strong style="color: #005C6D;">The panel is a <code>role="status"</code> live region</strong>, focus moves to it, and the heading states what happened in plain words.</li>
+                <li><strong style="color: #005C6D;">Set an expectation and give an escape:</strong> two business days, plus the phone number for anything urgent.</li>
+                <li><strong style="color: #005C6D;">Then give them somewhere to go</strong> &mdash; Impact Stories and the Podcast. A dead end after a conversion is a wasted moment.</li>
+                <li><strong style="color: #005C6D;">Fire the analytics conversion</strong> on render of this panel, not on button click.</li>
+                <li><strong style="color: #005C6D;">Autoresponder</strong> should match this copy exactly, so the email confirms what the page just said.</li>
+                <li><strong style="color: #005C6D;">Submit failure</strong> (network or server): the form is preserved with every value intact, and an <code>role="alert"</code> panel offers Try again plus the mailto address. Never lose what they typed.</li>
+                <li><strong style="color: #005C6D;">Submitting state:</strong> button label changes to &ldquo;Sending&hellip;&rdquo;, <code>aria-busy</code> set, button disabled to prevent a double send. No spinner-only states.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile -->
+        <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Mobile behavior</h3>
+          <p style="margin: 0 0 28px; max-width: 78ch; font-size: 15px; line-height: 1.65; color: #51536a;">Single column at &lt;768px, 20px gutters, 64px section padding. The form comes first; the aside follows it, because on a phone the fields are the reason for the visit.</p>
+          <div data-spec-mobile="" style="display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 40px; align-items: start;">
+            <div style="width: 360px; max-width: 100%; border: 1px solid #d3dde1; border-radius: 20px; overflow: hidden; background: #f5f6f8;">
+              <div style="height: 48px; background: #ffffff; border-bottom: 1px solid #eef1f2; display: flex; align-items: center; justify-content: space-between; padding: 0 14px;">
+                <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo.svg?v=palette-2026-3" alt="" style="height: 26px; width: auto;" />
+                <span style="display: flex; flex-direction: column; gap: 4px; width: 18px;"><span style="display: block; height: 2px; background: #005C6D;"></span><span style="display: block; height: 2px; background: #005C6D;"></span></span>
+              </div>
+              <div style="padding: 24px 20px 28px;">
+                <p style="margin: 0 0 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Contact us</p>
+                <h4 style="margin: 0 0 14px; font-size: 34px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #005C6D;">Let's start a conversation.</h4>
+                <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: #51536a;">Tell us where your district is headed and what is getting in the way.</p>
+                <div style="background: #ffffff; border: 1px solid #e3e9eb; border-radius: 16px; padding: 24px 20px 26px;">
+                  <strong style="display: block; font-size: 22px; line-height: 1.15; letter-spacing: -0.025em; color: #005C6D; margin-bottom: 20px;">Send us a message</strong>
+                  <span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D; margin-bottom: 8px;">Full name <span style="color: #C0392B;">*</span></span>
+                  <div style="height: 48px; border-radius: 8px; border: 1px solid #e0e6e9; background: #ffffff; padding: 0 14px; display: flex; align-items: center; font-size: 15px; color: #9aa4a8; margin-bottom: 18px;">Jane Rivera</div>
+                  <span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D; margin-bottom: 8px;">Email <span style="color: #C0392B;">*</span></span>
+                  <div style="height: 48px; border-radius: 8px; border: 1px solid #C0392B; background: #fdf7f6; padding: 0 14px; display: flex; align-items: center; font-size: 15px; color: #005C6D;">jrivera@district</div>
+                  <p style="margin: 8px 0 18px; font-size: 13px; line-height: 1.5; color: #C0392B;">Enter a valid email address so we can reply.</p>
+                  <span style="display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: #005C6D; margin-bottom: 8px;">How can we help? <span style="color: #C0392B;">*</span></span>
+                  <div style="height: 96px; border-radius: 8px; border: 1px solid #e0e6e9; background: #ffffff; padding: 13px 14px; font-size: 15px; line-height: 1.6; color: #9aa4a8; margin-bottom: 20px;">Tell us about your district's goals&hellip;</div>
+                  <span style="display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; height: 48px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;">Send Message &rarr;</span>
+                  <p style="margin: 14px 0 0; font-size: 12px; line-height: 1.6; color: #51536a; text-align: center;">We reply within two business days.</p>
+                </div>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.85; color: #51536a;">
+              <li><strong style="color: #005C6D;">Order flips:</strong> hero → form → aside → other ways to connect. The aside un-sticks and follows the form.</li>
+              <li><strong style="color: #005C6D;">All paired fields go single-column</strong> with 22px row gaps. No two-up fields on a phone, ever.</li>
+              <li><strong style="color: #005C6D;">Fields stay 48px tall and 15px</strong> &mdash; 16px-equivalent input sizing prevents iOS zoom-on-focus; never reduce the input font size on mobile.</li>
+              <li><strong style="color: #005C6D;">Correct keyboards:</strong> <code>inputmode="email"</code>, <code>inputmode="tel"</code>, plus full <code>autocomplete</code> tokens so the OS can fill name, email, phone, and organization.</li>
+              <li><strong style="color: #005C6D;">Submit button full-width, 48px</strong>, with the reply-time line centered beneath it rather than beside it.</li>
+              <li><strong style="color: #005C6D;">Error summary</strong> sits directly above the first field and scrolls into view with a 106px offset for the sticky header.</li>
+              <li><strong style="color: #005C6D;">Form shell padding</strong> 48px → 24px; section padding 96px → 64px.</li>
+              <li><strong style="color: #005C6D;">Reach cards</strong> 4-up → 2-up → 1-up; each keeps its 220px minimum height and full-card tap target.</li>
+              <li><strong style="color: #005C6D;">Success panel</strong> keeps its 64px check mark; heading drops to 30px and the two follow-up buttons stack full-width.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Spacing / image / states -->
+        <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 20px; margin-bottom: 20px;">
+          <div style="background: #ffffff; border-radius: 16px; padding: 30px 32px;">
+            <h3 style="margin: 0 0 18px; font-size: 20px; font-weight: 700; color: #005C6D;">Spacing specification</h3>
+            <div>
+              <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="14">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 11px 0; border-top: 1px solid #eef1f2; font-size: 14px; line-height: 1.5;">
+                  <span style="color: #51536a;">{{ s.what }}</span>
+                  <code style="font-size: 13px; font-weight: 700; color: #005C6D; white-space: nowrap;">{{ s.value }}</code>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background: #ffffff; border-radius: 16px; padding: 30px 32px;">
+            <h3 style="margin: 0 0 18px; font-size: 20px; font-weight: 700; color: #005C6D;">Image guidance</h3>
+            <ul style="margin: 0 0 20px; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+              <li><strong style="color: #005C6D;">This page is deliberately image-light.</strong> One photograph competing with a form only slows the send. The teal aside card and the mark watermark carry the brand instead.</li>
+              <li><strong style="color: #005C6D;">Chamber badge</strong> is the only required raster: 92px wide in the aside, min 276px source for retina, transparent PNG or clean white ground.</li>
+              <li><strong style="color: #005C6D;">Logo mark</strong> at 8% opacity, bottom-right of the teal aside card, clipped &mdash; the same watermark treatment as the homepage footer and teal bands.</li>
+              <li><strong style="color: #005C6D;">If a photograph is required later,</strong> put it in the aside as a 4:5 figure above the teal card &mdash; never behind the form or as a 21:9 hero. A real team moment, not a headset stock photo.</li>
+              <li><strong style="color: #005C6D;">No map embed.</strong> Focused Schools works nationally and on site with districts; a pinned office map implies walk-in visits. Add one only if there is a genuine visitor address.</li>
+              <li>Decorative marks get <code>alt=""</code>; the badge's alt text carries its membership year.</li>
+            </ul>
+            <p style="margin: 0; padding-top: 18px; border-top: 1px solid #d3dde1; font-size: 14px; line-height: 1.7; color: #51536a;">The chamber badge is pulled from the approved homepage. Nothing else on this page needs photography to ship.</p>
+          </div>
+          <div style="background: #ffffff; border-radius: 16px; padding: 30px 32px;">
+            <h3 style="margin: 0 0 18px; font-size: 20px; font-weight: 700; color: #005C6D;">Hover, focus &amp; active states</h3>
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px;">
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                <span style="display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 24px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;">Default</span>
+                <span style="display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 24px; border-radius: 999px; background: #C4522C; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;">Hover</span>
+                <span style="display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 24px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px #0A96CB;">Focus</span>
+                <span style="display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 24px; border-radius: 999px; background: #e9b3a0; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;">Sending</span>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+              <li><strong style="color: #005C6D;">Field focus:</strong> border → teal <code>#005C6D</code> plus a 3px <code>rgba(10,150,203,.22)</code> halo. The halo is the input equivalent of the site's cerulean focus ring.</li>
+              <li><strong style="color: #005C6D;">Field hover:</strong> border → <code>#c8d2d6</code> at 160ms. Subtle; hover is not the important state on an input.</li>
+              <li><strong style="color: #005C6D;">Field error:</strong> border <code>#C0392B</code>, ground <code>#fdf7f6</code>, message in <code>#C0392B</code> at 13px, <code>aria-invalid="true"</code>, <code>aria-describedby</code> pointing at the message.</li>
+              <li><strong style="color: #005C6D;">Error focus</strong> keeps the red border and adds the cerulean halo, so focus is still distinguishable inside an error state.</li>
+              <li><strong style="color: #005C6D;">Submit:</strong> coral, hover <code>brightness(.92)</code>, active <code>scale(.99)</code>, disabled 45% opacity with <code>cursor: not-allowed</code> during send.</li>
+              <li><strong style="color: #005C6D;">Aside contact links:</strong> label → lime <code>#A7CC14</code> at 160ms; rows keep their translucent hairlines.</li>
+              <li><strong style="color: #005C6D;">Reach cards:</strong> shadow-1 → shadow-2, 2px rise, border → teal at 240ms. Whole card is the link.</li>
+              <li><strong style="color: #005C6D;">Focus-visible, everything:</strong> 3px <code>#0A96CB</code> at 2px offset. Never removed &mdash; on a form page this is not optional.</li>
+              <li><strong style="color: #005C6D;">Checkbox:</strong> 20px, <code>accent-color: #005C6D</code>, label is fully clickable via <code>for</code>.</li>
+              <li><strong style="color: #005C6D;">Entrances:</strong> fade + 28px rise, 700ms, once. Disabled under <code>prefers-reduced-motion</code>; the success panel appears without motion either way, since it follows an action rather than a scroll.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dev + assumptions -->
+        <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px;">
+          <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px;">
+            <h3 style="margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #005C6D;">Developer notes (WordPress)</h3>
+            <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.85; color: #51536a;">
+              <li><strong style="color: #005C6D;">Keep the existing form plugin.</strong> Whatever handles the current form &mdash; Gravity Forms, WPForms, CF7 &mdash; stays, along with its notification routing, spam protection, and entry storage. Do not rebuild the handler; restyle it.</li>
+              <li><strong style="color: #005C6D;">Restyle via a scoped wrapper</strong> (<code>.fs-form</code>) targeting the plugin's own markup, not by overriding plugin core CSS. Field classes map 1:1 to the spec above.</li>
+              <li><strong style="color: #005C6D;">Preserve the current required set and recipient rules first;</strong> the four routing fields (role, phone, district, interest) are additive. If the live form has fewer fields, add them &mdash; do not remove any that exist.</li>
+              <li><strong style="color: #005C6D;">Interest select</strong> options are the three Services lanes plus &ldquo;Something else&rdquo;, read from the Services CPT so the two pages cannot drift. Falls back to a hardcoded list if the CPT is empty.</li>
+              <li><strong style="color: #005C6D;">Success without redirect:</strong> use the plugin's AJAX confirmation and render the success panel into the form's container. If the plugin can only redirect, redirect back to <code>?sent=1</code> and render the panel server-side from that param &mdash; same panel, same copy.</li>
+              <li><strong style="color: #005C6D;">Spam:</strong> honeypot plus a timing check, or Turnstile. <strong style="color: #005C6D;">No visible CAPTCHA</strong> &mdash; it is the single largest drop-off on a low-volume B2B form.</li>
+              <li><strong style="color: #005C6D;">Consent checkbox</strong> writes to the mailing list only on opt-in, stored with a timestamp. Unchecked by default, always.</li>
+              <li><strong style="color: #005C6D;">Editable in WordPress:</strong> hero heading and paragraph, form heading and helper line, the three &ldquo;what happens next&rdquo; steps, the reply-time promise, the aside contact values, and the four reach cards (title, note, CTA, link) as a capped repeater. Validation messages live in one filterable array, not scattered in templates.</li>
+              <li><strong style="color: #005C6D;">Reply-time promise appears twice</strong> &mdash; under the submit button and in the success panel. Pull both from one theme-option field so they can never disagree.</li>
+              <li><strong style="color: #005C6D;">A11y:</strong> one <code>h1</code>; every input has a real <code>&lt;label for&gt;</code> (no placeholder-as-label); the error summary is <code>role="alert"</code> and focusable; the success panel is <code>role="status"</code>; the asterisk key is explained in text before the first field.</li>
+              <li><strong style="color: #005C6D;">Analytics:</strong> fire the conversion on success-panel render, and log validation-error events by field name &mdash; that is how you find out which field is costing you submissions.</li>
+              <li><strong style="color: #005C6D;">Mockup caveat:</strong> the state tabs in this appendix are review chrome and do not ship. Validation here is illustrative; the real handler owns server-side validation too.</li>
+            </ul>
+          </div>
+          <div style="background: #005C6D; border-radius: 16px; padding: 34px 36px; color: #ffffff;">
+            <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #ffffff;">Assumptions &amp; missing assets</h3>
+            <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.88);">Decisions made to keep moving. None require a new component.</p>
+            <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.9);">
+              <li><strong style="color: #ffffff;">No Contact copy in the doc.</strong> The hero, form headings, helper text, validation messages, success copy, and reach cards are all written by me. Every string is replaceable.</li>
+              <li><strong style="color: #ffffff;">&ldquo;Within two business days&rdquo;</strong> is my invention and the single most important thing to confirm &mdash; it appears twice and it is a promise to real people. Tell me the real number.</li>
+              <li><strong style="color: #ffffff;">Current field list unconfirmed.</strong> I assumed name, email, phone, message from the homepage form and added role, district/school, and interest for routing. If the live form differs, its fields win and mine are additive.</li>
+              <li><strong style="color: #ffffff;">Four routing fields added.</strong> Each one is a small tax on the sender; if the team will not act on the routing, cut interest and role and the form gets shorter.</li>
+              <li><strong style="color: #ffffff;">Consent checkbox is new</strong> and assumes a mailing list exists. If there is no list, remove it &mdash; do not collect permission you cannot honor.</li>
+              <li><strong style="color: #ffffff;">Email and phone</strong> are the ones used site-wide (hello@focusedschools.com, 844-957-2466). Confirm these are the right inbox and line for inbound inquiries rather than general contact.</li>
+              <li><strong style="color: #ffffff;">No office address or hours</strong> supplied, so the aside carries none and there is no map. If there is a visitable address, it belongs in the teal card as a fourth row.</li>
+              <li><strong style="color: #ffffff;">Privacy policy link</strong> not included &mdash; &ldquo;We never share your information&rdquo; carries it for now. If a policy page exists, that line should link to it.</li>
+              <li><strong style="color: #ffffff;">Form plugin unknown.</strong> The restyle approach assumes a plugin-rendered form; if it is a custom handler, the same field spec applies unchanged.</li>
+              <li><strong style="color: #ffffff;">No hero photograph by choice.</strong> This is the one page in the set that opens without 21:9 media &mdash; a deliberate call, flagged because it is a visible departure from the family.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440},&quot;showSpecs&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Handoff&quot;,&quot;label&quot;:&quot;Show handoff specs&quot;}}">
+const TEAL = "#005C6D";
+const ERR = "#C0392B";
+
+const TEXTAREA_BASE = "width: 100%; border-radius: 8px; border: 1px solid #e0e6e9; background: #ffffff; padding: 13px 14px; font-family: inherit; font-size: 15px; line-height: 1.6; color: #005C6D; resize: vertical; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), box-shadow 160ms cubic-bezier(.2,.7,.2,1);";
+const FIELD_BASE = "width: 100%; height: 48px; border-radius: 8px; border: 1px solid #e0e6e9; background: #ffffff; padding: 0 14px; font-family: inherit; font-size: 15px; color: #005C6D; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), box-shadow 160ms cubic-bezier(.2,.7,.2,1);";
+
+class Component extends DCLogic {
+  state = { mode: "default" };
+
+  componentDidMount() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    this.io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.style.animation = "fsRise 700ms cubic-bezier(.2,.7,.2,1) both";
+        e.target.style.opacity = "";
+        this.io.unobserve(e.target);
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+    this.observe();
+  }
+
+  componentDidUpdate() { this.observe(); }
+
+  revealAll() {
+    Array.from(document.querySelectorAll("[data-reveal]")).forEach((n) => { n.style.opacity = ""; });
+  }
+
+  observe() {
+    if (!this.io) return;
+    Array.from(document.querySelectorAll("[data-reveal]")).forEach((n) => {
+      if (n.dataset.seen) return;
+      n.dataset.seen = "1";
+      if (n.getBoundingClientRect().top < window.innerHeight * 0.95) return;
+      n.style.opacity = "0";
+      this.io.observe(n);
+    });
+    clearTimeout(this.safety);
+    this.safety = setTimeout(() => this.revealAll(), 900);
+  }
+
+  componentWillUnmount() { clearTimeout(this.safety); if (this.io) this.io.disconnect(); }
+
+  field(hasError, msg, help, kind) {
+    const text = hasError ? msg : (help || "");
+    const base = kind === "area" ? TEXTAREA_BASE : FIELD_BASE;
+    return {
+      err: hasError ? "true" : undefined,
+      invalid: hasError ? "true" : "false",
+      inputStyle: base + (hasError ? " border-color: " + ERR + "; background: #fdf7f6;" : ""),
+      msg: text,
+      msgStyle: text
+        ? "margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: " + (hasError ? ERR : "#51536a") + ";"
+        : "display: none;"
+    };
+  }
+
+  renderVals() {
+    const mode = this.state.mode;
+    const errors = mode === "error";
+    const success = mode === "success";
+    const sending = mode === "sending";
+
+    const nav = [
+      { label: "About", href: "https://www.focusedschools.com/about-our-mission-vision/" },
+      { label: "Team", href: "https://www.focusedschools.com/team/" },
+      { label: "Services", href: "https://www.focusedschools.com/services/" },
+      { label: "Impact Stories", href: "https://www.focusedschools.com/impact-stories/" },
+      { label: "Contact", href: "https://www.focusedschools.com/contact/" }
+    ];
+
+    const tag = (t) => t === "Reused"
+      ? "font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #005C6D; background: #eef1f3; padding: 6px 12px; border-radius: 999px; white-space: nowrap;"
+      : "font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #ffffff; background: #DD6237; padding: 6px 12px; border-radius: 999px; white-space: nowrap;";
+
+    const boxBase = "height: 48px; border-radius: 8px; padding: 0 14px; display: flex; align-items: center; font-size: 15px;";
+
+    return {
+      navItems: nav.map((n) => ({
+        label: n.label, href: n.href,
+        current: n.label === "Contact" ? "page" : undefined,
+        style: "font-size: 14px; font-weight: " + (n.label === "Contact" ? "700" : "500") + "; color: #005C6D; padding-bottom: 6px; border-bottom: " + (n.label === "Contact" ? "2px solid #DD6237" : "2px solid transparent") + "; transition: color 160ms cubic-bezier(.2,.7,.2,1); white-space: nowrap;"
+      })),
+
+      showForm: !success,
+      showSuccess: success,
+      showErrorSummary: errors,
+      errorHeadline: "Three fields need your attention before we can send this.",
+      errorList: [
+        { label: "Full name is required", href: "#c-name" },
+        { label: "Enter a valid email address", href: "#c-email" },
+        { label: "Tell us a little about how we can help", href: "#c-message" }
+      ],
+
+      fieldStyle: FIELD_BASE,
+      selectStyle: FIELD_BASE + " padding-right: 40px; cursor: pointer;",
+      textareaStyle: TEXTAREA_BASE,
+
+      f: {
+        name: this.field(errors, "Full name is required."),
+        role: this.field(false, ""),
+        email: this.field(errors, "Enter a valid email address so we can reply."),
+        org: this.field(false, "", "District, school, or organization name."),
+        message: Object.assign(
+          this.field(errors, "Tell us a little about how we can help \u2014 at least a sentence.", "", "area"),
+          { count: errors ? "" : "Optional detail helps" }
+        )
+      },
+
+      interests: [
+        "Select one \u2014 optional",
+        "Strategy and Vision",
+        "Leadership and Systems",
+        "Capacity and Coaching",
+        "Not sure yet",
+        "Something else"
+      ],
+
+      submitLabel: sending ? "Sending\u2026" : "Send Message \u2192",
+      submitStyle: "display: inline-flex; align-items: center; justify-content: center; gap: 14px; height: 48px; padding: 0 30px; border-radius: 999px; border: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #ffffff; transition: filter 160ms cubic-bezier(.2,.7,.2,1), transform 160ms cubic-bezier(.2,.7,.2,1); background: #DD6237; "
+        + (sending ? "opacity: 0.45; cursor: not-allowed;" : "cursor: pointer;"),
+      onSubmit: (e) => { e.preventDefault(); this.setState({ mode: "success" }); },
+
+      directLines: [
+        { k: "Email", v: "hello@focusedschools.com", href: "mailto:hello@focusedschools.com" },
+        { k: "Phone", v: "844-957-2466", href: "tel:+18449572466" },
+        { k: "LinkedIn", v: "Focused Schools", href: "https://www.linkedin.com/company/focused-schools" }
+      ].map((d, i) => Object.assign(d, {
+        rowStyle: "display: block; padding: " + (i === 0 ? "0 0 18px" : "18px 0") + "; color: #ffffff; border-bottom: " + (i === 2 ? "0" : "1px solid rgba(255,255,255,0.22)") + "; transition: color 160ms cubic-bezier(.2,.7,.2,1);"
+      })),
+
+      steps: [
+        { num: "01", title: "We read it", note: "A person on our team, not a queue. Usually the same day." },
+        { num: "02", title: "We reply within two business days", note: "With a real answer about whether and how we can help." },
+        { num: "03", title: "We talk it through", note: "A conversation first. No proposal until we understand the work." }
+      ],
+
+      reach: [
+        { title: "Impact Stories", note: "What changed in districts that partnered with us.", cta: "Read stories", href: "https://www.focusedschools.com/impact-stories/", accent: "#0A96CB" },
+        { title: "Our Services", note: "Three lanes, one cycle of inquiry.", cta: "Explore services", href: "https://www.focusedschools.com/services/", accent: "#DD6237" },
+        { title: "The Podcast", note: "Conversations with leaders doing this work now.", cta: "Listen", href: "https://www.focusedschools.com/podcast/", accent: "#BC3E8C" },
+        { title: "Meet the Team", note: "Who you would actually be working with.", cta: "See the team", href: "https://www.focusedschools.com/team/", accent: "#A7CC14" }
+      ].map((r) => Object.assign(r, {
+        barStyle: "display: block; width: 26px; height: 3px; background: " + r.accent + "; margin-bottom: 26px;"
+      })),
+
+      showSpecs: this.props.showSpecs ?? true,
+
+      stateTabs: [
+        { label: "Default", key: "default" },
+        { label: "Validation errors", key: "error" },
+        { label: "Sending", key: "sending" },
+        { label: "Success", key: "success" }
+      ].map((t) => ({
+        label: t.label,
+        select: () => this.setState({ mode: t.key }),
+        style: "padding: 11px 20px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; min-height: 44px; transition: background 160ms cubic-bezier(.2,.7,.2,1), color 160ms cubic-bezier(.2,.7,.2,1); "
+          + (mode === t.key
+            ? "background: #005C6D; border: 1px solid #005C6D; color: #ffffff;"
+            : "background: #ffffff; border: 1px solid #d3dde1; color: #005C6D;")
+      })),
+
+      hierarchy: [
+        { num: "01", title: "Compact hero", note: "Label rail + H1 + one paragraph that sets the reply expectation. No 21:9 media, so the form starts high on the page." },
+        { num: "02", title: "Form + sticky aside", note: "The page's whole job. Form left at 1fr, aside right at 400px holding direct contact, what-happens-next, and credentials." },
+        { num: "03", title: "Other ways to connect", note: "Four cards for readers who are not ready to write yet. Each accent is its own section's color." },
+        { num: "04", title: "Footer", note: "Reused verbatim; its CTA points at the form rather than off-page." }
+      ],
+
+      mapping: [
+        { name: "Sticky header / footer", source: "Homepage, verbatim; Contact added to nav and active", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Compact label-rail hero", source: "Homepage belief rail, used as a page header", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Form shell (white card)", source: "Homepage contact form shell, 16px radius", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Form field", source: "Homepage input + label row, help text, error state, select", tag: "Extended", tagStyle: tag("Extended") },
+        { name: "Error summary panel", source: "DS v1 alert panel, coral-family red", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Success panel", source: "No precedent \u2014 new state", tag: "New", tagStyle: tag("New") },
+        { name: "Teal aside card", source: "Homepage teal band + mark watermark, card-scaled", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Numbered steps list", source: "Homepage commitments list, compressed", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Credential / badge row", source: "About page credential row", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Reach cards", source: "DS v1 link card with accent bar", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Primary / secondary pills", source: "DS v1 buttons, unchanged", tag: "Reused", tagStyle: tag("Reused") }
+      ],
+
+      fieldStates: [
+        { label: "Default", value: "jrivera@district.org", msg: "", spec: "1px #e0e6e9 hairline on white. 48px tall, 8px radius.",
+          boxStyle: boxBase + " border: 1px solid #e0e6e9; background: #ffffff; color: #005C6D;", msgStyle: "display: none;" },
+        { label: "Placeholder", value: "jrivera@district.org", msg: "", spec: "Placeholder #9aa4a8 \u2014 an example, never a substitute for the label.",
+          boxStyle: boxBase + " border: 1px solid #e0e6e9; background: #ffffff; color: #9aa4a8;", msgStyle: "display: none;" },
+        { label: "Hover", value: "jrivera@district.org", msg: "", spec: "Border darkens to #c8d2d6 at 160ms. Nothing else moves.",
+          boxStyle: boxBase + " border: 1px solid #c8d2d6; background: #ffffff; color: #005C6D;", msgStyle: "display: none;" },
+        { label: "Focus", value: "jrivera@district.org", msg: "", spec: "Border teal + 3px rgba(10,150,203,.22) halo. The input's focus ring.",
+          boxStyle: boxBase + " border: 1px solid " + TEAL + "; background: #ffffff; color: #005C6D; box-shadow: 0 0 0 3px rgba(10,150,203,0.22);", msgStyle: "display: none;" },
+        { label: "Error", value: "jrivera@district", msg: "Enter a valid email address so we can reply.", spec: "Border #C0392B, ground #fdf7f6, message at 13px. Border, ground, and text \u2014 never color alone.",
+          boxStyle: boxBase + " border: 1px solid " + ERR + "; background: #fdf7f6; color: #005C6D;", msgStyle: "margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: " + ERR + ";" },
+        { label: "Disabled", value: "jrivera@district.org", msg: "", spec: "Ground #f5f6f8, text 55%, cursor not-allowed. Used only while sending.",
+          boxStyle: boxBase + " border: 1px solid #e8ecee; background: #f5f6f8; color: #9aa4a8;", msgStyle: "display: none;" }
+      ],
+
+      fieldSpec: [
+        { what: "Input height", value: "48px" },
+        { what: "Radius", value: "8px" },
+        { what: "Border", value: "1px #e0e6e9" },
+        { what: "Horizontal padding", value: "14px" },
+        { what: "Input text", value: "15px / #005C6D" },
+        { what: "Placeholder", value: "#9aa4a8" },
+        { what: "Label", value: "12px / 700 / 0.06em" },
+        { what: "Label \u2192 field", value: "10px" },
+        { what: "Optional tag", value: "9px / 0.12em caps" },
+        { what: "Help / error text", value: "13px / 1.5" },
+        { what: "Field \u2192 message", value: "8px" },
+        { what: "Textarea rows / padding", value: "6 / 13px 14px" },
+        { what: "Focus halo", value: "3px rgba(10,150,203,.22)" },
+        { what: "Error ground", value: "#fdf7f6" },
+        { what: "Checkbox", value: "20px, accent #005C6D" }
+      ],
+
+      spacing: [
+        { what: "Container / gutter", value: "1400 / 24px" },
+        { what: "Hero padding", value: "72px / 80px" },
+        { what: "Form section padding", value: "96px / 112px" },
+        { what: "Form / aside columns", value: "1fr + 400px, 80px gap" },
+        { what: "Form shell padding", value: "44px 48px 48px" },
+        { what: "Form header \u2192 fields", value: "34px" },
+        { what: "Field group gap (vertical)", value: "26px" },
+        { what: "Paired field gap", value: "24px" },
+        { what: "Error summary \u2192 first field", value: "30px" },
+        { what: "Consent panel padding", value: "18px 20px" },
+        { what: "Submit row gap", value: "24px" },
+        { what: "Aside card gap", value: "20px" },
+        { what: "Aside card padding", value: "32\u201336px" },
+        { what: "Sticky aside offset", value: "top 118px" },
+        { what: "Success panel padding", value: "56px 52px 60px" },
+        { what: "Reach card min-height", value: "220px" },
+        { what: "Mobile section padding", value: "64px" },
+        { what: "Mobile form shell padding", value: "28px 24px 32px" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

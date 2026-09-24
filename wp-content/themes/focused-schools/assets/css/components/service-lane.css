@@ -37,7 +37,7 @@
 .fs-lane__copy h2 {
 	margin: 0 0 22px;
 	max-width: 18ch;
-	font-size: 2.25rem;
+	font-size: 2.75rem;
 	line-height: 1.04;
 	letter-spacing: -0.03em;
 	font-weight: 700;
@@ -192,10 +192,10 @@
 	}
 }
 
-@media ( min-width: 1024px ) {
+@media ( max-width: 720px ) {
 
 	.fs-lane__copy h2 {
-		font-size: 2.75rem;
+		font-size: 2rem;
 	}
 }
 

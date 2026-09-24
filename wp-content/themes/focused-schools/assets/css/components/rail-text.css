@@ -1,11 +1,13 @@
 /**
  * Rail Text Block. Exact geometry from the approved .dc design: 264px label
  * column, 84px display heading (steps down at each breakpoint), 19px lead
- * paragraph body.
+ * paragraph body. Bottom padding and heading font-weight are set per-caller
+ * via CSS custom properties (rail-text.php), since Home/About/Team each
+ * specify slightly different values for this shared component.
  */
 
 .fs-rail-text {
-	padding: 6rem 0 7.5rem;
+	padding: 6rem 0 var( --fs-rail-padding-bottom, 7.5rem );
 }
 
 .fs-rail-text__inner {
@@ -39,8 +41,12 @@
 	font-size: 3.75rem;
 	line-height: 1;
 	letter-spacing: -0.03em;
-	font-weight: 700;
+	font-weight: var( --fs-rail-heading-weight, 700 );
 	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-rail-text__content h2 strong {
+	font-weight: 700;
 }
 
 .fs-rail-text__content p {
@@ -57,7 +63,7 @@
 	line-height: 1.75;
 }
 
-@media ( min-width: 1240px ) {
+@media ( min-width: 1241px ) {
 	.fs-rail-text__inner {
 		grid-template-columns: 264px minmax( 0, 1fr );
 	}
@@ -68,6 +74,10 @@
 }
 
 @media ( max-width: 720px ) {
+	.fs-rail-text {
+		padding: 4rem 0;
+	}
+
 	.fs-rail-text__content h2 {
 		font-size: 2.25rem;
 	}

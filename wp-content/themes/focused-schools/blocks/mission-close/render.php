@@ -20,6 +20,7 @@ get_template_part(
 	'template-parts/components/content-image-split',
 	null,
 	array(
+		'eyebrow'        => isset( $attributes['eyebrow'] ) ? $attributes['eyebrow'] : '',
 		'heading'        => isset( $attributes['heading'] ) ? $attributes['heading'] : '',
 		'body'           => '<p>' . esc_html( isset( $attributes['body'] ) ? $attributes['body'] : '' ) . '</p>',
 		'image_url'      => $fs_photo['url'],

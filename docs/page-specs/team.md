@@ -73,3 +73,77 @@ itself needed no change — it was already using current tokens (`ink-soft`, `co
 via bounding-box measurement: 378×472.5px, an exact 4:5 match), unlike some Home-page
 image contexts fixed in an earlier pass — this one sits in a CSS Grid track with a
 definite width, which is what that fix depended on.
+
+## 9. Exact-Fidelity Pass Against `Focused Schools Team.dc.html`
+
+This entire page (§1–§8 above) predates the literal `.dc` source files — it was built from
+"the approved mockup's /#/team route" before `Focused Schools Team.dc.html` was supplied, so
+it was never checked against that file directly. This pass read it in full and fixed every
+real discrepancy found. `team-card.php`'s quote block + LinkedIn tile + bordered footer row
+needed no change here — `Focused Schools Team.dc.html`'s own designer-handoff notes confirm
+this richer treatment (not the About page's plain card) is this page's own correct design,
+and `bio_modal => true` with no `compact` flag already selects it by default.
+
+**Fixed:**
+
+- **Closing CTA section used the wrong component.** `cta-banner.php` (a text-only,
+  centered banner) doesn't match the `.dc` source's closing section at all — it's a
+  white-ground, 2-column grid with real photography on the right, identical in structure to
+  Home's Mission section and About's Mission Close. Swapped to `content-image-split.php`
+  (same component, `image_url` => `retreat-2.jpg`, same "Two education leaders celebrating
+  progress together." caption both pages already share), which also needed a new `eyebrow`
+  prop this page requires ("Say hello") — added it as a small, backward-compatible addition
+  to the shared component, and used it to fix the *same* missing-eyebrow gap on About's
+  Mission Close ("Our mission") while touching the file.
+- **Team grid used the shared auto-fit `.fs-card-grid`** instead of the `.dc` source's fixed
+  3/2/1-column grid (`[data-team-grid]`: 3-up desktop, 2-up ≤1023px with 24px gap, 1-up
+  ≤767px with 20px gap) — same underlying issue, and same scoped-ID-override fix, as the
+  About page's `#fs-about-team-grid` (see `docs/page-specs/about.md` §16). Added
+  `#fs-team-grid` with its own breakpoints, since Team's gap values (32/24/20) genuinely
+  differ from About's (flat 32px throughout).
+- **Intro heading was missing its mixed-weight emphasis.** The `.dc` source's "We have sat
+  in the seat **you are sitting in.**" renders the first clause at 400 weight with the
+  second bold — `rail-text.php` was passing/rendering the whole heading as one plain string
+  through `esc_html()`. Rather than a one-off fix, extended the shared component: `heading`
+  now goes through `wp_kses_post()` (so a caller can embed `<strong>`, matching the pattern
+  already used by `commitment-list.php`'s heading), and added a `heading_weight` prop
+  (default 700, preserving Home's/About's existing all-bold headings) since Team's base
+  weight is 400. Also fixed `heading_max_ch` (15 → 18, the `.dc` source's real value for
+  this specific heading) and added a `padding_bottom` prop (Team's section uses 112px, not
+  the shared 120px default) — both via the same "per-caller override, shared default"
+  pattern already established for `heading_max_ch`.
+- **Grid-head layout and type scale were both wrong.** `.fs-team__head` used a CSS Grid
+  with a 1024px breakpoint and 52px/36px heading sizes; the `.dc` source's
+  `[data-grid-head]` is a flex row (`justify-content: space-between`) that only stacks at
+  ≤767px, and its heading (`data-display`) follows the same universal 68px/60px/36px scale
+  already established for other `data-display` headings this session. Rewrote both.
+  `.fs-team__count`'s letter-spacing was also off by one decimal (0.12em → 0.1em) and it was
+  missing `aria-live="polite"` (present in the `.dc` markup, needed so the "Load more"
+  script's count update is announced).
+- **Roster section id/anchor mismatch**: the section was `id="team-grid"` with the Hero's
+  CTA pointing at `#team-grid`; the `.dc` source uses `id="roster"` (`href="#roster"` on the
+  Hero CTA, and the same id in a spec-appendix note). Renamed both to match.
+- **Roster section padding**: was a flat 3rem/7.5rem (48px/120px) responsive step; the `.dc`
+  source's own value is asymmetric 112px/120px desktop with a 64px mobile step (this
+  section carries `data-space=""`, same universal mobile rule used across Home/About).
+
+**Known, deliberately unfixed inconsistency**: `Focused Schools Team.dc.html` uses 767px/
+1023px as its "mobile"/"tablet" breakpoints, while `Focused Schools Homepage.dc.html` and
+`Focused Schools About.dc.html` both use 720px/1024px for the same concepts. Page-specific
+CSS in `page-team.css` (added this pass) uses Team's own 767/1023 values throughout, but
+`hero.css` and `rail-text.css` are *shared* across Home/About/Team and were already fixed to
+720/1024 based on the two files that agree — changing them to 767/1023 would un-fix About.
+The practical effect is a ~47px range (721–767px) where a couple of shared-component
+elements (e.g. the intro heading) step up to their "desktop-ish" size slightly before
+Team's own page-specific elements (e.g. the grid-head heading) do. Narrow, cosmetic, and not
+worth a shared-component fork for one page's 1px-different design-file value.
+
+Verified: a 13-breakpoint sweep (320–1440px) confirmed every fixed value matches its `.dc`
+target exactly (grid columns/gaps, heading sizes/weights, `<strong>` presence, section
+padding) and zero overflow at any width; a 7-page regression sweep (Home, About, Services,
+Team, Contact, Podcast, Impact Stories — everything touching `hero.css`, `rail-text.css`,
+`content-image-split.php`, or the shared card grid) showed zero overflow and zero console
+errors; `php -l` and PHPCS (`phpcs.xml.dist`) both clean on every touched PHP file; keyboard
+QA confirmed the skip link and tab order still work (the bio modal's open/Escape-close/
+focus-return path itself remains unverified live in this environment, same known limitation
+as About — the one real team member has no bio content).

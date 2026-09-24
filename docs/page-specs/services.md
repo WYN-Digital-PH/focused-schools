@@ -250,3 +250,231 @@ stay lime. Computed styles at 1163px confirmed the 1024–1240px tier exactly: 4
 the ≥1241px desktop tier (1fr/500px at 96px gap, 52px title) was confirmed by reading the
 media block out of the CSSOM rather than by rendering it. Mobile (<768px) was not
 rendered either.
+
+## 9. Exact-Fidelity Pass: Hero/Index Copy, Missing CTA Image, and the Two Unverified Tiers
+
+A later task re-read `Focused Schools Services.dc.html` in full and found the §8/§8.6
+passes above had drifted from it in several places their own checks didn't cover — §8.6
+specifically verified the *lane* component's geometry, but never re-checked the Hero, the
+Lane Index header, or the closing CTA against the literal file, and its own "not verified"
+note above was still true going into this pass. All fixed and this time actually rendered
+live at every breakpoint (320–1440px), not inferred from the CSSOM.
+
+**Hero copy was entirely wrong** — eyebrow, heading, subheading, image, and CTA all
+differed from the `.dc` source (a Rendering pass from before the `.dc` file was supplied
+had never been reconciled against it once the file existed). Fixed to the literal copy:
+eyebrow "Services", heading "Support tailored to your goals, your challenges, and your
+students.", the `retreat-3.jpg` photo, and a "Let's Talk" CTA pointing at `#contact`
+(the closing section, not the `/contact/` page) — same anchor-not-navigation pattern as
+every other CTA on this page.
+
+**Lane Index header copy was also wrong** — "Every school is different. So is every
+plan." isn't in the `.dc` source at all; the real copy is "Three lanes. **One cycle of
+inquiry.**" (mixed weight) with a different description line. Extended
+`section-heading.php`'s `heading` prop to allow embedded HTML (`wp_kses_post()` instead of
+`esc_html()`, same backward-compatible pattern used elsewhere this session) so the
+`<strong>` renders, and added a scoped `#how-we-help` override in `page-services.css` for
+the header's flex-row layout and 68/60/36px `data-display` scale — kept scoped rather than
+changed in `section-heading.css` itself, since Impact Stories and `single.php` use that
+component's generic stacked layout correctly as-is.
+
+**The Lane Index rows were built with the wrong component.** `service-list.php` looks
+almost right for this section — close enough that an earlier pass reused it — but it's
+actually the Home page's own row pattern (`[data-srow]` in the `.dc` sources: two text
+fields, a 330px title column, right-arrow). Services' own index (`[data-index-row]`) is a
+different pattern: one lead line only, a 420px title column, and a down-arrow in a 46px
+circle. Built a new sibling component, `service-index.php` (+ `service-index.css`,
+registered in `inc/enqueue.php`), rather than overloading `service-list.php` with a
+variant flag — the two patterns differ structurally (a whole missing text field), not just
+in size, and `fs_service` already has three display integrations for three different
+pages/contexts (`service-card.php` grid, `service-list.php` Home rows, now
+`service-index.php` here), each degrading gracefully via duplicated meta-key reads if the
+plugin is off, matching that established convention.
+
+**Closing CTA was missing its photo, same bug as the Team page.** `cta-banner.php`
+(text-only) doesn't match the `.dc` source's 2-column `data-cta-grid` section with real
+photography on the right. Swapped to `content-image-split.php` (same `retreat-2.jpg` +
+caption every other closing CTA on the site already uses), which needed a new `id` prop
+so the section keeps its `#contact` anchor — `[id] { scroll-margin-top: 106px }` in
+`site.css` already applies sitewide, so no new CSS was needed for the jump offset.
+
+**Hero slab width was wrong** — the shared `hero.css` hardcoded 680px (Home/About's own
+value), but Services' `.dc` source specifies 640px, and (found while checking) Team's
+specifies 660px — three different values across three pages sharing one component. Added
+a `slab_width` prop to `hero.php` (default 680, so Home/About are unaffected) driven by a
+CSS custom property, same pattern as `rail-text.php`'s `heading_max_ch`; Services now
+passes 640, Team 660.
+
+**Lane title was missing its own mobile step.** `service-lane.css`'s `.fs-lane__copy h2`
+had a 36px base and a `min-width:1024px` override to 44px — but the `.dc` source's real
+cascade is 44px from 721px all the way up to 1240px (not starting at 1024), stepping down
+to 32px only at ≤720px, and up to 52px at ≥1241px. Fixed the threshold (1024 → the
+implicit 1240/720 split) and added the missing 32px mobile tier.
+
+Verified: a 13-breakpoint sweep (320–1440px) of the hero slab (width/position), hero H1,
+lane title, and lane-index grid-column-count confirms every value matches its `.dc` target
+exactly at every width — including the ≥1241px and ≤720px tiers the previous pass
+explicitly flagged as never rendered — with zero overflow anywhere. Keyboard QA: skip link
+first, the Hero CTA and a lane CTA both scroll-jump to `#contact` correctly. A 7-page
+site-wide regression sweep (Home/About/Services/Team/Contact/Podcast/Impact Stories — all
+affected by the shared `hero.php`/`content-image-split.php`/`section-heading.php`
+changes) showed zero overflow and zero console errors. `php -l` and PHPCS
+(`phpcs.xml.dist`) both clean on every touched and new file.
+
+## 10. Content Fix: the Seeded `fs_service` Posts Didn't Match This Page At All
+
+The client compared the rebuilt Lane Index against the live mockup and found the whole
+section wrong — not a styling issue, a content one. Tracing it: the 4 `fs_service` posts
+in this environment (Strategic Planning / Leadership Development / Educator Development /
+Technical Assistance) are Home page's own service names, verbatim, from
+`Focused Schools Homepage.dc.html`'s `services` data array. Services' own lane data
+(`Focused Schools Services.dc.html`, `renderVals()`, ~line 539) describes three
+completely different services — **Strategy and Vision**, **Leadership and Systems**,
+**Capacity and Coaching** — each with its own real tagline, body paragraph, offerings
+list, accent color, and photo caption. The `.dc` source's own "Assumptions" section (line
+498) even flags the conflict directly: *"Technical Assistance — the doc places it as a
+capability inside Leadership and Systems, but the homepage lists it as a fourth service
+row. The homepage row should either relabel or link into this lane."* — i.e. the mockup's
+own author knew Home and Services disagreed and left it unresolved.
+
+Since Home's teaser (`service-list.php`) and this page's index both query the same
+`fs_service` CPT with no filtering, fixing Services' content necessarily changes what Home
+shows too. Given the choice, the client asked to reseed to the correct 3 lanes and
+explicitly **not** touch Home's page code — so Home's teaser now displays these 3 real
+lane names/copy through its own unchanged template, rather than its previous (also
+not-`.dc`-sourced) 4-item copy. Nothing on Home's side was edited.
+
+**Reseeded** (post content + `_fs_service_tagline`/`_fs_service_accent_role`/
+`_fs_service_offerings`/`_fs_service_proof` postmeta) directly via the three existing
+posts whose legacy accent roles conveniently already matched the correct new identity
+(`strategy`→cerulean, `leadership`→coral, `capacity`→lime — reused the same post IDs
+rather than recreating them, so nothing else referencing them breaks), and deleted the
+fourth ("Technical Assistance") entirely, since the source is explicit it's a capability
+within Leadership and Systems, not its own lane.
+
+Verified live: the Lane Index now shows exactly the 3 real lanes with their real leads;
+each lane section shows the right accent color, offering count (4/6/4, matching the
+source), and proof caption; Home's teaser adapted cleanly to 3 rows with no layout
+breakage; slugs changed (`strategy-and-vision`/`leadership-and-systems`/
+`capacity-and-coaching`), so all internal anchors (`/services/#{slug}`) were re-verified
+against the new values. Screenshots reviewed at desktop/tablet/mobile — matches the
+approved design exactly. Full 7-page regression sweep re-run after the content change:
+zero overflow, zero console errors.
+
+**Known, deliberately-unaddressed gap**: the caption "kicker" span above each lane's
+proof line (e.g. "Planning in practice") currently reuses the lane's own title instead of
+the `.dc` source's distinct, shorter kicker phrase — `service-lane.php` has no field for
+it and none was added this pass, since it's a minor branding nuance rather than a content
+error, unlike the fixes above.
+
+## 11. "How We Help" Header Layout Bug
+
+The client caught this by comparing a live screenshot directly against the `.dc` source:
+the eyebrow and heading had visually separated from each other, landing eyebrow-top-left/
+heading-top-right/description-bottom-left instead of the intended two-column layout.
+Root cause: the `.dc` markup wraps eyebrow+heading together in one `<div>` (the left
+column) beside the description (the right column) — but `section-heading.php`'s actual
+output is three flat sibling elements with no such wrapper, so §9's `flex-direction: row`
+override on the shared component treated all three as independent flex items instead of
+two grouped columns. Rewrote the `#how-we-help` override to use CSS Grid with explicit
+per-child `grid-column`/`grid-row` placement (`minmax(0,1fr) 520px` columns, eyebrow at
+row 1/heading at row 2 both in column 1, description spanning both rows in column 2) —
+this reproduces the source's grouping without needing to change the shared component's
+DOM. Mobile (≤720px) collapses to one column in natural document order.
+
+Verified via bounding-box measurement (eyebrow and heading now share the same left x
+position, description sits in the right column) and screenshot review at desktop and
+mobile — matches the `.dc` source and the client's reference exactly. Full 7-page
+regression sweep re-run: zero overflow, zero console errors.
+
+## 12. Cycle of Excellence Was the Wrong Component
+
+A full top-to-bottom re-audit against `Focused Schools Services.dc.html`, requested after
+the header-layout catch above, found one more real mismatch in the one section neither
+this pass nor §8.6 had directly verified: "A Cycle of Excellence." The page was calling
+`cycle-of-excellence.php` — Home's own interactive, scroll-scrubbed 3-phase stepper
+(rotating mark, orbiting dot, clickable phase buttons) — but the `.dc` source's own
+section label literally reads *"Cycle of Excellence (teal band, **static reference**)"*:
+a simple non-interactive circle-and-icon graphic beside eyebrow/heading/body copy and a
+CTA button, explicitly a callback to the concept already explained in full elsewhere
+(About's own Cycle of Excellence section), not a second full treatment. Symptoms this
+produced: wrong eyebrow ("The method underneath" instead of "One shared focus"), a
+phase-stepper UI with labels ("Build Capacity" etc.) the Services `.dc` source never
+shows, and a completely missing "Our Approach" CTA button linking to `/about-our-mission-
+vision/` — `cycle-of-excellence.php` has no CTA slot at all, structurally can't render one.
+
+Built `cycle-reference.php` (+ `cycle-reference.css`, registered in `inc/enqueue.php`) as
+a new sibling rather than adding a "static mode" flag to the interactive component — same
+reasoning as `service-index.php` in §9: the two aren't a size/copy variant of each other,
+one has an entire interactive subsystem (JS-driven phase state, scroll-scrub) the other
+doesn't need or want. `cycle-of-excellence.php` itself is untouched, so Home's (and any
+other future caller's) use of the real interactive version is unaffected.
+
+Verified live: eyebrow now reads "One shared focus," the "Our Approach" button renders
+and links correctly, circle/ring/icon geometry and the 340px/1fr desktop grid (collapsing
+to one column ≤1024px) match the source, reviewed at desktop and mobile. Full 7-page
+regression sweep: zero overflow, zero console errors. `php -l` and PHPCS clean.
+
+## 13. Testimonial Section Was Invisible (White Text on a Light Ground)
+
+The client asked whether the testimonial section should be static or dynamic content —
+it looked essentially empty (only the coral quote-mark bars and carousel dots showed).
+The answer: **dynamic is correct as already decided** — the `.dc` source's own
+"Assumptions" note explicitly sanctions the real `fs_testimonial` carousel as an
+alternative to its literal single static quote, and this project consistently prefers
+CPT-driven content over hardcoded copy. All 3 real testimonials were already seeded and
+present in the page's HTML (confirmed via direct DOM inspection) — the actual bug was
+pure CSS, not a content question.
+
+`testimonial-carousel.css` hardcodes every text/control color to white — correct for
+Home, where this component sits on a teal "Impact stories" band (confirmed directly in
+`Focused Schools Homepage.dc.html`), but Services' own `.dc` source puts its testimonial
+section on a light `#f5f6f8` paper ground instead (`color: #005C6D` for the quote there,
+not white). White-on-white-effectively made the quote text, attribution, and most
+controls invisible. Compounding it: `.fs-services__quote` had no `background` at all
+(inheriting plain white) and the wrong padding (a flat, non-`data-space`-aware 48px
+instead of the source's 112px/64px-mobile).
+
+Added an `on_light` prop to `testimonial-carousel.php` (default `false`, so Home is
+unaffected) that adds a `.fs-testimonial-carousel--on-light` modifier class, styled in
+`testimonial-carousel.css` with the source's teal text plus reasonable light-ground
+tokens for the controls (the source itself doesn't show carousel dots/arrows, since its
+own version is a single static quote — used the same rule/paper-soft/ink-soft tokens
+already established elsewhere on this page for consistency). Fixed `.fs-services__quote`'s
+background and padding to match.
+
+Verified live: quote text and attribution now render in teal, section background is the
+correct paper tint, arrows/dots/status text all visible and using consistent tokens,
+screenshot reviewed. Full 7-page regression sweep: zero overflow, zero console errors —
+Home's own teal-band testimonial carousel confirmed unaffected (the `on_light` class is
+opt-in). `php -l` and PHPCS clean.
+
+No further discrepancies found in the rest of this page. Header/Footer are the shared,
+already-verified sitewide components.
+
+**Follow-up fix #2**: the client noticed the prev arrow sat isolated near the far-left
+edge while the dots and next arrow clustered together in the middle. Root cause, found
+by checking Home's own carousel layout (Services has no literal carousel markup at all,
+since its own `.dc` source shows only a static single quote — this whole component was
+adapted from Home's): the literal source groups prev+dots+next together in **one** flex
+container that sits in the parent grid's middle `auto` column, with an empty spacer
+`<span>` in column 1 and the slide counter in column 3. `testimonial-carousel.php` instead
+placed the prev button, dots, and next button as three separate direct children of the
+`1fr auto 1fr` grid — each aligning to the *start* of its own column by default, which is
+why prev landed at the far-left edge (start of a wide column 1) while next landed right
+next to the dots (start of the narrow column 3), an asymmetric result that had nothing to
+do with the light/dark-ground fix. Added a `.fs-testimonial-carousel__nav` flex wrapper
+around prev+dots+next and an empty spacer for grid column 1, matching the source exactly.
+This is a shared-component fix, so it also corrects the same (previously unreported, but
+equally present) issue on Home's own carousel. Verified via bounding-box measurement on
+both pages: the prev-to-next span is now centered exactly on the viewport center. Full
+regression sweep clean.
+
+**Follow-up fix #1**: the client reported the carousel's arrow buttons didn't respond.
+Root cause: `inc/enqueue.php` only ever enqueued `testimonial-carousel.js` inside its
+`is_front_page()` block — the `is_page('services')` block enqueued the page's CSS but no
+JS at all, so the markup and (now-fixed) styling rendered correctly while the prev/next/
+dot click handlers simply never attached. Added the same script enqueue to the Services
+block. Verified: next/prev (including wraparound) and dot navigation all confirmed working
+via scripted clicks, live status text updates correctly ("1 / 3" etc.). Regression sweep
+re-run clean.

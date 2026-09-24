@@ -13,6 +13,10 @@
 		"multiple": false
 	},
 	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Our mission"
+		},
 		"heading": {
 			"type": "string",
 			"default": "Support the educators who shape students' lives."

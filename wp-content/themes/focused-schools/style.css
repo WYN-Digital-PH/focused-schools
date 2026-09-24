@@ -104,6 +104,14 @@ object {
 	}
 }
 
+/* Both Home's and About's .dc sources agree on 20px shell padding at this
+   width, overriding the 2rem step above it. */
+@media ( max-width: 720px ) {
+	.fs-container {
+		padding-inline: 1.25rem;
+	}
+}
+
 @media ( min-width: 1024px ) {
 	.fs-container {
 		padding-inline: var( --wp--preset--spacing--x-large, 3rem );

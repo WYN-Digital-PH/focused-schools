@@ -8,7 +8,9 @@
  * - flip      (bool) photo left, copy right — derived from query position, not
  *              authored. Source order stays copy-then-figure either way.
  * - cta_label (string) defaults to "Start This Conversation"
- * - cta_url   (string) defaults to /contact/
+ * - cta_url   (string) defaults to "#contact" — the closing CTA section on
+ *              this same page (the `.dc` source's literal href for every
+ *              lane's button), not an external page navigation
  * - image_url (string) fallback photo used only when the service has no
  *              featured image, e.g. a theme-bundled asset
  * - image_alt (string) alt text for image_url
@@ -78,7 +80,7 @@ $fs_kicker_color = 'lime' === $fs_accent ? $fs_accent_colors['cerulean'] : $fs_a
 $fs_offerings = array_values( array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $fs_raw ) ), 'strlen' ) );
 
 $fs_cta_label = isset( $args['cta_label'] ) ? $args['cta_label'] : __( 'Start This Conversation', 'focused-schools' );
-$fs_cta_url   = isset( $args['cta_url'] ) ? $args['cta_url'] : home_url( '/contact/' );
+$fs_cta_url   = isset( $args['cta_url'] ) ? $args['cta_url'] : '#contact';
 $fs_has_image = has_post_thumbnail( $fs_post_id ) || ! empty( $args['image_url'] );
 ?>
 <div class="fs-lane<?php echo $fs_flip ? ' fs-lane--flip' : ''; ?><?php echo $fs_has_image ? '' : ' fs-lane--no-media'; ?>" id="<?php echo esc_attr( $fs_post->post_name ); ?>">

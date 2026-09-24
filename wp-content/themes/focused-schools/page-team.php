@@ -75,7 +75,8 @@ if ( have_posts() ) :
 					'image_url'  => $fs_img . 'retreat-3.jpg',
 					'image_alt'  => __( 'The Focused Schools team working alongside district leaders.', 'focused-schools' ),
 					'cta_label'  => __( 'See the Team', 'focused-schools' ),
-					'cta_url'    => '#team-grid',
+					'cta_url'    => '#roster',
+					'slab_width' => 660,
 				)
 			);
 
@@ -95,8 +96,14 @@ if ( have_posts() ) :
 				array(
 					'eyebrow'        => __( "Who you'll work with", 'focused-schools' ),
 					'icon_url'       => $fs_img . 'mark-1.svg',
-					'heading'        => __( 'We have sat in the seat you are sitting in.', 'focused-schools' ),
-					'heading_max_ch' => 15,
+					'heading'        => sprintf(
+						/* translators: %s: "you are sitting in." (emphasized). */
+						__( 'We have sat in the seat %s', 'focused-schools' ),
+						'<strong>' . __( 'you are sitting in.', 'focused-schools' ) . '</strong>'
+					),
+					'heading_max_ch' => 18,
+					'padding_bottom' => 112,
+					'heading_weight' => 400,
 					'body'           => array(
 						__( "We've celebrated student successes, supported educators through difficult seasons, and made the tough decisions that come with leading schools and districts. That experience is why we listen before we lead — and why the people you meet on day one are the people who stay with the work.", 'focused-schools' ),
 					),
@@ -106,7 +113,7 @@ if ( have_posts() ) :
 			);
 		?>
 
-			<section class="fs-team__section fs-team__grid-section" id="team-grid" aria-labelledby="fs-team-heading">
+			<section class="fs-team__section fs-team__grid-section" id="roster" aria-labelledby="fs-team-heading">
 				<div class="fs-container fs-container--shell">
 					<header class="fs-team__head">
 						<div>
@@ -123,7 +130,7 @@ if ( have_posts() ) :
 							// every remaining card has been revealed.
 							$fs_count_all = sprintf( $fs_count_format, $fs_team_total, $fs_team_total );
 							?>
-							<p class="fs-team__count" data-fs-team-count data-fs-team-count-all="<?php echo esc_attr( $fs_count_all ); ?>">
+							<p class="fs-team__count" aria-live="polite" data-fs-team-count data-fs-team-count-all="<?php echo esc_attr( $fs_count_all ); ?>">
 								<?php echo esc_html( $fs_count_now ); ?>
 							</p>
 							<?php
@@ -176,16 +183,19 @@ if ( have_posts() ) :
 
 			<?php
 			get_template_part(
-				'template-parts/components/cta-banner',
+				'template-parts/components/content-image-split',
 				null,
 				array(
-					'eyebrow'     => __( 'Say hello', 'focused-schools' ),
-					'heading'     => __( 'Get to Know Us.', 'focused-schools' ),
-					'description' => __( 'Tell us where your district is headed and we will introduce you to the people who would carry the work with you.', 'focused-schools' ),
-					'cta_label'   => __( "Let's Talk", 'focused-schools' ),
-					'cta_url'     => home_url( '/contact/' ),
-					'cta2_label'  => __( 'See Impact Stories', 'focused-schools' ),
-					'cta2_url'    => home_url( '/impact-stories/' ),
+					'eyebrow'        => __( 'Say hello', 'focused-schools' ),
+					'heading'        => __( 'Get to Know Us.', 'focused-schools' ),
+					'body'           => '<p>' . esc_html__( 'Tell us where your district is headed and we will introduce you to the people who would carry the work with you.', 'focused-schools' ) . '</p>',
+					'image_url'      => $fs_img . 'retreat-2.jpg',
+					'image_alt'      => __( 'Two education leaders celebrating progress together.', 'focused-schools' ),
+					'image_position' => 'right',
+					'cta_label'      => __( "Let's Talk", 'focused-schools' ),
+					'cta_url'        => home_url( '/contact/' ),
+					'cta2_label'     => __( 'See Impact Stories', 'focused-schools' ),
+					'cta2_url'       => home_url( '/impact-stories/' ),
 				)
 			);
 			?>
