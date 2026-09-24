@@ -111,6 +111,14 @@
 	stroke-width: 2;
 }
 
+/* Previous, dots and next travel together, centred between the rules. */
+.fs-testimonial-carousel__cluster {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 18px;
+}
+
 .fs-testimonial-carousel__dots {
 	display: flex;
 	justify-content: center;
@@ -148,5 +156,17 @@
 	.fs-testimonial-carousel__slide {
 		grid-template-columns: minmax( 0, 1fr );
 		gap: 1rem;
+	}
+}
+
+@media ( max-width: 767px ) {
+	.fs-testimonial-carousel__controls {
+		grid-template-columns: minmax( 0, 1fr );
+		justify-items: center;
+		margin-top: 2.5rem;
+	}
+
+	.fs-testimonial-carousel__status {
+		justify-self: center;
 	}
 }

@@ -55,8 +55,19 @@ $fs_count = count( $fs_posts );
 
 	<?php if ( $fs_count > 1 ) : ?>
 		<div class="fs-testimonial-carousel__controls">
+			<?php
+			/*
+			 * A spacer, so the control cluster centres in the middle column
+			 * while the counter keeps the right one. Without it the four
+			 * controls auto-place across a three-column grid and the
+			 * previous arrow strands itself at the far left.
+			 */
+			?>
+			<span aria-hidden="true"></span>
+
+			<div class="fs-testimonial-carousel__cluster">
 			<button type="button" class="fs-testimonial-carousel__arrow" data-fs-carousel-prev aria-label="<?php esc_attr_e( 'Previous testimonial', 'focused-schools' ); ?>">
-				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg>
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5 8.5 12 15.5 19" /></svg>
 			</button>
 			<div class="fs-testimonial-carousel__dots" role="tablist" aria-label="<?php esc_attr_e( 'Choose testimonial', 'focused-schools' ); ?>">
 				<?php foreach ( $fs_posts as $fs_index => $fs_post ) : ?>
@@ -72,8 +83,10 @@ $fs_count = count( $fs_posts );
 				<?php endforeach; ?>
 			</div>
 			<button type="button" class="fs-testimonial-carousel__arrow" data-fs-carousel-next aria-label="<?php esc_attr_e( 'Next testimonial', 'focused-schools' ); ?>">
-				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg>
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5 15.5 12 8.5 19" /></svg>
 			</button>
+			</div>
+
 			<p class="fs-testimonial-carousel__status" data-fs-carousel-status aria-live="polite">
 				<?php echo esc_html( sprintf( /* translators: 1: slide number 2: total slides. */ __( '%1$d / %2$d', 'focused-schools' ), 1, $fs_count ) ); ?>
 			</p>
