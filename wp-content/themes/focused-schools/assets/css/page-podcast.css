@@ -97,3 +97,162 @@
 		font-size: 3.25rem;
 	}
 }
+
+/* Latest episode spotlight ------------------------------------------------- */
+
+.fs-podcast__latest {
+	padding-block: 5rem 7rem;
+}
+
+.fs-podcast__latest .fs-eyebrow-row {
+	margin-bottom: 2.125rem;
+}
+
+.fs-spotlight {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-radius: var( --fs-r-sm, 8px );
+	overflow: hidden;
+}
+
+.fs-spotlight__copy {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 2.25rem;
+}
+
+.fs-spotlight__copy .fs-eyebrow {
+	margin: 0 0 18px;
+}
+
+.fs-spotlight__copy h2 {
+	margin: 0 0 20px;
+	max-width: 22ch;
+	font-size: 1.875rem;
+	line-height: 1.04;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-spotlight__copy p {
+	margin: 0 0 34px;
+	max-width: 58ch;
+	font-size: 1.0625rem;
+	line-height: 1.7;
+	color: rgba( 255, 255, 255, 0.92 );
+}
+
+.fs-spotlight__player {
+	background: var( --wp--preset--color--base, #ffffff );
+	border-radius: var( --fs-r-sm, 8px );
+	overflow: hidden;
+}
+
+.fs-spotlight__frame {
+	display: block;
+	width: 100%;
+	border: 0;
+}
+
+.fs-spotlight__media {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 200px;
+	background: var( --wp--preset--color--teal-deep, #004855 );
+}
+
+.fs-spotlight__media img {
+	width: auto;
+	height: 46%;
+	opacity: 0.16;
+}
+
+/* Embed shell -------------------------------------------------------------- */
+
+.fs-embed {
+	background: var( --wp--preset--color--base, #ffffff );
+	border: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.fs-embed__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	padding: 24px 28px;
+	border-bottom: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+}
+
+.fs-embed__id {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.fs-embed__tile {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	flex: 0 0 auto;
+	border-radius: var( --fs-r-sm, 8px );
+	background: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-embed__tile img {
+	width: auto;
+	height: 60%;
+}
+
+.fs-embed__id strong {
+	display: block;
+	font-size: 1.0625rem;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-embed__id em {
+	display: block;
+	font-style: normal;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+@media ( min-width: 1024px ) {
+	.fs-spotlight--audio {
+		grid-template-columns: minmax( 0, 1fr ) 420px;
+	}
+
+	.fs-spotlight__copy {
+		padding: 4rem 4.25rem 4.25rem;
+	}
+
+	.fs-spotlight__copy h2 {
+		font-size: 2.75rem;
+	}
+
+	.fs-spotlight__media {
+		min-height: 100%;
+	}
+}
+
+@media ( max-width: 640px ) {
+	.fs-podcast__latest {
+		padding-block: 3rem 4rem;
+	}
+
+	.fs-embed__head {
+		padding: 18px 20px;
+	}
+}

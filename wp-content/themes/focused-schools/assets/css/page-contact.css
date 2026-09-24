@@ -14,3 +14,289 @@
 	text-align: center;
 	color: var( --wp--preset--color--secondary, #6b7280 );
 }
+
+/* Approved contact design ------------------------------------------------- */
+
+.fs-contact__hero {
+	padding-block: 3rem 3.5rem;
+}
+
+.fs-contact__title {
+	margin: 0 0 26px;
+	max-width: 18ch;
+	font-size: 2.25rem;
+	line-height: 1.05;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-contact__lead {
+	margin: 0;
+	max-width: 62ch;
+	font-size: 1.1875rem;
+	line-height: 1.7;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-contact__form-section {
+	padding-block: 6rem 7rem;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-contact-grid {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 3.5rem;
+	align-items: start;
+}
+
+.fs-form-col {
+	order: 1;
+	min-width: 0;
+}
+
+/* Aside -------------------------------------------------------------------- */
+
+.fs-aside {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	order: 2;
+}
+
+.fs-panel {
+	padding: 30px 28px 32px;
+	background: var( --wp--preset--color--base, #ffffff );
+	border: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+	border-radius: 16px;
+}
+
+.fs-panel .fs-eyebrow {
+	margin: 0 0 22px;
+}
+
+.fs-teal-card {
+	position: relative;
+	padding: 36px 34px 38px;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-radius: 16px;
+	color: var( --wp--preset--color--base, #ffffff );
+	overflow: hidden;
+}
+
+.fs-teal-card .fs-eyebrow {
+	margin: 0 0 24px;
+}
+
+.fs-aside__rows {
+	display: flex;
+	flex-direction: column;
+}
+
+.fs-aside__row {
+	display: block;
+	padding: 18px 0;
+	border-bottom: 1px solid rgba( 255, 255, 255, 0.22 );
+	color: var( --wp--preset--color--base, #ffffff );
+	text-decoration: none;
+	transition: color var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-aside__row:first-child {
+	padding-top: 0;
+}
+
+.fs-aside__row:last-child {
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.fs-aside__row:hover {
+	color: var( --wp--preset--color--lime, #a7cc14 );
+}
+
+.fs-aside__row span {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 0.625rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: rgba( 255, 255, 255, 0.7 );
+}
+
+.fs-aside__row strong {
+	display: block;
+	font-size: 1rem;
+	font-weight: 700;
+	line-height: 1.4;
+}
+
+/* Steps and credential ----------------------------------------------------- */
+
+.fs-steps {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+}
+
+.fs-steps li {
+	display: grid;
+	grid-template-columns: 30px minmax( 0, 1fr );
+	gap: 16px;
+	padding: 16px 0;
+	border-bottom: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+}
+
+.fs-steps li:last-child {
+	border-bottom: 0;
+	padding-bottom: 0;
+}
+
+.fs-steps li > span {
+	padding-top: 3px;
+	font-size: 0.6875rem;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-steps strong {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 0.9375rem;
+	font-weight: 700;
+	line-height: 1.35;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-mini {
+	display: block;
+	font-size: 0.8125rem;
+	line-height: 1.55;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-credential {
+	display: flex;
+	align-items: flex-start;
+	gap: 22px;
+}
+
+.fs-credential img {
+	width: 92px;
+	height: auto;
+	flex: 0 0 auto;
+}
+
+.fs-credential strong {
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+/* Reach cards -------------------------------------------------------------- */
+
+.fs-contact__reach {
+	padding-block: 7.5rem;
+}
+
+.fs-grid-4 {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 20px;
+}
+
+.fs-reach-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 40px;
+	min-height: 220px;
+	padding: 30px 32px 32px;
+	background: var( --wp--preset--color--base, #ffffff );
+	border: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+	border-radius: 16px;
+	color: inherit;
+	text-decoration: none;
+	transition:
+		box-shadow var( --fs-dur-base, 240ms ) var( --fs-ease, ease ),
+		transform var( --fs-dur-base, 240ms ) var( --fs-ease, ease ),
+		border-color var( --fs-dur-base, 240ms ) var( --fs-ease, ease );
+}
+
+.fs-reach-card:hover {
+	box-shadow: var( --fs-shadow-2, 0 12px 28px rgba( 0, 92, 109, 0.12 ) );
+	transform: translateY( -2px );
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-reach-card .fs-rule {
+	margin-bottom: 26px;
+}
+
+.fs-reach-card strong {
+	display: block;
+	margin-bottom: 10px;
+	font-size: 1.5rem;
+	line-height: 1.18;
+	letter-spacing: -0.02em;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-reach-card .fs-small {
+	display: block;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-reach-card .fs-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-contact__empty {
+	margin: 0;
+}
+
+.fs-contact__empty p {
+	margin: 0 0 0.75rem;
+}
+
+@media ( min-width: 768px ) {
+	.fs-grid-4 {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	}
+}
+
+@media ( min-width: 1024px ) {
+	.fs-contact__hero {
+		padding-block: 4.5rem 5rem;
+	}
+
+	.fs-contact__title {
+		font-size: 3.25rem;
+	}
+
+	.fs-contact-grid {
+		grid-template-columns: minmax( 0, 1fr ) 400px;
+		gap: 5rem;
+	}
+
+	/* Follows the reader down a long form. */
+	.fs-aside {
+		position: sticky;
+		top: 118px;
+		order: 0;
+	}
+
+	.fs-grid-4 {
+		grid-template-columns: repeat( 4, minmax( 0, 1fr ) );
+	}
+}

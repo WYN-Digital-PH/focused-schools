@@ -373,3 +373,92 @@ forbidden as a bulk conversion.
 | `fs_impact_story` singles | Unaffected; they use their own template |
 
 Twelve routes swept, zero PHP errors, phpcs clean on six files.
+
+
+---
+
+## 12. Contact Form Preservation (September 25, 2026)
+
+The Contact page was rebuilt to the approved design. **No form system was
+built, and no form behaviour was touched.** Elementor Pro still owns the form
+on that page: its fields, its validation, its saved submissions, its
+notification emails and its redirect to /thanks/.
+
+Two paths, both untouched pass-throughs, and neither can alter the form:
+
+1. **Page is Elementor-built** — `page-contact.php` renders Elementor's own
+   output and none of the new design applies. Same guard as `single.php`.
+2. **Otherwise** — the page's own content is rendered through
+   `the_content()` into the form column, so whatever shortcode, widget or
+   block holds the form runs exactly as it does today. The theme adds a
+   styling wrapper around it and nothing else.
+
+### Verified locally
+
+Elementor is not installed here, so the form itself could not be exercised.
+What *was* proved is the pass-through, using a stand-in shortcode that
+returns a form:
+
+| Check | Result |
+|---|---|
+| Form renders inside the design's form column | yes |
+| `action` attribute preserved byte-for-byte | `/thanks/` unchanged |
+| `required` attribute preserved | yes |
+| Theme adds only a wrapper | yes |
+| Empty state when no form content exists | shown, with the direct contact details beside it |
+| `/thanks/` still resolves | 200 |
+| Page IDs | podcast 43, contact 44, thanks 75 — unchanged |
+
+### Not verifiable in this environment — must be done on staging
+
+The task list asks for a real submission test. **None of the following could
+be run here, because Elementor, Elementor Pro and any mail transport are all
+absent from this local environment:**
+
+1. required-field validation behaviour
+2. actual submit
+3. submission saved to Elementor's store
+4. **notification email actually received**
+5. redirect to /thanks/ firing
+6. error behaviour on failure
+
+**Mail delivery is the biggest unknown.** `docs/01-technical-audit.md` already
+records that no SMTP plugin was found and that delivery relies on PHP mail,
+which is unreliable and unobservable. Nothing in this sprint changed that, and
+nothing in this sprint can prove an email arrives. A real end-to-end
+submission on staging, with a confirmed received email, is still outstanding
+and should not be assumed to work.
+
+---
+
+## 13. Podcast Page (September 25, 2026)
+
+Rebuilt to the approved design. **Buzzsprout is preserved, not replaced.**
+
+| Requirement | How it is met |
+|---|---|
+| Keep Buzzsprout active | Both players are Buzzsprout's own iframes; the new "embed shell" is a frame drawn around the vendor markup, which is untouched |
+| No unnecessary YouTube iframes on load | **Zero YouTube iframes in the page source.** Verified with the page fully configured |
+| YouTube automation not a launch dependency | With no playlist configured the Watch section shows its own message and a link to the channel; every other section works normally |
+| YouTube automation out of scope | Not extended. The existing playlist client is unchanged |
+
+Sections now render in the design's order: hero, subscribe rail, **latest
+episode**, all episodes in the embed shell, watch, closing CTA. The first two
+of those are new; the rest were already present.
+
+The latest-episode panel is optional — with no episode id set it simply does
+not appear, and the full player below still lists every episode, so the page
+never depends on it. Three optional Site Settings fields drive it.
+
+### One functional gap to decide on
+
+The Watch section has **no manual video source**. Videos come only from the
+YouTube playlist integration, so unless that is configured on staging the
+section will show its empty state rather than the videos the live page
+currently displays.
+
+Adding a manual video list would be new scope and sits next to the YouTube
+automation this task was told to leave alone, so it was not built. The
+options are: configure the playlist integration, or approve a small manual
+video source. **This needs a decision before launch** if the live page's
+videos are expected to carry over.

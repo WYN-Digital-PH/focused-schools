@@ -136,6 +136,56 @@ if ( have_posts() ) :
 			);
 		?>
 
+			<?php
+			/*
+			 * Latest episode. Buzzsprout's own single-episode player, so
+			 * listening starts without scrolling to the full list. The
+			 * episode id is optional: with none set this section simply does
+			 * not appear, and the full player below still carries every
+			 * episode — the page never depends on it.
+			 */
+			$fs_latest_id = focused_schools_podcast_setting( 'podcast_latest_episode_id' );
+
+			if ( $fs_buzzsprout_id && $fs_latest_id ) :
+				$fs_latest_src = add_query_arg(
+					array(
+						'client_source' => 'small_player',
+						'iframe'        => 'true',
+					),
+					'https://www.buzzsprout.com/' . rawurlencode( $fs_buzzsprout_id ) . '/' . rawurlencode( $fs_latest_id )
+				);
+
+				$fs_latest_player = sprintf(
+					'<iframe class="fs-spotlight__frame" src="%1$s" title="%2$s" loading="lazy" width="100%%" height="200" frameborder="0" scrolling="no"></iframe>',
+					esc_url( $fs_latest_src ),
+					esc_attr__( 'Latest episode player', 'focused-schools' )
+				);
+				?>
+				<section class="fs-podcast__section fs-podcast__latest" aria-labelledby="fs-podcast-latest-title">
+					<div class="fs-container fs-container--shell">
+						<div class="fs-eyebrow-row">
+							<span class="fs-rule fs-rule--rasp" aria-hidden="true"></span>
+							<p class="fs-eyebrow"><?php esc_html_e( 'Latest episode', 'focused-schools' ); ?></p>
+						</div>
+						<?php
+						get_template_part(
+							'template-parts/components/episode-spotlight',
+							null,
+							array(
+								'eyebrow'  => $fs_show_title,
+								'title'    => focused_schools_podcast_setting( 'podcast_latest_episode_title' ) ? focused_schools_podcast_setting( 'podcast_latest_episode_title' ) : __( 'Start with the latest conversation.', 'focused-schools' ),
+								'body'     => focused_schools_podcast_setting( 'podcast_latest_episode_summary' ),
+								'mark_url' => $fs_img . 'mark-white.svg',
+								'inner'    => $fs_latest_player,
+							)
+						);
+						?>
+					</div>
+				</section>
+				<?php
+			endif;
+			?>
+
 			<section class="fs-podcast__section fs-podcast__listen" id="listen" aria-labelledby="fs-podcast-listen-title">
 				<div class="fs-container fs-container--shell">
 					<header class="fs-podcast__head">
@@ -159,12 +209,13 @@ if ( have_posts() ) :
 						?>
 					</header>
 
-					<p class="fs-podcast__hosted">
-						<span class="fs-podcast__show"><?php echo esc_html( $fs_show_title ); ?></span>
-						<span class="fs-podcast__hosted-by"><?php esc_html_e( 'Hosted on Buzzsprout', 'focused-schools' ); ?></span>
-					</p>
-
 					<?php
+					/*
+					 * Buzzsprout's own embed, captured so the design's shell
+					 * can be drawn around it. The player markup itself is
+					 * untouched — the shell only frames it.
+					 */
+					ob_start();
 					get_template_part(
 						'template-parts/components/podcast-player',
 						null,
@@ -175,6 +226,22 @@ if ( have_posts() ) :
 							'empty_text' => __( 'Episodes will appear here once the Buzzsprout podcast ID is set in Site Settings → Podcast.', 'focused-schools' ),
 						)
 					);
+					$fs_player = ob_get_clean();
+
+					if ( $fs_buzzsprout_id ) {
+						get_template_part(
+							'template-parts/components/embed-shell',
+							null,
+							array(
+								'title'    => $fs_show_title,
+								'kicker'   => __( 'Hosted on Buzzsprout', 'focused-schools' ),
+								'mark_url' => $fs_img . 'mark-white.svg',
+								'inner'    => $fs_player,
+							)
+						);
+					} else {
+						echo $fs_player; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the component's own escaped empty-state markup.
+					}
 					?>
 				</div>
 			</section>
