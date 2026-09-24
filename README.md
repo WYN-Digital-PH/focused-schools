@@ -13,6 +13,7 @@ The local checkout is a full WordPress install (Local by Flywheel), but Git only
 | `wp-content/plugins/focused-schools-core/` | Site plugin (content models, settings, migration helpers) |
 | `docs/` | Audits, architecture, and migration docs |
 | `docs/page-specs/` | One spec per page; see the template in its README |
+| `docs/design-comps/` | The approved `.dc.html` design sources (reference only; not deployed) |
 | `composer.json`, `phpcs.xml.dist` | Dev tooling (WordPress Coding Standards) |
 | `.editorconfig` | Editor formatting rules |
 | `.github/workflows/` | Staging deployment |
@@ -20,6 +21,30 @@ The local checkout is a full WordPress install (Local by Flywheel), but Git only
 **Never committed:** WordPress core, `wp-config.php`, uploads, cache, backups, `.wpress`/SQL files, secrets,
 third-party plugins/themes (including Elementor), `vendor/`, and `node_modules/`. The `.gitignore` is a whitelist,
 so anything not listed above stays out of Git by default.
+
+## Local setup
+
+Prerequisites: [Local](https://localwp.com/) (or any WordPress 6.0+ stack), PHP 7.4 or newer, and
+[Composer](https://getcomposer.org/) for the lint tooling.
+
+1. Create a WordPress site in Local. Local generates `wp-config.php`; it is ignored by Git and must never be committed.
+2. Clone this repository into the site's `app/public` folder, or copy the two project directories into an existing
+   install's `wp-content/`. Git only tracks project-owned files, so an existing WordPress install is left alone.
+3. In wp-admin, activate the **Focused Schools** theme and the **Focused Schools Core** plugin.
+4. Fill in **Focused Schools → Site Settings** (business details, primary CTA, social links, Buzzsprout ID). Nothing
+   business-specific is hardcoded in the theme.
+5. Optional, for the Podcast page's YouTube videos: define `FOCUSED_SCHOOLS_YOUTUBE_API_KEY` in `wp-config.php` (or as an
+   environment variable), then enable the integration under **Focused Schools → Podcast (YouTube)**. The key is never
+   stored in the database or Git.
+6. Install the dev tooling and run the standards check:
+
+   ```sh
+   composer install
+   composer lint
+   ```
+
+Notes: Elementor Pro is not part of this repository. Local form submissions and notification emails are caught by
+Local's bundled Mailpit rather than delivered. Design sources live in `docs/design-comps/`.
 
 ## Coding standards
 

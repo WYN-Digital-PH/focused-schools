@@ -9,7 +9,7 @@
  * recreated, or hardcoded here. See docs/architecture.md §4.6.
  *
  * Design reference: the approved `.dc` source files (`Design System v1.dc.html`,
- * `Focused Schools Homepage.dc.html`) in this theme's root directory — the
+ * `Focused Schools Homepage.dc.html`) in `docs/design-comps/` at the repository root (kept out of the theme so they are not deployed) — the
  * exact visual/structural/token source of truth, per the task that rebuilt
  * this template to match them. See docs/page-specs/home.md for the full
  * section-by-section mapping and what was deliberately adapted (no

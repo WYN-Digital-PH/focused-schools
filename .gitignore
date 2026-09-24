@@ -13,7 +13,6 @@
 !/composer.json
 !/composer.lock
 !/phpcs.xml.dist
-!/.editorconfig
 !/docs/
 
 # Composer's own installed dependencies stay ignored (regenerated via
@@ -70,6 +69,3 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
-# Local and Upload Exclusions
-wp-config.php
-wp-content/uploads/
