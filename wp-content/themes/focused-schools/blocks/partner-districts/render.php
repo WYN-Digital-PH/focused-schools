@@ -17,6 +17,7 @@ $fs_url   = isset( $attributes['ctaUrl'] ) ? (string) $attributes['ctaUrl'] : ''
 
 // Live query: adding a district in wp-admin adds a chip here, no page edit.
 $fs_states = array();
+$fs_map    = array();
 $fs_terms  = get_terms(
 	array(
 		'taxonomy'   => 'fs_partner_state',
@@ -51,6 +52,28 @@ if ( ! is_wp_error( $fs_terms ) ) {
 				'name'      => $fs_term->name,
 				'districts' => wp_list_pluck( $fs_query->posts, 'post_title' ),
 			);
+
+			// Split by partnership status for the map's legend.
+			$fs_current  = array();
+			$fs_previous = array();
+
+			foreach ( $fs_query->posts as $fs_partner ) {
+				$fs_status = get_post_meta( $fs_partner->ID, '_fs_partner_status', true );
+
+				if ( 'previous' === $fs_status ) {
+					$fs_previous[] = $fs_partner->post_title;
+				} else {
+					$fs_current[] = $fs_partner->post_title;
+				}
+			}
+
+			$fs_map[] = array(
+				'name'     => $fs_term->name,
+				'lat'      => get_term_meta( $fs_term->term_id, '_fs_partner_state_lat', true ),
+				'lng'      => get_term_meta( $fs_term->term_id, '_fs_partner_state_lng', true ),
+				'current'  => $fs_current,
+				'previous' => $fs_previous,
+			);
 		}
 	}
 }
@@ -63,6 +86,21 @@ if ( empty( $fs_states ) ) {
 	<?php
 	return;
 }
+
+/*
+ * The map sits above the district list and is enhancement only: the list
+ * below carries every partner, so a failed tile service or JavaScript off
+ * costs the reader nothing.
+ */
+get_template_part(
+	'template-parts/components/partner-map',
+	null,
+	array(
+		'states' => $fs_map,
+		// A ?state= on the URL opens that state, so a view is shareable.
+		'active' => isset( $_GET['state'] ) ? sanitize_text_field( wp_unslash( $_GET['state'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only public filter, changes no state.
+	)
+);
 
 get_template_part(
 	'template-parts/components/partner-districts',

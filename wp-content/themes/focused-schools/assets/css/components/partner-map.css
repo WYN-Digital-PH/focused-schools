@@ -1,0 +1,97 @@
+/**
+ * Partner map. The district list below it is the real content — this is a
+ * way of reading that list, so it stays deliberately quiet: a light basemap,
+ * flat pins, and no controls beyond zoom.
+ */
+
+.fs-partner-map {
+	margin-bottom: 2.5rem;
+}
+
+.fs-partner-map__canvas {
+	height: 420px;
+	border-radius: var( --fs-r-sm, 8px );
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-partner-map__legend {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem 1.5rem;
+	margin: 1rem 0 0;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-partner-map__key {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.fs-partner-map__key::before {
+	content: "";
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+}
+
+.fs-partner-map__key--current::before {
+	background: var( --wp--preset--color--accent, #0a96cb );
+}
+
+.fs-partner-map__key--previous::before {
+	background: #9aa4a8;
+}
+
+.fs-partner-map__note {
+	font-weight: 500;
+	letter-spacing: 0.04em;
+	text-transform: none;
+}
+
+/* Popup ------------------------------------------------------------------ */
+
+.fs-partner-map__popup-state {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-partner-map__popup-count {
+	margin: 2px 0 10px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-partner-map__popup-label {
+	margin: 10px 0 4px;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--accent, #0a96cb );
+}
+
+.fs-partner-map__popup ul {
+	margin: 0;
+	padding-left: 1.1em;
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+@media ( max-width: 767px ) {
+
+	.fs-partner-map__canvas {
+		height: 300px;
+	}
+}
