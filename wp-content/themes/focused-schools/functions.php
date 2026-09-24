@@ -22,3 +22,4 @@ if ( ! defined( 'FOCUSED_SCHOOLS_THEME_URI' ) ) {
 require_once FOCUSED_SCHOOLS_THEME_DIR . '/inc/setup.php';
 require_once FOCUSED_SCHOOLS_THEME_DIR . '/inc/enqueue.php';
 require_once FOCUSED_SCHOOLS_THEME_DIR . '/inc/blocks.php';
+require_once FOCUSED_SCHOOLS_THEME_DIR . '/inc/form-content.php';

@@ -13,9 +13,10 @@
  * confirmation panel where the form would be. The phone number in the panel
  * comes from Site Settings.
  *
- * Any content an editor adds to the page renders below the panel. If the page
- * is Elementor-built, its output is kept there too rather than replacing the
- * confirmation.
+ * The panel applies only while the page holds no content of its own. If the
+ * page holds a full Elementor layout or written copy (the live confirmation
+ * message), that content renders on its own, with no theme wrappers, so the
+ * visitor never sees two confirmations.
  *
  * See docs/page-specs/contact.md §5.
  *
@@ -29,6 +30,18 @@ get_header();
 if ( have_posts() ) :
 	while ( have_posts() ) :
 		the_post();
+
+		if ( ! focused_schools_is_form_only_content( get_the_ID() ) ) :
+			// A full Elementor layout (or copy an editor wrote) renders as the
+			// page's own content, with none of this template's wrappers.
+			$fs_builder = 'builder' === get_post_meta( get_the_ID(), '_elementor_edit_mode', true );
+			?>
+			<main id="content"<?php echo $fs_builder ? '' : ' class="fs-container"'; ?>>
+				<?php the_content(); ?>
+			</main>
+			<?php
+			continue;
+		endif;
 
 		ob_start();
 		the_content();

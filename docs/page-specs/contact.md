@@ -108,9 +108,12 @@ phone from Site Settings, "While you wait" links) where the form would be.
   the form at 1240px.
 - Link cards (`link-cards`, new): Impact Stories / Services / Podcast / Team, 4 / 2 / 1
   columns at 1023 / 767.
-- The Elementor branch used to output only `the_content()`, which would have discarded the
-  approved layout. The layout now always renders and the page content sits inside the form
-  card, so the page's Elementor content is expected to be **the form itself**.
+- The theme layout applies only when the page's content is just a form (Elementor `form` /
+  `shortcode` widgets, bare shortcodes, `<form>` markup, or empty). A full Elementor layout,
+  written copy or media renders untouched as the page's own content, with no wrappers
+  (`focused_schools_is_form_only_content()`, `inc/form-content.php`; see
+  `docs/forms-audit.md` §8.3). `/thanks/` follows the same rule: the confirmation panel shows
+  only while the page holds no content of its own.
 
 **Not implemented (owned by the form plugin).** The `.dc`'s error-summary panel, message
 counter, "Sending…" label and in-place success are client-side behaviours of a mock form;

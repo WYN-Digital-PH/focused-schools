@@ -16,10 +16,11 @@
  * redirect to /thanks/ all stay in the form's own settings; the design's
  * success presentation lives on /thanks/ (page-thanks.php).
  *
- * The Elementor branch used to render only the_content(), which would have
- * discarded the approved layout on an Elementor-built page. The layout now
- * always renders and Elementor's output sits inside the form card, so the
- * page's Elementor content should be the form itself.
+ * The theme layout applies only when the page's content is nothing but a form
+ * (Elementor form/shortcode widgets, or bare shortcodes/<form> markup — see
+ * focused_schools_is_form_only_content()). If the page holds a full Elementor
+ * layout, or copy an editor wrote, its content renders on its own without the
+ * hero/card/aside wrappers, so nothing is nested and the form is untouched.
  *
  * Design source: `Focused Schools Contact.dc.html`. Sections in order: hero,
  * form + aside, "Get to know how we work first" link cards. No closing CTA
@@ -35,6 +36,18 @@ get_header();
 if ( have_posts() ) :
 	while ( have_posts() ) :
 		the_post();
+
+		if ( ! focused_schools_is_form_only_content( get_the_ID() ) ) :
+			// A full Elementor layout (or copy an editor wrote) renders as the
+			// page's own content, with none of this template's wrappers.
+			$fs_builder = 'builder' === get_post_meta( get_the_ID(), '_elementor_edit_mode', true );
+			?>
+			<main id="content"<?php echo $fs_builder ? '' : ' class="fs-container"'; ?>>
+				<?php the_content(); ?>
+			</main>
+			<?php
+			continue;
+		endif;
 
 		ob_start();
 		the_content();
