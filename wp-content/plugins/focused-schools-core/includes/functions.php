@@ -35,3 +35,23 @@ if ( ! function_exists( 'focused_schools_get_setting' ) ) {
 		return $settings[ $key ];
 	}
 }
+
+if ( ! function_exists( 'focused_schools_get_podcast_playlist' ) ) {
+	/**
+	 * Get the normalized YouTube playlist videos for the Podcast page.
+	 *
+	 * Cache-only: makes no HTTP request during a page load. Serves the fresh
+	 * transient, else the last-known-good copy (a background refresh is queued
+	 * when the transient has expired), else an empty array (feature flag off, no
+	 * API key/playlist configured, empty playlist, or nothing fetched yet).
+	 * Returns data only; the theme renders it.
+	 *
+	 * Each video: ['video_id' => string, 'title' => string,
+	 * 'thumbnail_url' => string, 'published_at' => string (ISO 8601)].
+	 *
+	 * @return array<int, array{video_id:string,title:string,thumbnail_url:string,published_at:string}>
+	 */
+	function focused_schools_get_podcast_playlist() {
+		return \FocusedSchoolsCore\Integrations\Youtube_Playlist::get_videos();
+	}
+}

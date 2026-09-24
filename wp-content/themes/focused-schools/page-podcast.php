@@ -15,7 +15,7 @@
  *  - Audio: the Buzzsprout hosted player, built from the Buzzsprout podcast
  *    ID in Site Settings → Podcast. Buzzsprout stays the audio source of
  *    record per docs/AGENTS.md.
- *  - Video: FocusedSchoolsCore\get_podcast_youtube_videos(), the
+ *  - Video: focused_schools_get_podcast_playlist(), the
  *    feature-flagged, cache-only YouTube playlist helper. Returns an empty
  *    array when the flag is off or nothing has been fetched, which this
  *    template treats as "no episodes" rather than an error.
@@ -73,8 +73,8 @@ if ( have_posts() ) :
 		$fs_youtube_url    = focused_schools_podcast_setting( 'youtube_url' );
 
 		// Cache-only helper: never triggers a live HTTP request on page load.
-		$fs_videos = function_exists( 'FocusedSchoolsCore\\get_podcast_youtube_videos' )
-			? FocusedSchoolsCore\get_podcast_youtube_videos()
+		$fs_videos = function_exists( 'focused_schools_get_podcast_playlist' )
+			? focused_schools_get_podcast_playlist()
 			: array();
 
 		// The design paginates the video grid at six, with a "Load more" button.
@@ -292,8 +292,8 @@ if ( have_posts() ) :
 											'title'      => isset( $fs_video['title'] ) ? $fs_video['title'] : '',
 											'youtube_id' => $fs_video['video_id'],
 											'thumbnail_url' => isset( $fs_video['thumbnail_url'] ) ? $fs_video['thumbnail_url'] : '',
-											'date'       => ! empty( $fs_video['publish_date'] )
-												? date_i18n( get_option( 'date_format' ), strtotime( $fs_video['publish_date'] ) )
+											'date'       => ! empty( $fs_video['published_at'] )
+												? date_i18n( get_option( 'date_format' ), strtotime( $fs_video['published_at'] ) )
 												: '',
 										)
 									);

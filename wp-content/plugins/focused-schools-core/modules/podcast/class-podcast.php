@@ -7,10 +7,10 @@
 
 namespace FocusedSchoolsCore\Modules;
 
+use FocusedSchoolsCore\Integrations\Youtube_Playlist;
 use FocusedSchoolsCore\Module_Interface;
 use FocusedSchoolsCore\Modules\Podcast\Buzzsprout_Feed;
 use FocusedSchoolsCore\Modules\Podcast\Fields;
-use FocusedSchoolsCore\Modules\Podcast\Youtube_Client;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -18,22 +18,14 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Podcast.
  *
- * Fetches, normalizes, and caches YouTube playlist video data for the
- * Podcast page. Does not register a post type, taxonomy, or any frontend
- * markup/CSS — it only exposes data via
- * FocusedSchoolsCore\get_podcast_youtube_videos() (includes/functions-podcast.php).
+ * Owns the YouTube playlist settings (feature flag, playlist ID, max videos,
+ * cache duration via the Settings API) and the admin-only manual refresh. The
+ * fetching, normalizing and caching live in
+ * FocusedSchoolsCore\Integrations\Youtube_Playlist; the theme reads the result
+ * through focused_schools_get_podcast_playlist() (includes/functions.php). Does
+ * not register a post type or render any markup.
  *
  * Never modifies Buzzsprout embed handling; entirely separate data source.
- *
- * Cache strategy (see get_cached_videos() / refresh_cache()):
- * - A short-lived transient is the fast path, expiring after the configured
- *   `cache_duration`.
- * - A persistent option holds the last successful payload indefinitely, as
- *   a fail-safe: a failed live fetch (bad/missing API key, quota, network)
- *   never overwrites it, and it's served once the transient expires.
- * - The theme-facing helper only ever reads these two caches — it never
- *   performs a live HTTP request. Only the admin "Refresh Now" action calls
- *   the YouTube API.
  */
 class Podcast implements Module_Interface {
 
@@ -57,23 +49,6 @@ class Podcast implements Module_Interface {
 	 * @var string
 	 */
 	const PAGE_SLUG = 'focused-schools-podcast';
-
-	/**
-	 * Transient name for the fast-path video cache.
-	 *
-	 * @var string
-	 */
-	const CACHE_TRANSIENT = 'focused_schools_podcast_videos_cache';
-
-	/**
-	 * Option name for the persistent last-known-good fallback payload.
-	 *
-	 * Stores array{videos: array, fetched_at: int}. autoload=no: only ever
-	 * read from the Podcast page, not every request site-wide.
-	 *
-	 * @var string
-	 */
-	const LAST_GOOD_OPTION = 'focused_schools_podcast_videos_last_good';
 
 	/**
 	 * Admin-post action name for the manual refresh button.
@@ -110,6 +85,7 @@ class Podcast implements Module_Interface {
 		add_action( 'admin_notices', array( $this, 'render_admin_notices' ) );
 
 		Buzzsprout_Feed::register();
+		Youtube_Playlist::register();
 	}
 
 	/**
@@ -119,76 +95,6 @@ class Podcast implements Module_Interface {
 	 */
 	private static function get_settings() {
 		return wp_parse_args( get_option( self::OPTION_NAME, array() ), Fields::defaults() );
-	}
-
-	/**
-	 * Theme-facing read: the normalized video list, cache-only.
-	 *
-	 * Never performs a live HTTP request. Returns the fresh transient if
-	 * present, otherwise the persistent last-known-good payload (which may
-	 * itself be stale, or empty if nothing has ever been fetched
-	 * successfully), otherwise an empty array.
-	 *
-	 * @return array<int, array{video_id:string,title:string,thumbnail_url:string,publish_date:string}>
-	 */
-	public static function get_cached_videos() {
-		$settings = self::get_settings();
-
-		if ( empty( $settings['enabled'] ) ) {
-			return array();
-		}
-
-		$cached = get_transient( self::CACHE_TRANSIENT );
-		if ( is_array( $cached ) ) {
-			return $cached;
-		}
-
-		$last_good = get_option( self::LAST_GOOD_OPTION, array() );
-
-		return isset( $last_good['videos'] ) && is_array( $last_good['videos'] ) ? $last_good['videos'] : array();
-	}
-
-	/**
-	 * Get metadata about the persistent last-known-good cache, for the admin UI.
-	 *
-	 * @return array{fetched_at:int}
-	 */
-	private static function get_cache_meta() {
-		$last_good = get_option( self::LAST_GOOD_OPTION, array() );
-
-		return array(
-			'fetched_at' => isset( $last_good['fetched_at'] ) ? (int) $last_good['fetched_at'] : 0,
-		);
-	}
-
-	/**
-	 * Perform a live fetch and, on success, update both caches.
-	 *
-	 * On failure, both existing caches are left untouched (fail-safe: stale
-	 * data keeps serving rather than being wiped by a bad fetch).
-	 *
-	 * @return array<int, array<string, string>>|WP_Error
-	 */
-	public function refresh_cache() {
-		$settings = self::get_settings();
-
-		$result = Youtube_Client::fetch_playlist_videos( $settings['playlist_id'], $settings['max_videos'] );
-
-		if ( is_wp_error( $result ) ) {
-			return $result;
-		}
-
-		set_transient( self::CACHE_TRANSIENT, $result, max( 60, (int) $settings['cache_duration'] ) );
-		update_option(
-			self::LAST_GOOD_OPTION,
-			array(
-				'videos'     => $result,
-				'fetched_at' => time(),
-			),
-			false
-		);
-
-		return $result;
 	}
 
 	/**
@@ -255,15 +161,15 @@ class Podcast implements Module_Interface {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'focused-schools-core' ) );
 		}
 
-		$meta = self::get_cache_meta();
+		$fetched_at = Youtube_Playlist::get_last_fetched_at();
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Podcast (YouTube Playlist)', 'focused-schools-core' ); ?></h1>
 
-			<?php if ( ! defined( 'FS_YOUTUBE_API_KEY' ) || '' === trim( (string) FS_YOUTUBE_API_KEY ) ) : ?>
+			<?php if ( '' === Youtube_Playlist::get_api_key() ) : ?>
 				<div class="notice notice-warning">
 					<p>
-						<?php esc_html_e( 'FS_YOUTUBE_API_KEY is not defined in wp-config.php. Live fetches will fail until it is set; cached/last-known-good data (if any) will keep serving on the frontend.', 'focused-schools-core' ); ?>
+						<?php esc_html_e( 'FOCUSED_SCHOOLS_YOUTUBE_API_KEY is not defined in wp-config.php or the environment. Live fetches will fail until it is set; cached/last-known-good data (if any) will keep serving on the frontend.', 'focused-schools-core' ); ?>
 					</p>
 				</div>
 			<?php endif; ?>
@@ -281,11 +187,11 @@ class Podcast implements Module_Interface {
 			<h2><?php esc_html_e( 'Cache', 'focused-schools-core' ); ?></h2>
 			<p>
 				<?php
-				if ( $meta['fetched_at'] ) {
+				if ( $fetched_at ) {
 					printf(
 						/* translators: %s: human-readable date/time of the last successful fetch. */
 						esc_html__( 'Last successful fetch: %s', 'focused-schools-core' ),
-						esc_html( wp_date( 'Y-m-d H:i:s', $meta['fetched_at'] ) )
+						esc_html( wp_date( 'Y-m-d H:i:s', $fetched_at ) )
 					);
 				} else {
 					esc_html_e( 'No successful fetch yet.', 'focused-schools-core' );
@@ -371,7 +277,8 @@ class Podcast implements Module_Interface {
 
 		Buzzsprout_Feed::refresh();
 
-		$result = $this->refresh_cache();
+		Youtube_Playlist::purge_cache();
+		$result = Youtube_Playlist::refresh();
 
 		$redirect_args = array( 'page' => self::PAGE_SLUG );
 		if ( is_wp_error( $result ) ) {

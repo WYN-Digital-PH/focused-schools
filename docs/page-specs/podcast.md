@@ -91,7 +91,7 @@ deployed mockup's `/#/podcast` route, with copy taken verbatim.
 | 1 | Hero | `hero.php` (**extended**) | Literal mockup copy. Eyebrow is the configured show name. Two CTAs jump to `#listen` / `#watch`. |
 | 2 | Subscribe strip | `podcast-subscribe.php` (**new**) | Site Settings → Podcast (Apple/Spotify/Buzzsprout) plus the existing `youtube_url`. |
 | 3 | "Every episode, in one place." | `podcast-player.php` (**new**) | The Buzzsprout hosted player. |
-| 4 | "Prefer to watch our podcasts?" | `podcast-card.php` (unchanged) | `FocusedSchoolsCore\get_podcast_youtube_videos()`. |
+| 4 | "Prefer to watch our podcasts?" | `podcast-card.php` (unchanged) | `focused_schools_get_podcast_playlist()` (fields `video_id`, `title`, `thumbnail_url`, `published_at`). |
 | 5 | Closing CTA | `cta-banner.php` (unchanged) | Links to the Buzzsprout show when configured, else `/contact/`. |
 
 ### 9.2 Component changes

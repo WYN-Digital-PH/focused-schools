@@ -14,8 +14,8 @@ defined( 'ABSPATH' ) || exit;
  *
  * Single source of truth for the Podcast settings field list. Note: the
  * YouTube API key itself is never a field here — it's read directly from the
- * FS_YOUTUBE_API_KEY constant (defined in wp-config.php), never stored in
- * this plugin's options.
+ * FOCUSED_SCHOOLS_YOUTUBE_API_KEY constant (wp-config.php) or environment
+ * variable, never stored in this plugin's options.
  */
 class Fields {
 

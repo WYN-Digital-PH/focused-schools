@@ -184,56 +184,66 @@ non-CPT data source (YouTube video metadata only) layered alongside it.
 
 ### 3.6 Podcast — YouTube Playlist Integration
 
-Feature-flagged, non-visual data integration implemented in
-`wp-content/plugins/focused-schools-core/modules/podcast/`. Fetches and normalizes
-YouTube playlist video metadata; deliberately does **not** touch Buzzsprout audio
-handling, `podcast-card.php`, `podcast-video.js`, or any grid markup/CSS — those remain
-entirely the theme's responsibility. Not a custom post type — see §3.5.
+Feature-flagged, non-visual data integration. The service is
+`FocusedSchoolsCore\Integrations\Youtube_Playlist`
+(`wp-content/plugins/focused-schools-core/includes/integrations/class-youtube-playlist.php`);
+the settings page and admin refresh live in `modules/podcast/class-podcast.php`. It
+fetches, normalizes and caches playlist video data and returns **data only** — no HTML or
+cards are rendered in the plugin. It deliberately does **not** touch the Buzzsprout
+integrations (`Buzzsprout_Feed`, the hosted player, the Latest Episode helper). Not a
+custom post type — see §3.5.
 
-- **API key:** read directly from the `FS_YOUTUBE_API_KEY` constant, expected in
-  `wp-config.php`. Never stored in an option, never committed. `wp-config.php` is out of
-  this repo's editable scope (`AGENTS.md` §2) — the site owner must define this constant
-  themselves. Until it is, live fetches fail gracefully (see fail-safe behavior below);
-  nothing else breaks.
-- **Settings storage:** a single namespaced option, `focused_schools_podcast_settings`
-  (feature flag, playlist ID, max videos 1–50, cache duration in seconds — default 21600
-  = 6 hours). Field schema source of truth:
-  `FocusedSchoolsCore\Modules\Podcast\Fields::all()`.
-- **Admin location:** Focused Schools → Podcast (YouTube)
-  (`admin.php?page=focused-schools-podcast`), a submenu of the same shared top-level menu
-  as Site Settings/Team/Services/Impact Stories.
-- **Manual refresh:** a "Refresh Now" button on that page, posting to `admin-post.php`
-  with `current_user_can( 'manage_options' )` and an explicit `wp_verify_nonce()` check
-  (`FocusedSchoolsCore\Modules\Podcast::handle_manual_refresh()`). This is the **only**
-  code path that ever calls the YouTube API.
-- **Cache strategy — two tiers, both required by the fail-safe requirement:**
-  1. A transient (`focused_schools_podcast_videos_cache`) is the fast path, expiring
-     after the configured cache duration.
-  2. A persistent option (`focused_schools_podcast_videos_last_good`, `autoload = no`)
-     holds the last successful payload indefinitely. A failed live fetch (missing/invalid
-     key, quota, network error) leaves **both** caches untouched — stale-but-good data
-     keeps serving rather than being wiped by a bad fetch.
-- **Theme-facing helper:** `FocusedSchoolsCore\get_podcast_youtube_videos()`
-  (`includes/functions-podcast.php`), delegating to
-  `Modules\Podcast::get_cached_videos()`. **Never performs a live HTTP request** — it only
-  reads the fresh transient, or falls back to the last-known-good option, or returns
-  `array()` (feature disabled, or nothing ever fetched successfully). This is what
-  satisfies "zero frontend overhead on standard page loads."
-  Each video: `['video_id' => string, 'title' => string, 'thumbnail_url' => string,
-  'publish_date' => string (ISO 8601)]`.
-- **Not yet wired into `page-podcast.php`:** the task scoped this to the plugin only (no
-  visual grid markup/CSS in the plugin). The placeholder episode array in
-  `page-podcast.php` (§4.11) is unchanged; wiring the two together — deciding how YouTube
-  videos and Buzzsprout audio episodes are merged/ordered on the page — is a follow-up
-  theme-side decision, not made here.
-- **Verified locally** (no real playlist/API key available in this environment — see
-  `AGENTS.md` §2): isolated logic tests against the actual class files (not a mock
-  reimplementation) covering flag-off, empty-cache, fresh-transient,
-  expired-transient-falls-back-to-last-good, and — for `Youtube_Client` — every documented
-  failure branch (missing key, missing playlist ID, network error, non-2xx, malformed
-  body) plus successful normalization (title sanitized, correct thumbnail tier picked,
-  items missing a video ID skipped, `max_videos` clamped to 50). All pass. Live requests
-  against the real YouTube Data API were not exercised — no key is available here.
+- **API key:** read from the `FOCUSED_SCHOOLS_YOUTUBE_API_KEY` constant in `wp-config.php`,
+  or failing that the environment variable of the same name
+  (`Youtube_Playlist::get_api_key()`). Never stored in an option, a settings field or Git.
+  `wp-config.php` is out of this repo's editable scope (`AGENTS.md` §2), so the site owner
+  defines it. Until then live fetches fail gracefully and nothing else breaks. (The earlier
+  `FS_YOUTUBE_API_KEY` name is no longer read.)
+- **Settings (Settings API):** one option, `focused_schools_podcast_settings` — feature flag,
+  playlist ID, max videos 1–50, cache duration in seconds (default 21600 = 6 hours; minimum
+  60). Schema: `FocusedSchoolsCore\Modules\Podcast\Fields::all()`. Admin location:
+  Focused Schools → Podcast (YouTube) (`admin.php?page=focused-schools-podcast`).
+- **Fetch:** `Youtube_Playlist::refresh()` calls the YouTube Data API v3 `playlistItems`
+  endpoint with `wp_remote_get()`. Errors are typed: `fs_youtube_missing_key`,
+  `fs_youtube_missing_playlist`, `fs_youtube_bad_key`, `fs_youtube_quota`,
+  `fs_youtube_playlist_not_found`, `fs_youtube_api_error`, `fs_youtube_invalid_response`
+  (plus the transport `WP_Error`).
+- **Normalized output**, per video: `video_id`, `title`, `thumbnail_url` (best of
+  maxres/standard/high/medium/default), `published_at` (ISO 8601). Items without a video ID
+  and "Private video" / "Deleted video" placeholders are skipped. An empty playlist is a
+  valid result (`array()`).
+- **Cache — two tiers:** a transient (`focused_schools_podcast_videos_cache`) for the
+  configured duration, and a persistent last-known-good option
+  (`focused_schools_podcast_videos_last_good`, `autoload = no`). A failed refresh (bad key,
+  quota, network, malformed response) never overwrites either, so stale-but-good data keeps
+  serving, and it sets a 30-minute back-off (`..._backoff` transient) so failures are not
+  retried on every page view.
+- **Theme-facing helper:** `focused_schools_get_podcast_playlist()`
+  (`includes/functions.php`) → `Youtube_Playlist::get_videos()`. It **never makes an HTTP
+  request**: it returns the fresh transient, else the last-known-good copy, else `array()`
+  (flag off, nothing fetched yet). When the transient has expired and a key and playlist are
+  configured, it queues one background wp-cron event
+  (`focused_schools_refresh_podcast_playlist`) that runs `refresh()`; the page load itself
+  stays free of API calls.
+- **Manual refresh:** a "Refresh Now" button on the settings page posts to `admin-post.php`
+  with `current_user_can( 'manage_options' )` and a `wp_verify_nonce()` check
+  (`Podcast::handle_manual_refresh()`); it purges the transient and back-off, then
+  refreshes live. The last-known-good copy survives a failed manual refresh. The only code
+  paths that call the API are that button and the cron event.
+- **Consumer:** `page-podcast.php` reads the helper and renders the video grid
+  (`podcast-card.php`, `podcast-video.js`).
+- **Verified locally** (no real API key or playlist in this environment): a harness that
+  loads the real plugin classes through the plugin's autoloader with WordPress functions
+  stubbed and scripted YouTube responses. It covers key handling (constant, environment,
+  precedence, never persisted, not a settings field), flag off, cold cache (zero HTTP, one
+  queued cron event), successful fetch (normalization, one request with the right
+  parameters, 6-hour transient TTL, last-known-good stored, zero extra HTTP on reads),
+  empty playlist, seven failure modes (bad key ×2, quota, not found, 500, malformed body,
+  network error — each leaves the last-known-good copy untouched, serves stale data and
+  sets the back-off), and the manual refresh handler (no capability → 403, bad nonce → 403,
+  neither makes a request; valid → purge, one fetch, success redirect; quota failure keeps
+  stale data). Also rendered the live Podcast page from stale last-good data (3 cards,
+  dates from `published_at`). Live requests against the real YouTube API were not exercised.
 
 ### 3.7 Testimonials
 
