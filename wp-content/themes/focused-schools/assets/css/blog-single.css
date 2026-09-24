@@ -461,3 +461,44 @@
 		transition: none;
 	}
 }
+
+/*
+ * Legacy Squarespace image blocks.
+ *
+ * Most of the imported posts came through Squarespace and still carry its
+ * image markup: a wrapper with an inline `padding-bottom: NN%` that reserved
+ * space for an image Squarespace's own CSS then positioned to fill. That CSS
+ * does not exist here, and wpautop has closed the wrapper early, so it
+ * renders as an empty box most of a column wide and tall, with the real
+ * image below it.
+ *
+ * Neutralising the spacer is the safe fix: it leaves the stored content
+ * untouched — no bulk rewrite of 78 posts — and the images flow normally.
+ * `!important` is unavoidable and appropriate here, because the values it
+ * overrides are inline styles on the elements themselves.
+ */
+.fs-prose .sqs-image-shape-container-element,
+.fs-prose .image-block-wrapper,
+.fs-prose .image-block-outer-wrapper,
+.fs-prose [class*="sqs-block-image"] {
+	padding-bottom: 0 !important;
+	height: auto !important;
+	min-height: 0 !important;
+	overflow: visible !important;
+}
+
+/* The same wrappers are left empty by the early close, so they add nothing. */
+.fs-prose .sqs-image-shape-container-element:empty,
+.fs-prose .image-block-wrapper:empty,
+.fs-prose .image-block-outer-wrapper:empty {
+	display: none;
+}
+
+/* wpautop also leaves stray empty paragraphs around the migrated blocks. */
+.fs-prose p:empty {
+	display: none;
+}
+
+.fs-prose figure {
+	max-width: 100%;
+}
