@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/pull-quote",
+	"title": "Pull Quote",
+	"category": "design",
+	"icon": "format-quote",
+	"description": "One approved quote from the Testimonials records, shown statically with an optional reviews link.",
+	"textdomain": "focused-schools",
+	"supports": { "html": false, "reusable": false, "multiple": false },
+	"attributes": {
+		"linkLabel": { "type": "string", "default": "Read Our Google Reviews" }
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

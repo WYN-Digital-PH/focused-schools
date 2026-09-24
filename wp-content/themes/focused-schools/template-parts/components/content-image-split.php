@@ -3,6 +3,7 @@
  * Component: Content/Image Split.
  *
  * Contract ($args):
+ * - eyebrow  (string) small label above the heading
  * - heading         (string)
  * - body            (string, allows basic HTML — run through wp_kses_post())
  * - image_id        (int) attachment ID
@@ -24,6 +25,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
+$fs_eyebrow    = isset( $args['eyebrow'] ) ? $args['eyebrow'] : '';
 $fs_heading    = isset( $args['heading'] ) ? $args['heading'] : '';
 $fs_body       = isset( $args['body'] ) ? $args['body'] : '';
 $fs_image_id   = isset( $args['image_id'] ) ? absint( $args['image_id'] ) : 0;
@@ -42,6 +44,9 @@ if ( '' === trim( (string) $fs_heading ) && '' === trim( (string) $fs_body ) && 
 <div class="fs-content-split fs-content-split--image-<?php echo esc_attr( $fs_position ); ?>">
 	<div class="fs-container fs-container--shell fs-content-split__inner">
 		<div class="fs-content-split__content">
+			<?php if ( $fs_eyebrow ) : ?>
+				<p class="fs-eyebrow fs-content-split__eyebrow"><?php echo esc_html( $fs_eyebrow ); ?></p>
+			<?php endif; ?>
 			<?php if ( $fs_heading ) : ?>
 				<h2 class="fs-content-split__heading"><?php echo esc_html( $fs_heading ); ?></h2>
 			<?php endif; ?>

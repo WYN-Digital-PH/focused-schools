@@ -47,6 +47,10 @@ function focused_schools_block_names() {
 		'stats-band',
 		'partner-districts',
 		'where-we-work',
+		'service-index',
+		'service-lanes',
+		'cycle-steps',
+		'pull-quote',
 		'team-grid',
 		'mission-close',
 	);
@@ -199,6 +203,36 @@ function focused_schools_partner_states() {
 			'previous' => $previous,
 		);
 	}
+
+	return $cache;
+}
+
+/**
+ * Published services, in the order editors set.
+ *
+ * Shared by the index and the lanes so the two always agree about which
+ * services exist and what order they run in; the lane numerals, grounds,
+ * media sides and anchors all derive from that order.
+ *
+ * @return WP_Post[]
+ */
+function focused_schools_service_query() {
+	static $cache = null;
+
+	if ( null !== $cache ) {
+		return $cache;
+	}
+
+	$cache = get_posts(
+		array(
+			'post_type'      => 'fs_service',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'orderby'        => 'menu_order',
+			'order'          => 'ASC',
+			'no_found_rows'  => true,
+		)
+	);
 
 	return $cache;
 }

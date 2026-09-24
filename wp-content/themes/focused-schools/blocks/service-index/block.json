@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/service-index",
+	"title": "Service Index",
+	"category": "design",
+	"icon": "list-view",
+	"description": "The numbered index of services, built live from the Services records and anchored to the lanes below.",
+	"textdomain": "focused-schools",
+	"supports": { "html": false, "reusable": false, "multiple": false },
+	"attributes": {
+		"eyebrow": { "type": "string", "default": "How we help" },
+		"heading": { "type": "string", "default": "Every school is different. So is every plan." },
+		"description": { "type": "string", "default": "Three lanes of partnered support, all running the same cycle of inquiry underneath. Most districts start in one and grow into another." },
+		"navLabel": { "type": "string", "default": "Jump to a service" },
+		"anchor": { "type": "string", "default": "how-we-help" },
+		"emptyText": { "type": "string", "default": "Our services list is being updated \u2014 check back soon." }
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

@@ -327,17 +327,54 @@
 		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP }
 	] );
 
+	/* -------------------------------------------------- Services page --- */
+
+	registerServerBlock( 'focused-schools/service-index', __( 'Service Index', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ), type: 'textarea' },
+		{ name: 'description', label: __( 'Description', 'focused-schools' ), type: 'textarea' },
+		{ name: 'navLabel', label: __( 'Index landmark name', 'focused-schools' ), help: __( 'Announced to screen readers, e.g. "Jump to a service".', 'focused-schools' ) },
+		{ name: 'anchor', label: __( 'Section anchor', 'focused-schools' ) },
+		{ name: 'emptyText', label: __( 'Text when no services exist', 'focused-schools' ), type: 'textarea' }
+	] );
+
+	registerServerBlock( 'focused-schools/service-lanes', __( 'Service Lanes', 'focused-schools' ), [] );
+
+	registerServerBlock( 'focused-schools/cycle-steps', __( 'Cycle Steps', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'body', label: __( 'Body', 'focused-schools' ), type: 'textarea' },
+		{ name: 'step1Kicker', label: __( 'Step 1 kicker', 'focused-schools' ) },
+		{ name: 'step1Title', label: __( 'Step 1 title', 'focused-schools' ) },
+		{ name: 'step1Body', label: __( 'Step 1 body', 'focused-schools' ), type: 'textarea' },
+		{ name: 'step2Kicker', label: __( 'Step 2 kicker', 'focused-schools' ) },
+		{ name: 'step2Title', label: __( 'Step 2 title', 'focused-schools' ) },
+		{ name: 'step2Body', label: __( 'Step 2 body', 'focused-schools' ), type: 'textarea' },
+		{ name: 'step3Kicker', label: __( 'Step 3 kicker', 'focused-schools' ) },
+		{ name: 'step3Title', label: __( 'Step 3 title', 'focused-schools' ) },
+		{ name: 'step3Body', label: __( 'Step 3 body', 'focused-schools' ), type: 'textarea' },
+		{ name: 'step4Kicker', label: __( 'Step 4 kicker', 'focused-schools' ) },
+		{ name: 'step4Title', label: __( 'Step 4 title', 'focused-schools' ) },
+		{ name: 'step4Body', label: __( 'Step 4 body', 'focused-schools' ), type: 'textarea' }
+	] );
+
+	registerServerBlock( 'focused-schools/pull-quote', __( 'Pull Quote', 'focused-schools' ), [
+		{ name: 'linkLabel', label: __( 'Reviews link label', 'focused-schools' ), help: __( 'The destination is the Google Reviews URL in Site Settings.', 'focused-schools' ) }
+	] );
+
 	registerServerBlock( 'focused-schools/team-grid', __( 'Team Grid', 'focused-schools' ), [
 		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
 		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
 		{ name: 'headingEmphasis', label: __( 'Heading, bold tail', 'focused-schools' ) },
 		{ name: 'intro', label: __( 'Intro', 'focused-schools' ), type: 'textarea' },
 		{ name: 'visibleCount', label: __( 'Cards before Load more', 'focused-schools' ) },
+		{ name: 'variant', label: __( 'Variant', 'focused-schools' ), help: __( '"roster" for the Team page; anything else draws the About teaser.', 'focused-schools' ) },
 		{ name: 'linkLabel', label: __( 'Link label', 'focused-schools' ) },
 		{ name: 'linkUrl', label: __( 'Link URL', 'focused-schools' ), help: URL_HELP }
 	] );
 
 	registerServerBlock( 'focused-schools/mission-close', __( 'Closing Split', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
 		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
 		{ name: 'body', label: __( 'Body', 'focused-schools' ), type: 'textarea' },
 		{ name: 'image', label: __( 'Photo', 'focused-schools' ), type: 'image' },

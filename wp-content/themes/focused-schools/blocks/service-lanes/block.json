@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/service-lanes",
+	"title": "Service Lanes",
+	"category": "design",
+	"icon": "align-pull-left",
+	"description": "One reusable lane rendered once per Services record. Numerals, grounds, media sides and anchors all derive from record order.",
+	"textdomain": "focused-schools",
+	"supports": { "html": false, "reusable": false, "multiple": false },
+	"attributes": {
+		"ctaLabel": { "type": "string", "default": "" }
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

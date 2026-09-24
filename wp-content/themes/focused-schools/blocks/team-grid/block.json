@@ -40,6 +40,10 @@
 		"linkUrl": {
 			"type": "string",
 			"default": "/team/"
+		},
+		"variant": {
+			"type": "string",
+			"default": "teaser"
 		}
 	},
 	"editorScript": "focused-schools-blocks-editor",

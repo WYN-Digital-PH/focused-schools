@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/cycle-steps",
+	"title": "Cycle Steps",
+	"category": "design",
+	"icon": "image-rotate",
+	"description": "The teal method band: four static steps. The Home page keeps the animated cycle; this is the still version.",
+	"textdomain": "focused-schools",
+	"supports": { "html": false, "reusable": false, "multiple": false },
+	"attributes": {
+		"eyebrow": { "type": "string", "default": "The method underneath" },
+		"heading": { "type": "string", "default": "A Cycle of Excellence" },
+		"body": { "type": "string", "default": "High-performing districts and schools are intentional about committing to a cycle of excellence. Build capacity, accelerate growth, and communicate your progress relentlessly." },
+		"step1Kicker": { "type": "string", "default": "01 \u00b7 Focus" },
+		"step1Title": { "type": "string", "default": "Name the work" },
+		"step1Body": { "type": "string", "default": "A small number of priorities everyone can repeat without looking them up." },
+		"step2Kicker": { "type": "string", "default": "02 \u00b7 Build" },
+		"step2Title": { "type": "string", "default": "Build capacity" },
+		"step2Body": { "type": "string", "default": "Leadership teams and coaches who can run the practice themselves." },
+		"step3Kicker": { "type": "string", "default": "03 \u00b7 Accelerate" },
+		"step3Title": { "type": "string", "default": "Accelerate growth" },
+		"step3Body": { "type": "string", "default": "Honest inquiry cycles that change what happens after the assessment." },
+		"step4Kicker": { "type": "string", "default": "04 \u00b7 Communicate" },
+		"step4Title": { "type": "string", "default": "Communicate progress" },
+		"step4Body": { "type": "string", "default": "A reporting rhythm that replaces anecdote with evidence, relentlessly." }
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

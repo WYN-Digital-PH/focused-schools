@@ -105,10 +105,26 @@ function focused_schools_is_home_layout() {
 }
 
 /**
- * Whether the current request renders a partner map.
+ * Whether the page being rendered carries a given block.
  *
- * True when the page content carries the Partner Districts block. Keeps
- * Leaflet off every other page rather than loading it site-wide.
+ * Lets a page's styles follow its blocks rather than its slug, so a section
+ * moved to another page takes its CSS with it.
+ *
+ * @param string $block Fully qualified block name.
+ * @return bool
+ */
+function focused_schools_has_block( $block ) {
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	$post = get_post();
+
+	return $post instanceof WP_Post && has_block( $block, $post );
+}
+
+/**
+ * Whether the current page draws the partner map.
  *
  * @return bool
  */
@@ -271,7 +287,7 @@ function focused_schools_enqueue_assets() {
 		}
 	}
 
-	if ( is_page( 'services' ) ) {
+	if ( is_page( 'services' ) || focused_schools_has_block( 'focused-schools/service-lanes' ) ) {
 		wp_enqueue_style(
 			'focused-schools-page-services',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-services.css',
@@ -290,7 +306,7 @@ function focused_schools_enqueue_assets() {
 		);
 	}
 
-	if ( is_page( 'team' ) ) {
+	if ( is_page( 'team' ) || focused_schools_has_block( 'focused-schools/team-grid' ) ) {
 		wp_enqueue_style(
 			'focused-schools-page-team',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-team.css',
