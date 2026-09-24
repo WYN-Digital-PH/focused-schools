@@ -96,7 +96,7 @@ endif;
 		</header>
 
 		<?php if ( have_posts() ) : ?>
-			<div class="fs-card-grid">
+			<div class="fs-blog__grid">
 				<?php
 				while ( have_posts() ) :
 					the_post();
