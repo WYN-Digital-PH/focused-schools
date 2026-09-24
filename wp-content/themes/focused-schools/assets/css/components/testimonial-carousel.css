@@ -84,6 +84,15 @@
 	gap: 20px;
 }
 
+/* Prev/dots/next are one grouped unit in the middle grid column — not
+   spread across separate columns, which is what pushed the prev arrow to
+   the far edge instead of sitting beside the dots. */
+.fs-testimonial-carousel__nav {
+	display: flex;
+	align-items: center;
+	gap: 18px;
+}
+
 .fs-testimonial-carousel__arrow {
 	display: inline-flex;
 	align-items: center;
@@ -149,4 +158,44 @@
 		grid-template-columns: minmax( 0, 1fr );
 		gap: 1rem;
 	}
+}
+
+/*
+ * Light-ground variant (Services' own .dc source: `color: #005C6D` on a
+ * `#f5f6f8` paper section, vs Home's white-on-teal default above).
+ */
+.fs-testimonial-carousel--on-light {
+	border-top-color: var( --wp--preset--color--rule, #d3dde1 );
+}
+
+.fs-testimonial-carousel--on-light .fs-testimonial-carousel__slide blockquote,
+.fs-testimonial-carousel--on-light .fs-testimonial-carousel__slide figcaption {
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-testimonial-carousel--on-light .fs-testimonial-carousel__controls {
+	border-top-color: var( --wp--preset--color--rule, #d3dde1 );
+}
+
+.fs-testimonial-carousel--on-light .fs-testimonial-carousel__arrow {
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+	border: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-testimonial-carousel--on-light .fs-testimonial-carousel__arrow:hover {
+	background: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-testimonial-carousel--on-light .fs-testimonial-carousel__dot {
+	background: rgba( 0, 92, 109, 0.2 );
+}
+
+.fs-testimonial-carousel--on-light .fs-testimonial-carousel__dot.is-active {
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-testimonial-carousel--on-light .fs-testimonial-carousel__status {
+	color: var( --wp--preset--color--ink-soft, #51536a );
 }

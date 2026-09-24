@@ -94,3 +94,42 @@
 	font-weight: 700;
 	flex-shrink: 0;
 }
+
+/* Compact variant — the About page's simpler card per the .dc source: no
+   quote, no LinkedIn tile, fixed (non-responsive) 28/28/30px padding and
+   6px/18px name/position margins instead of the shared card's flat 16px
+   flex-gap stack. */
+.fs-team-card--compact .fs-card__body {
+	gap: 0;
+	padding: 28px 28px 30px;
+}
+
+.fs-team-card--compact .fs-card__heading {
+	margin-bottom: 6px;
+}
+
+.fs-team-card--compact .fs-team-card__position {
+	margin-bottom: 18px;
+}
+
+.fs-team-card__read-bio {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: auto;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	background: none;
+	border: none;
+	font-family: inherit;
+	padding: 0;
+	cursor: pointer;
+}
+
+.fs-team-card__read-bio span {
+	color: var( --wp--preset--color--primary, #dd6237 );
+	font-size: 0.875rem;
+}

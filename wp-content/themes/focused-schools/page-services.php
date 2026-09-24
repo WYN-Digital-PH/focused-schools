@@ -67,13 +67,14 @@ if ( have_posts() ) :
 				'template-parts/components/hero',
 				null,
 				array(
-					'eyebrow'    => __( 'Our services', 'focused-schools' ),
-					'heading'    => __( 'Support shaped around where your district actually is.', 'focused-schools' ),
-					'subheading' => __( "No two districts face the same challenges, which is why we don't believe in one-size-fits-all support.", 'focused-schools' ),
-					'image_url'  => $fs_img . 'retreat-1.jpg',
-					'image_alt'  => __( 'District leaders working together in a Focused Schools session.', 'focused-schools' ),
-					'cta_label'  => __( 'See How We Help', 'focused-schools' ),
-					'cta_url'    => '#how-we-help',
+					'eyebrow'    => __( 'Services', 'focused-schools' ),
+					'heading'    => __( 'Support tailored to your goals, your challenges, and your students.', 'focused-schools' ),
+					'subheading' => __( 'Every partnership is powered by IMPACT Coaching and a continuous cycle of inquiry. Rather than offering one-time solutions, we work alongside leaders as they reflect, adapt, and grow.', 'focused-schools' ),
+					'image_url'  => $fs_img . 'retreat-3.jpg',
+					'image_alt'  => __( 'A Focused Schools facilitator mapping priorities with district leaders.', 'focused-schools' ),
+					'cta_label'  => __( "Let's Talk", 'focused-schools' ),
+					'cta_url'    => '#contact',
+					'slab_width' => 640,
 				)
 			);
 
@@ -95,15 +96,19 @@ if ( have_posts() ) :
 					null,
 					array(
 						'eyebrow'       => __( 'How we help', 'focused-schools' ),
-						'heading'       => __( 'Every school is different. So is every plan.', 'focused-schools' ),
-						'description'   => __( 'Three lanes of partnered support, all running the same cycle of inquiry underneath. Most districts start in one and grow into another.', 'focused-schools' ),
+						'heading'       => sprintf(
+							/* translators: %s: "One cycle of inquiry." (emphasized). */
+							__( 'Three lanes. %s', 'focused-schools' ),
+							'<strong>' . __( 'One cycle of inquiry.', 'focused-schools' ) . '</strong>'
+						),
+						'description'   => __( 'Most districts start in one lane and grow into the others. Each one stands on its own, and each one is built to end with your people carrying the work.', 'focused-schools' ),
 						'heading_level' => 2,
 						'heading_id'    => 'fs-services-heading',
 					)
 				);
 
 				if ( $fs_services->have_posts() ) :
-					get_template_part( 'template-parts/components/service-list', null, array( 'posts' => $fs_services->posts ) );
+					get_template_part( 'template-parts/components/service-index', null, array( 'posts' => $fs_services->posts ) );
 				else :
 					?>
 					<p class="fs-services__empty"><?php esc_html_e( 'Our services list is being updated — check back soon.', 'focused-schools' ); ?></p>
@@ -156,18 +161,15 @@ if ( have_posts() ) :
 			wp_reset_postdata();
 
 			get_template_part(
-				'template-parts/components/cycle-of-excellence',
+				'template-parts/components/cycle-reference',
 				null,
 				array(
-					'eyebrow'  => __( 'The method underneath', 'focused-schools' ),
-					'heading'  => __( 'A Cycle of Excellence', 'focused-schools' ),
-					'body'     => __( 'High-performing districts and schools are intentional about committing to a cycle of excellence. Your Focused Schools team is prepared to support your cycle of excellence in ways that will help you to continue to build capacity, accelerate growth, and communicate your progress relentlessly.', 'focused-schools' ),
-					'mark_url' => $fs_img . 'mark-cycle.svg',
-					'phases'   => array(
-						array( 'label' => __( 'Build Capacity', 'focused-schools' ) ),
-						array( 'label' => __( 'Accelerate Growth', 'focused-schools' ) ),
-						array( 'label' => __( 'Communicate Progress', 'focused-schools' ) ),
-					),
+					'eyebrow'   => __( 'One shared focus', 'focused-schools' ),
+					'heading'   => __( 'A Cycle of Excellence', 'focused-schools' ),
+					'body'      => __( 'High-performing districts and schools are intentional about committing to a cycle of excellence. Your Focused Schools team is prepared to support your cycle of excellence in ways that will help you to continue to build capacity, accelerate growth, and communicate your progress relentlessly.', 'focused-schools' ),
+					'mark_url'  => $fs_img . 'mark-cycle.svg',
+					'cta_label' => __( 'Our Approach', 'focused-schools' ),
+					'cta_url'   => home_url( '/about-our-mission-vision/' ),
 				)
 			);
 
@@ -185,7 +187,16 @@ if ( have_posts() ) :
 			?>
 				<section class="fs-services__quote">
 					<div class="fs-container fs-container--shell">
-					<?php get_template_part( 'template-parts/components/testimonial-carousel', null, array( 'posts' => $fs_testimonials->posts ) ); ?>
+					<?php
+					get_template_part(
+						'template-parts/components/testimonial-carousel',
+						null,
+						array(
+							'posts'    => $fs_testimonials->posts,
+							'on_light' => true,
+						)
+					);
+					?>
 					</div>
 				</section>
 				<?php
@@ -193,16 +204,20 @@ if ( have_posts() ) :
 			wp_reset_postdata();
 
 			get_template_part(
-				'template-parts/components/cta-banner',
+				'template-parts/components/content-image-split',
 				null,
 				array(
-					'eyebrow'     => __( 'Start somewhere', 'focused-schools' ),
-					'heading'     => __( 'Not sure which lane you need?', 'focused-schools' ),
-					'description' => __( "Most districts don't, at first. Tell us what is getting in the way and we will tell you honestly whether and how we can help — before anyone writes a proposal.", 'focused-schools' ),
-					'cta_label'   => __( "Let's Talk", 'focused-schools' ),
-					'cta_url'     => home_url( '/contact/' ),
-					'cta2_label'  => __( 'See Impact Stories', 'focused-schools' ),
-					'cta2_url'    => home_url( '/impact-stories/' ),
+					'id'             => 'contact',
+					'eyebrow'        => __( 'Start a partnership', 'focused-schools' ),
+					'heading'        => __( 'Not sure which lane you need?', 'focused-schools' ),
+					'body'           => '<p>' . esc_html__( 'Most partnerships begin with a conversation, not a proposal. Tell us where your district is headed and what is getting in the way, and we will tell you honestly where we can help.', 'focused-schools' ) . '</p>',
+					'image_url'      => $fs_img . 'retreat-2.jpg',
+					'image_alt'      => __( 'Two education leaders celebrating progress together at a Focused Schools session.', 'focused-schools' ),
+					'image_position' => 'right',
+					'cta_label'      => __( "Let's Talk", 'focused-schools' ),
+					'cta_url'        => home_url( '/contact/' ),
+					'cta2_label'     => __( 'See Impact Stories', 'focused-schools' ),
+					'cta2_url'       => home_url( '/impact-stories/' ),
 				)
 			);
 		?>

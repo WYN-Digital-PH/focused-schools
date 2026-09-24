@@ -180,11 +180,19 @@
 	}
 
 	.fs-home__contact-copy {
-		flex: 1 1 auto;
+		flex: 1 1 25rem;
+		min-width: 0;
 	}
 
 	.fs-home__contact-cta {
-		flex: 0 0 45.625rem;
+		/*
+		 * A rigid `flex: 0 0 45.625rem` (730px, no shrink) overflowed the
+		 * shell between 1024px and ~1099px, where the container's own
+		 * padding also steps up at the same breakpoint and leaves too
+		 * little room. Shrinkable with the same 730px ceiling instead.
+		 */
+		flex: 1 1 28rem;
+		max-width: 45.625rem;
 	}
 }
 

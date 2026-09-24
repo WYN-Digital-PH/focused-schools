@@ -7,6 +7,10 @@
  * `.fs-hero__media + .fs-hero__slab` (the adjacent-sibling selector) scopes
  * the overlap treatment to only when media actually precedes the slab, so
  * nothing floats or collapses when there's no image.
+ *
+ * Slab has three states matching the .dc source's own breakpoints: absolute
+ * overlap ≥1241px, static in-flow with a small negative top margin 721-1240px,
+ * and a tighter static block ≤720px.
  */
 
 .fs-hero {
@@ -46,11 +50,11 @@
 
 .fs-hero__slab {
 	position: relative;
-	margin: -3.5rem 0 0 1.5rem;
-	width: 90%;
-	max-width: 560px;
+	margin: -2.8125rem 0 0;
+	width: auto;
+	max-width: none;
 	background: var( --wp--preset--color--contrast, #005c6d );
-	padding: 2.75rem;
+	padding: 2.5rem;
 	z-index: 2;
 }
 
@@ -79,14 +83,20 @@
 	color: rgba( 255, 255, 255, 0.92 );
 }
 
-@media ( min-width: 1024px ) {
+@media ( min-width: 1241px ) {
 	.fs-hero__media + .fs-hero__slab {
 		position: absolute;
 		left: 24px;
 		bottom: -3.5rem;
-		width: 680px;
+		width: var( --fs-hero-slab-width, 680px );
 		max-width: none;
 		margin: 0;
+	}
+}
+
+@media ( max-width: 1240px ) {
+	.fs-hero__heading {
+		font-size: 2.875rem;
 	}
 }
 

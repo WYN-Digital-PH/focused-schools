@@ -3,7 +3,10 @@
  * Component: Section Heading.
  *
  * Contract ($args):
- * - heading       (string, required)
+ * - heading       (string, required) allows basic HTML (run through
+ *                  wp_kses_post()) so a caller can mix regular/bold weight
+ *                  within it — plain-text headings render identically to
+ *                  before.
  * - eyebrow       (string)
  * - description   (string)
  * - heading_level (int) 2-4, default 2
@@ -34,9 +37,9 @@ if ( '' === trim( (string) $fs_heading ) ) {
 		<p class="fs-section-heading__eyebrow"><?php echo esc_html( $fs_eyebrow ); ?></p>
 	<?php endif; ?>
 	<?php if ( $fs_heading_id ) : ?>
-		<?php printf( '<%1$s id="%3$s" class="fs-section-heading__heading">%2$s</%1$s>', esc_html( $fs_tag ), esc_html( $fs_heading ), esc_attr( $fs_heading_id ) ); ?>
+		<?php printf( '<%1$s id="%3$s" class="fs-section-heading__heading">%2$s</%1$s>', esc_html( $fs_tag ), wp_kses_post( $fs_heading ), esc_attr( $fs_heading_id ) ); ?>
 	<?php else : ?>
-		<?php printf( '<%1$s class="fs-section-heading__heading">%2$s</%1$s>', esc_html( $fs_tag ), esc_html( $fs_heading ) ); ?>
+		<?php printf( '<%1$s class="fs-section-heading__heading">%2$s</%1$s>', esc_html( $fs_tag ), wp_kses_post( $fs_heading ) ); ?>
 	<?php endif; ?>
 	<?php if ( $fs_description ) : ?>
 		<p class="fs-section-heading__description"><?php echo esc_html( $fs_description ); ?></p>

@@ -1,0 +1,100 @@
+/**
+ * Cycle of Excellence — static reference band. Exact geometry from the
+ * approved .dc design: teal band, 280px white disc with a 12px ring +
+ * faint outer ring, centered cycle mark icon, 340px/1fr grid at 96px gap.
+ */
+
+.fs-cycle-ref {
+	position: relative;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	padding: 7.5rem 0;
+	overflow: hidden;
+}
+
+.fs-cycle-ref__watermark {
+	position: absolute;
+	right: -60px;
+	top: 40px;
+	height: 420px;
+	width: auto;
+	opacity: 0.06;
+	pointer-events: none;
+}
+
+.fs-cycle-ref__inner {
+	position: relative;
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 3rem;
+	align-items: center;
+}
+
+.fs-cycle-ref__mark {
+	position: relative;
+	width: 280px;
+	max-width: 100%;
+	aspect-ratio: 1 / 1;
+	justify-self: center;
+}
+
+.fs-cycle-ref__disc {
+	position: absolute;
+	inset: 0;
+	border-radius: var( --fs-r-pill, 999px );
+	background: var( --wp--preset--color--base, #ffffff );
+	box-shadow: 0 0 0 12px var( --wp--preset--color--contrast, #005c6d ), 0 0 0 14px rgba( 255, 255, 255, 0.4 );
+}
+
+.fs-cycle-ref__mark img {
+	position: absolute;
+	left: 19%;
+	top: 19%;
+	width: 62%;
+	height: 62%;
+}
+
+.fs-cycle-ref__eyebrow {
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-cycle-ref__copy h2 {
+	margin: 0 0 26px;
+	max-width: 14ch;
+	font-size: 3.625rem;
+	line-height: 1.02;
+	letter-spacing: -0.025em;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-cycle-ref__copy p {
+	margin: 0 0 34px;
+	max-width: 700px;
+	font-size: 1.0625rem;
+	line-height: 1.7;
+	color: rgba( 255, 255, 255, 0.92 );
+}
+
+@media ( min-width: 1025px ) {
+	.fs-cycle-ref__inner {
+		grid-template-columns: 340px minmax( 0, 1fr );
+		gap: 96px;
+	}
+}
+
+@media ( max-width: 1240px ) {
+	.fs-cycle-ref__copy h2 {
+		font-size: 3.75rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-cycle-ref {
+		padding: 4rem 0;
+	}
+
+	.fs-cycle-ref__copy h2 {
+		font-size: 2.25rem;
+	}
+}

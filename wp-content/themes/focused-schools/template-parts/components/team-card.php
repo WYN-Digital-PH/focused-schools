@@ -15,6 +15,13 @@
  * - placeholder_mark_url (string) theme-static mark image shown, faint, in
  *   the "Portrait pending" fallback tile when the member has no featured
  *   image — matches the approved .dc design's explicit fallback treatment.
+ * - compact (bool, optional, default false) — the About page's simpler card
+ *   variant per Focused Schools About.dc.html: no quote block, no LinkedIn
+ *   tile, "Read bio" as a plain inline link instead of a bordered footer
+ *   row. Team page's own Focused Schools Team.dc.html explicitly documents
+ *   the quote block + Read-bio/LinkedIn footer row as an intentional
+ *   *extension* of the base card for that page specifically — so this
+ *   defaults to false, preserving the Team page's existing correct design.
  *
  * Meta key literals mirror FocusedSchoolsCore\Modules\Team\Meta so this
  * template degrades gracefully (empty values) rather than fataling if the
@@ -41,8 +48,9 @@ $fs_bio       = $fs_show_bio ? get_the_excerpt( $fs_post_id ) : '';
 $fs_bio_modal = ! empty( $args['bio_modal'] );
 $fs_full_bio  = $fs_bio_modal ? trim( (string) $fs_post->post_content ) : '';
 $fs_mark_url  = isset( $args['placeholder_mark_url'] ) ? $args['placeholder_mark_url'] : '';
+$fs_compact   = ! empty( $args['compact'] );
 ?>
-<div class="fs-card fs-team-card">
+<div class="fs-card fs-team-card<?php echo $fs_compact ? ' fs-team-card--compact' : ''; ?>">
 	<?php if ( has_post_thumbnail( $fs_post_id ) ) : ?>
 		<div class="fs-card__media fs-team-card__media">
 			<?php
@@ -72,25 +80,34 @@ $fs_mark_url  = isset( $args['placeholder_mark_url'] ) ? $args['placeholder_mark
 		<?php if ( $fs_bio ) : ?>
 			<p class="fs-team-card__bio"><?php echo esc_html( $fs_bio ); ?></p>
 		<?php endif; ?>
-		<?php if ( $fs_quote ) : ?>
+		<?php if ( ! $fs_compact && $fs_quote ) : ?>
 			<blockquote class="fs-team-card__quote">
 				<p><?php echo esc_html( $fs_quote ); ?></p>
 			</blockquote>
 		<?php endif; ?>
-		<?php if ( $fs_full_bio || $fs_linkedin ) : ?>
+		<?php if ( $fs_full_bio ) : ?>
+			<template data-fs-bio-content>
+				<h3><?php echo esc_html( $fs_name ); ?></h3>
+				<?php if ( $fs_position ) : ?>
+					<p class="fs-bio-modal__position"><?php echo esc_html( $fs_position ); ?></p>
+				<?php endif; ?>
+				<?php echo wp_kses_post( wpautop( $fs_full_bio ) ); ?>
+			</template>
+		<?php endif; ?>
+		<?php if ( $fs_compact ) : ?>
+			<?php if ( $fs_full_bio ) : ?>
+				<button type="button" class="fs-team-card__read-bio" data-fs-bio-open aria-haspopup="dialog">
+					<?php esc_html_e( 'Read bio', 'focused-schools' ); ?>
+					<span aria-hidden="true">&rarr;</span>
+				</button>
+			<?php endif; ?>
+		<?php elseif ( $fs_full_bio || $fs_linkedin ) : ?>
 			<div class="fs-team-card__foot">
 				<?php if ( $fs_full_bio ) : ?>
 					<button type="button" class="fs-text-link" data-fs-bio-open aria-haspopup="dialog">
 						<?php esc_html_e( 'Read bio', 'focused-schools' ); ?>
 						<span aria-hidden="true">&rarr;</span>
 					</button>
-					<template data-fs-bio-content>
-						<h3><?php echo esc_html( $fs_name ); ?></h3>
-						<?php if ( $fs_position ) : ?>
-							<p class="fs-bio-modal__position"><?php echo esc_html( $fs_position ); ?></p>
-						<?php endif; ?>
-						<?php echo wp_kses_post( wpautop( $fs_full_bio ) ); ?>
-					</template>
 				<?php endif; ?>
 				<?php if ( $fs_linkedin ) : ?>
 					<a

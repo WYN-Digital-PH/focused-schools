@@ -17,6 +17,9 @@
  *               (added for the Podcast page, whose hero has two buttons)
  * - cta2_url   (string) required when cta2_label is set
  * - alignment  (string) 'left'|'center', default 'left'
+ * - slab_width (int) desktop (≥1241px) slab width in px, default 680
+ *   (Home/About's value) — Team and Services each specify their own
+ *   narrower width (660px / 640px) in their `.dc` sources.
  *
  * Always renders in the shell (.fs-container--shell, 1400px) container,
  * matching the approved .dc design's hero treatment (About page task) —
@@ -39,6 +42,7 @@ $fs_cta_url    = isset( $args['cta_url'] ) ? $args['cta_url'] : '';
 $fs_cta2_label = isset( $args['cta2_label'] ) ? $args['cta2_label'] : '';
 $fs_cta2_url   = isset( $args['cta2_url'] ) ? $args['cta2_url'] : '';
 $fs_alignment  = isset( $args['alignment'] ) && 'center' === $args['alignment'] ? 'center' : 'left';
+$fs_slab_width = isset( $args['slab_width'] ) ? absint( $args['slab_width'] ) : 680;
 
 if ( '' === trim( (string) $fs_heading ) ) {
 	return;
@@ -56,7 +60,7 @@ if ( '' === trim( (string) $fs_heading ) ) {
 			</div>
 		<?php endif; ?>
 
-		<div class="fs-hero__slab">
+		<div class="fs-hero__slab" style="--fs-hero-slab-width: <?php echo esc_attr( $fs_slab_width ); ?>px;">
 			<?php if ( $fs_eyebrow ) : ?>
 				<p class="fs-eyebrow fs-eyebrow--on-dark"><?php echo esc_html( $fs_eyebrow ); ?></p>
 			<?php endif; ?>

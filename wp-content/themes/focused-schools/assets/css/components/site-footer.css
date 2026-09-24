@@ -25,15 +25,9 @@
 .fs-site-footer__grid {
 	position: relative;
 	display: grid;
-	grid-template-columns: 1fr;
+	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
 	gap: 3rem;
 	padding-bottom: 5.5rem;
-}
-
-.fs-site-footer__brand-name {
-	margin: 0 0 var( --wp--preset--spacing--large, 2rem );
-	font-size: 1.5rem;
-	font-weight: 900;
 }
 
 .fs-site-footer__logo-img {
@@ -67,6 +61,12 @@
 
 .fs-site-footer__col .fs-nav__list,
 .fs-site-footer__col div.fs-nav__list {
+	/* The Explore column's <ul> stacks correctly without this (browser
+	   default block/list-item layout), which is why this went unnoticed —
+	   but Resources' plain <div>/<a> markup has no such default, and
+	   rendered as one inline-flowing line without an explicit flex
+	   container. */
+	display: flex;
 	flex-direction: column;
 	gap: 1.25rem;
 }
@@ -156,7 +156,13 @@
 	color: var( --wp--preset--color--lime, #a7cc14 );
 }
 
-@media ( min-width: 1024px ) {
+@media ( max-width: 720px ) {
+	.fs-site-footer__grid {
+		grid-template-columns: minmax( 0, 1fr );
+	}
+}
+
+@media ( min-width: 1025px ) {
 	.fs-site-footer__grid {
 		grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr;
 		gap: 3.75rem;

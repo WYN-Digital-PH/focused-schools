@@ -12,7 +12,96 @@
 }
 
 .fs-services__section {
-	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+	/* 96px/24px per the .dc source's own Lane Index section (asymmetric —
+	   the lanes immediately below carry their own top padding). */
+	padding-top: 6rem;
+	padding-bottom: 1.5rem;
+}
+
+@media ( max-width: 720px ) {
+	.fs-services__section {
+		padding-top: 4rem;
+		padding-bottom: 4rem;
+	}
+}
+
+/*
+ * "How we help" header: heading-block left, description right, matching
+ * the .dc source's own flex row — overridden here rather than in the
+ * shared section-heading.css, since Impact Stories/single.php use that
+ * component's generic stacked layout correctly as-is.
+ */
+/*
+ * The .dc source wraps eyebrow+heading in one <div> (grouped, left column)
+ * beside the description (right column) — but section-heading.php outputs
+ * three flat siblings with no such wrapper. Grid placement (rather than
+ * flex-direction:row on the flat list, which would treat eyebrow/heading/
+ * description as three independent items) reproduces the same two-column
+ * grouping without needing a DOM change to the shared component.
+ */
+#how-we-help .fs-section-heading {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr ) 520px;
+	column-gap: 60px;
+	align-items: end;
+	margin-bottom: 3.5rem;
+}
+
+#how-we-help .fs-section-heading__eyebrow {
+	grid-column: 1;
+	grid-row: 1;
+	margin: 0 0 26px;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+#how-we-help .fs-section-heading__heading {
+	grid-column: 1;
+	grid-row: 2;
+	max-width: 14ch;
+	font-size: 3.75rem;
+	line-height: 1.03;
+	letter-spacing: -0.03em;
+	font-weight: 400;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+#how-we-help .fs-section-heading__heading strong {
+	font-weight: 700;
+}
+
+#how-we-help .fs-section-heading__description {
+	grid-column: 2;
+	grid-row: 1 / span 2;
+	margin: 0 0 12px;
+	max-width: 520px;
+	font-size: 1.0625rem;
+	line-height: 1.75;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+@media ( min-width: 1241px ) {
+	#how-we-help .fs-section-heading__heading {
+		font-size: 4.25rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	#how-we-help .fs-section-heading {
+		grid-template-columns: minmax( 0, 1fr );
+	}
+
+	#how-we-help .fs-section-heading__description {
+		grid-column: 1;
+		grid-row: 3;
+	}
+
+	#how-we-help .fs-section-heading__heading {
+		font-size: 2.25rem;
+	}
 }
 
 /*
@@ -28,7 +117,14 @@
 }
 
 .fs-services__quote {
-	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+	padding-block: 7rem;
+}
+
+@media ( max-width: 720px ) {
+	.fs-services__quote {
+		padding-block: 4rem;
+	}
 }
 
 .fs-services__empty {

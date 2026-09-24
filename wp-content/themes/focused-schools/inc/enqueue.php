@@ -39,7 +39,9 @@ function focused_schools_component_styles() {
 		'home-hero',
 		'commitment-list',
 		'cycle-of-excellence',
+		'cycle-reference',
 		'service-list',
+		'service-index',
 		'service-lane',
 		'testimonial-carousel',
 		'rail-text',
@@ -187,6 +189,20 @@ function focused_schools_enqueue_assets() {
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-services.css',
 			array( 'focused-schools-style' ),
 			focused_schools_asset_version( '/assets/css/page-services.css' )
+		);
+
+		// The closing testimonial section needs the same carousel script
+		// Home uses — was missing here entirely, so the prev/next/dot
+		// controls rendered but did nothing.
+		wp_enqueue_script(
+			'focused-schools-testimonial-carousel',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/testimonial-carousel.js',
+			array(),
+			focused_schools_asset_version( '/assets/js/components/testimonial-carousel.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
 		);
 	}
 

@@ -10,24 +10,36 @@
 .fs-partner-districts__intro {
 	display: grid;
 	grid-template-columns: minmax( 0, 1fr );
-	gap: 2rem;
+	gap: 2.75rem;
 	margin-bottom: 4.5rem;
 }
 
 .fs-partner-districts__intro h2 {
 	margin: 0;
 	max-width: 16ch;
-	font-size: 2.5rem;
+	font-size: 3.75rem;
 	line-height: 1.03;
 	letter-spacing: -0.03em;
 	font-weight: 400;
 	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
-@media ( min-width: 1024px ) {
+@media ( min-width: 1241px ) {
+	.fs-partner-districts__intro {
+		grid-template-columns: minmax( 0, 1fr ) minmax( 0, 1fr );
+		align-items: end;
+		gap: 5rem;
+	}
+
 	.fs-partner-districts__intro h2 {
 		/* 68px — the approved .dc design's desktop size for this heading. */
 		font-size: 4.25rem;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-partner-districts__intro h2 {
+		font-size: 2.25rem;
 	}
 }
 
@@ -50,7 +62,7 @@
 .fs-partner-districts__row {
 	display: grid;
 	grid-template-columns: minmax( 0, 1fr );
-	gap: 1rem;
+	gap: 3rem;
 	padding: 2.25rem 0;
 	border-bottom: 1px solid var( --wp--preset--color--rule, #d3dde1 );
 }
@@ -167,5 +179,11 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: space-between;
+	}
+}
+
+@media ( max-width: 720px ) {
+	.fs-partner-districts {
+		padding: 4rem 0;
 	}
 }

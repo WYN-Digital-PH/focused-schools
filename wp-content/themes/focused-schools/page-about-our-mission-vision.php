@@ -334,6 +334,7 @@ if ( have_posts() ) :
 									array(
 										'post'      => get_post(),
 										'bio_modal' => true,
+										'compact'   => true,
 										'placeholder_mark_url' => $fs_img . 'mark-white.svg',
 									)
 								);
@@ -374,6 +375,7 @@ if ( have_posts() ) :
 				'template-parts/components/content-image-split',
 				null,
 				array(
+					'eyebrow'        => __( 'Our mission', 'focused-schools' ),
 					'heading'        => __( "Support the educators who shape students' lives.", 'focused-schools' ),
 					'body'           => '<p>' . esc_html__( 'By strengthening leadership, developing people, and building sustainable systems, we help schools create lasting change so every student can reach their full potential.', 'focused-schools' ) . '</p>',
 					'image_url'      => $fs_img . 'retreat-2.jpg',

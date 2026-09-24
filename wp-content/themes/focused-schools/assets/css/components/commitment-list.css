@@ -12,7 +12,7 @@
 .fs-commitments__intro {
 	display: grid;
 	grid-template-columns: minmax( 0, 1fr );
-	gap: 2rem;
+	gap: 2.75rem;
 	margin-bottom: 6rem;
 }
 
@@ -41,13 +41,14 @@
 .fs-commitments__body {
 	display: grid;
 	grid-template-columns: minmax( 0, 1fr );
-	gap: 2.5rem;
+	gap: 3.5rem;
 	align-items: start;
 }
 
 .fs-commitments__photo {
 	position: relative;
 	margin: 0;
+	max-width: 430px;
 	aspect-ratio: 4 / 5;
 	border-radius: var( --fs-r-sm, 8px );
 	background: var( --wp--preset--color--teal-deep, #004855 );
@@ -104,7 +105,7 @@
 	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
-@media ( min-width: 1240px ) {
+@media ( min-width: 1241px ) {
 	.fs-commitments__intro {
 		grid-template-columns: minmax( 0, 1fr ) minmax( 0, 1fr );
 		align-items: end;
@@ -123,7 +124,18 @@
 	}
 }
 
+@media ( max-width: 1024px ) {
+	.fs-commitments__row {
+		row-gap: 14px;
+		column-gap: 24px;
+	}
+}
+
 @media ( max-width: 720px ) {
+	.fs-commitments {
+		padding: 4rem 0;
+	}
+
 	.fs-commitments__heading {
 		font-size: 2.25rem;
 	}
