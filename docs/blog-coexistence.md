@@ -61,7 +61,20 @@ if a Theme Builder condition is active, it may take precedence. **This must be v
 directly against the real Elementor Pro configuration on staging/production** before
 assuming these new files are the effective ones for `/blog/` or single posts there.
 
-## 5. Known Limitation: Excerpts on Elementor-Authored Posts
+## 5. Excerpts on Elementor-Authored Posts — measured, and not a problem
+
+**Updated September 24, 2026.** The concern below was written before the real export
+was available. It has now been measured against the actual content, and it does not
+apply to this site: **all 30 Elementor posts carry real text in `post_content`** —
+minimum 428 characters, median 2,544. Auto-generated excerpts in listings therefore
+work normally, and no Elementor post shows a thin or empty card. No manual excerpts
+exist anywhere (0 of 124 posts), so every card excerpt is auto-generated, which is
+fine at those content lengths.
+
+The original note is kept below because the reasoning still holds for any site where
+Elementor posts *do* have empty `post_content`.
+
+### Original note
 
 Elementor's real content lives in `_elementor_data` post meta as JSON, not in
 `post_content` — for many Elementor-built posts, `post_content` is just a placeholder
@@ -199,3 +212,36 @@ there is no single post to key the check off, so they are always native.
   `title-tag` support), but that is structural reasoning, not a test.
 - **Elementor Pro Theme Builder** — see above.
 - **Tablet/mobile** — breakpoints written from the design's CSS; not viewed at width.
+
+
+---
+
+## 9. The Live Export — measured facts (September 24, 2026)
+
+Taken from `focusedschools.WordPress.2026-09-24.xml`, 2.8 MB, before any import.
+
+| Fact | Value |
+|---|---|
+| Items | 503 |
+| Posts | 124 — **123 published**, 1 draft ("Skills for Life", 2024-02-12) |
+| Attachments | 379, all on `www.focusedschools.com` (227 png, 83 jpg, 67 jpeg, 1 svg, 1 gif) |
+| Elementor posts | 30 with `_elementor_edit_mode = builder` — **29 published + 1 draft**, which reconciles the audit's "29" |
+| Elementor date span | 2023-01-24 → 2026-05-01 |
+| Featured images | present on **all 124** |
+| Yoast meta | present on **all 124** |
+| Authors | 4 — `grapeadmin`, `broberts`, `focadmin`, `jgordon` |
+| Live domain occurrences | 1,771 |
+
+### Categories: there are none
+
+The export contains **zero category and zero tag definitions**, and every one of the
+124 posts sits in `Uncategorized` alone. This is a content fact, not an export fault.
+
+It has one design consequence. The approved blog design shows a row of category
+filter chips, which against this data would render "All | Uncategorized" — a filter
+that filters nothing, reading as broken rather than as a feature. The chip row is
+therefore hidden whenever fewer than two categories exist, and appears by itself once
+posts are categorised. Nothing else about the design changes.
+
+If the client wants the filters visible, the work is editorial — categorise the 123
+posts — not a code change.

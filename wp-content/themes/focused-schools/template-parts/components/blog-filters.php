@@ -36,6 +36,17 @@ $fs_cats = get_categories(
 		'hide_empty' => true,
 	)
 );
+
+/*
+ * Filters are only worth showing when they can actually divide the archive.
+ * A site whose posts all sit in one category — the default "Uncategorized"
+ * included — would otherwise get a row of chips that filters nothing, which
+ * reads as broken rather than as a feature. Categorise the posts and the row
+ * appears by itself.
+ */
+if ( count( $fs_cats ) < 2 ) {
+	$fs_cats = array();
+}
 ?>
 <div class="fs-blogbar">
 	<form class="fs-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
