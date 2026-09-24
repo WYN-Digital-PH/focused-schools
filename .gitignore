@@ -14,6 +14,8 @@
 !/composer.lock
 !/phpcs.xml.dist
 !/docs/
+# Superseded duplicate of the root AGENTS.md; keep it out of Git.
+/docs/AGENTS.md
 
 # Composer's own installed dependencies stay ignored (regenerated via
 # `composer install`), even though composer.json/composer.lock above are
