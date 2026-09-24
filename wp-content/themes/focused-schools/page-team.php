@@ -123,7 +123,7 @@ if ( have_posts() ) :
 							// every remaining card has been revealed.
 							$fs_count_all = sprintf( $fs_count_format, $fs_team_total, $fs_team_total );
 							?>
-							<p class="fs-team__count" data-fs-team-count data-fs-team-count-all="<?php echo esc_attr( $fs_count_all ); ?>">
+							<p class="fs-team__count" aria-live="polite" data-fs-team-count data-fs-team-count-all="<?php echo esc_attr( $fs_count_all ); ?>">
 								<?php echo esc_html( $fs_count_now ); ?>
 							</p>
 							<?php
@@ -186,6 +186,8 @@ if ( have_posts() ) :
 					'cta_url'     => home_url( '/contact/' ),
 					'cta2_label'  => __( 'See Impact Stories', 'focused-schools' ),
 					'cta2_url'    => home_url( '/impact-stories/' ),
+					'image_url'   => $fs_img . 'retreat-2.jpg',
+					'image_alt'   => __( 'Two education leaders celebrating progress together.', 'focused-schools' ),
 				)
 			);
 			?>
