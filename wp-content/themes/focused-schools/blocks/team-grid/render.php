@@ -55,6 +55,7 @@ $fs_team = new WP_Query(
 						array(
 							'post'                 => get_post(),
 							'bio_modal'            => true,
+							'compact'              => true,
 							'placeholder_mark_url' => $fs_img . 'mark-white.svg',
 						)
 					);
