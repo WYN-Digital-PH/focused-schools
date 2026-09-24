@@ -32,8 +32,9 @@ class Meta {
 	 * @var array<string, callable>
 	 */
 	private static $type_sanitizers = array(
-		'text'    => 'sanitize_text_field',
-		'boolean' => 'rest_sanitize_boolean',
+		'text'     => 'sanitize_text_field',
+		'textarea' => 'sanitize_textarea_field',
+		'boolean'  => 'rest_sanitize_boolean',
 	);
 
 	/**
@@ -59,7 +60,67 @@ class Meta {
 				'label' => __( 'Featured', 'focused-schools-core' ),
 				'type'  => 'boolean',
 			),
+			'service_lane'       => array(
+				'label'       => __( 'Service Lane', 'focused-schools-core' ),
+				'type'        => 'text',
+				'description' => __( 'e.g. Strategy and Vision. Also used to match related stories.', 'focused-schools-core' ),
+			),
+			'partnership_length' => array(
+				'label'       => __( 'Partnership Length', 'focused-schools-core' ),
+				'type'        => 'text',
+				'description' => __( 'e.g. Three years.', 'focused-schools-core' ),
+			),
+			'results'            => array(
+				'label'       => __( 'At a Glance Results', 'focused-schools-core' ),
+				'type'        => 'textarea',
+				'description' => __( 'One result per line as value | unit | label, e.g. 400+ | Educators | Coached across eight campuses. Up to four; leave empty to omit the band.', 'focused-schools-core' ),
+			),
 		);
+	}
+
+	/**
+	 * Parse the stored results textarea into rows.
+	 *
+	 * Each line is `value | unit | label`; unit and label are optional. Lines
+	 * without a value are dropped, and the list is capped at four because the
+	 * approved design only lays out one to four results.
+	 *
+	 * @param string $value Raw stored meta value.
+	 * @return array<int, array{value:string,unit:string,label:string}>
+	 */
+	public static function results_list( $value ) {
+		if ( ! is_string( $value ) || '' === trim( $value ) ) {
+			return array();
+		}
+
+		$rows = array();
+
+		foreach ( preg_split(
+			'/
+
+|
+|
+/',
+			$value
+		) as $line ) {
+			$parts = array_map( 'trim', explode( '|', $line ) );
+
+			if ( '' === $parts[0] ) {
+				continue;
+			}
+
+			$rows[] = array(
+				'value' => $parts[0],
+				'unit'  => isset( $parts[1] ) ? $parts[1] : '',
+				'label' => isset( $parts[2] ) ? $parts[2] : '',
+			);
+
+			if ( count( $rows ) >= 4 ) {
+				break;
+			}
+		}
+
+		return $rows;
 	}
 
 	/**

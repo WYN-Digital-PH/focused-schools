@@ -163,12 +163,27 @@ class Impact_Stories implements Module_Interface {
 				esc_attr( $id ),
 				esc_html( $field['label'] )
 			);
-			printf(
-				'<input type="text" id="%1$s" name="%2$s" value="%3$s" class="large-text" />',
-				esc_attr( $id ),
-				esc_attr( $meta_key ),
-				esc_attr( $value )
-			);
+
+			if ( 'textarea' === $field['type'] ) {
+				printf(
+					'<textarea id="%1$s" name="%2$s" rows="5" class="large-text">%3$s</textarea>',
+					esc_attr( $id ),
+					esc_attr( $meta_key ),
+					esc_textarea( $value )
+				);
+			} else {
+				printf(
+					'<input type="text" id="%1$s" name="%2$s" value="%3$s" class="large-text" />',
+					esc_attr( $id ),
+					esc_attr( $meta_key ),
+					esc_attr( $value )
+				);
+			}
+
+			if ( ! empty( $field['description'] ) ) {
+				printf( '<span class="description">%s</span>', esc_html( $field['description'] ) );
+			}
+
 			echo '</p>';
 		}
 	}

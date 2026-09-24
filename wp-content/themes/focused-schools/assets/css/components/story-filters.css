@@ -1,0 +1,91 @@
+/**
+ * Story Filter Bar — the one new component on the Impact Stories page.
+ * A 120px label rail beside a chip area, one row per taxonomy, rules top and
+ * bottom. Chips clear 44px so they stay comfortable on touch.
+ */
+
+.fs-story-filters {
+	margin: 0 0 3rem;
+	padding: 28px 0 40px;
+	border-top: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	border-bottom: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	display: grid;
+	gap: 18px;
+}
+
+.fs-story-filters__row {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 12px;
+}
+
+.fs-story-filters__label {
+	margin: 0;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-story-filters__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.fs-chip {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	padding: 12px 18px;
+	border: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	border-radius: var( --fs-r-pill, 999px );
+	background: var( --wp--preset--color--base, #fff );
+	color: var( --wp--preset--color--contrast, #005c6d );
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background var( --fs-dur-fast, 160ms ) var( --fs-ease, ease ), border-color var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-chip:hover {
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-chip.is-active {
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #fff );
+}
+
+@media ( min-width: 1024px ) {
+
+	.fs-story-filters__row {
+		grid-template-columns: 120px minmax( 0, 1fr );
+		gap: 24px;
+	}
+
+	.fs-story-filters__label {
+		padding-top: 12px;
+	}
+}
+
+@media ( max-width: 767px ) {
+
+	/* One horizontally scrollable row per taxonomy; no dropdowns. */
+	.fs-story-filters__chips {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		padding-bottom: 4px;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.fs-chip {
+		flex: 0 0 auto;
+	}
+}

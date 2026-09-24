@@ -445,3 +445,49 @@ Verified live: About's card now shows no quote and no footer row (confirmed via 
 not just visual inspection); the Team page's card was re-checked and still has
 `compact` unset and renders exactly as before (no regression). Full 5-page overflow sweep
 stayed clean; `php -l` clean on `team-card.php`, `page-about-our-mission-vision.php`.
+
+## Partner Map (built)
+
+The Partner Districts section now carries the interactive map from the approved mockup. It
+had been flagged twice as needing a decision before building — `AGENTS.md` §3 gates new
+libraries — and was parked until that decision came.
+
+**Leaflet 1.9.4 is vendored into the theme** (`assets/vendor/leaflet/`) rather than loaded
+from unpkg, so the site makes no third-party request for the library and nothing breaks if
+a CDN is blocked or disappears. It is enqueued **only where the Partner Districts block is
+actually on the page** — `focused_schools_has_partner_map()` checks with `has_block()` — so
+no other page pays for it. Map *tiles* are still fetched from Esri at view time, which is
+inherent to any web map; that is the one remaining third-party call and the attribution is
+rendered.
+
+### Data model
+
+| Where | Field | Purpose |
+|---|---|---|
+| `fs_partner_state` term meta | `_fs_partner_state_lat` / `_lng` | One edit moves every pin for that state; nothing repeated per district. A state with no coordinates is simply not mapped. |
+| `fs_partner` post meta | `_fs_partner_status` | `current` or `previous`, strictly whitelisted, drives the pin colour and the popup grouping. Defaults to `current`. |
+
+Both are editable in wp-admin — coordinates on the state term screen, status in a side box
+on the partner — so adding a district or a state updates the map with no code change.
+
+### Progressive enhancement
+
+The district chip list underneath is the real content and is always server-rendered. The map
+is a way of reading that list, never the only copy of it: with JavaScript off, Leaflet
+failing to load, or the tile service unreachable, the container stays empty and the reader
+loses nothing. The canvas carries `role="img"` with a label pointing at the list below.
+
+`?state=California` opens that state's popup on load, so a filtered view is shareable —
+matching the mockup's own URL behaviour.
+
+### QA performed
+
+Leaflet loads, the map initialises at 1150×420, **5 pins render, 12 of 12 tiles load**, both
+legend keys show, and the district list is still present below. A pin popup reads
+"California · 3 DISTRICTS · CURRENT: Covina-Valley, Downey · PREVIOUS: San Marino", so the
+status split works. `?state=Illinois` opens the Illinois popup on load. Leaflet is served
+from the theme (200, 147,552 bytes) and is **absent from `/services/`**, confirming the
+scoping. Zero console errors, full-project PHPCS clean.
+
+**Not verified:** tablet and mobile were not rendered — the browser here will not resize —
+and screenshot capture failed repeatedly, so the visual check is by measurement only.

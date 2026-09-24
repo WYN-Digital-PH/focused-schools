@@ -1,0 +1,63 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/contact",
+	"title": "Contact Close",
+	"category": "design",
+	"icon": "email",
+	"description": "The closing contact split: heading, the shared contact details, and a CTA.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Contact"
+		},
+		"heading": {
+			"type": "string",
+			"default": "Get to Know Us."
+		},
+		"body": {
+			"type": "string",
+			"default": "Ready to talk about your district's next step? Send us a message and a member of our team will follow up soon."
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "Contact Us"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": "/contact/"
+		},
+		"linkText": {
+			"type": "string",
+			"default": "Prefer the full form?"
+		},
+		"linkLabel": {
+			"type": "string",
+			"default": "Go to our contact page"
+		},
+		"formShortcode": {
+			"type": "string",
+			"default": ""
+		},
+		"badgeId": {
+			"type": "number",
+			"default": 0
+		},
+		"badgeUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"badgeAlt": {
+			"type": "string",
+			"default": "2026 Proud Member — Manatee Chamber of Commerce"
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/stats-band",
+	"title": "Impact Stats Band",
+	"category": "design",
+	"icon": "chart-bar",
+	"description": "The teal impact band. The three figures come from Site Settings so this page and the Home page cannot drift.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Two decades of partnership"
+		},
+		"heading": {
+			"type": "string",
+			"default": "The measure of our work is what changed because of it."
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "View Impact Stories"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": "/impact-stories/"
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

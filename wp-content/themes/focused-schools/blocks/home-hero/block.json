@@ -6,7 +6,11 @@
 	"category": "design",
 	"icon": "video-alt3",
 	"description": "The homepage hero: poster image with a muted ambient video, playback console, and the teal copy slab.",
-	"keywords": [ "hero", "video", "home" ],
+	"keywords": [
+		"hero",
+		"video",
+		"home"
+	],
 	"textdomain": "focused-schools",
 	"supports": {
 		"html": false,
@@ -14,12 +18,38 @@
 		"multiple": false
 	},
 	"attributes": {
-		"heading":    { "type": "string", "default": "We are Focused Schools" },
-		"subheading": { "type": "string", "default": "We help educators confidently lead the hard work and heart work of lasting school improvement." },
-		"ctaLabel":   { "type": "string", "default": "Our Approach" },
-		"ctaUrl":     { "type": "string", "default": "" },
-		"youtubeId":  { "type": "string", "default": "" },
-		"posterUrl":  { "type": "string", "default": "" }
+		"heading": {
+			"type": "string",
+			"default": "We are Focused Schools"
+		},
+		"subheading": {
+			"type": "string",
+			"default": "We help educators confidently lead the hard work and heart work of lasting school improvement."
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "Our Approach"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"youtubeId": {
+			"type": "string",
+			"default": ""
+		},
+		"posterId": {
+			"type": "number",
+			"default": 0
+		},
+		"posterUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"posterAlt": {
+			"type": "string",
+			"default": ""
+		}
 	},
 	"editorScript": "focused-schools-blocks-editor",
 	"render": "file:./render.php"

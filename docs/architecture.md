@@ -674,7 +674,43 @@ contains `<!-- wp:focused-schools/`) → the hardcoded layout. The hardcoded lay
 the default, so no existing site changes behaviour until someone builds the page with
 blocks.
 
-**Status: partial.** Built so far: `home-hero`, `beliefs`. Still hardcoded, and still to be
-converted: commitments, cycle teaser, cycle diagram, services intro, impact stories, proof
-stats, contact. **Because block mode replaces the whole layout, a page must not be switched
-to blocks until every section has one** — otherwise the missing sections simply vanish.
+**About page.** `page-about-our-mission-vision.php` renders the page's blocks directly with
+no wrapper, so the Page starts empty and is built in the editor. Six further blocks cover
+its sections — `page-hero`, `rail-text`, `stats-band`, `partner-districts`, `team-grid`,
+`mission-close` — and it reuses `commitments` from the Home set. Each renders through the
+same component the approved About layout used.
+
+Their dynamic sources are unchanged: `team-grid` queries Team Members and carries the bio
+dialog and Load more, `partner-districts` builds its state groups from the Partners records
+and taxonomy, and `stats-band` reads the three figures from Site Settings so About and Home
+cannot drift.
+
+**Status: complete.** All nine Home sections are blocks: `home-hero`, `beliefs`, `commitments`,
+`cycle-teaser`, `cycle`, `services`, `impact-stories`, `proof`, `contact`. A block-built
+page and the hardcoded layout render identical markup — verified marker by marker.
+
+**Dynamic content stays dynamic.** `services` and `impact-stories` run their own live
+`WP_Query`, and `proof` reads the figures from Site Settings, so publishing a service or
+editing a stat updates the page with no page edit. Only the copy is stored on the block.
+
+**What an editor can change.** Every block exposes its copy, its link targets and its
+photographs. Images use a `<name>Id` / `<name>Url` / `<name>Alt` trio resolved by
+`focused_schools_block_image()`, in that order of precedence, falling back to the
+theme-bundled photo — so a site that has never opened the editor still renders correct,
+described images. Alt text falls back to the attachment's own alt, then to a written
+default. URL fields accept a site path (`/team/`) or a full URL.
+
+**What is deliberately not editable.** The brand marks and decorative shapes — the rail
+icon, the cycle mark, the watermark, the confetti — are design furniture, not content.
+Exposing them would invite a broken layout for no editorial gain. The three impact figures
+stay in Site Settings so this page and About cannot drift, and the commitments and cycle
+phases are fixed at three each, matching the approved design.
+
+**`page-home.php`** applies to any page with the slug `home` and renders its blocks bare —
+no container, no page title. Without it the generic `index.php` fallback wrapped the
+full-bleed sections in the 720px content container and printed the page title above them.
+
+**`focused_schools_is_home_layout()`** in `inc/enqueue.php` decides which requests get the
+homepage CSS/JS: the front page, plus any singular page whose content contains
+`<!-- wp:focused-schools/`. Without it a block-built page rendered the right markup with
+none of its stylesheet or scroll/video behaviour.

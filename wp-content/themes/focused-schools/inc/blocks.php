@@ -35,6 +35,20 @@ function focused_schools_block_names() {
 	return array(
 		'home-hero',
 		'beliefs',
+		'commitments',
+		'cycle-teaser',
+		'cycle',
+		'services',
+		'impact-stories',
+		'proof',
+		'contact',
+		'page-hero',
+		'rail-text',
+		'stats-band',
+		'partner-districts',
+		'where-we-work',
+		'team-grid',
+		'mission-close',
 	);
 }
 
@@ -72,3 +86,119 @@ function focused_schools_register_blocks() {
 	}
 }
 add_action( 'init', 'focused_schools_register_blocks' );
+
+/**
+ * Resolve an editable image slot on a block.
+ *
+ * Precedence: a picked media library item, then a pasted URL, then the
+ * theme-bundled default. Alt text follows the same idea — the block's own alt
+ * wins, then the attachment's, then the supplied default — so a site that has
+ * never opened the editor still renders correct, described images.
+ *
+ * @param array  $attributes   Block attributes.
+ * @param string $prefix       Attribute prefix, e.g. 'image' for imageId/imageUrl/imageAlt.
+ * @param string $default_file Theme-relative fallback, e.g. '/assets/img/retreat-1.jpg'.
+ * @param string $default_alt  Fallback alt text.
+ * @return array{url:string,alt:string}
+ */
+function focused_schools_block_image( $attributes, $prefix, $default_file, $default_alt = '' ) {
+	$id  = isset( $attributes[ $prefix . 'Id' ] ) ? (int) $attributes[ $prefix . 'Id' ] : 0;
+	$url = isset( $attributes[ $prefix . 'Url' ] ) ? trim( (string) $attributes[ $prefix . 'Url' ] ) : '';
+	$alt = isset( $attributes[ $prefix . 'Alt' ] ) ? trim( (string) $attributes[ $prefix . 'Alt' ] ) : '';
+	if ( $id ) {
+		$from_library = wp_get_attachment_image_url( $id, 'full' );
+		if ( $from_library ) {
+			$url = $from_library;
+			if ( '' === $alt ) {
+				$alt = (string) get_post_meta( $id, '_wp_attachment_image_alt', true );
+			}
+		}
+	}
+
+	if ( '' === $url ) {
+		$url = FOCUSED_SCHOOLS_THEME_URI . $default_file;
+	}
+
+	return array(
+		'url' => $url,
+		'alt' => '' !== $alt ? $alt : $default_alt,
+	);
+}
+
+/**
+ * Partner records grouped by state, for the blocks that show them.
+ *
+ * One query serves both views the approved design asks for: the map plots
+ * every state we have worked in, while the "Partnering in <year>" list shows
+ * only the districts whose partnership is current. Keeping that split in the
+ * status meta rather than in two hand-kept lists means adding a district in
+ * wp-admin updates both, and they cannot drift apart.
+ *
+ * @return array[] Each item: name, lat, lng, current[], previous[].
+ */
+function focused_schools_partner_states() {
+	static $cache = null;
+
+	if ( null !== $cache ) {
+		return $cache;
+	}
+
+	$cache = array();
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'fs_partner_state',
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+			'hide_empty' => true,
+		)
+	);
+
+	if ( is_wp_error( $terms ) ) {
+		return $cache;
+	}
+
+	foreach ( $terms as $term ) {
+		$posts = get_posts(
+			array(
+				'post_type'      => 'fs_partner',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'orderby'        => 'menu_order title',
+				'order'          => 'ASC',
+				'no_found_rows'  => true,
+				'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- small, admin-managed taxonomy.
+					array(
+						'taxonomy' => 'fs_partner_state',
+						'field'    => 'term_id',
+						'terms'    => $term->term_id,
+					),
+				),
+			)
+		);
+
+		if ( ! $posts ) {
+			continue;
+		}
+
+		$current  = array();
+		$previous = array();
+
+		foreach ( $posts as $partner ) {
+			if ( 'previous' === get_post_meta( $partner->ID, '_fs_partner_status', true ) ) {
+				$previous[] = $partner->post_title;
+			} else {
+				$current[] = $partner->post_title;
+			}
+		}
+
+		$cache[] = array(
+			'name'     => $term->name,
+			'lat'      => get_term_meta( $term->term_id, '_fs_partner_state_lat', true ),
+			'lng'      => get_term_meta( $term->term_id, '_fs_partner_state_lng', true ),
+			'current'  => $current,
+			'previous' => $previous,
+		);
+	}
+
+	return $cache;
+}

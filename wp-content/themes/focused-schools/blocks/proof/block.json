@@ -1,0 +1,23 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/proof",
+	"title": "Impact Figures",
+	"category": "design",
+	"icon": "chart-bar",
+	"description": "The Our Impact figures. The numbers come from Site Settings so this page and About cannot drift.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": "Our Impact"
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

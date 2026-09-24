@@ -285,3 +285,82 @@
 		width: 100%;
 	}
 }
+
+/*
+ * Where We Work continues the Our Impact section rather than starting a new
+ * one, as in the approved design: one rule separates the figures from the map,
+ * so the section's own bottom padding moves to the block that now ends it.
+ */
+.fs-home__where {
+	padding-block: 0 7.5rem;
+
+	/* Contain the component's top margin instead of letting it collapse out. */
+	display: flow-root;
+}
+
+.fs-home__proof:has( + .fs-home__where ) {
+	padding-bottom: 0;
+}
+
+/* Contact ---------------------------------------------------------------- */
+
+/*
+ * The approved design puts the address, the membership badge and the link to
+ * the full contact page down the left, with the form shell to the right.
+ */
+.fs-contact-info--stacked {
+	display: flex;
+	flex-direction: column;
+	gap: 1.625rem;
+	margin-bottom: 2.75rem;
+	font-style: normal;
+}
+
+.fs-contact-info--stacked a,
+.fs-contact-info--stacked span {
+	font-size: 1.0625rem;
+	font-weight: 700;
+	line-height: 1.5;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-contact-info--stacked a:hover,
+.fs-contact-info--stacked a:focus-visible {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-home__contact-badge {
+	width: 11rem;
+	height: auto;
+}
+
+.fs-home__contact-aside {
+	margin: 2rem 0 0;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-home__contact-aside a {
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	border-bottom: 1px solid var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-home__contact-form {
+	background: var( --wp--preset--color--base, #ffffff );
+	border-radius: 16px;
+	padding: 2.75rem 3rem 3rem;
+}
+
+@media ( min-width: 1024px ) {
+	.fs-home__contact-form {
+		flex: 0 0 45.625rem;
+	}
+}
+
+@media ( max-width: 640px ) {
+	.fs-home__contact-form {
+		padding: 1.75rem 1.5rem 2rem;
+	}
+}

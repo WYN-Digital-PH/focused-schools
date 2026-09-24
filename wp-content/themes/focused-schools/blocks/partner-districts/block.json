@@ -1,0 +1,71 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/partner-districts",
+	"title": "Partner Districts",
+	"category": "design",
+	"icon": "location-alt",
+	"description": "State-grouped district list, built live from the Partners records so adding a district needs no page edit.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Our partners"
+		},
+		"heading": {
+			"type": "string",
+			"default": "We're proud to partner with"
+		},
+		"headingEmphasis": {
+			"type": "string",
+			"default": "these districts."
+		},
+		"intro": {
+			"type": "string",
+			"default": "Urban, rural, public, private, and charter \u2014 during the 2024\u20132025 school year we worked alongside these communities across five states."
+		},
+		"listEyebrow": {
+			"type": "string",
+			"default": "Partnering in 2024\u20132025"
+		},
+		"note": {
+			"type": "string",
+			"default": "Massachusetts Department of Elementary and Secondary Education"
+		},
+		"noteEmphasis": {
+			"type": "string",
+			"default": "Approved Provider."
+		},
+		"closingText": {
+			"type": "string",
+			"default": "Let's put you on the map."
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "Let's Talk"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": "/contact/"
+		},
+		"badgeId": {
+			"type": "number",
+			"default": 0
+		},
+		"badgeUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"badgeAlt": {
+			"type": "string",
+			"default": "2026 Proud Member \u2014 Manatee Chamber of Commerce"
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

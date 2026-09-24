@@ -34,11 +34,13 @@ class Site_Seeder {
 	 * binds each template to its page, so these must match the template
 	 * filenames in the theme.
 	 *
-	 * 'home' is the exception: it has no page-home.php. It exists so a site
-	 * can be switched to a static front page, which front-page.php then
-	 * renders. This command creates the Page only — it never touches
-	 * Settings > Reading, so making it the front page stays a deliberate
-	 * manual step (see docs/AGENTS.md "URL Preservation").
+	 * 'home' is the exception twice over. It has no page-home.php, and it is
+	 * skipped entirely when the site already has a static front page — see
+	 * front_page_exists(). A site whose Home is an existing Page (production's
+	 * is Page 992) must never be given a second one, so this command can add a
+	 * Home only where none exists. It never touches Settings > Reading either,
+	 * so making a Page the front page stays a deliberate manual step (see
+	 * docs/AGENTS.md "URL Preservation").
 	 *
 	 * @var array<string, string>
 	 */
@@ -79,6 +81,33 @@ class Site_Seeder {
 	);
 
 	/**
+	 * Whether the site already has a Page acting as its front page.
+	 *
+	 * When it does, that Page is the Home page whatever its slug, so creating
+	 * one called 'home' would produce a duplicate competing with it.
+	 *
+	 * @return bool
+	 */
+	public static function front_page_exists() {
+		return 'page' === get_option( 'show_on_front' ) && (int) get_option( 'page_on_front' ) > 0;
+	}
+
+	/**
+	 * Pages this command should act on, given the current site.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function pages() {
+		$pages = self::PAGES;
+
+		if ( self::front_page_exists() ) {
+			unset( $pages['home'] );
+		}
+
+		return $pages;
+	}
+
+	/**
 	 * Find an existing published or draft Page by slug.
 	 *
 	 * @param string $slug Page slug.
@@ -99,7 +128,7 @@ class Site_Seeder {
 	public static function preview() {
 		$pages = array();
 
-		foreach ( self::PAGES as $slug => $title ) {
+		foreach ( self::pages() as $slug => $title ) {
 			$page = self::find_page( $slug );
 
 			$pages[] = array(
@@ -154,7 +183,7 @@ class Site_Seeder {
 	public static function apply_pages() {
 		$report = array();
 
-		foreach ( self::PAGES as $slug => $title ) {
+		foreach ( self::pages() as $slug => $title ) {
 			$page = self::find_page( $slug );
 
 			if ( $page ) {

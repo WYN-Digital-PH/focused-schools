@@ -22,3 +22,96 @@
 	border: 1px dashed var( --wp--preset--color--secondary, #6b7280 );
 	border-radius: 4px;
 }
+
+/* -----------------------------------------------------------------------
+ * Stories section: grid header, count, empty-state panel.
+ * --------------------------------------------------------------------- */
+
+.fs-stories {
+	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-stories__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 2.5rem;
+	margin-bottom: 2.5rem;
+}
+
+.fs-stories__head h2 {
+	margin: 0;
+	max-width: 18ch;
+	font-size: 2.25rem;
+	line-height: 1;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-stories__count {
+	margin: 0;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-stories__grid {
+	gap: 2rem;
+}
+
+/* Never an empty grid, and never a dead end. */
+.fs-stories__empty {
+	max-width: 62ch;
+	padding: 56px 48px;
+	border: 1px solid #e3e9eb;
+	border-radius: var( --fs-r-md, 16px );
+	background: var( --wp--preset--color--base, #fff );
+}
+
+.fs-stories__empty h3 {
+	margin: 0 0 1rem;
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-stories__empty p {
+	margin: 0 0 1.75rem;
+	font-size: 0.9375rem;
+	line-height: 1.7;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-loadmore {
+	margin-top: 3.5rem;
+	text-align: center;
+}
+
+@media ( min-width: 1024px ) {
+
+	.fs-stories__head h2 {
+		font-size: 3.25rem;
+	}
+}
+
+@media ( max-width: 767px ) {
+
+	.fs-stories__head {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+	}
+
+	.fs-stories__grid {
+		gap: 1.25rem;
+	}
+
+	.fs-loadmore .fs-btn {
+		width: 100%;
+		justify-content: center;
+	}
+}

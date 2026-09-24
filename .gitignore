@@ -61,6 +61,11 @@ cache/
 vendor/
 node_modules/
 
+# ...but a library deliberately vendored into the theme is source we ship:
+# it is checked in so a deploy carries it and the site makes no CDN request.
+!wp-content/themes/focused-schools/assets/vendor/
+!wp-content/themes/focused-schools/assets/vendor/**
+
 # OS and logs
 *.log
 .DS_Store

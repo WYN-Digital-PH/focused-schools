@@ -24,6 +24,9 @@ function focused_schools_component_styles() {
 		'service-card',
 		'team-card',
 		'impact-story-card',
+		'story-card',
+		'story-filters',
+		'story-spotlight',
 		'podcast-card',
 		'podcast-subscribe',
 		'podcast-player',
@@ -46,6 +49,8 @@ function focused_schools_component_styles() {
 		'testimonial-carousel',
 		'rail-text',
 		'partner-districts',
+		'partner-map',
+		'where-we-work',
 		'team-bio-modal',
 		'cycle-teaser',
 	);
@@ -71,6 +76,55 @@ function focused_schools_asset_version( $relative_path ) {
 	$time = is_readable( $file ) ? filemtime( $file ) : false;
 
 	return $time ? (string) $time : FOCUSED_SCHOOLS_THEME_VERSION;
+}
+
+/**
+ * Whether the current request renders the homepage layout.
+ *
+ * True for the front page, and for any page built with the homepage blocks —
+ * they render the same components, so they need the same stylesheet and the
+ * same scroll/video behaviour. Without this, a block-built Home page rendered
+ * its markup with none of its CSS or JS.
+ *
+ * @return bool
+ */
+function focused_schools_is_home_layout() {
+	if ( is_front_page() ) {
+		return true;
+	}
+
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	$post = get_post();
+
+	return $post instanceof WP_Post
+		&& false !== strpos( (string) $post->post_content, '<!-- wp:focused-schools/' );
+}
+
+/**
+ * Whether the current request renders a partner map.
+ *
+ * True when the page content carries the Partner Districts block. Keeps
+ * Leaflet off every other page rather than loading it site-wide.
+ *
+ * @return bool
+ */
+function focused_schools_has_partner_map() {
+	if ( ! is_singular() ) {
+		return false;
+	}
+
+	$post = get_post();
+
+	if ( ! $post instanceof WP_Post ) {
+		return false;
+	}
+
+	// Both the About directory and the homepage's Where We Work draw the map.
+	return has_block( 'focused-schools/partner-districts', $post )
+		|| has_block( 'focused-schools/where-we-work', $post );
 }
 
 /**
@@ -139,7 +193,7 @@ function focused_schools_enqueue_assets() {
 		)
 	);
 
-	if ( is_front_page() ) {
+	if ( focused_schools_is_home_layout() ) {
 		wp_enqueue_style(
 			'focused-schools-page-home',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-home.css',
@@ -159,6 +213,39 @@ function focused_schools_enqueue_assets() {
 				)
 			);
 		}
+	}
+
+	/*
+	 * Leaflet is vendored into the theme rather than loaded from a CDN, so the
+	 * site makes no third-party request for the library. It is enqueued only
+	 * where a partner map is actually on the page — never site-wide.
+	 */
+	if ( focused_schools_has_partner_map() ) {
+		wp_enqueue_style(
+			'leaflet',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/vendor/leaflet/leaflet.css',
+			array(),
+			'1.9.4'
+		);
+
+		wp_enqueue_script(
+			'leaflet',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/vendor/leaflet/leaflet.js',
+			array(),
+			'1.9.4',
+			array( 'in_footer' => true )
+		);
+
+		wp_enqueue_script(
+			'focused-schools-partner-map',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/partner-map.js',
+			array( 'leaflet' ),
+			focused_schools_asset_version( '/assets/js/components/partner-map.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 
 	if ( is_page( 'about-our-mission-vision' ) ) {
@@ -236,6 +323,17 @@ function focused_schools_enqueue_assets() {
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-impact-stories.css',
 			array( 'focused-schools-style' ),
 			focused_schools_asset_version( '/assets/css/page-impact-stories.css' )
+		);
+
+		wp_enqueue_script(
+			'focused-schools-story-filters',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/story-filters.js',
+			array(),
+			focused_schools_asset_version( '/assets/js/components/story-filters.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
 		);
 	}
 

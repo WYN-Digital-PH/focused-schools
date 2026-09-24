@@ -1,0 +1,103 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/commitments",
+	"title": "Partnership Commitments",
+	"category": "design",
+	"icon": "list-view",
+	"description": "The three-commitment list with its photo and floating caption.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "How we partner"
+		},
+		"heading": {
+			"type": "string",
+			"default": "Our partnerships are built on"
+		},
+		"headingEmphasis": {
+			"type": "string",
+			"default": "three commitments."
+		},
+		"intro": {
+			"type": "string",
+			"default": "Every student gets one chance. One. Everything we do exists to help school leaders make it worth it. The true measure of our work is not what we did. It is what changed because of it."
+		},
+		"captionKicker": {
+			"type": "string",
+			"default": "Focused Schools in practice"
+		},
+		"captionText": {
+			"type": "string",
+			"default": "Leadership working side by side"
+		},
+		"item1Heading": {
+			"type": "string",
+			"default": "We listen before we lead."
+		},
+		"item1Body": {
+			"type": "string",
+			"default": "Your educators know their schools best. We take the time to understand your strengths, challenges, and goals before recommending a path forward."
+		},
+		"item1CtaLabel": {
+			"type": "string",
+			"default": "Meet Our Team"
+		},
+		"item1CtaUrl": {
+			"type": "string",
+			"default": "/team/"
+		},
+		"item2Heading": {
+			"type": "string",
+			"default": "We work alongside your team."
+		},
+		"item2Body": {
+			"type": "string",
+			"default": "We're not here to hand you a plan and walk away. We collaborate with school and district leaders, providing coaching, guidance, and support throughout the work."
+		},
+		"item2CtaLabel": {
+			"type": "string",
+			"default": "Explore Our Services"
+		},
+		"item2CtaUrl": {
+			"type": "string",
+			"default": "/services/"
+		},
+		"item3Heading": {
+			"type": "string",
+			"default": "We leave your schools stronger."
+		},
+		"item3Body": {
+			"type": "string",
+			"default": "Our goal is to build the confidence, leadership, and internal capacity that allow educators to continue the work long after our partnership ends."
+		},
+		"item3CtaLabel": {
+			"type": "string",
+			"default": "Our Results"
+		},
+		"item3CtaUrl": {
+			"type": "string",
+			"default": "/impact-stories/"
+		},
+		"imageId": {
+			"type": "number",
+			"default": 0
+		},
+		"imageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": "District and school leaders working together during a Focused Schools leadership retreat."
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

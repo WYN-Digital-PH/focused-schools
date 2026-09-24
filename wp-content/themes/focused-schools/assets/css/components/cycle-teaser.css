@@ -96,16 +96,31 @@
 		pointer-events: none;
 	}
 
+	/*
+	 * Desktop: the portrait is a cut-out with a real alpha channel, so it is
+	 * shown at its natural aspect with no box around it — exactly as the
+	 * mockup does. The placeholder ground, the crop and the clip all have to
+	 * go: an opaque box here sits at z-index 2 over the decorative shapes and
+	 * hides them completely, which is what it used to do.
+	 */
 	.fs-cycle-teaser__person {
 		position: absolute;
 		bottom: 0;
 		right: 0;
 		width: 59%;
 		max-width: none;
-		/* Caps how far a tall aspect-ratio box can outgrow the card at wide
-		 * desktop widths — object-fit: cover on the inner img means a real
-		 * photo still crops cleanly to whatever box height this leaves. */
-		max-height: 420px;
+		height: auto;
+		aspect-ratio: auto;
+		overflow: visible;
+		border-radius: 0;
+		background: transparent;
+	}
+
+	.fs-cycle-teaser__person img {
+		position: static;
+		width: 100%;
+		height: auto;
+		object-fit: fill;
 	}
 
 	.fs-cycle-teaser__shape {
