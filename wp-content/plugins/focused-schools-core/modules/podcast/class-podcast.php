@@ -82,6 +82,13 @@ class Podcast implements Module_Interface {
 	const REFRESH_ACTION = 'fs_podcast_refresh_cache';
 
 	/**
+	 * The admin-post action for deliberately emptying the cached videos.
+	 *
+	 * @var string
+	 */
+	const CLEAR_ACTION = 'fs_podcast_clear_cache';
+
+	/**
 	 * Nonce field name for the manual refresh form.
 	 *
 	 * @var string
@@ -106,6 +113,7 @@ class Podcast implements Module_Interface {
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_post_' . self::REFRESH_ACTION, array( $this, 'handle_manual_refresh' ) );
+		add_action( 'admin_post_' . self::CLEAR_ACTION, array( $this, 'handle_manual_clear' ) );
 		add_action( 'admin_notices', array( $this, 'render_admin_notices' ) );
 	}
 
@@ -164,6 +172,16 @@ class Podcast implements Module_Interface {
 	 * On failure, both existing caches are left untouched (fail-safe: stale
 	 * data keeps serving rather than being wiped by a bad fetch).
 	 *
+	 * An empty-but-successful response is treated the same way. YouTube
+	 * answers with an empty list for a playlist that has been made private,
+	 * or whose permissions have lapsed, exactly as it does for one an editor
+	 * has genuinely emptied — the two are indistinguishable from here. The
+	 * costs are not symmetric: keeping videos that have been removed is a
+	 * small staleness, while wiping a good cache empties the published grid.
+	 * So an empty result never overwrites videos we already hold; it is
+	 * reported instead, and clearing the grid deliberately is done with the
+	 * Clear button rather than by accident.
+	 *
 	 * @return array<int, array<string, string>>|WP_Error
 	 */
 	public function refresh_cache() {
@@ -173,6 +191,17 @@ class Podcast implements Module_Interface {
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
+		}
+
+		if ( empty( $result ) ) {
+			$last_good = get_option( self::LAST_GOOD_OPTION, array() );
+
+			if ( ! empty( $last_good['videos'] ) ) {
+				return new \WP_Error(
+					'fs_podcast_empty_playlist',
+					__( 'YouTube returned no videos for this playlist, so the existing videos were kept. Check that the playlist is public and still has videos in it; use Clear cached videos to empty the grid on purpose.', 'focused-schools-core' )
+				);
+			}
 		}
 
 		set_transient( self::CACHE_TRANSIENT, $result, max( 60, (int) $settings['cache_duration'] ) );
@@ -292,7 +321,15 @@ class Podcast implements Module_Interface {
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::REFRESH_ACTION ); ?>" />
 				<?php wp_nonce_field( self::REFRESH_ACTION, self::REFRESH_NONCE_FIELD ); ?>
-				<?php submit_button( __( 'Refresh Now', 'focused-schools-core' ), 'secondary' ); ?>
+				<?php submit_button( __( 'Refresh Now', 'focused-schools-core' ), 'secondary', 'submit', false ); ?>
+			</form>
+
+			<?php // Emptying the grid is deliberate, never a side effect of a fetch. ?>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="<?php echo esc_attr( self::CLEAR_ACTION ); ?>" />
+				<?php wp_nonce_field( self::CLEAR_ACTION, self::REFRESH_NONCE_FIELD ); ?>
+				<?php submit_button( __( 'Clear cached videos', 'focused-schools-core' ), 'delete', 'submit', false ); ?>
+				<p class="description"><?php esc_html_e( 'Empties the video grid until the next successful refresh. Use this when the playlist really is empty.', 'focused-schools-core' ); ?></p>
 			</form>
 		</div>
 		<?php
@@ -356,6 +393,39 @@ class Podcast implements Module_Interface {
 	 *
 	 * @return void
 	 */
+	public function handle_manual_clear() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'focused-schools-core' ), 403 );
+		}
+
+		$nonce = isset( $_POST[ self::REFRESH_NONCE_FIELD ] ) ? sanitize_text_field( wp_unslash( $_POST[ self::REFRESH_NONCE_FIELD ] ) ) : '';
+
+		if ( ! wp_verify_nonce( $nonce, self::CLEAR_ACTION ) ) {
+			wp_die( esc_html__( 'Security check failed. Please go back and try again.', 'focused-schools-core' ), 403 );
+		}
+
+		delete_transient( self::CACHE_TRANSIENT );
+		delete_option( self::LAST_GOOD_OPTION );
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'               => self::PAGE_SLUG,
+					'fs_podcast_refresh' => 'cleared',
+				),
+				admin_url( 'admin.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Handle the admin-only manual cache refresh.
+	 *
+	 * Strict capability + nonce checks, per the task's explicit requirement.
+	 *
+	 * @return void
+	 */
 	public function handle_manual_refresh() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have permission to perform this action.', 'focused-schools-core' ), 403 );
@@ -411,6 +481,11 @@ class Podcast implements Module_Interface {
 						$count
 					)
 				)
+			);
+		} elseif ( 'cleared' === $status ) {
+			printf(
+				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+				esc_html__( 'Cached videos cleared. The grid is empty until the next successful refresh.', 'focused-schools-core' )
 			);
 		} elseif ( 'error' === $status ) {
 			$message = (string) get_transient( self::LAST_ERROR_TRANSIENT );

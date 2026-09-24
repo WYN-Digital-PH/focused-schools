@@ -462,3 +462,88 @@ automation this task was told to leave alone, so it was not built. The
 options are: configure the playlist integration, or approve a small manual
 video source. **This needs a decision before launch** if the live page's
 videos are expected to carry over.
+
+
+---
+
+## 14. YouTube Playlist Integration (September 25, 2026)
+
+The feature-flagged module already existed from an earlier sprint and met the
+requirements; this pass configured it against the real playlist, tested every
+named case, and fixed one edge case the testing exposed.
+
+**Buzzsprout was not touched.** Audio and video are independent: the podcast
+page renders Buzzsprout's own iframes for listening and this module's data for
+watching.
+
+### How it meets each requirement
+
+| Requirement | Where |
+|---|---|
+| Playlist ID configurable by admin | Focused Schools → Podcast (YouTube) |
+| API key from environment/wp-config, never committed | `FS_YOUTUBE_API_KEY` constant. `wp-config.php` is gitignored (`.gitignore:74`) and no key value appears in any commit |
+| WordPress HTTP API | `wp_remote_get()` in `class-youtube-client.php` |
+| Normalized fields | `video_id`, `title`, `thumbnail_url`, `publish_date` |
+| Cache ~6 hours | Transient, `cache_duration` default 21600 |
+| Last-known-good on failure | Persistent option, never overwritten by a failed fetch |
+| Admin-only manual refresh, nonce + capability | `admin_post` handler, `manage_options` + `wp_verify_nonce` |
+| Theme consumes, plugin renders nothing | `FocusedSchoolsCore\get_podcast_youtube_videos()`; all markup lives in the theme |
+| No API request on page view | Helper is cache-only and never fetches |
+| Feature flag | `enabled` checkbox; off returns an empty list |
+
+### Test results
+
+Live fetch against playlist `PLntAE9m90gzDHfD8VebNCbSgIlRPd19Ya`: **13 videos,
+all four fields populated, zero incomplete records**, thumbnails from
+`i.ytimg.com`. The page renders 13 cards with **zero YouTube iframes in the
+source** — thumbnails only, players load on click.
+
+**No API request on page view**, proved rather than asserted: a
+`pre_http_request` probe logging every outbound call recorded **nothing across
+three page views**, while a manual refresh through the same probe recorded
+exactly one call to googleapis.com. The probe was verified working by that
+second observation, so the zero is meaningful.
+
+Failure handling, each forced through a mocked HTTP layer:
+
+| Case | Result | Last-known-good |
+|---|---|---|
+| Bad API key (403) | WP_Error | preserved |
+| Quota exceeded (403) | WP_Error | preserved |
+| Server error (500) | WP_Error | preserved |
+| Network failure | WP_Error | preserved |
+| Malformed JSON | WP_Error | preserved |
+| Empty playlist (200, `items: []`) | WP_Error | preserved — **see below** |
+| Stale cache (transient deleted) | serves last-known-good | 13 videos |
+| Feature flag off / on | 0 / 13 videos | — |
+
+Security, with `wp_die` converted to an exception so each guard is observable:
+
+| Attempt | Result |
+|---|---|
+| Refresh as non-admin | blocked on capability |
+| Clear as non-admin | blocked on capability |
+| Refresh with missing nonce | blocked |
+| Refresh with wrong nonce | blocked |
+| Clear with wrong nonce | blocked |
+| **Clear using a refresh nonce** | **blocked** — actions do not share a nonce |
+
+### The edge case testing found
+
+A successful response containing an empty list originally **overwrote
+last-known-good with nothing**, emptying the published grid.
+
+YouTube answers with an empty list for a playlist that has been made private,
+or whose permissions have lapsed, exactly as it does for one an editor has
+genuinely emptied — indistinguishable from the server. The costs are not
+symmetric: keeping videos that were removed is mild staleness, while wiping a
+good cache empties a published page.
+
+An empty result therefore no longer overwrites videos already held; it is
+reported as an error instead. Clearing the grid on purpose is done with a new
+**Clear cached videos** button, which carries its own capability check and its
+own nonce.
+
+This is a deliberate judgement rather than a literal reading of "preserve on
+failure", since an empty 200 is not a failure. It is easily reversed if the
+client would rather an empty playlist empty the page immediately.
