@@ -29,6 +29,7 @@ function focused_schools_component_styles() {
 		'story-spotlight',
 		'podcast-card',
 		'podcast-subscribe',
+		'podcast-latest',
 		'podcast-player',
 		'statistics-counter',
 		'partner-strip',

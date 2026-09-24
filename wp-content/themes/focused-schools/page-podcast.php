@@ -21,8 +21,10 @@
  *    template treats as "no episodes" rather than an error.
  *
  * Design source: `Focused Schools Podcast.dc.html`. Sections in order: hero,
- * subscribe rail, latest episode (not built — see docs/page-specs/podcast.md
- * §10), Buzzsprout list, video grid. The design has no closing CTA banner.
+ * subscribe rail, latest episode (newest item of the Buzzsprout RSS feed via
+ * FocusedSchoolsCore\get_podcast_latest_episode(); hidden until fetched — see
+ * docs/page-specs/podcast.md §10), Buzzsprout list, video grid. The design
+ * has no closing CTA banner.
  *
  * @package FocusedSchools
  */
@@ -85,6 +87,25 @@ if ( have_posts() ) :
 			)
 		);
 		$fs_video_visible = 6;
+
+		// Cache-only Buzzsprout RSS helper; null hides the Latest Episode panel.
+		$fs_latest = function_exists( 'FocusedSchoolsCore\\get_podcast_latest_episode' )
+			? FocusedSchoolsCore\get_podcast_latest_episode()
+			: null;
+
+		$fs_latest_eyebrow = array();
+		if ( $fs_latest ) {
+			if ( '' !== $fs_latest['episode_number'] ) {
+				/* translators: %s: episode number. */
+				$fs_latest_eyebrow[] = sprintf( __( 'Episode %s', 'focused-schools' ), $fs_latest['episode_number'] );
+			}
+			if ( '' !== $fs_latest['publish_date'] ) {
+				$fs_latest_eyebrow[] = date_i18n( get_option( 'date_format' ), strtotime( $fs_latest['publish_date'] ) );
+			}
+			if ( '' !== $fs_latest['duration'] ) {
+				$fs_latest_eyebrow[] = $fs_latest['duration'];
+			}
+		}
 		?>
 
 		<main id="content">
@@ -149,6 +170,32 @@ if ( have_posts() ) :
 				)
 			);
 		?>
+
+			<?php if ( $fs_latest ) : ?>
+				<section class="fs-podcast__section fs-podcast__latest" aria-labelledby="fs-podcast-latest-label">
+					<div class="fs-container fs-container--shell">
+						<div class="fs-podcast__eyebrow-row">
+							<span class="fs-rule fs-rule--rasp" aria-hidden="true"></span>
+							<p class="fs-podcast__eyebrow" id="fs-podcast-latest-label"><?php esc_html_e( 'Latest episode', 'focused-schools' ); ?></p>
+						</div>
+						<?php
+						get_template_part(
+							'template-parts/components/podcast-latest',
+							null,
+							array(
+								'podcast_id' => $fs_latest['podcast_id'],
+								'episode_id' => $fs_latest['episode_id'],
+								'title'      => $fs_latest['title'],
+								'summary'    => $fs_latest['summary'],
+								'eyebrow'    => implode( ' · ', $fs_latest_eyebrow ),
+								'image_url'  => $fs_latest['image_url'],
+								'show_title' => $fs_show_title,
+							)
+						);
+						?>
+					</div>
+				</section>
+			<?php endif; ?>
 
 			<section class="fs-podcast__section fs-podcast__listen" id="listen" aria-labelledby="fs-podcast-listen-title">
 				<div class="fs-container fs-container--shell">

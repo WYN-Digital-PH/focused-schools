@@ -14,6 +14,14 @@
 	padding-block: 7rem;
 }
 
+.fs-podcast__latest {
+	padding-block: 5rem 7rem;
+}
+
+.fs-podcast__latest .fs-podcast__eyebrow-row {
+	margin-bottom: 2.125rem;
+}
+
 .fs-podcast__listen {
 	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
 }

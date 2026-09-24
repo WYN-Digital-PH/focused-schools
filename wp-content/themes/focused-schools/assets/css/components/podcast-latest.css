@@ -1,0 +1,125 @@
+/**
+ * Podcast latest-episode panel. Values and breakpoints (1240 / 767) are the
+ * Podcast .dc source's own: 1fr / 520px split, stacking with the cover art
+ * (16:9) on top, copy padding 60/64 -> 44 -> 28/24.
+ */
+
+.fs-podcast-latest {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr ) 520px;
+	overflow: hidden;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-radius: 8px;
+}
+
+.fs-podcast-latest__copy {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 60px 64px 64px;
+}
+
+.fs-podcast-latest__eyebrow {
+	margin: 0 0 18px;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: #fff;
+}
+
+.fs-podcast-latest__title {
+	margin: 0 0 20px;
+	max-width: 24ch;
+	font-size: 46px;
+	line-height: 1.06;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: #fff;
+}
+
+.fs-podcast-latest__summary {
+	margin: 0 0 32px;
+	max-width: 58ch;
+	font-size: 1.0625rem;
+	line-height: 1.7;
+	color: rgba( 255, 255, 255, 0.92 );
+}
+
+.fs-podcast-latest__player {
+	padding: 20px 22px;
+	background: rgba( 255, 255, 255, 0.1 );
+	border: 1px solid rgba( 255, 255, 255, 0.22 );
+	border-radius: 12px;
+}
+
+.fs-podcast-latest__frame {
+	display: block;
+	width: 100%;
+	height: 200px;
+	border: 0;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.fs-podcast-latest__note {
+	margin: 14px 0 0;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: rgba( 255, 255, 255, 0.62 );
+}
+
+.fs-podcast-latest__media {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100%;
+	background: #004855;
+}
+
+.fs-podcast-latest__art {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.fs-podcast-latest__mark {
+	width: auto;
+	height: 46%;
+	opacity: 0.16;
+}
+
+@media ( max-width: 1240px ) {
+	.fs-podcast-latest {
+		grid-template-columns: minmax( 0, 1fr );
+	}
+
+	.fs-podcast-latest__media {
+		order: -1;
+		aspect-ratio: 16 / 9;
+		min-height: 0;
+	}
+
+	.fs-podcast-latest__copy {
+		padding: 44px 44px 48px;
+	}
+
+	.fs-podcast-latest__title {
+		font-size: 60px;
+	}
+}
+
+@media ( max-width: 767px ) {
+	.fs-podcast-latest__copy {
+		padding: 28px 24px 32px;
+	}
+
+	.fs-podcast-latest__title {
+		font-size: 36px;
+	}
+}

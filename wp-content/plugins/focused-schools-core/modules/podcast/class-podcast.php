@@ -8,6 +8,7 @@
 namespace FocusedSchoolsCore\Modules;
 
 use FocusedSchoolsCore\Module_Interface;
+use FocusedSchoolsCore\Modules\Podcast\Buzzsprout_Feed;
 use FocusedSchoolsCore\Modules\Podcast\Fields;
 use FocusedSchoolsCore\Modules\Podcast\Youtube_Client;
 use WP_Error;
@@ -107,6 +108,8 @@ class Podcast implements Module_Interface {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_post_' . self::REFRESH_ACTION, array( $this, 'handle_manual_refresh' ) );
 		add_action( 'admin_notices', array( $this, 'render_admin_notices' ) );
+
+		Buzzsprout_Feed::register();
 	}
 
 	/**
@@ -365,6 +368,8 @@ class Podcast implements Module_Interface {
 		if ( ! wp_verify_nonce( $nonce, self::REFRESH_ACTION ) ) {
 			wp_die( esc_html__( 'Security check failed. Please go back and try again.', 'focused-schools-core' ), 403 );
 		}
+
+		Buzzsprout_Feed::refresh();
 
 		$result = $this->refresh_cache();
 

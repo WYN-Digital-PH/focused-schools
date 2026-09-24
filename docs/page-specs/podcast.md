@@ -181,13 +181,31 @@ thumbnail button to the in-place `youtube-nocookie` player (`autoplay=1&rel=0`) 
 same 16:9 box and moves focus to the iframe. No iframe loads before a click (verified: 0
 iframes on load). One `h1`; sections `h2`; card titles `h3`.
 
-**Deliberately not built: the "Latest episode" panel.** It needs a newest episode's title,
-summary, duration and cover art for a teal split panel with Buzzsprout's single-episode
-player. Nothing in the site provides that: §9.3 rules out an episode CPT (`AGENTS.md`), and
-the only Buzzsprout data we hold is the podcast ID. Sourcing it would mean a new Buzzsprout
-feed integration (cached fetch, parsing, cover-art handling) — a network/content-model
-decision for the project owner, not a template change. Everything else on the page is
-independent of it.
+**Latest episode panel (approved data source: Buzzsprout RSS).** The teal split panel
+(copy + single-episode player left, cover art right) is built as
+`template-parts/components/podcast-latest.php` / `assets/css/components/podcast-latest.css`.
+No episode CPT (`AGENTS.md`); data comes from the show's public feed,
+`https://feeds.buzzsprout.com/{podcast_id}.rss`, using the ID already in Site Settings.
+
+- `Modules\Podcast\Buzzsprout_Feed` (plugin) reads the newest `<item>`: title, summary
+  (tags stripped, 48 words), `itunes:duration` (normalised to `m:ss` / `h:mm:ss`),
+  `itunes:episode`, publish date, episode ID (from the `Buzzsprout-<id>` GUID) and cover art
+  (`itunes:image`, else the show's).
+- Same rules as the YouTube helper: the theme-facing read
+  `FocusedSchoolsCore\get_podcast_latest_episode()` is cache-only and never makes an HTTP
+  request on a page load. A 3-hour transient is the fast path; once it expires the
+  last-known-good option (`autoload=no`) keeps serving while one wp-cron event refreshes in
+  the background. A failed fetch never overwrites it. "Refresh Now" on the Podcast (YouTube)
+  admin page also refreshes the feed. A cached payload for a different podcast ID is ignored.
+- The panel is hidden (not an empty shell) until the first fetch succeeds or when no
+  Buzzsprout ID is set. The player is Buzzsprout's own iframe built from the two numeric IDs
+  (`small_player`, 200px) inside the design's translucent wrapper; the design's mock
+  play button and progress bar are annotations of that vendor player and are not shipped.
+  With no cover art the white mark on `#004855` is shown, as in the design.
+- Layout from the source: `1fr / 520px`, copy padding `60/64` -> `44` (<=1240) -> `28/24`
+  (<=767), cover art stacks on top at 16:9, 46 / 60 / 36px title.
+- Cover art hotlinks the Buzzsprout image URL from the feed (not copied into the media
+  library), like the YouTube thumbnails.
 
 **Known differences from the source**
 - **Video metadata:** the cached playlist helper returns title, ID, thumbnail and publish
@@ -208,4 +226,4 @@ hidden until "Load more"; Watch link and thumbnail both mount the player; keyboa
 reaches the hero CTAs then the subscribe cards. With no data configured the page shows the
 empty states, no "TODO" text, no closing banner. Eight-page overflow sweep after the change
 was clean. **Not verified:** a real Buzzsprout player (the test ID 404s inside Buzzsprout's
-own iframe) or a populated YouTube playlist — neither exists in this environment.
+own iframe) or a populated YouTube playlist — neither exists in this environment. The feed parser was checked against a fixture RSS (title/summary/duration in seconds and h:mm:ss/episode/date/cover art, malformed XML rejected) and the panel rendered from seeded cache at 375–1440px with no overflow; a live fetch of the real Buzzsprout feed and the wp-cron refresh were not run.
