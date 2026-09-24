@@ -143,8 +143,22 @@ if ( have_posts() ) :
 			 * episode id is optional: with none set this section simply does
 			 * not appear, and the full player below still carries every
 			 * episode — the page never depends on it.
+			 *
+			 * The newest episode comes from Buzzsprout's RSS feed, read from
+			 * cache, so the panel keeps itself current after every publish.
+			 * The Site Settings fields still win where they are filled in, so
+			 * an editor can pin a particular episode or reword its summary
+			 * without losing the automatic behaviour everywhere else.
 			 */
+			$fs_feed = function_exists( 'FocusedSchoolsCore\get_podcast_latest_episode' )
+				? FocusedSchoolsCore\get_podcast_latest_episode()
+				: array();
+
 			$fs_latest_id = focused_schools_podcast_setting( 'podcast_latest_episode_id' );
+
+			if ( '' === trim( (string) $fs_latest_id ) && ! empty( $fs_feed['episode_id'] ) ) {
+				$fs_latest_id = $fs_feed['episode_id'];
+			}
 
 			if ( $fs_buzzsprout_id && $fs_latest_id ) :
 				/*
@@ -274,7 +288,7 @@ if ( have_posts() ) :
 					</header>
 
 					<?php if ( ! empty( $fs_videos ) ) : ?>
-						<div class="fs-card-grid">
+						<div class="fs-podcast__grid">
 							<?php
 							foreach ( $fs_videos as $fs_video ) :
 								if ( empty( $fs_video['video_id'] ) ) {

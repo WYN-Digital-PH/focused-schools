@@ -70,6 +70,18 @@ iframe,
 embed,
 object {
 	max-width: 100%;
+}
+
+/*
+ * Only the elements whose height genuinely follows their width. An iframe's
+ * height attribute is meaningful — a third-party embed sets it because it
+ * knows how tall its content is — and `height: auto` silently discards it,
+ * collapsing the frame to the CSS default of 150px. That is what was cutting
+ * the Buzzsprout player down to a single visible episode. Embeds that should
+ * be responsive set their own height where they are defined.
+ */
+img,
+video {
 	height: auto;
 }
 

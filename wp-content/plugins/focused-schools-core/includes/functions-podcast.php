@@ -29,3 +29,18 @@ if ( ! function_exists( __NAMESPACE__ . '\\get_podcast_youtube_videos' ) ) {
 		return Modules\Podcast::get_cached_videos();
 	}
 }
+
+if ( ! function_exists( __NAMESPACE__ . '\get_podcast_latest_episode' ) ) {
+	/**
+	 * The newest Buzzsprout episode, read from cache.
+	 *
+	 * Never triggers a live HTTP request, so a page view never waits on
+	 * Buzzsprout. A scheduled refresh keeps the cache current, and a failed
+	 * refresh leaves the previous episode in place.
+	 *
+	 * @return array<string, string> Empty when nothing has been cached yet.
+	 */
+	function get_podcast_latest_episode() {
+		return Modules\Podcast::get_latest_episode();
+	}
+}

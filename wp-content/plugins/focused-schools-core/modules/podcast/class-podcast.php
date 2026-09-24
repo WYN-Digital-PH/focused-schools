@@ -8,6 +8,7 @@
 namespace FocusedSchoolsCore\Modules;
 
 use FocusedSchoolsCore\Module_Interface;
+use FocusedSchoolsCore\Modules\Podcast\Buzzsprout_Feed;
 use FocusedSchoolsCore\Modules\Podcast\Fields;
 use FocusedSchoolsCore\Modules\Podcast\Youtube_Client;
 use WP_Error;
@@ -105,6 +106,27 @@ class Podcast implements Module_Interface {
 	const LAST_ERROR_TRANSIENT = 'focused_schools_podcast_last_error';
 
 	/**
+	 * Transient holding the newest episode read from the Buzzsprout feed.
+	 *
+	 * @var string
+	 */
+	const EPISODE_TRANSIENT = 'focused_schools_podcast_latest_episode';
+
+	/**
+	 * Persistent last-known-good copy of that episode.
+	 *
+	 * @var string
+	 */
+	const EPISODE_OPTION = 'focused_schools_podcast_latest_episode_last_good';
+
+	/**
+	 * Scheduled hook that keeps both caches current.
+	 *
+	 * @var string
+	 */
+	const CRON_HOOK = 'focused_schools_podcast_refresh';
+
+	/**
 	 * Register module hooks.
 	 *
 	 * @return void
@@ -115,6 +137,14 @@ class Podcast implements Module_Interface {
 		add_action( 'admin_post_' . self::REFRESH_ACTION, array( $this, 'handle_manual_refresh' ) );
 		add_action( 'admin_post_' . self::CLEAR_ACTION, array( $this, 'handle_manual_clear' ) );
 		add_action( 'admin_notices', array( $this, 'render_admin_notices' ) );
+
+		/*
+		 * A scheduled refresh is what makes the latest episode keep itself
+		 * current. It is not a page-view fetch: WP-Cron fires this hook at
+		 * most twice a day, and the front end only ever reads the cache.
+		 */
+		add_action( self::CRON_HOOK, array( $this, 'refresh_latest_episode' ) );
+		add_action( 'init', array( $this, 'schedule_refresh' ) );
 	}
 
 	/**
@@ -164,6 +194,71 @@ class Podcast implements Module_Interface {
 		return array(
 			'fetched_at' => isset( $last_good['fetched_at'] ) ? (int) $last_good['fetched_at'] : 0,
 		);
+	}
+
+	/**
+	 * Make sure the recurring refresh exists.
+	 *
+	 * @return void
+	 */
+	public function schedule_refresh() {
+		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
+			wp_schedule_event( time() + HOUR_IN_SECONDS, 'twicedaily', self::CRON_HOOK );
+		}
+	}
+
+	/**
+	 * The newest episode, read from cache only.
+	 *
+	 * Never performs a live HTTP request, for the same reason the video
+	 * helper does not: a page view must not depend on a third party being
+	 * reachable. Returns the fresh transient, otherwise the last-known-good
+	 * copy, otherwise an empty array.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_latest_episode() {
+		$cached = get_transient( self::EPISODE_TRANSIENT );
+
+		if ( is_array( $cached ) ) {
+			return $cached;
+		}
+
+		$last_good = get_option( self::EPISODE_OPTION, array() );
+
+		return isset( $last_good['episode'] ) && is_array( $last_good['episode'] ) ? $last_good['episode'] : array();
+	}
+
+	/**
+	 * Fetch the newest episode from the Buzzsprout feed and cache it.
+	 *
+	 * On failure the existing caches are left alone, so a feed outage shows
+	 * the previous episode rather than emptying the panel.
+	 *
+	 * @return array<string, string>|WP_Error
+	 */
+	public function refresh_latest_episode() {
+		$podcast_id = function_exists( 'focused_schools_get_setting' )
+			? focused_schools_get_setting( 'podcast_buzzsprout_id' )
+			: '';
+
+		$result = Buzzsprout_Feed::fetch_latest_episode( $podcast_id );
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		set_transient( self::EPISODE_TRANSIENT, $result, 6 * HOUR_IN_SECONDS );
+		update_option(
+			self::EPISODE_OPTION,
+			array(
+				'episode'    => $result,
+				'fetched_at' => time(),
+			),
+			false
+		);
+
+		return $result;
 	}
 
 	/**
@@ -435,6 +530,9 @@ class Podcast implements Module_Interface {
 		if ( ! wp_verify_nonce( $nonce, self::REFRESH_ACTION ) ) {
 			wp_die( esc_html__( 'Security check failed. Please go back and try again.', 'focused-schools-core' ), 403 );
 		}
+
+		// The button refreshes everything the page shows, not just the videos.
+		$this->refresh_latest_episode();
 
 		$result = $this->refresh_cache();
 
