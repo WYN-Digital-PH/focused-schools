@@ -1,0 +1,109 @@
+/**
+ * Link cards. Geometry from the Contact .dc "reach" grid: 4 / 2 / 1 columns
+ * at 1023 / 767, 20px gap, 220px min-height, lift + teal border on hover.
+ */
+
+.fs-link-cards {
+	display: grid;
+	grid-template-columns: repeat( 4, minmax( 0, 1fr ) );
+	gap: 20px;
+}
+
+.fs-link-cards__card {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 40px;
+	min-height: 220px;
+	padding: 30px 32px 32px;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	background: var( --wp--preset--color--base, #fff );
+	border: 1px solid #e3e9eb;
+	border-radius: var( --fs-r-md, 16px );
+	box-shadow: var( --fs-shadow-1, 0 1px 2px rgba( 0, 92, 109, 0.08 ) );
+	transition: box-shadow 240ms cubic-bezier( 0.2, 0.7, 0.2, 1 ), transform 240ms cubic-bezier( 0.2, 0.7, 0.2, 1 ), border-color 160ms cubic-bezier( 0.2, 0.7, 0.2, 1 );
+}
+
+.fs-link-cards__card:hover {
+	color: var( --wp--preset--color--contrast, #005c6d );
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+	box-shadow: var( --fs-shadow-2, 0 12px 28px rgba( 0, 92, 109, 0.12 ) );
+	transform: translateY( -2px );
+}
+
+.fs-link-cards__bar {
+	display: block;
+	width: 26px;
+	height: 3px;
+	margin-bottom: 26px;
+}
+
+.fs-link-cards__bar--cerulean {
+	background: var( --fs-cerulean, #0a96cb );
+}
+
+.fs-link-cards__bar--coral {
+	background: var( --fs-coral, #dd6237 );
+}
+
+.fs-link-cards__bar--raspberry {
+	background: var( --wp--preset--color--raspberry, #bc3e8c );
+}
+
+.fs-link-cards__bar--lime {
+	background: var( --wp--preset--color--lime, #a7cc14 );
+}
+
+.fs-link-cards__title {
+	display: block;
+	margin-bottom: 10px;
+	font-size: 1.5rem;
+	font-weight: 700;
+	line-height: 1.18;
+	letter-spacing: -0.02em;
+}
+
+.fs-link-cards__note {
+	display: block;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-link-cards__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+.fs-link-cards__cta span {
+	font-size: 0.875rem;
+	color: var( --fs-coral, #dd6237 );
+}
+
+@media ( max-width: 1023px ) {
+	.fs-link-cards {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	}
+}
+
+@media ( max-width: 767px ) {
+	.fs-link-cards {
+		grid-template-columns: minmax( 0, 1fr );
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.fs-link-cards__card:hover {
+		transform: none;
+	}
+}
+
+.fs-link-cards__card,
+.fs-link-cards__card:hover {
+	text-decoration: none;
+}

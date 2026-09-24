@@ -1,11 +1,91 @@
 /**
- * Thank You page-specific spacing only. Layout/visual work is done
- * entirely by the reusable components in assets/css/components/ — this
- * file just provides vertical rhythm for page-thanks.php. Enqueued only
- * on that page (see inc/enqueue.php).
+ * Thank You page: the success panel from the Contact .dc (it replaces the
+ * form card; hero, aside and shell come from the shared Contact components).
+ * Enqueued only on the Thank You page (see inc/enqueue.php).
  */
+
+.fs-thanks-panel {
+	padding: 56px 52px 60px;
+}
+
+.fs-thanks-panel__check {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	margin-bottom: 32px;
+	font-size: 1.75rem;
+	color: #fff;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-radius: 999px;
+}
+
+.fs-thanks-panel__eyebrow,
+.fs-thanks-panel__label {
+	margin: 0 0 14px;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-thanks-panel h2 {
+	max-width: 22ch;
+	margin: 0 0 20px;
+	font-size: 2.625rem;
+	line-height: 1.06;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-thanks-panel__body {
+	max-width: 58ch;
+	margin: 0 0 34px;
+	font-size: 1.0625rem;
+	line-height: 1.75;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-thanks-panel__body a {
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	border-bottom: 1px solid var( --fs-coral, #dd6237 );
+}
+
+.fs-thanks-panel__next {
+	padding-top: 32px;
+	border-top: 1px solid #eef1f2;
+}
+
+.fs-thanks-panel__label {
+	margin-bottom: 20px;
+	font-size: 0.6875rem;
+}
+
+.fs-thanks-panel__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+}
 
 .fs-thanks__content {
 	padding-block: var( --wp--preset--spacing--large, 2rem );
-	text-align: center;
+}
+
+@media ( max-width: 767px ) {
+	.fs-thanks-panel {
+		padding: 28px 24px 32px;
+	}
+
+	.fs-thanks-panel h2 {
+		font-size: 1.875rem;
+	}
+}
+
+.fs-thanks-panel__body a,
+.fs-thanks-panel__body a:hover {
+	text-decoration: none;
 }

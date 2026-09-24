@@ -11,7 +11,9 @@
  * Contract ($args):
  * - layout (string) 'stacked' draws the approved homepage variant: email,
  *   phone and address as three links in one <address>, the address linking to
- *   the Map Link setting when one is set. Anything else keeps the default.
+ *   the Map Link setting when one is set. 'direct' draws the Contact page's
+ *   "Reach us directly" rows (email, phone, LinkedIn), each a label over a
+ *   large value on a teal ground. Anything else keeps the default.
  *
  * @package FocusedSchools
  */
@@ -36,6 +38,50 @@ if ( ! $fs_business_name && ! $fs_phone && ! $fs_email && ! $fs_address ) {
 $fs_phone_href = $fs_phone ? preg_replace( '/[^0-9+]/', '', $fs_phone ) : '';
 $fs_layout     = isset( $args['layout'] ) ? (string) $args['layout'] : '';
 $fs_map_url    = focused_schools_get_setting( 'map_url' );
+
+if ( 'direct' === $fs_layout ) :
+	$fs_linkedin = focused_schools_get_setting( 'linkedin_url' );
+	$fs_rows     = array();
+
+	if ( $fs_email ) {
+		$fs_rows[] = array(
+			'label' => __( 'Email', 'focused-schools' ),
+			'value' => $fs_email,
+			'href'  => 'mailto:' . $fs_email,
+		);
+	}
+
+	if ( $fs_phone ) {
+		$fs_rows[] = array(
+			'label' => __( 'Phone', 'focused-schools' ),
+			'value' => $fs_phone,
+			'href'  => 'tel:' . $fs_phone_href,
+		);
+	}
+
+	if ( $fs_linkedin ) {
+		$fs_rows[] = array(
+			'label' => __( 'LinkedIn', 'focused-schools' ),
+			'value' => $fs_business_name ? $fs_business_name : __( 'Follow us', 'focused-schools' ),
+			'href'  => $fs_linkedin,
+		);
+	}
+
+	if ( empty( $fs_rows ) ) {
+		return;
+	}
+	?>
+	<address class="fs-contact-info fs-contact-info--direct">
+		<?php foreach ( $fs_rows as $fs_row ) : ?>
+			<a class="fs-contact-info__row" href="<?php echo esc_url( $fs_row['href'] ); ?>"<?php echo 0 === strpos( $fs_row['href'], 'http' ) ? ' target="_blank" rel="noopener"' : ''; ?>>
+				<span class="fs-contact-info__k"><?php echo esc_html( $fs_row['label'] ); ?></span>
+				<span class="fs-contact-info__v"><?php echo esc_html( $fs_row['value'] ); ?></span>
+			</a>
+		<?php endforeach; ?>
+	</address>
+	<?php
+	return;
+endif;
 
 if ( 'stacked' === $fs_layout ) :
 	// This variant shows only the three contact routes, so with none of them

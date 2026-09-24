@@ -17,6 +17,15 @@
  *   value, the original caller).
  * - padding_bottom (int) section's bottom padding in px — Home/About use
  *   120px (the default); Team's own `.dc` source specifies 112px.
+ * - heading_tag (string) 'h1'|'h2', default 'h2'. 'h1' is for a page hero
+ *   (Contact): it also steps the heading to 46px / 34px at the .dc's
+ *   1240px / 767px breakpoints instead of the h2 scale.
+ * - heading_size (int) desktop (>=1241px) heading size in px, default 84.
+ *   Contact's `.dc` hero specifies 68.
+ * - heading_gap (int) heading's bottom margin in px, default 34 (Contact: 26).
+ * - padding_top (int) section's top padding in px, default 96 (Contact: 72).
+ * - body_max_ch (int) paragraph max-width in `ch`; default is the 890px cap
+ *   (Contact: 62).
  * - heading_weight (int) heading's base font-weight, default 700
  *   (Home/About render the whole heading bold). Team's `.dc` source uses a
  *   400 base weight with `<strong>` at 700 for the emphasized clause.
@@ -47,13 +56,18 @@ $fs_cta_url        = isset( $args['cta_url'] ) ? $args['cta_url'] : '';
 $fs_heading_max_ch = isset( $args['heading_max_ch'] ) ? absint( $args['heading_max_ch'] ) : 13;
 $fs_padding_bottom = isset( $args['padding_bottom'] ) ? absint( $args['padding_bottom'] ) : 120;
 $fs_heading_weight = isset( $args['heading_weight'] ) ? absint( $args['heading_weight'] ) : 700;
+$fs_heading_tag    = isset( $args['heading_tag'] ) && 'h1' === $args['heading_tag'] ? 'h1' : 'h2';
+$fs_heading_size   = isset( $args['heading_size'] ) ? absint( $args['heading_size'] ) : 84;
+$fs_heading_gap    = isset( $args['heading_gap'] ) ? absint( $args['heading_gap'] ) : 34;
+$fs_padding_top    = isset( $args['padding_top'] ) ? absint( $args['padding_top'] ) : 96;
+$fs_body_max_ch    = isset( $args['body_max_ch'] ) ? absint( $args['body_max_ch'] ) : 0;
 $fs_emphasis       = isset( $args['emphasis'] ) ? trim( (string) $args['emphasis'] ) : '';
 
 if ( '' === trim( (string) $fs_heading ) ) {
 	return;
 }
 ?>
-<section class="fs-rail-text" style="--fs-rail-padding-bottom: <?php echo esc_attr( $fs_padding_bottom ); ?>px; --fs-rail-heading-weight: <?php echo esc_attr( $fs_heading_weight ); ?>;">
+<section class="fs-rail-text<?php echo 'h1' === $fs_heading_tag ? ' fs-rail-text--h1' : ''; ?>" style="--fs-rail-padding-top: <?php echo esc_attr( $fs_padding_top ); ?>px; --fs-rail-padding-bottom: <?php echo esc_attr( $fs_padding_bottom ); ?>px; --fs-rail-heading-weight: <?php echo esc_attr( $fs_heading_weight ); ?>; --fs-rail-heading-size: <?php echo esc_attr( $fs_heading_size ); ?>px; --fs-rail-heading-gap: <?php echo esc_attr( $fs_heading_gap ); ?>px;<?php echo $fs_body_max_ch ? ' --fs-rail-body-max: ' . esc_attr( $fs_body_max_ch ) . 'ch;' : ''; ?>">
 	<div class="fs-container fs-container--shell fs-rail-text__inner">
 		<div class="fs-rail-text__label">
 			<?php if ( $fs_icon_url ) : ?>
@@ -64,7 +78,7 @@ if ( '' === trim( (string) $fs_heading ) ) {
 			<?php endif; ?>
 		</div>
 		<div class="fs-rail-text__content" style="--fs-rail-heading-max: <?php echo esc_attr( $fs_heading_max_ch ); ?>ch;">
-			<h2><?php echo wp_kses_post( $fs_heading ); ?></h2>
+			<<?php echo esc_attr( $fs_heading_tag ); ?>><?php echo wp_kses_post( $fs_heading ); ?></<?php echo esc_attr( $fs_heading_tag ); ?>>
 			<?php
 			$fs_first = true;
 

@@ -39,6 +39,8 @@ function focused_schools_component_styles() {
 		'cta-banner',
 		'card-grid',
 		'contact-info',
+		'contact-aside',
+		'link-cards',
 		'post-card',
 		'home-hero',
 		'commitment-list',

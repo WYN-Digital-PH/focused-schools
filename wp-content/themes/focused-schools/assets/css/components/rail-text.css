@@ -7,7 +7,7 @@
  */
 
 .fs-rail-text {
-	padding: 6rem 0 var( --fs-rail-padding-bottom, 7.5rem );
+	padding: var( --fs-rail-padding-top, 6rem ) 0 var( --fs-rail-padding-bottom, 7.5rem );
 }
 
 .fs-rail-text__inner {
@@ -35,8 +35,8 @@
 	line-height: 1.6;
 }
 
-.fs-rail-text__content h2 {
-	margin: 0 0 2.125rem;
+.fs-rail-text__content :is( h1, h2 ) {
+	margin: 0 0 var( --fs-rail-heading-gap, 2.125rem );
 	max-width: var( --fs-rail-heading-max, 13ch );
 	font-size: 3.75rem;
 	line-height: 1;
@@ -45,13 +45,13 @@
 	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
-.fs-rail-text__content h2 strong {
+.fs-rail-text__content :is( h1, h2 ) strong {
 	font-weight: 700;
 }
 
 .fs-rail-text__content p {
 	margin: 0 0 2.125rem;
-	max-width: 890px;
+	max-width: var( --fs-rail-body-max, 890px );
 	font-size: 1.1875rem;
 	line-height: 1.65;
 	color: var( --wp--preset--color--ink-soft, #51536a );
@@ -68,8 +68,8 @@
 		grid-template-columns: 264px minmax( 0, 1fr );
 	}
 
-	.fs-rail-text__content h2 {
-		font-size: 5.25rem;
+	.fs-rail-text__content :is( h1, h2 ) {
+		font-size: var( --fs-rail-heading-size, 5.25rem );
 	}
 }
 
@@ -81,4 +81,30 @@
 	.fs-rail-text__content h2 {
 		font-size: 2.25rem;
 	}
+}
+
+/* Page-hero (h1) variant: the .dc's own 46px / 34px steps at 1240 / 767. */
+.fs-rail-text--h1 .fs-rail-text__content p:last-child {
+	margin-bottom: 0;
+}
+
+@media ( max-width: 1240px ) {
+	.fs-rail-text--h1 .fs-rail-text__content h1 {
+		font-size: 46px;
+	}
+}
+
+@media ( max-width: 767px ) {
+	.fs-rail-text--h1 {
+		padding: 64px 0;
+	}
+
+	.fs-rail-text--h1 .fs-rail-text__content h1 {
+		font-size: 34px;
+	}
+}
+
+/* The Contact .dc draws the hero eyebrow teal, not the theme's default. */
+.fs-rail-text--h1 .fs-rail-text__label .fs-eyebrow {
+	color: var( --wp--preset--color--contrast, #005c6d );
 }

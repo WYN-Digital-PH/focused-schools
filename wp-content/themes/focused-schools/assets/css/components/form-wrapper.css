@@ -110,3 +110,232 @@
 	background-color: #f0fdf4;
 	border: 1px solid #16a34a;
 }
+
+/*
+ * Embedded variant (Contact page form card). Field geometry is the
+ * Contact .dc's own: 48px inputs, 8px radius, #e0e6e9 border, 12px/700
+ * labels, 26px row gap, two columns that collapse at 767px, a pill submit.
+ * Styling only; the form plugin's markup, validation and actions are untouched.
+ * Elementor selectors are the documented convention and could not be
+ * verified against a live form locally — confirm on staging.
+ */
+
+.fs-form--embedded .fs-form__content .elementor-form-fields-wrapper,
+.fs-form--embedded .fs-form__content form:not( .elementor-form ) {
+	display: grid;
+	grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	gap: 26px 24px;
+	align-items: start;
+	margin: 0;
+}
+
+.fs-form--embedded .fs-form__content .elementor-form-fields-wrapper > .elementor-field-group {
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	grid-column: 1 / -1;
+}
+
+.fs-form--embedded .fs-form__content .elementor-form-fields-wrapper > .elementor-col-50,
+.fs-form--embedded .fs-form__content .elementor-form-fields-wrapper > .elementor-col-33 {
+	grid-column: auto;
+}
+
+.fs-form--embedded .fs-form__content .elementor-field-label,
+.fs-form--embedded .fs-form__content label {
+	display: block;
+	margin: 0 0 10px;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	line-height: 1.4;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-form--embedded .fs-form__content .elementor-mark-required .elementor-field-label::after,
+.fs-form--embedded .fs-form__content label .required {
+	content: ' *';
+	color: #c0392b;
+}
+
+.fs-form--embedded .fs-form__content input[type="text"],
+.fs-form--embedded .fs-form__content input[type="email"],
+.fs-form--embedded .fs-form__content input[type="tel"],
+.fs-form--embedded .fs-form__content input[type="url"],
+.fs-form--embedded .fs-form__content select,
+.fs-form--embedded .fs-form__content textarea,
+.fs-form--embedded .fs-form__content .elementor-field-textual {
+	display: block;
+	width: 100%;
+	height: 48px;
+	min-height: 0;
+	padding: 0 14px;
+	font-family: inherit;
+	font-size: 0.9375rem;
+	line-height: 1.6;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	background-color: var( --wp--preset--color--base, #ffffff );
+	border: 1px solid #e0e6e9;
+	border-radius: 8px;
+	box-shadow: none;
+	transition: border-color 160ms cubic-bezier( 0.2, 0.7, 0.2, 1 ), box-shadow 160ms cubic-bezier( 0.2, 0.7, 0.2, 1 );
+}
+
+.fs-form--embedded .fs-form__content textarea,
+.fs-form--embedded .fs-form__content textarea.elementor-field-textual {
+	height: auto;
+	padding: 13px 14px;
+	resize: vertical;
+}
+
+.fs-form--embedded .fs-form__content select {
+	cursor: pointer;
+	padding-right: 40px;
+	appearance: none;
+	background-image: linear-gradient( 45deg, transparent 50%, #005c6d 50% ), linear-gradient( 135deg, #005c6d 50%, transparent 50% );
+	background-position: calc( 100% - 20px ) 50%, calc( 100% - 15px ) 50%;
+	background-size: 5px 5px, 5px 5px;
+	background-repeat: no-repeat;
+}
+
+.fs-form--embedded .fs-form__content ::placeholder {
+	color: #9aa4a8;
+	opacity: 1;
+}
+
+.fs-form--embedded .fs-form__content input:focus-visible,
+.fs-form--embedded .fs-form__content select:focus-visible,
+.fs-form--embedded .fs-form__content textarea:focus-visible {
+	outline: none;
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+	box-shadow: 0 0 0 3px rgba( 10, 150, 203, 0.22 );
+}
+
+.fs-form--embedded .fs-form__content .elementor-field-type-acceptance,
+.fs-form--embedded .fs-form__content .elementor-field-type-checkbox {
+	padding: 18px 20px;
+	background: #f7f9fa;
+	border: 1px solid #eef1f2;
+	border-radius: 12px;
+}
+
+.fs-form--embedded .fs-form__content input[type="checkbox"] {
+	width: 20px;
+	height: 20px;
+	margin: 2px 14px 0 0;
+	accent-color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-form--embedded .fs-form__content .elementor-field-type-acceptance label,
+.fs-form--embedded .fs-form__content .elementor-field-type-checkbox label {
+	display: inline;
+	margin: 0;
+	font-size: 0.875rem;
+	font-weight: 400;
+	letter-spacing: 0;
+	line-height: 1.6;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-form--embedded .fs-form__content button,
+.fs-form--embedded .fs-form__content input[type="submit"],
+.fs-form--embedded .fs-form__content .elementor-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	height: 48px;
+	padding: 0 30px;
+	font-family: inherit;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	letter-spacing: 0.09em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--base, #ffffff );
+	background-color: var( --fs-coral, #dd6237 );
+	border: 0;
+	border-radius: 999px;
+	cursor: pointer;
+	transition: filter 160ms cubic-bezier( 0.2, 0.7, 0.2, 1 );
+}
+
+.fs-form--embedded .fs-form__content button:hover,
+.fs-form--embedded .fs-form__content input[type="submit"]:hover,
+.fs-form--embedded .fs-form__content .elementor-button:hover {
+	filter: brightness( 0.92 );
+}
+
+.fs-form--embedded .fs-form__content button:focus-visible,
+.fs-form--embedded .fs-form__content input[type="submit"]:focus-visible,
+.fs-form--embedded .fs-form__content .elementor-button:focus-visible {
+	outline: 3px solid var( --fs-cerulean, #0a96cb );
+	outline-offset: 2px;
+}
+
+.fs-form--embedded .fs-form__content button[disabled],
+.fs-form--embedded .fs-form__content .elementor-button[disabled] {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+/* Validation: border, tinted ground and text, never colour alone (.dc 1.4.1). */
+.fs-form--embedded .fs-form__content .elementor-field-group.elementor-error input,
+.fs-form--embedded .fs-form__content .elementor-field-group.elementor-error select,
+.fs-form--embedded .fs-form__content .elementor-field-group.elementor-error textarea {
+	background-color: #fdf7f6;
+	border-color: #c0392b;
+}
+
+.fs-form--embedded .fs-form__content .elementor-message {
+	margin: 8px 0 0;
+	padding: 0;
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	background: none;
+	border: 0;
+}
+
+.fs-form--embedded .fs-form__content .elementor-message-danger {
+	color: #c0392b;
+}
+
+.fs-form--embedded .fs-form__content .elementor-message-success {
+	color: #14532d;
+}
+
+.fs-form--embedded .fs-form__content .elementor-form > .elementor-message,
+.fs-form--embedded .fs-form__content form > .elementor-message {
+	margin: 20px 0 0;
+	padding: 16px 20px;
+	border-radius: 12px;
+}
+
+.fs-form--embedded .fs-form__content .elementor-form > .elementor-message-danger,
+.fs-form--embedded .fs-form__content form > .elementor-message-danger {
+	color: #8e2a1e;
+	background: #fdf3f1;
+	border: 1px solid #f0c8c1;
+}
+
+@media ( max-width: 767px ) {
+	.fs-form--embedded .fs-form__content .elementor-form-fields-wrapper,
+	.fs-form--embedded .fs-form__content form:not( .elementor-form ) {
+		grid-template-columns: minmax( 0, 1fr );
+		gap: 22px;
+	}
+
+	.fs-form--embedded .fs-form__content .elementor-button,
+	.fs-form--embedded .fs-form__content button[type="submit"] {
+		width: 100%;
+	}
+}
+
+.fs-form--embedded {
+	padding-block: 0;
+}
+
+.fs-form--embedded .fs-form__content .elementor-field-option {
+	display: flex;
+	align-items: flex-start;
+}
