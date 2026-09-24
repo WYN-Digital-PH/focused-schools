@@ -245,3 +245,71 @@ posts are categorised. Nothing else about the design changes.
 
 If the client wants the filters visible, the work is editorial — categorise the 123
 posts — not a code change.
+
+
+---
+
+## 10. Import Procedure — tested end to end (September 25, 2026)
+
+The live export was imported into the local environment and verified. The
+steps below are the ones that were actually run, in order, not a suggestion.
+
+```bash
+wp plugin install wordpress-importer --activate
+wp import blog-posts.xml --authors=create
+```
+
+The import takes a while because it downloads all 379 attachments from the live
+site; it is not stalled. Result locally: 123 published posts, 1 draft, 379
+attachments, **0 featured images failed to resolve**.
+
+### The domain rewrite, and the part that is easy to get wrong
+
+After import, content still points at the live domain. The usual command fixes
+`post_content` but **silently misses Elementor**, because Elementor stores its
+layout as JSON with escaped forward slashes — `https:\/\/www.focusedschools.com\/`
+— which never matches a plain search for `https://www.focusedschools.com`.
+
+Measured on this import: after the standard replace, `post_content` was clean
+(28 rows → 0) while **22 `_elementor_data` rows were still pointing at the live
+site**. Two passes are required:
+
+```bash
+# 1. plain URLs
+wp search-replace 'https://www.focusedschools.com' 'https://TARGET-DOMAIN'   --precise --recurse-objects --skip-columns=guid
+wp search-replace 'http://www.focusedschools.com'  'https://TARGET-DOMAIN'   --precise --recurse-objects --skip-columns=guid
+
+# 2. the JSON-escaped form Elementor stores — without this, 22 posts keep
+#    loading their images from the live site
+wp search-replace 'https:\/\/www.focusedschools.com' 'https:\/\/TARGET-DOMAIN'   --precise --recurse-objects --skip-columns=guid
+
+wp elementor flush-css   # staging only; Elementor is not installed locally
+```
+
+`--precise` keeps serialized data valid; `--skip-columns=guid` leaves guids
+alone, which is correct — guids are identifiers, not links.
+
+Verified afterwards: **0 `_elementor_data` rows on the live domain, 30 rows
+checked, 0 invalid JSON**. The only remaining `focusedschools.com` references are
+`hello@focusedschools.com` email addresses in post copy, which must not be
+rewritten.
+
+### Verification matrix — real imported content, not fixtures
+
+| Case | Post | Result |
+|---|---|---|
+| Recent Elementor post | `dear-teacher` (2026-05-01) | Own output only, no native chrome, no live-domain URLs |
+| Older Elementor post | `a-strong-start-to-2023-…` (2023-01-24) | Same |
+| Native post | `hello-world` | Full native chrome |
+| Gutenberg post | `new-gutenberg-post` | Full native chrome |
+
+Archive at full volume: `/blog/`, `/blog/page/2/` and `/blog/page/14/` all 200,
+pagination 1…14, 10 images in main, all with `alt`, **zero live-domain image
+URLs**. Eight routes swept, zero PHP errors.
+
+### Still not provable from this environment
+
+Elementor is not installed locally, so an Elementor post renders through the
+coexistence branch as its raw `post_content`. **That proves the branch, not that
+Elementor's own layout renders.** Together with the Theme Builder question in §4,
+this is what has to be checked on staging after the import.
