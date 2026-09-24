@@ -47,7 +47,15 @@ $fs_cta_style  = $fs_is_split ? 'primary' : 'secondary';
 $fs_cta2_style = $fs_is_split ? 'secondary' : 'text';
 ?>
 <section class="fs-cta-banner<?php echo $fs_is_split ? ' fs-cta-banner--split' : ''; ?>">
-	<div class="fs-container fs-cta-banner__inner">
+	<?php
+	/*
+	 * The split runs the full shell, like every other section on the pages
+	 * that use it — at the narrow default its 460px figure leaves the copy
+	 * column a sliver, and the section reads as indented against the ones
+	 * above it. The centred band keeps the narrow measure on purpose.
+	 */
+	?>
+	<div class="fs-container<?php echo $fs_is_split ? ' fs-container--shell' : ''; ?> fs-cta-banner__inner">
 		<div class="fs-cta-banner__copy">
 			<?php if ( $fs_eyebrow ) : ?>
 				<p class="fs-eyebrow<?php echo $fs_is_split ? '' : ' fs-eyebrow--on-dark'; ?> fs-cta-banner__eyebrow"><?php echo esc_html( $fs_eyebrow ); ?></p>

@@ -127,12 +127,6 @@
 	}
 }
 
-@media ( max-width: 640px ) {
-	.fs-cta-banner--split {
-		padding-block: 4rem;
-	}
-}
-
 @media ( min-width: 1241px ) {
 	.fs-cta-banner--split .fs-cta-banner__heading {
 		/* 68px — the design's desktop display size for this heading. */
@@ -141,6 +135,10 @@
 }
 
 @media ( max-width: 640px ) {
+	.fs-cta-banner--split {
+		padding-block: 4rem;
+	}
+
 	.fs-cta-banner--split .fs-cta-banner__heading {
 		font-size: 1.75rem;
 		margin-bottom: 26px;
@@ -150,6 +148,7 @@
 		margin-bottom: 32px;
 	}
 
+	/* One full-width button per row, per the design's mobile rule. */
 	.fs-cta-banner--split .fs-cta-banner__actions {
 		flex-direction: column;
 		align-items: stretch;
