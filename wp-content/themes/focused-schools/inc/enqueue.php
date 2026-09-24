@@ -386,7 +386,7 @@ function focused_schools_enqueue_assets() {
 		);
 	}
 
-	if ( is_home() || is_archive() ) {
+	if ( is_home() || is_archive() || is_search() ) {
 		wp_enqueue_style(
 			'focused-schools-blog-archive',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/blog-archive.css',

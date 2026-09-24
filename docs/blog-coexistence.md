@@ -21,6 +21,7 @@ relying on this.
 |---|---|---|
 | `/blog/` (Page 1191, the Posts Page) | `home.php` | WordPress uses `home.php` — **not** `page-{slug}.php` — for whatever page is assigned via `page_for_posts`. Naming it `page-blog.php` would silently never apply. |
 | Category / tag / date / author archives | `archive.php` | No single associated post/page to key off of; always native rendering. Previously fell back to bare `index.php` (no Elementor awareness, no pagination handling, and a real `<h1>`-per-post-in-a-loop accessibility bug — fixed by these new templates existing). |
+| Search results (`/?s=`) | `search.php` | Core's search route. Always native — a results listing has no single post to key the coexistence check off. |
 | Individual post (any post type using default routing) | `single.php` | Standard per-post Loop; the coexistence check applies to *this specific queried post*. |
 | Individual `fs_impact_story` post | `single-fs_impact_story.php` (pre-existing, unrelated to this task) | More specific in the hierarchy than `single.php` — unaffected by this task's changes. |
 
@@ -117,3 +118,84 @@ auto-generated `<h2 class="screen-reader-text">Post navigation</h2>` would have 
 as a fully visible heading. Added the standard WP-core utility class to `style.css`
 (global, not blog-specific) and confirmed live: present for screen readers, visually
 1×1px/`position: absolute`.
+
+
+---
+
+## 8. Archive Redesign (September 24, 2026)
+
+`/blog/`, the term archives and search results were rebuilt against the approved
+design. **The coexistence rules above are unchanged** — this was a presentation change
+only, and the constraints it had to hold are worth stating explicitly.
+
+### What was not touched
+
+- **The main query.** No `pre_get_posts`, no `posts_per_page` override, no
+  `post__not_in`, no ordering change. Verified: the theme and the core plugin contain
+  no `pre_get_posts` hook at all.
+- **URLs.** `/%postname%/` unchanged, `/blog/page/N/` unchanged, term archives
+  unchanged. Nothing rewrites or redirects.
+- **`the_posts_pagination()`.** Still core's own output, styled but never
+  hand-rolled, so page URLs cannot drift from what the query expects.
+- **The Elementor branch in `home.php`.** Byte-for-byte the same check and the same
+  untouched `the_content()` render.
+
+### The one thing worth understanding
+
+The design leads with a "Latest article" feature above the grid. That feature is
+**the first result of the same main query**, presented differently — not a second
+query, and not an exclusion from the first. It only appears when `! is_paged()`.
+
+This matters because the obvious implementations are both wrong: a separate "latest
+post" query plus `post__not_in` on the main one would change the post count per page
+and desynchronise pagination, and excluding it via `pre_get_posts` would do the same.
+Verified empirically rather than assumed — with 14 posts, page 1 renders 10 (1 feature
++ 9 cards) and page 2 renders 4, **zero overlap, 14 unique**.
+
+### Search and category filtering
+
+The design shows a search field and category chips. Both go through core's own
+routing rather than filtering client-side:
+
+- the search field posts `s` (plus `post_type=post`) to the site root — core's search
+  route, rendered by the new `search.php`;
+- each chip is a real `get_category_link()` URL, rendered by `archive.php`.
+
+Client-side filtering was rejected deliberately: with 123 posts it could only ever
+filter the ten already on the page, silently hiding the rest. Going through core means
+every result is reachable, pagination keeps working, and the URLs stay shareable.
+
+### Routes that remain Elementor-dependent
+
+| Route | Dependency |
+|---|---|
+| `/blog/` **if Page 1191 is Elementor-built** | Renders that page's Elementor output; none of the new design applies. This is intentional and unchanged. |
+| Any single post with `_elementor_edit_mode = builder` | Renders its own Elementor output; no native chrome. 29 posts are in this state. |
+| **Anything governed by Elementor Pro's Theme Builder** | Still unverifiable locally — see §4. A Theme Builder condition on Single Post or Archive can override the template hierarchy entirely, which would mean these files are not the ones rendering on staging/production at all. **This remains the single biggest unknown and must be checked directly on staging.** |
+
+Category/tag/date/author archives and search results are **never** Elementor-dependent:
+there is no single post to key the check off, so they are always native.
+
+### Verified on this pass (local, 14 posts, 4 fixtures)
+
+| Check | Result |
+|---|---|
+| Recent Elementor post | Only its own output — no native title, meta, nav or related |
+| Older Elementor post (2023) | Same |
+| Native classic post | Full native render: title, author, date, content, nav, related |
+| New Gutenberg post | Full native render; block markup output correctly |
+| Elementor posts **in listings** | Rendered as native excerpt cards, as designed (§5) |
+| Pagination | 10 + 4 = 14, no overlap |
+| Category archive | Correct term, correct count, active chip marked `aria-current` |
+| Search | Correct results; empty search shows the empty state |
+| Featured image / author / date | All render on card, feature and single |
+| Images | 10 in main, all with `alt`, 8 lazy |
+| PHP errors | None across 13 routes |
+
+### Still unverified
+
+- **Yoast** — not installed locally. Canonical, meta and schema output unchecked. The
+  templates add nothing that competes with Yoast's hooks (`wp_head()` in `header.php`,
+  `title-tag` support), but that is structural reasoning, not a test.
+- **Elementor Pro Theme Builder** — see above.
+- **Tablet/mobile** — breakpoints written from the design's CSS; not viewed at width.

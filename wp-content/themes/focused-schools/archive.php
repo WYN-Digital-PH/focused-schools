@@ -1,16 +1,14 @@
 <?php
 /**
- * Generic archive template (category/tag/date/author).
+ * Category, tag, date and author archives.
  *
- * Distinct from home.php (the dedicated /blog/ Posts Page template) — this
- * governs other archive-type views that would otherwise fall back to the
- * bare index.php. There's no single associated post/page to check for
- * Elementor content here (unlike home.php's Posts Page or single.php's
- * individual post), so this always renders natively.
+ * There is no single post or page to key an Elementor check off here, so
+ * these routes are always native — unchanged from the original template, and
+ * documented in docs/blog-coexistence.md.
  *
- * Same known limitation as home.php/single.php regarding Elementor Pro's
- * Theme Builder possibly overriding archive views globally — see
- * docs/blog-coexistence.md.
+ * Presentation now matches the blog archive, but the main query is untouched:
+ * the term, ordering, post count and every /page/N/ URL are exactly as
+ * WordPress produced them.
  *
  * @package FocusedSchools
  */
@@ -18,37 +16,41 @@
 defined( 'ABSPATH' ) || exit;
 
 get_header();
+
+$fs_description = get_the_archive_description();
+$fs_term        = is_category() ? (int) get_queried_object_id() : 0;
 ?>
 
-<main id="content">
-	<div class="fs-container fs-container--wide fs-blog__header">
-		<h1 class="fs-blog__title"><?php echo wp_kses_post( get_the_archive_title() ); ?></h1>
-		<?php
-		$fs_archive_description = get_the_archive_description();
-		if ( $fs_archive_description ) :
-			?>
-			<div class="fs-blog__description"><?php echo wp_kses_post( $fs_archive_description ); ?></div>
-			<?php
-		endif;
-		?>
-	</div>
-
-	<div class="fs-container fs-container--wide fs-blog__list">
-		<?php if ( have_posts() ) : ?>
-			<div class="fs-card-grid">
-				<?php
-				while ( have_posts() ) :
-					the_post();
-					get_template_part( 'template-parts/components/post-card', null, array( 'post' => get_post() ) );
-				endwhile;
-				?>
+<main id="content" class="fs-blog">
+	<section class="fs-blog__section fs-blog__intro">
+		<div class="fs-container fs-container--shell">
+			<div class="fs-eyebrow-row">
+				<span class="fs-rule fs-rule--lime" aria-hidden="true"></span>
+				<p class="fs-eyebrow"><?php esc_html_e( 'Blog', 'focused-schools' ); ?></p>
 			</div>
 
-			<?php the_posts_pagination(); ?>
-		<?php else : ?>
-			<p class="fs-blog__empty"><?php esc_html_e( 'No posts found.', 'focused-schools' ); ?></p>
-		<?php endif; ?>
-	</div>
+			<h1 class="fs-blog__title"><?php echo wp_kses_post( get_the_archive_title() ); ?></h1>
+
+			<?php if ( $fs_description ) : ?>
+				<div class="fs-blog__lead"><?php echo wp_kses_post( $fs_description ); ?></div>
+			<?php endif; ?>
+
+			<?php get_template_part( 'template-parts/components/blog-filters', null, array( 'active_term' => $fs_term ) ); ?>
+		</div>
+	</section>
+
+	<?php
+	get_template_part(
+		'template-parts/components/post-list',
+		null,
+		array(
+			'eyebrow' => __( 'All articles', 'focused-schools' ),
+			'heading' => __( 'Browse the archive.', 'focused-schools' ),
+			'feature' => false,
+			'empty'   => __( 'No articles found in this archive.', 'focused-schools' ),
+		)
+	);
+	?>
 </main>
 
 <?php

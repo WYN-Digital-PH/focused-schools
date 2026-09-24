@@ -1,61 +1,398 @@
 /**
- * Shared styling for the blog archive views — home.php (/blog/) and
- * archive.php (category/tag/date/author). Enqueued on both (see
- * inc/enqueue.php, is_home() / is_archive()).
+ * Blog archive, category/tag archives and search results. Exact geometry
+ * from the approved .dc design: intro with search and category chips, a lead
+ * article, then the three-up grid on the paper ground.
  */
 
-.fs-blog__header {
-	padding-block: var( --wp--preset--spacing--x-large, 3rem ) var( --wp--preset--spacing--large, 2rem );
+.fs-blog__section {
+	padding-block: 4.5rem 4rem;
+}
+
+.fs-blog__section--paper {
+	padding-block: 7.5rem;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-blog__feature-section {
+	padding-block: 0 6rem;
+}
+
+/* Intro ------------------------------------------------------------------ */
+
+.fs-eyebrow-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 2.125rem;
+}
+
+.fs-rule {
+	display: block;
+	width: 26px;
+	height: 3px;
+	flex: 0 0 auto;
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-rule--lime {
+	background: var( --wp--preset--color--lime, #a7cc14 );
+}
+
+.fs-rule--gold {
+	background: var( --wp--preset--color--gold, #f3c145 );
 }
 
 .fs-blog__title {
+	margin: 0 0 26px;
+	max-width: 15ch;
+	font-size: 2.25rem;
+	line-height: 1.03;
+	letter-spacing: -0.03em;
+	font-weight: 400;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-blog__title strong {
+	font-weight: 700;
+}
+
+.fs-blog__lead {
 	margin: 0;
-	font-size: var( --wp--preset--font-size--x-large, 2.25rem );
+	max-width: 890px;
+	font-size: 1.1875rem;
+	line-height: 1.7;
+	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
-.fs-blog__description {
-	margin-top: var( --wp--preset--spacing--small, 0.5rem );
-	color: var( --wp--preset--color--secondary, #6b7280 );
+.fs-blog__lead p {
+	margin: 0 0 1rem;
 }
 
-.fs-blog__list {
-	padding-block: var( --wp--preset--spacing--large, 2rem ) var( --wp--preset--spacing--x-large, 3rem );
+.fs-blog__lead p:last-child {
+	margin-bottom: 0;
+}
+
+/* Search and chips ------------------------------------------------------- */
+
+.fs-blogbar {
+	display: grid;
+	gap: 28px;
+	margin-top: 44px;
+}
+
+.fs-search {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	max-width: 620px;
+}
+
+.fs-input {
+	width: 100%;
+	height: 54px;
+	padding: 0 14px;
+	border: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	border-radius: var( --fs-r-sm, 8px );
+	background: var( --wp--preset--color--base, #ffffff );
+	font-family: inherit;
+	font-size: 1rem;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-input::placeholder {
+	color: #9aa4a8;
+}
+
+.fs-input:focus-visible {
+	outline: none;
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+	box-shadow: 0 0 0 3px rgba( 10, 150, 203, 0.22 );
+}
+
+.fs-search .fs-btn {
+	height: 54px;
+	justify-content: center;
+}
+
+.fs-filters__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.fs-chip {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	padding: 12px 18px;
+	border: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	border-radius: var( --fs-r-pill, 999px );
+	background: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #005c6d );
+	font-size: 0.8125rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.fs-chip:hover {
+	background: #eef1f3;
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-chip[aria-current="page"] {
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+/* Lead article ----------------------------------------------------------- */
+
+.fs-feature {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	background: var( --wp--preset--color--base, #ffffff );
+	border: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.fs-feature__media {
+	display: block;
+	position: relative;
+	min-height: 260px;
+	overflow: hidden;
+}
+
+.fs-feature__media img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 600ms var( --fs-ease, ease );
+}
+
+.fs-feature:hover .fs-feature__media img {
+	transform: scale( 1.04 );
+}
+
+.fs-feature__copy {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	padding: 2rem;
+}
+
+.fs-feature__kicker {
+	margin: 0;
+}
+
+.fs-feature__title {
+	margin: 22px 0 18px;
+	max-width: 20ch;
+	font-size: 1.75rem;
+	line-height: 1.08;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	text-wrap: pretty;
+}
+
+.fs-feature__title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.fs-feature__title a:hover {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-feature__excerpt {
+	margin: 0 0 18px;
+	max-width: 54ch;
+	font-size: 1.0625rem;
+	line-height: 1.7;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-feature__meta {
+	margin: 0 0 32px;
+	font-size: 0.8125rem;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+/* Grid, count, pagination ------------------------------------------------ */
+
+.fs-blog__head {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 1rem;
+	align-items: end;
+	margin-bottom: 2.75rem;
+}
+
+.fs-blog__heading {
+	margin: 0;
+	max-width: 16ch;
+	font-size: 2.25rem;
+	line-height: 1.03;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-count {
+	margin: 0;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
 .fs-blog__empty {
-	margin: 0;
-	padding: var( --wp--preset--spacing--large, 2rem );
-	text-align: center;
-	color: var( --wp--preset--color--secondary, #6b7280 );
-	border: 1px dashed var( --wp--preset--color--secondary, #6b7280 );
-	border-radius: 4px;
+	max-width: 62ch;
+	padding: 3.5rem 3rem;
+	background: var( --wp--preset--color--base, #ffffff );
+	border: 1px solid var( --wp--preset--color--rule, #e3e9eb );
+	border-radius: 16px;
 }
 
-/* WordPress core the_posts_pagination() markup. */
-.pagination {
+.fs-blog__empty p:first-child {
+	margin: 0 0 12px;
+	font-size: 1.5rem;
+	line-height: 1.25;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-blog__empty .fs-small {
+	margin: 0 0 26px;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+/*
+ * Core prints the pagination, so these style whatever it emits rather than
+ * assuming a structure — the markup has to stay core's for the page URLs to
+ * keep matching the query.
+ */
+.fs-blog .pagination {
+	margin-top: 4rem;
+}
+
+.fs-blog .nav-links {
 	display: flex;
 	flex-wrap: wrap;
-	gap: var( --wp--preset--spacing--small, 0.5rem );
-	margin-top: var( --wp--preset--spacing--large, 2rem );
-	list-style: none;
-	padding: 0;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
 }
 
-.pagination .page-numbers {
+.fs-blog .page-numbers {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-width: 2.5rem;
-	height: 2.5rem;
-	padding-inline: 0.5rem;
-	border: 1px solid var( --wp--preset--color--secondary, #6b7280 );
-	border-radius: 4px;
+	min-width: 44px;
+	min-height: 44px;
+	padding: 0 16px;
+	border: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	border-radius: var( --fs-r-pill, 999px );
+	background: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #005c6d );
+	font-size: 0.8125rem;
+	font-weight: 700;
 	text-decoration: none;
-	color: inherit;
 }
 
-.pagination .page-numbers.current {
-	background-color: var( --wp--preset--color--primary, #1e40af );
-	border-color: var( --wp--preset--color--primary, #1e40af );
+.fs-blog .page-numbers:hover {
+	background: #eef1f3;
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-blog .page-numbers.current {
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-color: var( --wp--preset--color--contrast, #005c6d );
 	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-blog .page-numbers.dots {
+	min-width: 0;
+	padding: 0 2px;
+	border: 0;
+	background: none;
+	color: #9aa4a8;
+}
+
+@media ( min-width: 641px ) {
+	.fs-search {
+		flex-direction: row;
+	}
+
+	.fs-search .fs-input {
+		flex: 1 1 auto;
+	}
+
+	.fs-search .fs-btn {
+		flex: 0 0 auto;
+	}
+}
+
+@media ( min-width: 1024px ) {
+	.fs-blog__section {
+		padding-block: 4.5rem 4rem;
+	}
+
+	.fs-blog__title {
+		font-size: 4.25rem;
+	}
+
+	.fs-blog__heading {
+		font-size: 3.25rem;
+	}
+
+	.fs-blog__head {
+		grid-template-columns: minmax( 0, 1fr ) auto;
+	}
+
+	.fs-feature {
+		grid-template-columns: minmax( 0, 1.05fr ) minmax( 0, 1fr );
+	}
+
+	.fs-feature__media {
+		min-height: 340px;
+	}
+
+	.fs-feature__copy {
+		padding: 52px 52px 54px;
+	}
+
+	.fs-feature__title {
+		font-size: 2.5rem;
+	}
+}
+
+@media ( max-width: 640px ) {
+	.fs-blog__section--paper {
+		padding-block: 4rem;
+	}
+
+	/* One row that scrolls, rather than a stack of chips. */
+	.fs-filters__chips {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		padding-bottom: 6px;
+		scrollbar-width: none;
+	}
+
+	.fs-filters__chips::-webkit-scrollbar {
+		display: none;
+	}
+
+	.fs-blog__empty {
+		padding: 2rem 1.5rem;
+	}
 }
