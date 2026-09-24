@@ -2,12 +2,16 @@
 /**
  * Component: Contact Info block.
  *
- * No args — pulls directly from Site Settings (focused_schools_get_setting()),
- * same no-args pattern as site-footer.php. Renders business name, formatted
- * address, and tel:/mailto: links inside a semantic <address> element.
- * Omits itself entirely if the plugin is inactive or all fields are empty
- * (graceful degradation, same as every other Site-Settings-dependent
- * component).
+ * Pulls directly from Site Settings (focused_schools_get_setting()), same
+ * pattern as site-footer.php. Renders business name, formatted address, and
+ * tel:/mailto: links inside a semantic <address> element. Omits itself
+ * entirely if the plugin is inactive or all fields are empty (graceful
+ * degradation, same as every other Site-Settings-dependent component).
+ *
+ * Contract ($args):
+ * - layout (string) 'stacked' draws the approved homepage variant: email,
+ *   phone and address as three links in one <address>, the address linking to
+ *   the Map Link setting when one is set. Anything else keeps the default.
  *
  * @package FocusedSchools
  */
@@ -30,6 +34,40 @@ if ( ! $fs_business_name && ! $fs_phone && ! $fs_email && ! $fs_address ) {
 // tel: links need digits (and a leading +) only — strip spaces, dashes,
 // parens, dots that make the display string human-readable.
 $fs_phone_href = $fs_phone ? preg_replace( '/[^0-9+]/', '', $fs_phone ) : '';
+$fs_layout     = isset( $args['layout'] ) ? (string) $args['layout'] : '';
+$fs_map_url    = focused_schools_get_setting( 'map_url' );
+
+if ( 'stacked' === $fs_layout ) :
+	// This variant shows only the three contact routes, so with none of them
+	// set there is nothing to draw — an empty <address> would still take space.
+	if ( ! $fs_email && ! $fs_phone && ! $fs_address ) {
+		return;
+	}
+	?>
+	<address class="fs-contact-info fs-contact-info--stacked">
+		<?php if ( $fs_email ) : ?>
+			<a href="<?php echo esc_url( 'mailto:' . $fs_email ); ?>"><?php echo esc_html( $fs_email ); ?></a>
+		<?php endif; ?>
+		<?php if ( $fs_phone ) : ?>
+			<a href="<?php echo esc_url( 'tel:' . $fs_phone_href ); ?>"><?php echo esc_html( $fs_phone ); ?></a>
+		<?php endif; ?>
+		<?php
+		if ( $fs_address ) :
+			$fs_lines = wp_kses( nl2br( esc_html( $fs_address ) ), array( 'br' => array() ) );
+
+			if ( $fs_map_url ) :
+				?>
+				<a href="<?php echo esc_url( $fs_map_url ); ?>" target="_blank" rel="noopener"><?php echo $fs_lines; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above, then <br> restored via wp_kses. ?></a>
+			<?php else : ?>
+				<span><?php echo $fs_lines; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- see above. ?></span>
+				<?php
+			endif;
+		endif;
+		?>
+	</address>
+	<?php
+	return;
+endif;
 ?>
 <div class="fs-contact-info">
 	<address class="fs-contact-info__address">

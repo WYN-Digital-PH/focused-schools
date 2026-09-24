@@ -263,9 +263,18 @@
 	registerServerBlock( 'focused-schools/contact', __( 'Contact Close', 'focused-schools' ), [
 		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
 		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
-		{ name: 'body', label: __( 'Body', 'focused-schools' ), type: 'textarea' },
+		{ name: 'body', label: __( 'Body', 'focused-schools' ), type: 'textarea', help: __( 'Shown in place of the form when no form shortcode is set.', 'focused-schools' ) },
 		{ name: 'ctaLabel', label: __( 'Button label', 'focused-schools' ) },
-		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP }
+		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP },
+		{ name: 'linkText', label: __( 'Aside text', 'focused-schools' ) },
+		{ name: 'linkLabel', label: __( 'Aside link label', 'focused-schools' ) },
+		{ name: 'badge', label: __( 'Badge image', 'focused-schools' ), type: 'image' },
+		{
+			name: 'formShortcode',
+			label: __( 'Form shortcode', 'focused-schools' ),
+			type: 'textarea',
+			help: __( 'Paste your form plugin’s shortcode, e.g. [elementor-template id="123"]. Leave empty to show the button instead.', 'focused-schools' )
+		}
 	] );
 	/* ------------------------------------------------------ About page --- */
 
@@ -305,6 +314,15 @@
 		{ name: 'note', label: __( 'Note', 'focused-schools' ) },
 		{ name: 'noteEmphasis', label: __( 'Note, bold tail', 'focused-schools' ) },
 		{ name: 'closingText', label: __( 'Closing line', 'focused-schools' ) },
+		{ name: 'ctaLabel', label: __( 'Button label', 'focused-schools' ) },
+		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP }
+	] );
+
+	registerServerBlock( 'focused-schools/where-we-work', __( 'Where We Work', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ), type: 'textarea' },
+		{ name: 'listEyebrow', label: __( 'Label above the district list', 'focused-schools' ) },
+		{ name: 'ctaLine', label: __( 'Closing line', 'focused-schools' ) },
 		{ name: 'ctaLabel', label: __( 'Button label', 'focused-schools' ) },
 		{ name: 'ctaUrl', label: __( 'Button URL', 'focused-schools' ), help: URL_HELP }
 	] );

@@ -78,6 +78,12 @@ class Fields {
 				'type'        => 'textarea',
 				'description' => '',
 			),
+			'map_url'                => array(
+				'label'       => __( 'Map Link', 'focused-schools-core' ),
+				'section'     => 'business_info',
+				'type'        => 'url',
+				'description' => __( 'Optional. Turns the address into a link, e.g. the Google Maps listing.', 'focused-schools-core' ),
+			),
 			'cta_label'              => array(
 				'label'       => __( 'Primary CTA Label', 'focused-schools-core' ),
 				'section'     => 'primary_cta',

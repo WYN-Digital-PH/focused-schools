@@ -46,6 +46,7 @@ function focused_schools_block_names() {
 		'rail-text',
 		'stats-band',
 		'partner-districts',
+		'where-we-work',
 		'team-grid',
 		'mission-close',
 	);
@@ -122,4 +123,82 @@ function focused_schools_block_image( $attributes, $prefix, $default_file, $defa
 		'url' => $url,
 		'alt' => '' !== $alt ? $alt : $default_alt,
 	);
+}
+
+/**
+ * Partner records grouped by state, for the blocks that show them.
+ *
+ * One query serves both views the approved design asks for: the map plots
+ * every state we have worked in, while the "Partnering in <year>" list shows
+ * only the districts whose partnership is current. Keeping that split in the
+ * status meta rather than in two hand-kept lists means adding a district in
+ * wp-admin updates both, and they cannot drift apart.
+ *
+ * @return array[] Each item: name, lat, lng, current[], previous[].
+ */
+function focused_schools_partner_states() {
+	static $cache = null;
+
+	if ( null !== $cache ) {
+		return $cache;
+	}
+
+	$cache = array();
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'fs_partner_state',
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+			'hide_empty' => true,
+		)
+	);
+
+	if ( is_wp_error( $terms ) ) {
+		return $cache;
+	}
+
+	foreach ( $terms as $term ) {
+		$posts = get_posts(
+			array(
+				'post_type'      => 'fs_partner',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'orderby'        => 'menu_order title',
+				'order'          => 'ASC',
+				'no_found_rows'  => true,
+				'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- small, admin-managed taxonomy.
+					array(
+						'taxonomy' => 'fs_partner_state',
+						'field'    => 'term_id',
+						'terms'    => $term->term_id,
+					),
+				),
+			)
+		);
+
+		if ( ! $posts ) {
+			continue;
+		}
+
+		$current  = array();
+		$previous = array();
+
+		foreach ( $posts as $partner ) {
+			if ( 'previous' === get_post_meta( $partner->ID, '_fs_partner_status', true ) ) {
+				$previous[] = $partner->post_title;
+			} else {
+				$current[] = $partner->post_title;
+			}
+		}
+
+		$cache[] = array(
+			'name'     => $term->name,
+			'lat'      => get_term_meta( $term->term_id, '_fs_partner_state_lat', true ),
+			'lng'      => get_term_meta( $term->term_id, '_fs_partner_state_lng', true ),
+			'current'  => $current,
+			'previous' => $previous,
+		);
+	}
+
+	return $cache;
 }

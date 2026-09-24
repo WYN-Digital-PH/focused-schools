@@ -32,6 +32,30 @@
 		"ctaUrl": {
 			"type": "string",
 			"default": "/contact/"
+		},
+		"linkText": {
+			"type": "string",
+			"default": "Prefer the full form?"
+		},
+		"linkLabel": {
+			"type": "string",
+			"default": "Go to our contact page"
+		},
+		"formShortcode": {
+			"type": "string",
+			"default": ""
+		},
+		"badgeId": {
+			"type": "number",
+			"default": 0
+		},
+		"badgeUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"badgeAlt": {
+			"type": "string",
+			"default": "2026 Proud Member — Manatee Chamber of Commerce"
 		}
 	},
 	"editorScript": "focused-schools-blocks-editor",

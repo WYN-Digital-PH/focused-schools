@@ -1,0 +1,43 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/where-we-work",
+	"title": "Where We Work",
+	"category": "design",
+	"icon": "location",
+	"description": "The homepage partner map and current-partner list, built live from the Partners records so adding a district needs no page edit.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Where we work"
+		},
+		"heading": {
+			"type": "string",
+			"default": "We're proud to partner with districts in 24 states and one Canadian province."
+		},
+		"listEyebrow": {
+			"type": "string",
+			"default": "Partnering in 2024–2025"
+		},
+		"ctaLine": {
+			"type": "string",
+			"default": "Let's put you on the map."
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "Start a Conversation"
+		},
+		"ctaUrl": {
+			"type": "string",
+			"default": "/contact/"
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

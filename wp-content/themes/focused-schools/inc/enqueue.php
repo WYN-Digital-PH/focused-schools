@@ -48,6 +48,7 @@ function focused_schools_component_styles() {
 		'rail-text',
 		'partner-districts',
 		'partner-map',
+		'where-we-work',
 		'team-bio-modal',
 		'cycle-teaser',
 	);
@@ -115,8 +116,13 @@ function focused_schools_has_partner_map() {
 
 	$post = get_post();
 
-	return $post instanceof WP_Post
-		&& has_block( 'focused-schools/partner-districts', $post );
+	if ( ! $post instanceof WP_Post ) {
+		return false;
+	}
+
+	// Both the About directory and the homepage's Where We Work draw the map.
+	return has_block( 'focused-schools/partner-districts', $post )
+		|| has_block( 'focused-schools/where-we-work', $post );
 }
 
 /**
