@@ -65,28 +65,43 @@
 	text-align: left;
 }
 
+/*
+ * Graduated spacing, not one gap: the design steps 26 / 34 / 40px down the
+ * column, which is what gives the block its rhythm. A single flex gap made
+ * every interval identical and read as cramped under the heading and loose
+ * above the buttons.
+ */
 .fs-cta-banner--split .fs-cta-banner__copy {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 1.5rem;
+	display: block;
+	text-align: left;
+}
+
+.fs-cta-banner--split .fs-cta-banner__eyebrow {
+	margin: 0 0 26px;
 }
 
 .fs-cta-banner--split .fs-cta-banner__heading {
+	margin: 0 0 34px;
 	max-width: 14ch;
+	font-size: 2.25rem;
+	line-height: 1.03;
+	letter-spacing: -0.03em;
 	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-cta-banner--split .fs-cta-banner__description {
-	margin: 0;
-	max-width: 52ch;
+	margin: 0 0 40px;
+	max-width: 62ch;
+	font-size: 1.0625rem;
+	line-height: 1.75;
 	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
 .fs-cta-banner--split .fs-cta-banner__actions {
 	display: flex;
+	align-items: center;
 	flex-wrap: wrap;
-	gap: 1rem;
+	gap: 20px;
 }
 
 .fs-cta-banner__figure {
@@ -115,5 +130,29 @@
 @media ( max-width: 640px ) {
 	.fs-cta-banner--split {
 		padding-block: 4rem;
+	}
+}
+
+@media ( min-width: 1241px ) {
+	.fs-cta-banner--split .fs-cta-banner__heading {
+		/* 68px — the design's desktop display size for this heading. */
+		font-size: 4.25rem;
+	}
+}
+
+@media ( max-width: 640px ) {
+	.fs-cta-banner--split .fs-cta-banner__heading {
+		font-size: 1.75rem;
+		margin-bottom: 26px;
+	}
+
+	.fs-cta-banner--split .fs-cta-banner__description {
+		margin-bottom: 32px;
+	}
+
+	.fs-cta-banner--split .fs-cta-banner__actions {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 16px;
 	}
 }

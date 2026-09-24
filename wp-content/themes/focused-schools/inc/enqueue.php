@@ -49,6 +49,9 @@ function focused_schools_component_styles() {
 		'partner-districts',
 		'partner-map',
 		'where-we-work',
+		'cycle-steps',
+		'pull-quote',
+		'video-modal',
 		'team-bio-modal',
 		'cycle-teaser',
 	);
@@ -274,6 +277,16 @@ function focused_schools_enqueue_assets() {
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/page-services.css',
 			array( 'focused-schools-style' ),
 			focused_schools_asset_version( '/assets/css/page-services.css' )
+		);
+
+		// Opens the lanes' overview videos. Enhancement only: with it absent
+		// the play controls never appear, so nothing is left dangling.
+		wp_enqueue_script(
+			'focused-schools-video-modal',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/video-modal.js',
+			array(),
+			focused_schools_asset_version( '/assets/js/components/video-modal.js' ),
+			true
 		);
 	}
 

@@ -1,0 +1,76 @@
+/**
+ * Pull Quote — one approved quote, shown statically. Exact geometry from the
+ * approved .dc design: a 78px mark rail beside a 34ch measure, coral slashes,
+ * italic teal text. Colours are stated here rather than inherited, because
+ * this sits on the light paper ground, not the carousel's coloured band.
+ */
+
+.fs-pull-quote {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 1.25rem;
+	align-items: start;
+	margin: 0;
+}
+
+.fs-pull-quote__marks {
+	display: flex;
+	gap: 7px;
+	padding-top: 14px;
+}
+
+.fs-pull-quote__marks span {
+	display: block;
+	width: 10px;
+	height: 38px;
+	background: var( --wp--preset--color--primary, #dd6237 );
+	transform: skewX( -14deg );
+}
+
+.fs-pull-quote__text {
+	margin: 0 0 1.5rem;
+	max-width: 34ch;
+	font-size: 1.625rem;
+	line-height: 1.26;
+	letter-spacing: -0.02em;
+	font-style: italic;
+	font-weight: 400;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-pull-quote__cite {
+	display: flex;
+	align-items: flex-start;
+	gap: 18px;
+	margin: 0;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	line-height: 1.5;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-pull-quote__cite span {
+	display: block;
+	width: 26px;
+	height: 2px;
+	flex: 0 0 auto;
+	margin-top: 7px;
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-pull-quote__action {
+	padding-top: 3rem;
+}
+
+@media ( min-width: 768px ) {
+	.fs-pull-quote {
+		grid-template-columns: 78px minmax( 0, 1fr );
+		gap: 2.125rem;
+	}
+
+	.fs-pull-quote__text {
+		font-size: 2.25rem;
+	}
+}

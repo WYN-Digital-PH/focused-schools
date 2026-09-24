@@ -126,6 +126,7 @@ if ( have_posts() ) :
 			// with its photo on the opposite side.
 			if ( $fs_services->have_posts() ) :
 				$fs_lane_index = 0;
+				$fs_has_video  = false;
 
 				// Theme-bundled fallbacks, used only until each service has
 				// its own featured image set in wp-admin. Same photo set the
@@ -134,6 +135,10 @@ if ( have_posts() ) :
 
 				foreach ( $fs_services->posts as $fs_service_post ) :
 					++$fs_lane_index;
+
+					if ( focused_schools_youtube_id( get_post_meta( $fs_service_post->ID, '_fs_service_video_url', true ) ) ) {
+						$fs_has_video = true;
+					}
 					$fs_alt   = ( 0 === $fs_lane_index % 2 );
 					$fs_photo = $fs_lane_photos[ ( $fs_lane_index - 1 ) % count( $fs_lane_photos ) ];
 					?>
@@ -160,21 +165,42 @@ if ( have_posts() ) :
 					</section>
 					<?php
 				endforeach;
+				// Only ship the dialog when something on the page can open it.
+				if ( $fs_has_video ) {
+					get_template_part( 'template-parts/components/video-modal' );
+				}
 			endif;
 			wp_reset_postdata();
 
 			get_template_part(
-				'template-parts/components/cycle-of-excellence',
+				'template-parts/components/cycle-steps',
 				null,
 				array(
 					'eyebrow'  => __( 'The method underneath', 'focused-schools' ),
 					'heading'  => __( 'A Cycle of Excellence', 'focused-schools' ),
-					'body'     => __( 'High-performing districts and schools are intentional about committing to a cycle of excellence. Your Focused Schools team is prepared to support your cycle of excellence in ways that will help you to continue to build capacity, accelerate growth, and communicate your progress relentlessly.', 'focused-schools' ),
-					'mark_url' => $fs_img . 'mark-cycle.svg',
-					'phases'   => array(
-						array( 'label' => __( 'Build Capacity', 'focused-schools' ) ),
-						array( 'label' => __( 'Accelerate Growth', 'focused-schools' ) ),
-						array( 'label' => __( 'Communicate Progress', 'focused-schools' ) ),
+					'body'     => __( 'High-performing districts and schools are intentional about committing to a cycle of excellence. Build capacity, accelerate growth, and communicate your progress relentlessly.', 'focused-schools' ),
+					'mark_url' => $fs_img . 'mark-white.svg',
+					'steps'    => array(
+						array(
+							'kicker' => __( '01 · Focus', 'focused-schools' ),
+							'title'  => __( 'Name the work', 'focused-schools' ),
+							'body'   => __( 'A small number of priorities everyone can repeat without looking them up.', 'focused-schools' ),
+						),
+						array(
+							'kicker' => __( '02 · Build', 'focused-schools' ),
+							'title'  => __( 'Build capacity', 'focused-schools' ),
+							'body'   => __( 'Leadership teams and coaches who can run the practice themselves.', 'focused-schools' ),
+						),
+						array(
+							'kicker' => __( '03 · Accelerate', 'focused-schools' ),
+							'title'  => __( 'Accelerate growth', 'focused-schools' ),
+							'body'   => __( 'Honest inquiry cycles that change what happens after the assessment.', 'focused-schools' ),
+						),
+						array(
+							'kicker' => __( '04 · Communicate', 'focused-schools' ),
+							'title'  => __( 'Communicate progress', 'focused-schools' ),
+							'body'   => __( 'A reporting rhythm that replaces anecdote with evidence, relentlessly.', 'focused-schools' ),
+						),
 					),
 				)
 			);
@@ -182,7 +208,7 @@ if ( have_posts() ) :
 			$fs_testimonials = new WP_Query(
 				array(
 					'post_type'      => 'fs_testimonial',
-					'posts_per_page' => 6,
+					'posts_per_page' => 1,
 					'orderby'        => 'menu_order',
 					'order'          => 'ASC',
 					'no_found_rows'  => true,
@@ -193,7 +219,17 @@ if ( have_posts() ) :
 			?>
 				<section class="fs-services__quote">
 					<div class="fs-container fs-container--shell">
-					<?php get_template_part( 'template-parts/components/testimonial-carousel', null, array( 'posts' => $fs_testimonials->posts ) ); ?>
+					<?php
+					get_template_part(
+						'template-parts/components/pull-quote',
+						null,
+						array(
+							'post'       => $fs_testimonials->posts[0],
+							'link_label' => __( 'Read Our Google Reviews', 'focused-schools' ),
+							'link_url'   => function_exists( 'focused_schools_get_setting' ) ? focused_schools_get_setting( 'google_reviews_url' ) : '',
+						)
+					);
+					?>
 					</div>
 				</section>
 				<?php

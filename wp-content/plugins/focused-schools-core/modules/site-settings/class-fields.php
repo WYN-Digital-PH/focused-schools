@@ -84,6 +84,12 @@ class Fields {
 				'type'        => 'url',
 				'description' => __( 'Optional. Turns the address into a link, e.g. the Google Maps listing.', 'focused-schools-core' ),
 			),
+			'google_reviews_url'     => array(
+				'label'       => __( 'Google Reviews URL', 'focused-schools-core' ),
+				'section'     => 'business_info',
+				'type'        => 'url',
+				'description' => __( 'Optional. Linked from the Services page quote.', 'focused-schools-core' ),
+			),
 			'cta_label'              => array(
 				'label'       => __( 'Primary CTA Label', 'focused-schools-core' ),
 				'section'     => 'primary_cta',
