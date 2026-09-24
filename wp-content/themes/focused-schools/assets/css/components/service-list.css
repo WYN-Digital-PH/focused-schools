@@ -97,3 +97,77 @@
 		justify-self: end;
 	}
 }
+
+/*
+ * Lane index variant, for the Services page. Exact grid from the approved
+ * .dc design: 90px numeral / 1fr title / 360px promise / 44px arrow, with a
+ * plain arrow rather than the Home page's pill.
+ */
+
+.fs-service-list--index .fs-service-list__row {
+	grid-template-columns: 56px minmax( 0, 1fr );
+	row-gap: 0.5rem;
+	column-gap: 2rem;
+	padding: 1.375rem 0;
+}
+
+.fs-service-list--index .fs-service-list__title {
+	grid-column: 2;
+	margin: 0;
+	font-size: 1.375rem;
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-service-list--index .fs-service-list__promise {
+	grid-column: 2;
+	font-size: 0.9375rem;
+	font-weight: 400;
+	line-height: 1.6;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+@media ( min-width: 768px ) {
+	.fs-service-list--index .fs-service-list__row {
+		grid-template-columns: 70px minmax( 0, 1fr ) 44px;
+	}
+
+	.fs-service-list--index .fs-service-list__promise {
+		grid-column: 2 / 4;
+	}
+}
+
+@media ( min-width: 1024px ) {
+	.fs-service-list--index .fs-service-list__row {
+		grid-template-columns: 90px minmax( 0, 1fr ) 360px 44px;
+		column-gap: 2rem;
+		align-items: center;
+		padding: 2.25rem 1.5rem 2.25rem 0;
+	}
+
+	.fs-service-list--index .fs-service-list__title {
+		grid-column: auto;
+		font-size: 1.75rem;
+	}
+
+	.fs-service-list--index .fs-service-list__promise {
+		grid-column: auto;
+	}
+
+	/* A plain glyph here, not the Home page's bordered pill. */
+	.fs-service-list--index .fs-service-list__arrow {
+		width: auto;
+		height: auto;
+		background: none;
+		border: 0;
+		border-radius: 0;
+		color: var( --wp--preset--color--primary, #dd6237 );
+	}
+
+	.fs-service-list--index .fs-service-list__arrow svg {
+		width: 18px;
+		height: 18px;
+	}
+}

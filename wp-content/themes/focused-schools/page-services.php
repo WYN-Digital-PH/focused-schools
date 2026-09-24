@@ -103,7 +103,15 @@ if ( have_posts() ) :
 				);
 
 				if ( $fs_services->have_posts() ) :
-					get_template_part( 'template-parts/components/service-list', null, array( 'posts' => $fs_services->posts ) );
+					get_template_part(
+						'template-parts/components/service-list',
+						null,
+						array(
+							'posts'     => $fs_services->posts,
+							'variant'   => 'index',
+							'nav_label' => __( 'Jump to a service', 'focused-schools' ),
+						)
+					);
 				else :
 					?>
 					<p class="fs-services__empty"><?php esc_html_e( 'Our services list is being updated — check back soon.', 'focused-schools' ); ?></p>
@@ -203,6 +211,8 @@ if ( have_posts() ) :
 					'cta_url'     => home_url( '/contact/' ),
 					'cta2_label'  => __( 'See Impact Stories', 'focused-schools' ),
 					'cta2_url'    => home_url( '/impact-stories/' ),
+					'image_url'   => $fs_img . 'retreat-2.jpg',
+					'image_alt'   => __( 'Two education leaders in conversation.', 'focused-schools' ),
 				)
 			);
 		?>
