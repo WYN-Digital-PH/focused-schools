@@ -1,10 +1,9 @@
 /**
- * Podcast page-specific spacing and section headers. Layout/visual work for
- * the subscribe strip and the Buzzsprout player lives in the reusable
- * assets/css/components/podcast-subscribe.css and podcast-player.css — this
- * file provides vertical rhythm, the 2-column section headers, and the
- * empty-state message styling for page-podcast.php. Enqueued only on that
- * page (see inc/enqueue.php). Mirrors assets/css/page-services.css.
+ * Podcast page-specific layout: section rhythm, the Listen header and
+ * Buzzsprout shell, the Watch header and video grid, and the empty states.
+ * Card/subscribe/player visuals live in the reusable components. Breakpoints
+ * are the Podcast .dc source's own: 1240 / 1023 / 767. Enqueued only on the
+ * Podcast page (see inc/enqueue.php).
  */
 
 .fs-podcast__intro {
@@ -12,88 +11,261 @@
 }
 
 .fs-podcast__section {
-	padding-block: var( --wp--preset--spacing--x-large, 3rem );
+	padding-block: 7rem;
 }
 
 .fs-podcast__listen {
-	background-color: var( --wp--preset--color--paper-soft, #f5f6f8 );
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
 }
 
-/*
- * Heading left, action right — the same 2-column section header pattern the
- * About page uses for "What Guides Us" and "Partner Districts".
- */
-.fs-podcast__head {
-	display: grid;
-	grid-template-columns: minmax( 0, 1fr );
-	gap: 1.5rem;
-	align-items: end;
-	margin-bottom: 2.5rem;
+.fs-podcast__watch {
+	padding-bottom: 7.5rem;
 }
 
-.fs-podcast__head h2 {
+/* ---- Eyebrows -------------------------------------------------------- */
+
+.fs-podcast__eyebrow {
+	margin: 0 0 1.5rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-podcast__eyebrow-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 1.5rem;
+}
+
+.fs-podcast__eyebrow-row .fs-podcast__eyebrow {
 	margin: 0;
-	max-width: 18ch;
-	font-size: 2.25rem;
-	line-height: 1.08;
-	letter-spacing: -0.02em;
+}
+
+/* ---- Listen header (heading left, action right) ---------------------- */
+
+.fs-podcast__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 40px;
+	margin-bottom: 3rem;
+}
+
+.fs-podcast__head .fs-btn {
+	margin-bottom: 8px;
+}
+
+.fs-podcast__head h2,
+.fs-podcast__watch-head h2 {
+	margin: 0;
+	max-width: 16ch;
+	font-size: 3.75rem;
+	line-height: 1;
+	letter-spacing: -0.03em;
 	font-weight: 700;
 	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
-.fs-podcast__lead {
-	margin: 1rem 0 0;
-	max-width: 56ch;
-	font-size: 1.0625rem;
-	line-height: 1.75;
-	color: var( --wp--preset--color--ink-soft, #51536a );
+/* ---- Buzzsprout shell ------------------------------------------------ */
+
+.fs-podcast__shell {
+	overflow: hidden;
+	background: var( --wp--preset--color--base, #ffffff );
+	border: 1px solid #e3e9eb;
+	border-radius: var( --fs-r-md, 16px );
+	box-shadow: var( --fs-shadow-1, 0 1px 2px rgba( 0, 92, 109, 0.08 ) );
 }
 
-.fs-podcast__hosted {
+.fs-podcast__shell-head {
 	display: flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 0.5rem 1rem;
-	margin: 0 0 1.25rem;
-	padding-bottom: 1.25rem;
-	border-bottom: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	align-items: center;
+	gap: 16px;
+	padding: 24px 28px;
+	border-bottom: 1px solid #eef1f2;
+}
+
+.fs-podcast__shell-mark {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 8px;
+	background: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-podcast__shell-mark img {
+	height: 60%;
+	width: auto;
 }
 
 .fs-podcast__show {
-	font-size: 1.125rem;
+	display: block;
+	font-size: 1.0625rem;
 	font-weight: 700;
 	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-podcast__hosted-by {
-	font-size: 0.6875rem;
+	font-size: 0.75rem;
 	font-weight: 700;
-	letter-spacing: 0.12em;
+	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
-.fs-podcast__empty {
-	margin: 0;
-	padding: var( --wp--preset--spacing--large, 2rem );
-	text-align: center;
-	color: var( --wp--preset--color--ink-soft, #51536a );
-	border: 1px dashed var( --wp--preset--color--rule, #d3dde1 );
-	border-radius: var( --fs-r-sm, 8px );
+.fs-podcast__shell .fs-podcast-player {
+	border-radius: 0;
 }
 
-@media ( min-width: 1024px ) {
+.fs-podcast__shell .fs-podcast__empty {
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+}
 
-	.fs-podcast__section {
-		padding-block: 7.5rem;
+/* ---- Watch header (two columns, like the source's data-intro) -------- */
+
+.fs-podcast__watch-head {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr ) minmax( 0, 1fr );
+	gap: 80px;
+	align-items: end;
+	margin-bottom: 3.5rem;
+}
+
+.fs-podcast__watch-head h2 {
+	font-weight: 400;
+}
+
+.fs-podcast__watch-head h2 strong {
+	font-weight: 700;
+}
+
+.fs-podcast__watch-aside {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 26px;
+}
+
+.fs-podcast__lead {
+	margin: 0;
+	max-width: 520px;
+	font-size: 1.0625rem;
+	line-height: 1.75;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-podcast__watch-aside .fs-btn--secondary:hover {
+	border-color: var( --wp--preset--color--raspberry, #bc3e8c );
+}
+
+/* ---- Video grid: fixed 3 / 2 / 1 columns ------------------------------ */
+
+.fs-podcast__video-grid {
+	display: grid;
+	grid-template-columns: repeat( 3, minmax( 0, 1fr ) );
+	gap: 32px;
+	align-items: stretch;
+}
+
+.fs-podcast__video-grid > div {
+	display: flex;
+}
+
+.fs-podcast__video-grid > [hidden] {
+	display: none;
+}
+
+.fs-podcast__video-grid .fs-podcast-card {
+	flex: 1 1 auto;
+	width: 100%;
+}
+
+.fs-loadmore {
+	margin-top: 0;
+	padding-top: 3.5rem;
+	text-align: center;
+}
+
+/* ---- Empty states ----------------------------------------------------- */
+
+.fs-podcast__empty {
+	margin: 0;
+	padding: 2.5rem 2rem;
+	text-align: center;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+	border: 1px dashed var( --wp--preset--color--rule, #d3dde1 );
+	border-radius: var( --fs-r-md, 16px );
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-podcast__empty p {
+	margin: 0 0 1rem;
+}
+
+.fs-podcast__empty p:last-child {
+	margin-bottom: 0;
+}
+
+/* ---- Breakpoints ------------------------------------------------------ */
+
+@media ( max-width: 1240px ) {
+	.fs-podcast__watch-head {
+		grid-template-columns: minmax( 0, 1fr );
+		gap: 44px;
+	}
+}
+
+@media ( min-width: 1241px ) {
+	.fs-podcast__head h2,
+	.fs-podcast__watch-head h2 {
+		font-size: 4.25rem;
+	}
+}
+
+@media ( max-width: 1023px ) {
+	.fs-podcast__video-grid {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+		gap: 24px;
+	}
+}
+
+@media ( max-width: 767px ) {
+	.fs-podcast__section,
+	.fs-podcast__watch {
+		padding-block: 4rem;
 	}
 
 	.fs-podcast__head {
-		grid-template-columns: minmax( 0, 1fr ) auto;
-		gap: 3rem;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
 	}
 
-	.fs-podcast__head h2 {
-		font-size: 3.25rem;
+	.fs-podcast__head h2,
+	.fs-podcast__watch-head h2 {
+		font-size: 2.25rem;
+	}
+
+	.fs-podcast__shell-head {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 16px;
+	}
+
+	.fs-podcast__video-grid {
+		grid-template-columns: minmax( 0, 1fr );
+		gap: 20px;
+	}
+
+	.fs-loadmore .fs-btn {
+		width: 100%;
+		justify-content: center;
 	}
 }

@@ -58,6 +58,32 @@
 	background-color: var( --wp--preset--color--paper-soft, #f5f6f8 );
 }
 
+/* Raspberry marketing accent (Podcast). */
+.fs-btn--raspberry {
+	background-color: var( --wp--preset--color--raspberry, #bc3e8c );
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-btn--raspberry:hover {
+	filter: brightness( 0.92 );
+}
+
+/* Transparent, white-outlined — secondary action on a teal ground. */
+.fs-btn--ghost {
+	height: 46px;
+	padding: 0 24px;
+	font-size: 0.6875rem;
+	letter-spacing: 0.1em;
+	background: transparent;
+	border: 1px solid rgba( 255, 255, 255, 0.4 );
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-btn--ghost:hover {
+	background: rgba( 255, 255, 255, 0.12 );
+	border-color: var( --wp--preset--color--base, #ffffff );
+}
+
 /* Bare arrow-link, no pill — "View all services" style. */
 .fs-btn--text {
 	height: auto;

@@ -141,3 +141,71 @@ return 200.
 environment, so neither populated section has been seen with real episodes; and screenshot
 capture was unavailable (browser extension timeouts), so tablet/mobile widths were not
 visually reviewed.
+
+## 10. Exact-Fidelity Pass Against `Focused Schools Podcast.dc.html`
+
+§9 above states that no `.dc` file exists for this page. One now does, so this pass rebuilt
+the page against it. The source's sections in order are: hero, subscribe rail, latest
+episode, Buzzsprout list, video grid — and **no closing CTA**.
+
+**Changed to match the source**
+
+- **Hero** (`hero.php`, additive props): `accent: raspberry` gives the 26×3px raspberry
+  rule beside a white eyebrow and a raspberry primary button; `cta2_style: ghost` gives the
+  transparent white-outlined secondary; `heading_size` (56px) and `slab_width` (700px) are
+  per-caller like Team/Services. Defaults leave every other page unchanged (verified:
+  Services still renders one `fs-btn--primary`). `button.php` gained `raspberry` and
+  `ghost` styles. Photo corrected to `retreat-1.jpg` (was `student-video.jpg`).
+- **Subscribe**: was a bordered strip; now the source's 264px label rail beside four cards
+  (name, qualifier, raspberry arrow, raspberry hover border, lift). 4 / 2 / 1 columns at
+  1023 / 767.
+- **Listen**: paper ground, 68/60/36px heading, "Open in Buzzsprout" outline button, and the
+  Buzzsprout player inside the source's white shell with a header row (mark tile, show name,
+  "Hosted on Buzzsprout"). The player is still `podcast-player.php` (numeric ID → iframe
+  src, digits-only sanitised); the source's "Vendor player — unchanged" and "in production
+  the vendor player renders here" labels are mockup annotations and are not shipped.
+- **Watch**: two-column header (raspberry-rule eyebrow, mixed-weight "Prefer to watch **our
+  podcasts?**", lead + outline button), fixed 3 / 2 / 1 column grid at 32 / 24 / 20px, and
+  "Load more episodes" after six. `podcast-card.php` was rewritten as the source's video
+  card (16:9 thumbnail, 58px raspberry play, 22px 3-line-clamped title, date, footer pinned
+  with `margin-top:auto`, Watch + YouTube tile). It no longer extends `.fs-card` (its 32px
+  padding and coral hover don't match) and dropped the unused Buzzsprout-embed/episode props
+  — this page was its only caller.
+- **Empty states**: header plus a single paper panel with a channel link — never an empty grid.
+- **Removed the closing CTA banner** ("Subscribe wherever you listen."): it is not in the
+  source, which drops the old page's contact form and ends at the video grid.
+
+**Progressive enhancement / a11y**: "Watch episode" and the YouTube tile are real links to
+the video, so cards work without JS; `podcast-video.js` upgrades the Watch link and the
+thumbnail button to the in-place `youtube-nocookie` player (`autoplay=1&rel=0`) inside the
+same 16:9 box and moves focus to the iframe. No iframe loads before a click (verified: 0
+iframes on load). One `h1`; sections `h2`; card titles `h3`.
+
+**Deliberately not built: the "Latest episode" panel.** It needs a newest episode's title,
+summary, duration and cover art for a teal split panel with Buzzsprout's single-episode
+player. Nothing in the site provides that: §9.3 rules out an episode CPT (`AGENTS.md`), and
+the only Buzzsprout data we hold is the podcast ID. Sourcing it would mean a new Buzzsprout
+feed integration (cached fetch, parsing, cover-art handling) — a network/content-model
+decision for the project owner, not a template change. Everything else on the page is
+independent of it.
+
+**Known differences from the source**
+- **Video metadata:** the cached playlist helper returns title, ID, thumbnail and publish
+  date only, so the source's per-video eyebrow and duration badge are omitted (both props
+  exist on the card and render when supplied). The source also says to cache thumbnails
+  into the media library instead of hotlinking `i.ytimg.com`; the card uses the helper's
+  thumbnail URL as before.
+- **Breakpoints:** the source's mobile step is 767px. Page-specific CSS uses 767/1023/1240
+  exactly; the *shared* `hero.css` steps at 720px (Home/About), so the hero's H1/slab
+  mobile treatment starts 47px later than the source's (same inter-file inconsistency
+  documented in `team.md` §9).
+
+**Verified**: `php -l` and PHPCS (project ruleset) clean on every touched PHP file. Rendered
+with temporary sample data (8 videos, test Buzzsprout ID and subscribe URLs — restored
+afterwards): 11 widths 320–1440px, zero overflow; grid columns 1/2/3, subscribe 1/2/4, rail
+2-col ≥1241, H1 56px/slab 700px ≥1241, section H2 68/60/36px; six cards visible with two
+hidden until "Load more"; Watch link and thumbnail both mount the player; keyboard order
+reaches the hero CTAs then the subscribe cards. With no data configured the page shows the
+empty states, no "TODO" text, no closing banner. Eight-page overflow sweep after the change
+was clean. **Not verified:** a real Buzzsprout player (the test ID 404s inside Buzzsprout's
+own iframe) or a populated YouTube playlist — neither exists in this environment.

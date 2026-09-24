@@ -24,6 +24,35 @@
 	color: var( --wp--preset--color--lime, #a7cc14 );
 }
 
+/* Raspberry accent (Podcast): rule + white eyebrow instead of lime. */
+.fs-hero__eyebrow-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 24px;
+}
+
+.fs-hero__eyebrow-row .fs-eyebrow {
+	margin: 0;
+}
+
+.fs-hero--raspberry .fs-hero__slab .fs-eyebrow--on-dark {
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-hero__actions {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.fs-hero--raspberry .fs-hero__subheading {
+	max-width: 540px;
+	margin-bottom: 1.875rem;
+	line-height: 1.6;
+}
+
 .fs-hero--align-center .fs-hero__slab {
 	text-align: center;
 }
@@ -68,7 +97,7 @@
 
 .fs-hero__heading {
 	margin: 0 0 1.25rem;
-	font-size: 3.25rem;
+	font-size: var( --fs-hero-h1, 52px );
 	line-height: 0.98;
 	letter-spacing: -0.025em;
 	font-weight: 700;

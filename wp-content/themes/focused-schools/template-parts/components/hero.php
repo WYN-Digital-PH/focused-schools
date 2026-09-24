@@ -17,6 +17,12 @@
  *               (added for the Podcast page, whose hero has two buttons)
  * - cta2_url   (string) required when cta2_label is set
  * - alignment  (string) 'left'|'center', default 'left'
+ * - accent    (string) 'coral'|'raspberry', default 'coral'. Raspberry is the
+ *               Podcast page's marketing accent: a short raspberry rule
+ *               beside a white eyebrow, and a raspberry primary button.
+ * - cta2_style (string) 'white'|'ghost', default 'white'.
+ * - heading_size (int) desktop (≥1241px) H1 size in px, default 52 — the
+ *               Podcast `.dc` source specifies 56.
  * - slab_width (int) desktop (≥1241px) slab width in px, default 680
  *   (Home/About's value) — Team and Services each specify their own
  *   narrower width (660px / 640px) in their `.dc` sources.
@@ -42,13 +48,16 @@ $fs_cta_url    = isset( $args['cta_url'] ) ? $args['cta_url'] : '';
 $fs_cta2_label = isset( $args['cta2_label'] ) ? $args['cta2_label'] : '';
 $fs_cta2_url   = isset( $args['cta2_url'] ) ? $args['cta2_url'] : '';
 $fs_alignment  = isset( $args['alignment'] ) && 'center' === $args['alignment'] ? 'center' : 'left';
+$fs_accent     = isset( $args['accent'] ) && 'raspberry' === $args['accent'] ? 'raspberry' : 'coral';
+$fs_cta2_style = isset( $args['cta2_style'] ) && 'ghost' === $args['cta2_style'] ? 'ghost' : 'white';
+$fs_h1_size    = isset( $args['heading_size'] ) ? absint( $args['heading_size'] ) : 52;
 $fs_slab_width = isset( $args['slab_width'] ) ? absint( $args['slab_width'] ) : 680;
 
 if ( '' === trim( (string) $fs_heading ) ) {
 	return;
 }
 ?>
-<section class="fs-hero fs-hero--align-<?php echo esc_attr( $fs_alignment ); ?>">
+<section class="fs-hero fs-hero--align-<?php echo esc_attr( $fs_alignment ); ?><?php echo 'raspberry' === $fs_accent ? ' fs-hero--raspberry' : ''; ?>">
 	<div class="fs-container fs-container--shell fs-hero__inner">
 		<?php if ( $fs_image_id ) : ?>
 			<div class="fs-hero__media">
@@ -60,8 +69,13 @@ if ( '' === trim( (string) $fs_heading ) ) {
 			</div>
 		<?php endif; ?>
 
-		<div class="fs-hero__slab" style="--fs-hero-slab-width: <?php echo esc_attr( $fs_slab_width ); ?>px;">
-			<?php if ( $fs_eyebrow ) : ?>
+		<div class="fs-hero__slab" style="--fs-hero-slab-width: <?php echo esc_attr( $fs_slab_width ); ?>px; --fs-hero-h1: <?php echo esc_attr( $fs_h1_size ); ?>px;">
+			<?php if ( $fs_eyebrow && 'raspberry' === $fs_accent ) : ?>
+				<div class="fs-hero__eyebrow-row">
+					<span class="fs-rule fs-rule--rasp" aria-hidden="true"></span>
+					<p class="fs-eyebrow fs-eyebrow--on-dark"><?php echo esc_html( $fs_eyebrow ); ?></p>
+				</div>
+			<?php elseif ( $fs_eyebrow ) : ?>
 				<p class="fs-eyebrow fs-eyebrow--on-dark"><?php echo esc_html( $fs_eyebrow ); ?></p>
 			<?php endif; ?>
 			<h1 class="fs-hero__heading"><?php echo esc_html( $fs_heading ); ?></h1>
@@ -77,7 +91,7 @@ if ( '' === trim( (string) $fs_heading ) ) {
 						array(
 							'label' => $fs_cta_label,
 							'url'   => $fs_cta_url,
-							'style' => 'primary',
+							'style' => 'raspberry' === $fs_accent ? 'raspberry' : 'primary',
 						)
 					);
 
@@ -88,7 +102,7 @@ if ( '' === trim( (string) $fs_heading ) ) {
 							array(
 								'label' => $fs_cta2_label,
 								'url'   => $fs_cta2_url,
-								'style' => 'white',
+								'style' => $fs_cta2_style,
 							)
 						);
 					}

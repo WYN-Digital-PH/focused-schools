@@ -353,6 +353,20 @@ function focused_schools_enqueue_assets() {
 			array( 'focused-schools-style' ),
 			focused_schools_asset_version( '/assets/css/page-podcast.css' )
 		);
+
+		// The video grid's "Load more episodes" reuses the team grid's
+		// reveal-hidden-children behaviour (it only needs the button's
+		// aria-controls grid), rather than duplicating it.
+		wp_enqueue_script(
+			'focused-schools-team-load-more',
+			FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/team-load-more.js',
+			array(),
+			focused_schools_asset_version( '/assets/js/components/team-load-more.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 
 	if ( is_page( 'contact' ) ) {

@@ -36,16 +36,18 @@ if ( empty( $fs_links ) ) {
 <section class="fs-subscribe" aria-label="<?php echo esc_attr( $fs_label ? $fs_label : __( 'Subscribe to the podcast', 'focused-schools' ) ); ?>">
 	<div class="fs-container fs-container--shell fs-subscribe__inner">
 		<?php if ( $fs_label ) : ?>
-			<p class="fs-eyebrow fs-subscribe__label"><?php echo esc_html( $fs_label ); ?></p>
+			<p class="fs-subscribe__label"><?php echo esc_html( $fs_label ); ?></p>
 		<?php endif; ?>
 		<ul class="fs-subscribe__list">
 			<?php foreach ( $fs_links as $fs_link ) : ?>
 				<li class="fs-subscribe__item">
 					<a class="fs-subscribe__link" href="<?php echo esc_url( $fs_link['url'] ); ?>" target="_blank" rel="noopener noreferrer">
-						<span class="fs-subscribe__name"><?php echo esc_html( $fs_link['label'] ); ?></span>
-						<?php if ( ! empty( $fs_link['kind'] ) ) : ?>
-							<span class="fs-subscribe__kind"><?php echo esc_html( $fs_link['kind'] ); ?></span>
-						<?php endif; ?>
+						<span class="fs-subscribe__text">
+							<strong class="fs-subscribe__name"><?php echo esc_html( $fs_link['label'] ); ?></strong>
+							<?php if ( ! empty( $fs_link['kind'] ) ) : ?>
+								<span class="fs-subscribe__kind"><?php echo esc_html( $fs_link['kind'] ); ?></span>
+							<?php endif; ?>
+						</span>
 						<span class="fs-subscribe__arrow" aria-hidden="true">&rarr;</span>
 					</a>
 				</li>

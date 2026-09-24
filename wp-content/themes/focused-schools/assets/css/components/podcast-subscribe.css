@@ -1,22 +1,37 @@
 /**
- * Podcast Subscribe strip — the row of platform links under the Podcast
- * hero (Apple Podcasts / Spotify / Buzzsprout / YouTube). Each link shows
- * the platform name with a small qualifier beneath it.
+ * Podcast Subscribe strip. Exact geometry from the approved .dc design: a
+ * 264px label rail beside four platform cards (name + qualifier + raspberry
+ * arrow). Rail collapses at 1240px, cards go 2-up at 1023px and 1-up at
+ * 767px — the Podcast source's own breakpoints.
  */
 
 .fs-subscribe {
-	padding-block: 2.5rem;
-	border-bottom: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	padding: 6rem 0 0;
+}
+
+.fs-subscribe__inner {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 40px;
+	align-items: start;
 }
 
 .fs-subscribe__label {
-	margin: 0 0 1.25rem;
+	margin: 0;
+	max-width: 10ch;
+	padding-top: 6px;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.14em;
+	line-height: 1.6;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-subscribe__list {
 	display: grid;
-	grid-template-columns: minmax( 0, 1fr );
-	gap: 1rem;
+	grid-template-columns: repeat( 4, minmax( 0, 1fr ) );
+	gap: 16px;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -24,48 +39,68 @@
 
 .fs-subscribe__link {
 	display: flex;
-	align-items: baseline;
-	gap: 0.75rem;
-	padding: 1rem 1.25rem;
-	border: 1px solid var( --wp--preset--color--rule, #d3dde1 );
-	border-radius: var( --fs-r-md, 12px );
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	height: 100%;
+	padding: 22px 24px;
+	border: 1px solid #e3e9eb;
+	border-radius: 12px;
+	background: var( --wp--preset--color--base, #ffffff );
+	box-shadow: var( --fs-shadow-1, 0 1px 2px rgba( 0, 92, 109, 0.08 ) );
 	text-decoration: none;
-	transition: border-color var( --fs-dur-fast, 150ms ) var( --fs-ease, ease );
+	transition: border-color 160ms var( --fs-ease, ease ), box-shadow 240ms var( --fs-ease, ease ), transform 240ms var( --fs-ease, ease );
 }
 
 .fs-subscribe__link:hover,
 .fs-subscribe__link:focus-visible {
-	border-color: var( --wp--preset--color--accent, #0d9488 );
+	border-color: var( --wp--preset--color--raspberry, #bc3e8c );
+	box-shadow: var( --fs-shadow-2, 0 12px 28px rgba( 0, 92, 109, 0.12 ) );
+	transform: translateY( -2px );
 }
 
 .fs-subscribe__name {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 1.0625rem;
 	font-weight: 700;
+	line-height: 1.2;
 	color: var( --wp--preset--color--contrast, #005c6d );
 }
 
 .fs-subscribe__kind {
-	font-size: 0.6875rem;
+	font-size: 0.75rem;
 	font-weight: 700;
-	letter-spacing: 0.12em;
+	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
 .fs-subscribe__arrow {
-	margin-left: auto;
-	color: var( --wp--preset--color--accent, #0d9488 );
+	flex: 0 0 auto;
+	font-size: 1rem;
+	color: var( --wp--preset--color--raspberry, #bc3e8c );
 }
 
-@media ( min-width: 640px ) {
+@media ( min-width: 1241px ) {
+	.fs-subscribe__inner {
+		grid-template-columns: 264px minmax( 0, 1fr );
+		gap: 0;
+	}
+}
 
+@media ( max-width: 1023px ) {
 	.fs-subscribe__list {
 		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
 	}
 }
 
-@media ( min-width: 1024px ) {
+@media ( max-width: 767px ) {
+	.fs-subscribe {
+		padding: 4rem 0;
+	}
 
 	.fs-subscribe__list {
-		grid-template-columns: repeat( 4, minmax( 0, 1fr ) );
+		grid-template-columns: minmax( 0, 1fr );
 	}
 }

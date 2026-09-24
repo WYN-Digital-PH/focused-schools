@@ -1,40 +1,35 @@
 /**
- * Podcast Card — adds episode/duration meta and embed sizing on top of the
- * shared .fs-card base (see card.css).
+ * Podcast video card. Exact geometry from the approved .dc design: white
+ * 16px-radius card, 16:9 thumbnail with a 58px raspberry play button,
+ * 26/28px body padding, 22px/3-line title, footer pinned with
+ * margin-top:auto so Watch and the YouTube tile line up across a row.
+ * Not built on .fs-card — its 32px padding and coral heading hover don't
+ * match this design.
  */
 
-.fs-podcast-card__episode {
-	margin: 0;
-	font-size: var( --wp--preset--font-size--small, 0.9rem );
-	color: var( --wp--preset--color--accent, #0d9488 );
+.fs-podcast-card {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background: var( --wp--preset--color--base, #ffffff );
+	border: 1px solid #e3e9eb;
+	border-radius: var( --fs-r-md, 16px );
+	box-shadow: var( --fs-shadow-1, 0 1px 2px rgba( 0, 92, 109, 0.08 ) );
+	transition: box-shadow 240ms var( --fs-ease, ease ), transform 240ms var( --fs-ease, ease );
 }
 
-.fs-podcast-card__duration {
-	margin: 0;
-	font-size: var( --wp--preset--font-size--small, 0.9rem );
-	color: var( --wp--preset--color--secondary, #6b7280 );
+.fs-podcast-card:hover {
+	box-shadow: var( --fs-shadow-2, 0 12px 28px rgba( 0, 92, 109, 0.12 ) );
+	transform: translateY( -2px );
 }
 
-.fs-podcast-card__embed {
-	position: relative;
-}
-
-.fs-podcast-card__embed iframe {
-	width: 100%;
-	border: 0;
-}
-
-/*
- * Reserves a fixed 16:9 box up front so swapping the click-to-load facade
- * for the real iframe (see assets/js/components/podcast-video.js) never
- * shifts layout — both children fill this container identically.
- */
+/* One 16:9 box holds both the facade and the eventual iframe, so mounting
+   the player (podcast-video.js) never shifts layout. */
 .fs-podcast-card__video {
 	position: relative;
 	aspect-ratio: 16 / 9;
 	overflow: hidden;
-	border-radius: 4px;
-	background-color: var( --wp--preset--color--contrast, #111111 );
+	background: var( --wp--preset--color--teal-deep, #004855 );
 }
 
 .fs-podcast-card__video iframe {
@@ -48,38 +43,145 @@
 .fs-podcast-card__video-facade {
 	position: absolute;
 	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: 100%;
 	padding: 0;
 	border: 0;
-	background: none;
+	background: transparent;
 	cursor: pointer;
 }
 
 .fs-podcast-card__video-thumb {
+	position: absolute;
+	inset: 0;
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
 }
 
-.fs-podcast-card__play-icon {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate( -50%, -50% );
-	width: 56px;
-	height: 56px;
-	border-radius: 50%;
-	background-color: rgba( 0, 0, 0, 0.65 );
+.fs-podcast-card__play {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 58px;
+	height: 58px;
+	padding-left: 4px;
+	border-radius: var( --fs-r-pill, 999px );
+	background: var( --wp--preset--color--raspberry, #bc3e8c );
+	color: var( --wp--preset--color--base, #ffffff );
+	font-size: 1.125rem;
+	box-shadow: 0 8px 22px rgba( 0, 0, 0, 0.28 );
+	transition: transform 240ms var( --fs-ease, ease );
 }
 
-.fs-podcast-card__play-icon::before {
-	content: "";
+.fs-podcast-card__video-facade:hover .fs-podcast-card__play {
+	transform: scale( 1.06 );
+}
+
+.fs-podcast-card__duration {
 	position: absolute;
-	top: 50%;
-	left: 54%;
-	transform: translate( -50%, -50% );
-	border-style: solid;
-	border-width: 10px 0 10px 16px;
-	border-color: transparent transparent transparent var( --wp--preset--color--base, #ffffff );
+	right: 14px;
+	bottom: 12px;
+	padding: 5px 10px;
+	border-radius: 6px;
+	background: rgba( 0, 72, 85, 0.78 );
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: var( --wp--preset--color--base, #ffffff );
+	pointer-events: none;
+}
+
+.fs-podcast-card__body {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	padding: 26px 28px 28px;
+}
+
+.fs-podcast-card__eyebrow {
+	margin: 0 0 10px;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--raspberry, #bc3e8c );
+}
+
+.fs-podcast-card__title {
+	display: -webkit-box;
+	margin: 0 0 12px;
+	overflow: hidden;
+	font-size: 1.375rem;
+	line-height: 1.22;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+}
+
+.fs-podcast-card__date {
+	margin: 0 0 20px;
+	font-size: 0.875rem;
+	line-height: 1.6;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-podcast-card__foot {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin-top: auto;
+	padding-top: 18px;
+	border-top: 1px solid #eef1f2;
+}
+
+.fs-podcast-card__watch {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	min-height: 44px;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	transition: color 160ms var( --fs-ease, ease ), gap 240ms var( --fs-ease, ease );
+}
+
+.fs-podcast-card__watch span {
+	font-size: 0.875rem;
+	color: var( --wp--preset--color--raspberry, #bc3e8c );
+}
+
+.fs-podcast-card__watch:hover {
+	color: var( --wp--preset--color--raspberry, #bc3e8c );
+	gap: 18px;
+}
+
+.fs-podcast-card__yt {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 44px;
+	height: 44px;
+	border: 1px solid #e3e9eb;
+	border-radius: 8px;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+	font-size: 0.6875rem;
+	text-decoration: none;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	transition: background 160ms var( --fs-ease, ease ), color 160ms var( --fs-ease, ease );
+}
+
+.fs-podcast-card__yt:hover {
+	background: var( --wp--preset--color--raspberry, #bc3e8c );
+	color: var( --wp--preset--color--base, #ffffff );
 }

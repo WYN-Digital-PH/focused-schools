@@ -1,123 +1,90 @@
 <?php
 /**
- * Component: Podcast Card.
+ * Component: Podcast video card.
  *
  * Contract ($args):
- * - title          (string, required)
- * - description    (string)
- * - embed_html     (string) e.g. a Buzzsprout <iframe> embed — lightweight
- *                  (an audio widget), so this renders immediately.
- * - youtube_id     (string) bare YouTube video ID. Renders a lazy-load
- *                  facade (thumbnail + play button) instead of an iframe;
- *                  the real iframe is only created by
- *                  assets/js/components/podcast-video.js after a click, to
- *                  avoid loading a heavy YouTube iframe on initial page
- *                  load. See docs/page-specs/podcast.md §4.
- * - episode_number (string|int)
- * - duration       (string)
- * - cta_label      (string)
- * - cta_url        (string)
+ * - title         (string, required)
+ * - youtube_id    (string, required) bare 11-character YouTube video ID.
+ * - date          (string) already-formatted publish date.
+ * - eyebrow       (string) optional small label above the title (episode
+ *                 number/series). Omitted, not blanked, when empty.
+ * - duration      (string) optional. The badge is omitted, not zeroed, when
+ *                 the source has no duration — the cached playlist helper
+ *                 doesn't supply one today.
+ * - thumbnail_url (string) optional https thumbnail; falls back to YouTube's
+ *                 predictable hqdefault URL.
  *
- * Generic/args-driven: no fs_podcast post type exists yet
- * (see docs/architecture.md §3.5). Ready to wire to real data once that
- * module is built.
+ * The card never loads a YouTube iframe on page load: the facade (thumbnail
+ * + raspberry play button) is swapped for a youtube-nocookie iframe by
+ * assets/js/components/podcast-video.js only after a click, inside the same
+ * 16:9 box so nothing shifts. Without JS the "Watch" link and the YouTube
+ * tile are plain links to the video, so the card always works.
+ *
+ * Only the Podcast page uses this card; audio is Buzzsprout's own player
+ * (podcast-player.php), not a card.
  *
  * @package FocusedSchools
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$fs_title       = isset( $args['title'] ) ? $args['title'] : '';
-$fs_description = isset( $args['description'] ) ? $args['description'] : '';
-$fs_embed       = isset( $args['embed_html'] ) ? $args['embed_html'] : '';
-$fs_youtube_id  = isset( $args['youtube_id'] ) ? $args['youtube_id'] : '';
-$fs_episode     = isset( $args['episode_number'] ) ? $args['episode_number'] : '';
-$fs_duration    = isset( $args['duration'] ) ? $args['duration'] : '';
-$fs_cta_label   = isset( $args['cta_label'] ) ? $args['cta_label'] : '';
-$fs_cta_url     = isset( $args['cta_url'] ) ? $args['cta_url'] : '';
-
-if ( '' === trim( (string) $fs_title ) ) {
-	return;
-}
+$fs_title      = isset( $args['title'] ) ? $args['title'] : '';
+$fs_youtube_id = isset( $args['youtube_id'] ) ? $args['youtube_id'] : '';
+$fs_date       = isset( $args['date'] ) ? $args['date'] : '';
+$fs_eyebrow    = isset( $args['eyebrow'] ) ? $args['eyebrow'] : '';
+$fs_duration   = isset( $args['duration'] ) ? $args['duration'] : '';
+$fs_thumb      = isset( $args['thumbnail_url'] ) ? $args['thumbnail_url'] : '';
 
 // YouTube video IDs are exactly 11 characters of [A-Za-z0-9_-]; reject
 // anything else rather than build a thumbnail/embed URL from bad input.
-if ( $fs_youtube_id && ! preg_match( '/^[A-Za-z0-9_-]{11}$/', $fs_youtube_id ) ) {
-	$fs_youtube_id = '';
+if ( '' === trim( (string) $fs_title ) || ! preg_match( '/^[A-Za-z0-9_-]{11}$/', (string) $fs_youtube_id ) ) {
+	return;
 }
 
-// Allow common podcast-embed iframe attributes on top of the standard post
-// allowlist, rather than trusting embed_html verbatim.
-$fs_allowed_embed_html = array_merge(
-	wp_kses_allowed_html( 'post' ),
-	array(
-		'iframe' => array(
-			'src'             => true,
-			'width'           => true,
-			'height'          => true,
-			'frameborder'     => true,
-			'scrolling'       => true,
-			'seamless'        => true,
-			'allow'           => true,
-			'allowfullscreen' => true,
-			'title'           => true,
-			'loading'         => true,
-		),
-	)
-);
+if ( '' === $fs_thumb || 0 !== strpos( $fs_thumb, 'https://' ) ) {
+	$fs_thumb = 'https://i.ytimg.com/vi/' . $fs_youtube_id . '/hqdefault.jpg';
+}
+
+$fs_watch_url = 'https://www.youtube.com/watch?v=' . $fs_youtube_id;
 ?>
-<article class="fs-card fs-podcast-card">
-	<div class="fs-card__body">
-		<?php if ( $fs_episode ) : ?>
-			<p class="fs-podcast-card__episode">
-				<?php
-				/* translators: %s: episode number. */
-				echo esc_html( sprintf( __( 'Episode %s', 'focused-schools' ), $fs_episode ) );
-				?>
-			</p>
-		<?php endif; ?>
-		<h3 class="fs-card__heading"><?php echo esc_html( $fs_title ); ?></h3>
+<article class="fs-podcast-card">
+	<div
+		class="fs-podcast-card__video"
+		data-youtube-id="<?php echo esc_attr( $fs_youtube_id ); ?>"
+		data-youtube-title="<?php echo esc_attr( $fs_title ); ?>"
+	>
+		<button
+			type="button"
+			class="fs-podcast-card__video-facade"
+			aria-label="<?php echo esc_attr( sprintf( /* translators: %s: video title. */ __( 'Play video: %s', 'focused-schools' ), $fs_title ) ); ?>"
+		>
+			<img class="fs-podcast-card__video-thumb" src="<?php echo esc_url( $fs_thumb ); ?>" alt="" loading="lazy" />
+			<span class="fs-podcast-card__play" aria-hidden="true">&#9654;</span>
+		</button>
 		<?php if ( $fs_duration ) : ?>
-			<p class="fs-podcast-card__duration"><?php echo esc_html( $fs_duration ); ?></p>
+			<span class="fs-podcast-card__duration" aria-hidden="true"><?php echo esc_html( $fs_duration ); ?></span>
 		<?php endif; ?>
-		<?php if ( $fs_description ) : ?>
-			<div class="fs-card__excerpt"><?php echo esc_html( $fs_description ); ?></div>
+	</div>
+	<div class="fs-podcast-card__body">
+		<?php if ( $fs_eyebrow ) : ?>
+			<p class="fs-podcast-card__eyebrow"><?php echo esc_html( $fs_eyebrow ); ?></p>
 		<?php endif; ?>
-		<?php if ( $fs_youtube_id ) : ?>
-			<div
-				class="fs-podcast-card__video"
-				data-youtube-id="<?php echo esc_attr( $fs_youtube_id ); ?>"
-				data-youtube-title="<?php echo esc_attr( $fs_title ); ?>"
-			>
-				<button
-					type="button"
-					class="fs-podcast-card__video-facade"
-					aria-label="<?php echo esc_attr( sprintf( /* translators: %s: episode title. */ __( 'Play video: %s', 'focused-schools' ), $fs_title ) ); ?>"
-				>
-					<img
-						src="<?php echo esc_url( 'https://i.ytimg.com/vi/' . $fs_youtube_id . '/hqdefault.jpg' ); ?>"
-						alt=""
-						loading="lazy"
-						class="fs-podcast-card__video-thumb"
-					/>
-					<span class="fs-podcast-card__play-icon" aria-hidden="true"></span>
-				</button>
-			</div>
+		<h3 class="fs-podcast-card__title"><?php echo esc_html( $fs_title ); ?></h3>
+		<?php if ( $fs_date ) : ?>
+			<p class="fs-podcast-card__date"><?php echo esc_html( $fs_date ); ?></p>
 		<?php endif; ?>
-		<?php if ( $fs_embed ) : ?>
-			<div class="fs-podcast-card__embed"><?php echo wp_kses( $fs_embed, $fs_allowed_embed_html ); ?></div>
-		<?php endif; ?>
-		<?php if ( $fs_cta_label && $fs_cta_url ) : ?>
-			<?php
-			get_template_part(
-				'template-parts/components/button',
-				null,
-				array(
-					'label' => $fs_cta_label,
-					'url'   => $fs_cta_url,
-				)
-			);
-			?>
-		<?php endif; ?>
+		<div class="fs-podcast-card__foot">
+			<a class="fs-podcast-card__watch" href="<?php echo esc_url( $fs_watch_url ); ?>" data-fs-video-play target="_blank" rel="noopener noreferrer">
+				<?php esc_html_e( 'Watch episode', 'focused-schools' ); ?>
+				<span aria-hidden="true">&rarr;</span>
+			</a>
+			<a
+				class="fs-podcast-card__yt"
+				href="<?php echo esc_url( $fs_watch_url ); ?>"
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label="<?php echo esc_attr( sprintf( /* translators: %s: video title. */ __( 'Open “%s” on YouTube', 'focused-schools' ), $fs_title ) ); ?>"
+			>&#9654;</a>
+		</div>
 	</div>
 </article>
