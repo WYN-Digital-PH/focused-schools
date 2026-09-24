@@ -43,6 +43,11 @@
 	color: var( --wp--preset--color--ink-soft, #51536a );
 }
 
+/* Separates the map from the list it indexes, at the design's 88px/26px. */
+.fs-partner-districts__list-label {
+	margin: 88px 0 26px;
+}
+
 .fs-partner-districts__states {
 	border-top: 1px solid var( --wp--preset--color--rule, #d3dde1 );
 }

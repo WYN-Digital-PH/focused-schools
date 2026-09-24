@@ -88,25 +88,21 @@ if ( empty( $fs_states ) ) {
 }
 
 /*
- * The map sits above the district list and is enhancement only: the list
- * below carries every partner, so a failed tile service or JavaScript off
- * costs the reader nothing.
+ * The map is passed into the directory component rather than rendered beside
+ * it: in the approved design both live inside the section's shell, so the map
+ * is column-width, not viewport-width. It stays enhancement only — the list
+ * carries every partner, so a failed tile service or JavaScript off costs the
+ * reader nothing.
  */
-get_template_part(
-	'template-parts/components/partner-map',
-	null,
-	array(
-		'states' => $fs_map,
-		// A ?state= on the URL opens that state, so a view is shareable.
-		'active' => isset( $_GET['state'] ) ? sanitize_text_field( wp_unslash( $_GET['state'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only public filter, changes no state.
-	)
-);
-
 get_template_part(
 	'template-parts/components/partner-districts',
 	null,
 	array(
 		'eyebrow'      => isset( $attributes['eyebrow'] ) ? $attributes['eyebrow'] : '',
+		'map_states'   => $fs_map,
+		// A ?state= on the URL opens that state, so a view is shareable.
+		'map_active'   => isset( $_GET['state'] ) ? sanitize_text_field( wp_unslash( $_GET['state'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only public filter, changes no state.
+		'list_eyebrow' => isset( $attributes['listEyebrow'] ) ? $attributes['listEyebrow'] : '',
 		'heading'      => sprintf(
 			/* translators: %s: emphasised tail of the heading. */
 			__( '%1$s %2$s', 'focused-schools' ),

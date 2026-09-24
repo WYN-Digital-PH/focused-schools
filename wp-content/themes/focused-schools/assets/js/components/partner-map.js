@@ -33,10 +33,15 @@
 		return;
 	}
 
-	var CURRENT = '#0a96cb';
-	var PREVIOUS = '#9aa4a8';
+	// Must match the legend in partner-map.css, or the key lies about the pins.
+	var CURRENT = '#dd6237';
+	var PREVIOUS = '#005c6d';
 
+	// An initial view up front, so invalidateSize() below is always safe to
+	// call; fitBounds replaces it as soon as the pins are on.
 	var map = window.L.map( canvas, {
+		center: [ 39.8, -98.5 ],
+		zoom: 4,
 		scrollWheelZoom: false,
 		zoomControl: true,
 		attributionControl: true
@@ -45,8 +50,9 @@
 	window.L.tileLayer(
 		'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
 		{
-			maxZoom: 16,
-			attribution: 'Tiles &copy; Esri'
+			minZoom: 2,
+			maxZoom: 12,
+			attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ'
 		}
 	).addTo( map );
 
@@ -107,8 +113,35 @@
 		}
 	} );
 
-	if ( bounds.length ) {
-		map.fitBounds( bounds, { padding: [ 40, 40 ] } );
+	/*
+	 * The container can still measure zero on first paint — reveal animations,
+	 * web fonts, a section not yet laid out — and Leaflet would then clamp the
+	 * fit to maxZoom and show the middle of the ocean. Size it now, then fit
+	 * again on the first non-zero measurement.
+	 */
+	function fit() {
+		map.invalidateSize( { animate: false } );
+
+		if ( bounds.length ) {
+			map.fitBounds( bounds, { padding: [ 52, 52 ], maxZoom: 6, animate: false } );
+		}
+	}
+
+	fit();
+
+	if ( window.ResizeObserver ) {
+		var observer = new window.ResizeObserver( function () {
+			if ( ! canvas.clientWidth || ! canvas.clientHeight ) {
+				return;
+			}
+
+			fit();
+			observer.disconnect();
+		} );
+
+		observer.observe( canvas );
+	} else {
+		window.setTimeout( fit, 240 );
 	}
 
 	if ( openMarker ) {

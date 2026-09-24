@@ -29,6 +29,10 @@
 			"type": "string",
 			"default": "Urban, rural, public, private, and charter \u2014 during the 2024\u20132025 school year we worked alongside these communities across five states."
 		},
+		"listEyebrow": {
+			"type": "string",
+			"default": "Partnering in 2024\u20132025"
+		},
 		"note": {
 			"type": "string",
 			"default": "Massachusetts Department of Elementary and Secondary Education"

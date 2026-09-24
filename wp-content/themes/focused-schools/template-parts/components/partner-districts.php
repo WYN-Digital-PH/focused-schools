@@ -6,6 +6,9 @@
  * - eyebrow      (string)
  * - heading      (string, required, allows basic HTML — run through wp_kses_post())
  * - intro        (string)
+ * - map_states   (array) states to map; passed straight to partner-map.php
+ * - map_active   (string) state name to open on load
+ * - list_eyebrow (string) label above the district list
  * - states       (array, required) each item: {
  *       name       (string, required)
  *       districts  (string[], required)
@@ -34,6 +37,9 @@ defined( 'ABSPATH' ) || exit;
 $fs_eyebrow      = isset( $args['eyebrow'] ) ? $args['eyebrow'] : '';
 $fs_heading      = isset( $args['heading'] ) ? $args['heading'] : '';
 $fs_intro        = isset( $args['intro'] ) ? $args['intro'] : '';
+$fs_map_states   = isset( $args['map_states'] ) && is_array( $args['map_states'] ) ? $args['map_states'] : array();
+$fs_map_active   = isset( $args['map_active'] ) ? (string) $args['map_active'] : '';
+$fs_list_eyebrow = isset( $args['list_eyebrow'] ) ? $args['list_eyebrow'] : '';
 $fs_states       = isset( $args['states'] ) && is_array( $args['states'] ) ? $args['states'] : array();
 $fs_badge_url    = isset( $args['badge_url'] ) ? $args['badge_url'] : '';
 $fs_badge_alt    = isset( $args['badge_alt'] ) ? $args['badge_alt'] : '';
@@ -59,6 +65,21 @@ if ( '' === trim( (string) $fs_heading ) || empty( $fs_states ) ) {
 				<p class="fs-partner-districts__lead"><?php echo esc_html( $fs_intro ); ?></p>
 			<?php endif; ?>
 		</header>
+
+		<?php
+		get_template_part(
+			'template-parts/components/partner-map',
+			null,
+			array(
+				'states' => $fs_map_states,
+				'active' => $fs_map_active,
+			)
+		);
+		?>
+
+		<?php if ( $fs_list_eyebrow ) : ?>
+			<p class="fs-eyebrow fs-partner-districts__list-label"><?php echo esc_html( $fs_list_eyebrow ); ?></p>
+		<?php endif; ?>
 
 		<div class="fs-partner-districts__states">
 			<?php

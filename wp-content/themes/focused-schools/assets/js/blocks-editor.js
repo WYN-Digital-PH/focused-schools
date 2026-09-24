@@ -300,6 +300,7 @@
 		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
 		{ name: 'headingEmphasis', label: __( 'Heading, bold tail', 'focused-schools' ) },
 		{ name: 'intro', label: __( 'Intro', 'focused-schools' ), type: 'textarea' },
+		{ name: 'listEyebrow', label: __( 'Label above the district list', 'focused-schools' ) },
 		{ name: 'badge', label: __( 'Badge image', 'focused-schools' ), type: 'image' },
 		{ name: 'note', label: __( 'Note', 'focused-schools' ) },
 		{ name: 'noteEmphasis', label: __( 'Note, bold tail', 'focused-schools' ) },
