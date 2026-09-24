@@ -1,22 +1,19 @@
 <?php
 /**
- * Single post template.
+ * Single post.
  *
- * Elementor coexistence: checks the current post's own _elementor_edit_mode.
- * If 'builder', renders only the_content() — Elementor's own saved output,
- * completely untouched, preserving its content wrapper exactly as today.
- * Otherwise: full native presentation using custom theme typography,
- * featured image, author/date meta, post navigation, and related posts.
+ * The Elementor guard below is the whole coexistence rule and is unchanged:
+ * a post whose layout Elementor owns renders its own output and nothing
+ * else — no breadcrumb, no hero, no share rail, no author box, no related
+ * strip. That is deliberate. Wrapping Elementor's saved layout in this
+ * design would duplicate the title it usually draws itself, constrain
+ * full-width sections into a narrow column, and fight Elementor Pro's Theme
+ * Builder if a condition is active. See docs/blog-coexistence.md.
  *
- * Yoast SEO compatibility (unverifiable locally — Yoast isn't installed
- * here): standard Loop, wp_head() (already called in header.php), and
- * title-tag support (already registered) — nothing custom that would
- * fight Yoast's own hooks/canonical/schema output.
- *
- * Known limitation: could not be verified against real Elementor content
- * or Elementor Pro's Theme Builder (a separate, site-wide template-override
- * system distinct from this per-post check) in this local environment —
- * verify against staging/production. See docs/blog-coexistence.md.
+ * So the design below applies to native and Gutenberg posts, and the 29
+ * Elementor posts keep rendering exactly as they do today. Bringing them
+ * across is editorial work — rebuilding them as blocks — not a template
+ * change, and it is explicitly out of scope this sprint.
  *
  * @package FocusedSchools
  */
@@ -37,47 +34,37 @@ if ( have_posts() ) :
 			<?php
 			continue;
 		endif;
+
+		$fs_post = get_post();
 		?>
 
-		<main id="content">
+		<main id="content" class="fs-post">
 			<article <?php post_class( 'fs-post-single' ); ?> id="post-<?php the_ID(); ?>">
-				<?php if ( has_post_thumbnail() ) : ?>
-					<div class="fs-post-single__media">
-						<?php the_post_thumbnail( 'large', array( 'class' => 'fs-post-single__image' ) ); ?>
-					</div>
-				<?php endif; ?>
+				<?php get_template_part( 'template-parts/components/post-hero', null, array( 'post' => $fs_post ) ); ?>
 
-				<div class="fs-container fs-post-single__content">
-					<header class="fs-post-single__header">
-						<?php the_title( '<h1 class="fs-post-single__title">', '</h1>' ); ?>
-						<p class="fs-post-single__meta">
+				<section class="fs-post__body-section">
+					<div class="fs-container fs-container--shell fs-story-body">
+						<?php get_template_part( 'template-parts/components/post-share', null, array( 'post' => $fs_post ) ); ?>
+
+						<div class="fs-prose">
+							<?php the_content(); ?>
+
 							<?php
-							printf(
-								/* translators: 1: author display name, 2: publish date. */
-								esc_html__( 'By %1$s on %2$s', 'focused-schools' ),
-								esc_html( get_the_author() ),
-								esc_html( get_the_date() )
+							wp_link_pages(
+								array(
+									'before' => '<nav class="fs-post-single__page-links" aria-label="' . esc_attr__( 'Page', 'focused-schools' ) . '">',
+									'after'  => '</nav>',
+								)
 							);
 							?>
-						</p>
-					</header>
-
-					<div class="fs-post-single__body">
-						<?php the_content(); ?>
+						</div>
 					</div>
-
-					<?php
-					wp_link_pages(
-						array(
-							'before' => '<nav class="fs-post-single__page-links" aria-label="' . esc_attr__( 'Page', 'focused-schools' ) . '">',
-							'after'  => '</nav>',
-						)
-					);
-					?>
-				</div>
+				</section>
 			</article>
 
-			<div class="fs-container fs-container--wide">
+			<?php get_template_part( 'template-parts/components/post-author', null, array( 'post' => $fs_post ) ); ?>
+
+			<div class="fs-container fs-container--shell">
 				<?php
 				the_post_navigation(
 					array(
@@ -106,26 +93,36 @@ if ( have_posts() ) :
 				);
 
 				if ( $fs_related->have_posts() ) :
+					$fs_blog = (int) get_option( 'page_for_posts' );
 					?>
-					<section class="fs-post-single__related fs-container fs-container--wide" aria-labelledby="fs-related-posts-heading">
-						<?php
-						get_template_part(
-							'template-parts/components/section-heading',
-							null,
-							array(
-								'heading'       => __( 'Related Posts', 'focused-schools' ),
-								'heading_level' => 2,
-								'heading_id'    => 'fs-related-posts-heading',
-							)
-						);
-						?>
-						<div class="fs-card-grid">
-							<?php
-							while ( $fs_related->have_posts() ) :
-								$fs_related->the_post();
-								get_template_part( 'template-parts/components/post-card', null, array( 'post' => get_post() ) );
-							endwhile;
-							?>
+					<section class="fs-post__related" aria-labelledby="fs-related-posts-heading">
+						<div class="fs-container fs-container--shell">
+							<header class="fs-blog__head">
+								<div>
+									<p class="fs-eyebrow"><?php esc_html_e( 'Keep reading', 'focused-schools' ); ?></p>
+									<h2 class="fs-blog__heading" id="fs-related-posts-heading"><?php esc_html_e( 'Related articles.', 'focused-schools' ); ?></h2>
+								</div>
+								<?php
+								get_template_part(
+									'template-parts/components/button',
+									null,
+									array(
+										'label' => __( 'View All Posts', 'focused-schools' ),
+										'url'   => $fs_blog ? get_permalink( $fs_blog ) : home_url( '/' ),
+										'style' => 'secondary',
+									)
+								);
+								?>
+							</header>
+
+							<div class="fs-blog__grid">
+								<?php
+								while ( $fs_related->have_posts() ) :
+									$fs_related->the_post();
+									get_template_part( 'template-parts/components/post-card', null, array( 'post' => get_post() ) );
+								endwhile;
+								?>
+							</div>
 						</div>
 					</section>
 					<?php

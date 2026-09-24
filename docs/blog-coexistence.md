@@ -313,3 +313,63 @@ Elementor is not installed locally, so an Elementor post renders through the
 coexistence branch as its raw `post_content`. **That proves the branch, not that
 Elementor's own layout renders.** Together with the Theme Builder question in §4,
 this is what has to be checked on staging after the import.
+
+
+---
+
+## 11. Single-Post Design (September 25, 2026)
+
+`single.php` now renders the approved article design: breadcrumb, teal title
+slab over the featured image with category badges and a byline, a sticky share
+rail beside the prose, an author box, post navigation, and a three-up related
+strip.
+
+### The constraint, stated plainly
+
+**The design applies to native and Gutenberg posts only. The 29 Elementor
+posts are untouched and render exactly as they did before.**
+
+That is not a shortcut — it is what the sprint's own rules require. A post
+whose layout Elementor owns cannot be wrapped in this design without:
+
+- duplicating the title, which Elementor layouts usually draw themselves;
+- constraining full-width Elementor sections into a 1fr prose column;
+- fighting Elementor Pro's Theme Builder if a condition is active on Single
+  Post.
+
+So the guard at the top of `single.php` is unchanged, byte for byte: an
+Elementor post renders `the_content()` and nothing else — no breadcrumb, no
+hero, no share rail, no author box, no related strip.
+
+**Consequence to communicate to the client:** immediately after launch the blog
+will look like two different sites — 94 posts in the new design, 29 in their
+Elementor layouts. Closing that gap means rebuilding those 29 as blocks, which
+is editorial work, deliberately out of scope this sprint, and explicitly
+forbidden as a bulk conversion.
+
+### Design decisions worth knowing
+
+| Decision | Reason |
+|---|---|
+| Standfirst uses `get_the_excerpt()` | Auto-generates when no manual excerpt exists, so all 123 posts get a sensible opening; writing one overrides it |
+| Reading time is computed from `post_content` | No stored field, nothing to maintain |
+| Share buttons are plain links | No third-party widget, so no tracking script loads on an article and nothing is requested from a social network until a reader chooses to share |
+| Author box hides itself when the bio is empty | An empty card with a name and an avatar is worse than no card |
+| Prose is styled with element selectors | The body is whatever the editor wrote, classic or Gutenberg; it cannot be reached through classes this theme controls |
+| Breadcrumb adds no structured data | Yoast prints its own breadcrumb schema; two sources could disagree about the hierarchy |
+
+### Verified
+
+| Case | Result |
+|---|---|
+| `dear-teacher` (real Elementor, 2026-05-01) | Own output only — no hero, share, breadcrumb or related |
+| `a-strong-start-to-2023-…` (real Elementor, 2023-01-24) | Same |
+| `hello-world` (native) | Full design |
+| `new-gutenberg-post` (blocks) | Full design |
+| 6 random real imported native posts | All 200, hero present, no PHP errors |
+| Author box | Absent with no bio; appears once one is written |
+| Share links | All four resolve, each with an accessible label |
+| Headings | One `h1`, then `h2`/`h3` — no skips |
+| `fs_impact_story` singles | Unaffected; they use their own template |
+
+Twelve routes swept, zero PHP errors, phpcs clean on six files.

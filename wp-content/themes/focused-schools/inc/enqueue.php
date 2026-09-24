@@ -386,7 +386,11 @@ function focused_schools_enqueue_assets() {
 		);
 	}
 
-	if ( is_home() || is_archive() || is_search() ) {
+	/*
+	 * Singles need this too: the related strip at the foot of an article
+	 * reuses the archive's listing grid and section header.
+	 */
+	if ( is_home() || is_archive() || is_search() || ( is_single() && 'post' === get_post_type() ) ) {
 		wp_enqueue_style(
 			'focused-schools-blog-archive',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/blog-archive.css',

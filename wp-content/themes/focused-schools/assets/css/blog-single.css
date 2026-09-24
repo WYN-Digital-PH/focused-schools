@@ -83,3 +83,381 @@
 .fs-post-single__related {
 	padding-block: var( --wp--preset--spacing--x-large, 3rem );
 }
+
+/* Single post — the approved article design ------------------------------ */
+
+.fs-post-hero {
+	padding-block: 0 0;
+}
+
+.fs-breadcrumb {
+	padding: 18px 0 22px;
+}
+
+.fs-breadcrumb p {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin: 0;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-breadcrumb a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.fs-breadcrumb a:hover {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-breadcrumb span[aria-hidden] {
+	color: var( --wp--preset--color--rule, #d3dde1 );
+}
+
+.fs-post-hero__media img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: var( --fs-r-sm, 8px );
+}
+
+/*
+ * The slab overlaps the image on desktop, as in the design. It goes static
+ * below that, because an overlap on a narrow screen eats the photograph.
+ */
+.fs-post-hero__slab {
+	padding: 28px 24px 32px;
+	background: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #ffffff );
+	border-radius: var( --fs-r-sm, 8px );
+}
+
+.fs-metas {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 26px;
+}
+
+.fs-meta {
+	display: inline-flex;
+	align-items: center;
+	min-height: 32px;
+	padding: 6px 14px;
+	border-radius: var( --fs-r-pill, 999px );
+	background: rgba( 255, 255, 255, 0.14 );
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--base, #ffffff );
+	text-decoration: none;
+}
+
+.fs-meta:hover {
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-post-hero__title {
+	margin: 0 0 20px;
+	font-size: 1.875rem;
+	line-height: 1.05;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-post-hero__lede {
+	margin: 0;
+	max-width: 560px;
+	font-size: 1.0625rem;
+	line-height: 1.6;
+	color: rgba( 255, 255, 255, 0.92 );
+}
+
+.fs-byline {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 18px;
+	margin-top: 28px;
+	padding-top: 26px;
+	border-top: 1px solid rgba( 255, 255, 255, 0.22 );
+}
+
+.fs-byline__avatar {
+	width: 52px;
+	height: 52px;
+	flex: 0 0 auto;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.fs-byline__name {
+	margin: 0 0 3px;
+	font-size: 1rem;
+	font-weight: 700;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-byline__line {
+	margin: 0;
+	font-size: 0.875rem;
+	line-height: 1.45;
+	color: rgba( 255, 255, 255, 0.86 );
+}
+
+.fs-byline__when {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	margin: 0;
+	width: 100%;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: rgba( 255, 255, 255, 0.86 );
+}
+
+.fs-byline__when span[aria-hidden] {
+	color: rgba( 255, 255, 255, 0.45 );
+}
+
+/* Body and share rail ---------------------------------------------------- */
+
+.fs-post__body-section {
+	padding-block: 4rem;
+}
+
+.fs-story-body {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 3.5rem;
+	align-items: start;
+}
+
+.fs-story-aside {
+	order: 2;
+}
+
+.fs-story-aside__label {
+	margin: 0 0 20px;
+}
+
+.fs-share__row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 2rem;
+}
+
+.fs-share__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 46px;
+	height: 46px;
+	border: 1px solid var( --wp--preset--color--rule, #d3dde1 );
+	border-radius: var( --fs-r-pill, 999px );
+	background: var( --wp--preset--color--base, #ffffff );
+	color: var( --wp--preset--color--contrast, #005c6d );
+	font-size: 0.8125rem;
+	font-weight: 700;
+	text-decoration: none;
+	transition:
+		background var( --fs-dur-fast, 160ms ) var( --fs-ease, ease ),
+		transform var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-share__btn:hover {
+	background: var( --wp--preset--color--contrast, #005c6d );
+	border-color: var( --wp--preset--color--contrast, #005c6d );
+	color: var( --wp--preset--color--base, #ffffff );
+	transform: translateY( -2px );
+}
+
+/*
+ * Prose rules are deliberately generic element selectors: the body is
+ * whatever the editor wrote, classic or Gutenberg, so it cannot be styled
+ * through classes this theme controls.
+ */
+.fs-prose {
+	order: 1;
+	min-width: 0;
+}
+
+.fs-prose > * + * {
+	margin-top: 30px;
+}
+
+.fs-prose p {
+	max-width: 66ch;
+	font-size: 1.0625rem;
+	line-height: 1.75;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-prose h2,
+.fs-prose h3 {
+	max-width: 26ch;
+	margin-top: 56px;
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-prose h2 + p,
+.fs-prose h3 + p {
+	margin-top: 26px;
+}
+
+.fs-prose img {
+	max-width: 100%;
+	height: auto;
+	border-radius: var( --fs-r-sm, 8px );
+}
+
+.fs-prose figure,
+.fs-prose blockquote {
+	margin-top: 56px;
+	margin-bottom: 56px;
+}
+
+.fs-prose figcaption {
+	margin-top: 16px;
+	max-width: 56ch;
+	font-size: 0.8125rem;
+	line-height: 1.6;
+	font-style: italic;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-prose blockquote {
+	padding-left: 24px;
+	border-left: 3px solid var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-prose a {
+	color: var( --wp--preset--color--contrast, #005c6d );
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.fs-prose a:hover {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+/* Author and related ----------------------------------------------------- */
+
+.fs-post-author {
+	padding-block: 0 5rem;
+}
+
+.fs-authorbox {
+	display: grid;
+	grid-template-columns: minmax( 0, 1fr );
+	gap: 24px;
+	padding: 30px 24px 34px;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+	border-radius: 16px;
+}
+
+.fs-authorbox__photo {
+	width: 104px;
+	height: 104px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.fs-authorbox__name {
+	margin: 0 0 16px;
+	font-size: 1.5rem;
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-authorbox__bio {
+	margin: 0;
+	max-width: 62ch;
+	font-size: 1rem;
+	line-height: 1.7;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-post__related {
+	padding-block: 5rem;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+@media ( min-width: 768px ) {
+	.fs-post-hero__title {
+		font-size: 2.625rem;
+	}
+
+	.fs-authorbox {
+		grid-template-columns: 148px minmax( 0, 1fr );
+		gap: 40px;
+		align-items: center;
+		padding: 44px 48px;
+	}
+
+	.fs-authorbox__photo {
+		width: 148px;
+		height: 148px;
+	}
+
+	.fs-byline__when {
+		width: auto;
+		margin-left: auto;
+	}
+}
+
+@media ( min-width: 1024px ) {
+	.fs-post-hero__title {
+		font-size: 3rem;
+	}
+
+	.fs-post-hero__slab {
+		position: relative;
+		width: 720px;
+		max-width: 100%;
+		margin-top: -56px;
+		margin-left: 24px;
+		padding: 40px;
+	}
+
+	.fs-post__body-section {
+		padding-block: 7.5rem;
+	}
+
+	.fs-story-body {
+		grid-template-columns: 300px minmax( 0, 1fr );
+		gap: 6rem;
+	}
+
+	/* Follows the reader down a long article. */
+	.fs-story-aside {
+		position: sticky;
+		top: 160px;
+		order: 0;
+	}
+
+	.fs-prose p {
+		font-size: 1.1875rem;
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.fs-share__btn {
+		transition: none;
+	}
+}
