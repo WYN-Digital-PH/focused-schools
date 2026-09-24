@@ -21,9 +21,11 @@ if ( ! $fs_post instanceof WP_Post ) {
 	return;
 }
 
-$fs_id    = $fs_post->ID;
-$fs_cats  = get_the_category( $fs_id );
-$fs_lede  = get_the_excerpt( $fs_post );
+$fs_id   = $fs_post->ID;
+$fs_cats = get_the_category( $fs_id );
+// The excerpt defaults to 55 words, which is a paragraph rather than a
+// standfirst and makes the slab overrun the photograph it sits on.
+$fs_lede  = wp_trim_words( get_the_excerpt( $fs_post ), 30, '&hellip;' );
 $fs_by    = (int) $fs_post->post_author;
 $fs_name  = get_the_author_meta( 'display_name', $fs_by );
 $fs_desc  = get_the_author_meta( 'description', $fs_by );
@@ -34,7 +36,8 @@ $fs_mins  = max( 1, (int) round( $fs_words / 200 ) );
 	<div class="fs-container fs-container--shell">
 		<?php get_template_part( 'template-parts/components/post-breadcrumb', null, array( 'post' => $fs_post ) ); ?>
 
-		<?php if ( has_post_thumbnail( $fs_id ) ) : ?>
+		<div class="fs-post-hero__inner">
+			<?php if ( has_post_thumbnail( $fs_id ) ) : ?>
 			<div class="fs-post-hero__media">
 				<?php
 				echo get_the_post_thumbnail(
@@ -62,7 +65,7 @@ $fs_mins  = max( 1, (int) round( $fs_words / 200 ) );
 			<h1 class="fs-post-hero__title"><?php echo esc_html( get_the_title( $fs_id ) ); ?></h1>
 
 			<?php if ( $fs_lede ) : ?>
-				<p class="fs-post-hero__lede"><?php echo esc_html( $fs_lede ); ?></p>
+				<p class="fs-post-hero__lede"><?php echo wp_kses( $fs_lede, array() ); ?></p>
 			<?php endif; ?>
 
 			<div class="fs-byline">
@@ -85,6 +88,7 @@ $fs_mins  = max( 1, (int) round( $fs_words / 200 ) );
 					?>
 				</p>
 			</div>
+		</div>
 		</div>
 	</div>
 </section>

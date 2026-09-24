@@ -61,7 +61,27 @@ $fs_glyphs = array(
 					</span>
 				</a>
 			<?php endforeach; ?>
+
+			<?php
+			/*
+			 * Copying needs the clipboard API, so this is the one control
+			 * here that depends on JavaScript. It is printed with `hidden`
+			 * and revealed by post-share.js, so a reader without scripts
+			 * sees the four working share links rather than a dead button.
+			 */
+			?>
+			<button
+				class="fs-share__btn fs-share__btn--wide"
+				type="button"
+				data-fs-copy
+				data-fs-copy-url="<?php echo esc_url( get_permalink( $fs_post ) ); ?>"
+				hidden
+			>
+				<?php esc_html_e( 'Copy link', 'focused-schools' ); ?>
+			</button>
 		</div>
+
+		<p class="fs-share__toast" role="status" aria-live="polite" data-fs-copy-toast></p>
 	</div>
 
 	<?php

@@ -404,6 +404,21 @@ function focused_schools_enqueue_assets() {
 	// fs_impact_story already has its own single-fs_impact_story.php +
 	// single-impact-story.css.
 	if ( is_single() && 'post' === get_post_type() ) {
+		/*
+		 * Reveals and drives the share rail's copy-link control. An
+		 * Elementor-built post renders none of this theme's chrome, so it
+		 * has no rail and no need for the script.
+		 */
+		if ( 'builder' !== get_post_meta( get_the_ID(), '_elementor_edit_mode', true ) ) {
+			wp_enqueue_script(
+				'focused-schools-post-share',
+				FOCUSED_SCHOOLS_THEME_URI . '/assets/js/components/post-share.js',
+				array(),
+				focused_schools_asset_version( '/assets/js/components/post-share.js' ),
+				true
+			);
+		}
+
 		wp_enqueue_style(
 			'focused-schools-blog-single',
 			FOCUSED_SCHOOLS_THEME_URI . '/assets/css/blog-single.css',
