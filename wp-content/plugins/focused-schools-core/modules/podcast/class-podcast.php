@@ -202,9 +202,23 @@ class Podcast implements Module_Interface {
 	 * @return void
 	 */
 	public function schedule_refresh() {
-		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
-			wp_schedule_event( time() + HOUR_IN_SECONDS, 'twicedaily', self::CRON_HOOK );
+		if ( wp_next_scheduled( self::CRON_HOOK ) ) {
+			return;
 		}
+
+		/*
+		 * On an environment that has never fetched — a fresh install, or the
+		 * first deploy carrying this feature — start the schedule now rather
+		 * than an hour out. Otherwise the Latest Episode panel stays hidden
+		 * until the first run, which looks like a broken feature rather than
+		 * one that has not run yet. Still a cron job, so no page view waits
+		 * on the fetch; it simply happens on the next request instead of the
+		 * one after an hour of traffic.
+		 */
+		$last_good = get_option( self::EPISODE_OPTION, array() );
+		$first_run = empty( $last_good['episode'] ) ? time() : time() + HOUR_IN_SECONDS;
+
+		wp_schedule_event( $first_run, 'twicedaily', self::CRON_HOOK );
 	}
 
 	/**

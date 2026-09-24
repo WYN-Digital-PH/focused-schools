@@ -190,8 +190,14 @@ if ( have_posts() ) :
 							null,
 							array(
 								'eyebrow'  => $fs_show_title,
-								'title'    => focused_schools_podcast_setting( 'podcast_latest_episode_title' ) ? focused_schools_podcast_setting( 'podcast_latest_episode_title' ) : __( 'Start with the latest conversation.', 'focused-schools' ),
-								'body'     => focused_schools_podcast_setting( 'podcast_latest_episode_summary' ),
+								'title'    => focused_schools_podcast_setting(
+									'podcast_latest_episode_title',
+									! empty( $fs_feed['title'] ) ? $fs_feed['title'] : __( 'Start with the latest conversation.', 'focused-schools' )
+								),
+								'body'     => focused_schools_podcast_setting(
+									'podcast_latest_episode_summary',
+									! empty( $fs_feed['summary'] ) ? wp_trim_words( $fs_feed['summary'], 40 ) : ''
+								),
 								'mark_url' => $fs_img . 'mark-white.svg',
 								'inner'    => $fs_latest_player,
 							)
