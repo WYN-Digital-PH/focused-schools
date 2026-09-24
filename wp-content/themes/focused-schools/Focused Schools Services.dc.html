@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400;1,9..40,700&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #ffffff; color: #005C6D; font-family: "DM Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  * { box-sizing: border-box; }
+  a { color: #005C6D; text-decoration: none; }
+  a:hover { color: #DD6237; }
+  button { font-family: inherit; }
+  @keyframes fsRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* Media queries cannot be expressed inline. Values match the approved homepage breakpoints. */
+  @media (max-width: 1240px) {
+    [data-display] { font-size: 60px !important; }
+    [data-h1] { font-size: 46px !important; }
+    [data-hero-slab] { position: static !important; width: auto !important; max-width: none !important; margin: -45px 0 0 !important; padding: 40px !important; }
+    [data-lane-grid] { grid-template-columns: minmax(0, 1fr) !important; gap: 48px !important; }
+    [data-lane-media] { order: 2 !important; max-width: 520px !important; }
+    [data-lane-copy] { order: 1 !important; }
+    [data-lane-title] { font-size: 44px !important; }
+  }
+  @media (max-width: 1024px) {
+    [data-nav] { display: none !important; }
+    [data-menu-label] { display: none !important; }
+    [data-index-row] { grid-template-columns: 56px minmax(0, 1fr) !important; row-gap: 10px !important; column-gap: 24px !important; }
+    [data-index-lead] { grid-column: 2 !important; }
+    [data-index-go] { display: none !important; }
+    [data-cta-grid] { grid-template-columns: minmax(0, 1fr) !important; gap: 48px !important; }
+    [data-quote-grid] { grid-template-columns: minmax(0, 1fr) !important; gap: 40px !important; }
+  }
+  @media (max-width: 900px) {
+    [data-spec-grid] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-spec-mobile] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-spec-mobile] > div:first-child { width: 100% !important; max-width: 390px !important; }
+  }
+  @media (max-width: 720px) {
+    [data-shell] { padding-left: 20px !important; padding-right: 20px !important; }
+    [data-h1] { font-size: 34px !important; }
+    [data-display] { font-size: 36px !important; }
+    [data-lane-title] { font-size: 32px !important; }
+    [data-space] { padding-top: 64px !important; padding-bottom: 64px !important; }
+    [data-hero-media] { aspect-ratio: 4 / 5 !important; }
+    [data-nav-cta] { display: none !important; }
+    [data-hero-slab] { position: static !important; width: auto !important; max-width: none !important; margin: 0 !important; padding: 28px 24px 32px !important; }
+    [data-offerings] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-lane-tagline] { font-size: 19px !important; }
+    [data-footer-grid] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-quote] { font-size: 24px !important; }
+    [data-btn-full] { width: 100% !important; justify-content: center !important; }
+  }
+</style>
+</helmet>
+
+<div id="top">
+  <a href="#main" style="position: absolute; left: -9999px;">Skip to content</a>
+
+  <!-- ===================== HEADER (reused, Services active) ===================== -->
+  <header style="position: sticky; top: 0; z-index: 70; padding: 16px 0 0;">
+    <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+      <div style="position: relative; height: 74px; background: #ffffff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,92,109,0.08); display: flex; align-items: center; gap: 24px; padding: 0 14px 0 26px; overflow: hidden;">
+        <a href="https://www.focusedschools.com/" aria-label="Focused Schools — home" style="display: flex; align-items: center; flex: 0 0 auto;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo.svg?v=palette-2026-3" alt="Focused Schools" style="height: 46px; width: auto; display: block;" />
+        </a>
+        <nav data-nav="" aria-label="Primary navigation" style="display: flex; align-items: center; gap: 40px; margin: 0 auto;">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+            <a href="{{ n.href }}" aria-current="{{ n.current }}" style="{{ n.style }}" style-hover="color: #DD6237;">{{ n.label }}</a>
+          </sc-for>
+        </nav>
+        <a data-nav-cta="" href="https://www.focusedschools.com/contact/" style="display: inline-flex; align-items: center; gap: 12px; height: 46px; padding: 0 24px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; flex: 0 0 auto; margin-left: auto; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Let's Talk <span style="font-size: 15px;">&rarr;</span></a>
+        <button type="button" aria-label="Open menu" style="display: inline-flex; align-items: center; gap: 12px; height: 46px; padding: 0 16px; border-radius: 999px; border: 1px solid #e6eaec; background: #ffffff; cursor: pointer; color: #005C6D; flex: 0 0 auto; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #f5f6f8;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-1.svg?v=palette-2026-3" alt="" style="height: 22px; width: auto; display: block;" />
+          <span data-menu-label="" style="font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Menu</span>
+          <span style="display: flex; flex-direction: column; gap: 5px; width: 18px;">
+            <span style="display: block; height: 2px; background: #005C6D;"></span>
+            <span style="display: block; height: 2px; background: #005C6D;"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ===================== 1 · PAGE HERO ===================== -->
+    <section data-screen-label="Services hero" style="background: #ffffff; padding: 14px 0 128px;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; position: relative;">
+        <div data-hero-media="" style="position: relative; aspect-ratio: 21 / 9; border-radius: 8px; overflow: hidden; background: #004855;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-3.jpg" alt="A Focused Schools facilitator mapping priorities with district leaders." style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;" />
+          <span aria-hidden="true" style="position: absolute; top: 26px; right: 26px; width: 44px; height: 44px; border-top: 2px solid rgba(255,255,255,0.9); border-right: 2px solid rgba(255,255,255,0.9);"></span>
+        </div>
+        <div data-hero-slab="" data-reveal="" style="position: absolute; left: 24px; bottom: -56px; width: 640px; background: #005C6D; padding: 44px; z-index: 2;">
+          <p style="margin: 0 0 22px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #A7CC14;">Services</p>
+          <h1 data-h1="" style="margin: 0 0 20px; font-size: 52px; line-height: 0.96; letter-spacing: -0.025em; font-weight: 700; color: #ffffff;">Support tailored to your goals, your challenges, and your students.</h1>
+          <p style="margin: 0 0 28px; max-width: 470px; font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.92);">Every partnership is powered by IMPACT Coaching and a continuous cycle of inquiry. Rather than offering one-time solutions, we work alongside leaders as they reflect, adapt, and grow.</p>
+          <a href="#contact" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 26px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Let's Talk <span style="font-size: 15px;">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 2 · LANE INDEX (dynamic) ===================== -->
+    <sc-if value="{{ showIndex }}" hint-placeholder-val="{{ true }}">
+      <section data-screen-label="Lane index" data-space="" style="background: #ffffff; padding: 96px 0 24px;">
+        <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+          <header data-reveal="" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 60px; flex-wrap: wrap; margin-bottom: 56px;">
+            <div>
+              <p style="margin: 0 0 26px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">How we help</p>
+              <h2 data-display="" style="margin: 0; font-size: 68px; line-height: 1.03; letter-spacing: -0.03em; font-weight: 400; color: #005C6D; max-width: 14ch;">Three lanes. <strong style="font-weight: 700;">One cycle of inquiry.</strong></h2>
+            </div>
+            <p style="margin: 0 0 12px; max-width: 520px; font-size: 17px; line-height: 1.75; color: #51536a;">Most districts start in one lane and grow into the others. Each one stands on its own, and each one is built to end with your people carrying the work.</p>
+          </header>
+          <nav aria-label="Jump to a service" style="border-top: 1px solid #d3dde1;">
+            <sc-for list="{{ lanes }}" as="l" hint-placeholder-count="3">
+              <a href="{{ l.anchor }}" data-index-row="" style="display: grid; grid-template-columns: 78px 420px minmax(0, 1fr) 60px; gap: 40px; align-items: center; padding: 36px 0; border-bottom: 1px solid #d3dde1; transition: background 240ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #eef1f3; color: #005C6D;">
+                <span style="{{ l.indexNum }}">{{ l.num }}</span>
+                <h3 style="margin: 0; font-size: 32px; line-height: 1.1; letter-spacing: -0.025em; font-weight: 700; color: #005C6D;">{{ l.title }}</h3>
+                <p data-index-lead="" style="margin: 0; max-width: 620px; font-size: 14px; font-weight: 700; line-height: 1.5; color: #005C6D;">{{ l.tagline }}</p>
+                <span data-index-go="" aria-hidden="true" style="width: 46px; height: 46px; border-radius: 999px; background: #ffffff; border: 1px solid #e3e9eb; display: flex; align-items: center; justify-content: center; color: #005C6D; font-size: 16px; justify-self: end;">&darr;</span>
+              </a>
+            </sc-for>
+          </nav>
+        </div>
+      </section>
+    </sc-if>
+
+    <!-- ===================== 3 · SERVICE LANES (one reusable component, N records) ===================== -->
+    <sc-for list="{{ lanes }}" as="l" hint-placeholder-count="3">
+      <section data-screen-label="Service lane" data-space="" id="{{ l.id }}" style="{{ l.sectionStyle }}">
+        <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+          <div data-lane-grid="" style="{{ l.gridStyle }}">
+            <div data-lane-copy="" data-reveal="" style="{{ l.copyStyle }}">
+              <div style="display: flex; align-items: center; gap: 18px; margin-bottom: 30px;">
+                <span aria-hidden="true" style="{{ l.accentBar }}"></span>
+                <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: #005C6D;">{{ l.num }}</span>
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #51536a;">Service lane</span>
+              </div>
+              <h2 data-lane-title="" style="margin: 0 0 22px; font-size: 52px; line-height: 1.04; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 18ch;">{{ l.title }}</h2>
+              <p data-lane-tagline="" style="margin: 0 0 26px; max-width: 30ch; font-size: 21px; line-height: 1.35; font-weight: 700; color: #005C6D;">{{ l.tagline }}</p>
+              <p style="margin: 0 0 40px; max-width: 62ch; font-size: 17px; line-height: 1.75; color: #51536a;">{{ l.body }}</p>
+              <sc-if value="{{ showOfferings }}" hint-placeholder-val="{{ true }}">
+                <div style="border-top: 1px solid #d3dde1; padding-top: 30px; margin-bottom: 40px;">
+                  <p style="margin: 0 0 22px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Signature offerings</p>
+                  <ul data-offerings="" style="{{ l.offeringsStyle }}">
+                    <sc-for list="{{ l.offerings }}" as="o" hint-placeholder-count="4">
+                      <li style="display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 14px; align-items: start; font-size: 15px; line-height: 1.55; color: #51536a;">
+                        <span aria-hidden="true" style="{{ l.dotStyle }}"></span>
+                        <span>{{ o }}</span>
+                      </li>
+                    </sc-for>
+                  </ul>
+                </div>
+              </sc-if>
+              <a href="#contact" data-btn-full="" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 26px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">{{ l.cta }} <span style="font-size: 15px;">&rarr;</span></a>
+            </div>
+            <figure data-lane-media="" data-reveal="" style="{{ l.mediaStyle }}">
+              <div role="img" aria-label="{{ l.imageAlt }}" style="{{ l.imgStyle }}"></div>
+              <figcaption style="{{ l.captionStyle }}">
+                <span style="{{ l.captionEyebrow }}">{{ l.captionKicker }}</span>
+                <strong style="display: block; font-size: 15px; font-weight: 700; line-height: 1.3; color: #005C6D;">{{ l.captionLine }}</strong>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+    </sc-for>
+
+    <!-- ===================== 4 · CYCLE OF EXCELLENCE (teal band, static reference) ===================== -->
+    <section data-screen-label="Cycle of Excellence" data-space="" style="position: relative; background: #005C6D; padding: 120px 0; overflow: hidden;">
+      <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" aria-hidden="true" style="position: absolute; right: -60px; top: 40px; height: 420px; width: auto; opacity: 0.06;" />
+      <div data-shell="" data-cta-grid="" style="position: relative; max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 96px; align-items: center;">
+        <div aria-hidden="true" style="position: relative; width: 280px; max-width: 100%; aspect-ratio: 1 / 1; justify-self: center;">
+          <span style="position: absolute; inset: 0; border-radius: 999px; background: #ffffff; box-shadow: 0 0 0 12px #005C6D, 0 0 0 14px rgba(255,255,255,0.4);"></span>
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-cycle.svg?v=palette-2026-3" alt="" style="position: absolute; left: 19%; top: 19%; width: 62%; height: 62%;" />
+        </div>
+        <div data-reveal="">
+          <p style="margin: 0 0 24px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #ffffff;">One shared focus</p>
+          <h2 data-display="" style="margin: 0 0 26px; font-size: 58px; line-height: 1.02; letter-spacing: -0.025em; font-weight: 700; text-transform: uppercase; color: #ffffff; max-width: 14ch;">A Cycle of Excellence</h2>
+          <p style="margin: 0 0 34px; max-width: 700px; font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.92);">High-performing districts and schools are intentional about committing to a cycle of excellence. Your Focused Schools team is prepared to support your cycle of excellence in ways that will help you to continue to build capacity, accelerate growth, and communicate your progress relentlessly.</p>
+          <a href="https://www.focusedschools.com/about-our-mission-vision/" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 26px; border-radius: 999px; background: #ffffff; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #f5f6f8; color: #005C6D;">Our Approach <span style="font-size: 14px;">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 5 · TESTIMONIAL (kept as is) ===================== -->
+    <section data-screen-label="Testimonial" data-space="" style="background: #f5f6f8; padding: 112px 0;">
+      <div data-shell="" data-quote-grid="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 34px;">
+        <span aria-hidden="true" style="display: flex; gap: 7px; padding-top: 16px; height: 40px;">
+          <span style="display: block; width: 10px; height: 38px; background: #DD6237; transform: skewX(-14deg);"></span>
+          <span style="display: block; width: 10px; height: 38px; background: #DD6237; transform: skewX(-14deg);"></span>
+        </span>
+        <div data-reveal="">
+          <blockquote data-quote="" style="margin: 0 0 40px; max-width: 1020px; font-size: 40px; line-height: 1.26; letter-spacing: -0.02em; font-style: italic; font-weight: 400; color: #005C6D;">&ldquo;I appreciate the data-driven approach that we took to arrive at this [Strategic] plan. I also appreciate the engagement that occurred with the community&hellip;&rdquo;</blockquote>
+          <div style="display: flex; align-items: center; gap: 32px; flex-wrap: wrap;">
+            <span style="display: flex; align-items: flex-start; gap: 18px;">
+              <span aria-hidden="true" style="display: block; width: 26px; height: 2px; background: #DD6237; margin-top: 7px; flex: 0 0 auto;"></span>
+              <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.5; color: #005C6D;">School Committee Member</span>
+            </span>
+            <a href="https://www.google.com/search?q=focused+schools+reviews" style="display: inline-flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #005C6D; transition: gap 240ms cubic-bezier(.2,.7,.2,1), color 160ms cubic-bezier(.2,.7,.2,1);" style-hover="color: #DD6237; gap: 18px;">Read our Google Reviews <span style="font-size: 14px;">&rarr;</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 6 · CLOSING CTA ===================== -->
+    <section data-screen-label="Closing CTA" id="contact" data-space="" style="background: #ffffff; padding: 112px 0 120px;">
+      <div data-shell="" data-cta-grid="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 100px; align-items: center;">
+        <div data-reveal="">
+          <p style="margin: 0 0 26px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Start a partnership</p>
+          <h2 data-display="" style="margin: 0 0 34px; font-size: 68px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 13ch;">Not sure which lane you need?</h2>
+          <p style="margin: 0 0 40px; max-width: 62ch; font-size: 17px; line-height: 1.75; color: #51536a;">Most partnerships begin with a conversation, not a proposal. Tell us where your district is headed and what is getting in the way, and we will tell you honestly where we can help.</p>
+          <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+            <a href="https://www.focusedschools.com/contact/" data-btn-full="" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 28px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Let's Talk <span style="font-size: 15px;">&rarr;</span></a>
+            <a href="https://www.focusedschools.com/impact-stories/" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 24px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="border-color: #005C6D; background: #f5f6f8; color: #005C6D;">See Impact Stories <span style="font-size: 14px;">&rarr;</span></a>
+          </div>
+        </div>
+        <figure data-reveal="" style="position: relative; margin: 0;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-2.jpg" alt="Two education leaders celebrating progress together at a Focused Schools session." style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 8px; display: block; box-shadow: 0 20px 44px rgba(0,92,109,0.14);" />
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER (reused) ===================== -->
+  <footer style="position: relative; background: #005C6D; color: #ffffff; overflow: hidden; padding: 96px 0 0;">
+    <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" aria-hidden="true" style="position: absolute; right: -50px; top: 56px; height: 400px; width: auto; opacity: 0.06;" />
+    <div data-shell="" data-footer-grid="" style="position: relative; max-width: 1400px; margin: 0 auto; padding: 0 24px 88px; display: grid; grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr; gap: 60px;">
+      <div>
+        <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo-white.svg?v=palette-2026-3" alt="Focused Schools" style="height: 55px; width: auto; display: block; margin-bottom: 44px;" />
+        <p style="margin: 0 0 30px; font-size: 21px; line-height: 1.35; font-weight: 700; color: #ffffff; max-width: 22ch;">Every student. Every classroom. Every day. No exceptions.</p>
+        <a href="https://www.focusedschools.com/contact/" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 26px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Contact Us <span style="font-size: 14px;">&rarr;</span></a>
+      </div>
+      <nav aria-label="Footer navigation">
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Explore</p>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <a href="https://www.focusedschools.com/about-our-mission-vision/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">About</a>
+          <a href="https://www.focusedschools.com/team/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Team</a>
+          <a href="https://www.focusedschools.com/services/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Services</a>
+          <a href="https://www.focusedschools.com/impact-stories/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Impact Stories</a>
+        </div>
+      </nav>
+      <nav aria-label="Resources">
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Resources</p>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <a href="https://www.focusedschools.com/podcast/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Podcast</a>
+          <a href="https://www.focusedschools.com/blog/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Blog</a>
+          <a href="https://www.focusedschools.com/contact/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Contact</a>
+        </div>
+      </nav>
+      <div>
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Connect</p>
+        <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px;">
+          <a href="mailto:hello@focusedschools.com" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">hello@focusedschools.com</a>
+          <a href="tel:+18449572466" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">844-957-2466</a>
+        </div>
+        <div aria-label="Social media" style="display: flex; gap: 10px;">
+          <a href="https://twitter.com/focusedschools" aria-label="X" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">X</a>
+          <a href="https://www.facebook.com/focusedschools" aria-label="Facebook" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">f</a>
+          <a href="https://www.youtube.com/channel/UCg8W-jIlwxFCrVsU15gWFqA" aria-label="YouTube" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 11px; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">&#9654;</a>
+          <a href="https://www.linkedin.com/company/focused-schools" aria-label="LinkedIn" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">in</a>
+        </div>
+      </div>
+    </div>
+    <div style="position: relative; border-top: 1px solid rgba(255,255,255,0.18);">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 26px 24px 30px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+        <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.72);">&copy;2026 Focused Schools. All Rights Reserved.</p>
+        <a href="#top" style="font-size: 12px; color: rgba(255,255,255,0.82);" style-hover="color: #A7CC14;">Back to top &uarr;</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== SPEC APPENDIX ===================== -->
+  <sc-if value="{{ showSpecs }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Handoff specs" style="background: #f5f6f8; padding: 120px 0 140px;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+
+        <header style="padding-bottom: 48px; border-bottom: 1px solid #d3dde1; margin-bottom: 56px;">
+          <p style="margin: 0 0 22px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Designer handoff · Services page</p>
+          <h2 style="margin: 0 0 20px; font-size: 52px; line-height: 1.04; letter-spacing: -0.03em; font-weight: 400; color: #005C6D; max-width: 22ch;">Specs, mobile behavior, and <strong style="font-weight: 700;">developer notes.</strong></h2>
+          <p style="margin: 0; max-width: 70ch; font-size: 17px; line-height: 1.75; color: #51536a;">Everything above is built from approved homepage components and Design System v1 values. Nothing below introduces a new color, type size, radius, or motion rule. Turn this appendix off with the <strong style="font-weight: 700; color: #005C6D;">Show handoff specs</strong> tweak before sharing the page as a client mockup.</p>
+        </header>
+
+        <!-- Section hierarchy + component mapping -->
+        <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; margin-bottom: 20px;">
+          <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px;">
+            <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Section hierarchy</h3>
+            <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: #51536a;">One decision per screenful, in the order a superintendent asks the questions.</p>
+            <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0;">
+              <sc-for list="{{ hierarchy }}" as="h" hint-placeholder-count="7">
+                <li style="display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 18px; padding: 18px 0; border-top: 1px solid #eef1f2;">
+                  <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: #DD6237; padding-top: 4px;">{{ h.num }}</span>
+                  <div>
+                    <strong style="display: block; font-size: 17px; font-weight: 700; color: #005C6D; margin-bottom: 4px;">{{ h.title }}</strong>
+                    <span style="font-size: 14px; line-height: 1.6; color: #51536a;">{{ h.note }}</span>
+                  </div>
+                </li>
+              </sc-for>
+            </ol>
+          </div>
+          <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px;">
+            <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Component mapping</h3>
+            <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: #51536a;">Eleven blocks on the page. Ten are reused verbatim; one is new and declared.</p>
+            <div style="display: flex; flex-direction: column; gap: 0;">
+              <sc-for list="{{ mapping }}" as="m" hint-placeholder-count="8">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 15px 0; border-top: 1px solid #eef1f2;">
+                  <div>
+                    <strong style="display: block; font-size: 15px; font-weight: 700; color: #005C6D;">{{ m.name }}</strong>
+                    <span style="font-size: 13px; line-height: 1.5; color: #51536a;">{{ m.source }}</span>
+                  </div>
+                  <span style="{{ m.tagStyle }}">{{ m.tag }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin: 24px 0 0; padding-top: 20px; border-top: 1px solid #d3dde1; font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">The one new component:</strong> the Service Lane block. It is the homepage Content/Image split with a numbered accent row and a Signature Offerings list added inside the copy column. Geometry, type sizes, radii, shadow, and button styles are unchanged — so it needs no new CSS beyond the offerings list.</p>
+          </div>
+        </div>
+
+        <!-- Reusable service component anatomy -->
+        <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">The reusable Service component</h3>
+          <p style="margin: 0 0 28px; max-width: 78ch; font-size: 15px; line-height: 1.65; color: #51536a;">One block, rendered once per Services CPT record in menu order. Three services today, six tomorrow, with no layout work. The lane accent is a field value, not a design variant: it colors a 26&times;3px bar and the offerings bullets, and nothing else. That is the rule that keeps N services looking like one system.</p>
+          <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Fields → rendering</p>
+              <div style="display: flex; flex-direction: column; gap: 0;">
+                <sc-for list="{{ fields }}" as="f" hint-placeholder-count="8">
+                  <div style="display: grid; grid-template-columns: 148px minmax(0, 1fr); gap: 16px; padding: 12px 0; border-top: 1px solid #eef1f2; font-size: 14px; line-height: 1.55;">
+                    <code style="font-size: 13px; color: #005C6D; font-weight: 700;">{{ f.key }}</code>
+                    <span style="color: #51536a;">{{ f.render }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Long-content &amp; empty-field behavior</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+                <li><strong style="color: #005C6D;">Title</strong> wraps at 18ch, up to three lines, before it hits the media column. Longer titles reduce to 44px at the 1240 breakpoint anyway.</li>
+                <li><strong style="color: #005C6D;">Tagline</strong> is a hard 30ch measure; editors get a 110-character soft limit in the admin field description. It never truncates — it wraps.</li>
+                <li><strong style="color: #005C6D;">Description</strong> measure is 62ch. Past ~160 words the block simply grows; the media stays top-aligned via <code>align-items: start</code>, so no vertical centering drift.</li>
+                <li><strong style="color: #005C6D;">Offerings</strong> render in two columns from four items up, one column below four and on mobile. Eight is the practical ceiling; past that, the section grows and the block stays legible.</li>
+                <li><strong style="color: #005C6D;">No offerings</strong> → the label, the hairline, and the 30px padding all disappear; the CTA moves up. No empty rule left behind.</li>
+                <li><strong style="color: #005C6D;">No featured image</strong> → the figure collapses and the copy column spans full width at a 70ch measure. Alternative fallback (needs approval): teal tile with the mark at 7%.</li>
+                <li><strong style="color: #005C6D;">No CTA</strong> → button is omitted; page-level closing CTA still catches the reader.</li>
+              </ul>
+            </div>
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Scaling to N services</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+                <li>Grounds alternate white / paper by index parity — never hard-coded per service.</li>
+                <li>Media side alternates by the same parity, so adding a service in the middle reflows the rhythm automatically.</li>
+                <li>Index numerals are generated from loop position, so reordering in WordPress renumbers the page.</li>
+                <li>The jump index above is the same query, so a new service appears in both places at once.</li>
+                <li>Accent falls back to teal <code>#005C6D</code> if the field is empty — never to a random color.</li>
+                <li>At 6+ services, switch the jump index to a sticky rail (documented, not built) rather than lengthening the list.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile -->
+        <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Mobile behavior</h3>
+          <p style="margin: 0 0 28px; max-width: 78ch; font-size: 15px; line-height: 1.65; color: #51536a;">Single column at &lt;768px, 20px gutters, section padding 64px. The lane block always stacks copy → offerings → CTA → image: the image is evidence, not the headline, so it never pushes the promise below the fold.</p>
+          <div data-spec-mobile="" style="display: grid; grid-template-columns: 390px minmax(0, 1fr); gap: 40px; align-items: start;">
+            <div style="width: 390px; max-width: 100%; border: 1px solid #d3dde1; border-radius: 20px; overflow: hidden; background: #ffffff; flex: 0 0 auto;">
+              <div style="height: 52px; background: #ffffff; border-bottom: 1px solid #eef1f2; display: flex; align-items: center; justify-content: space-between; padding: 0 16px;">
+                <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo.svg?v=palette-2026-3" alt="" style="height: 30px; width: auto;" />
+                <span style="display: flex; flex-direction: column; gap: 5px; width: 20px;"><span style="display: block; height: 2px; background: #005C6D;"></span><span style="display: block; height: 2px; background: #005C6D;"></span></span>
+              </div>
+              <div style="padding: 0 20px 20px;">
+                <img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-3.jpg" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; border-radius: 8px; margin: 14px 0 0;" />
+                <div style="background: #005C6D; padding: 28px 24px 32px; margin-top: 0;">
+                  <p style="margin: 0 0 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #A7CC14;">Services</p>
+                  <h4 style="margin: 0 0 14px; font-size: 34px; line-height: 0.98; letter-spacing: -0.025em; font-weight: 700; color: #ffffff;">Support tailored to your goals.</h4>
+                  <p style="margin: 0 0 22px; font-size: 15px; line-height: 1.55; color: rgba(255,255,255,0.92);">Every partnership is powered by IMPACT Coaching and a continuous cycle of inquiry.</p>
+                  <span style="display: flex; align-items: center; justify-content: center; gap: 12px; height: 46px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;">Let's Talk &rarr;</span>
+                </div>
+                <div style="padding: 48px 0 0;">
+                  <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+                    <span style="display: block; width: 26px; height: 3px; background: #0A96CB;"></span>
+                    <span style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: #005C6D;">01</span>
+                    <span style="font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #51536a;">Service lane</span>
+                  </div>
+                  <h4 style="margin: 0 0 14px; font-size: 32px; line-height: 1.05; letter-spacing: -0.03em; font-weight: 700; color: #005C6D;">Strategy and Vision</h4>
+                  <p style="margin: 0 0 18px; font-size: 19px; line-height: 1.35; font-weight: 700; color: #005C6D;">Your district moves in one direction, on a plan everyone owns.</p>
+                  <p style="margin: 0 0 28px; font-size: 16px; line-height: 1.7; color: #51536a;">A shared vision only matters when it guides daily decisions. We help you turn direction into an aligned plan your whole system can move on together.</p>
+                  <div style="border-top: 1px solid #d3dde1; padding-top: 24px; margin-bottom: 28px;">
+                    <p style="margin: 0 0 16px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Signature offerings</p>
+                    <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px;">
+                      <li style="display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 12px; font-size: 15px; line-height: 1.5; color: #51536a;"><span style="display: block; width: 6px; height: 6px; margin-top: 7px; background: #0A96CB;"></span><span>Multi-year strategic planning</span></li>
+                      <li style="display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 12px; font-size: 15px; line-height: 1.5; color: #51536a;"><span style="display: block; width: 6px; height: 6px; margin-top: 7px; background: #0A96CB;"></span><span>Portrait of a Learner or Graduate</span></li>
+                      <li style="display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 12px; font-size: 15px; line-height: 1.5; color: #51536a;"><span style="display: block; width: 6px; height: 6px; margin-top: 7px; background: #0A96CB;"></span><span>Operationalizing the plan</span></li>
+                    </ul>
+                  </div>
+                  <span style="display: flex; align-items: center; justify-content: center; gap: 12px; height: 46px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; margin-bottom: 24px;">Start This Conversation &rarr;</span>
+                  <img src="https://focused-schools-rebrand.vercel.app/assets/img/retreat-3.jpg" alt="" style="width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 8px; display: block;" />
+                </div>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.85; color: #51536a;">
+              <li>Hero media goes 4:5; the teal slab drops its negative offset and sits flush under the image, full-bleed to the 20px gutter.</li>
+              <li>H1 34px / H2 36px / lane title 32px / tagline 19px / body 16px — the Design System v1 mobile step, no new sizes.</li>
+              <li>Jump index keeps the number and title, drops the arrow and the tagline column onto a second row; rows stay 36px tall minimum with a 44px tap target.</li>
+              <li>Every button becomes full-width, 46px high, centered label. One primary per screenful.</li>
+              <li>Offerings collapse to one column with 12px row gaps; bullets stay 6px accent squares.</li>
+              <li>Cycle band: mark centered above the copy, 280px → 220px, section padding 80px.</li>
+              <li>Testimonial: quote 24px, coral slash marks stay at 78px column width above the quote.</li>
+              <li>Closing CTA: copy first, image last, buttons stacked with 16px gap.</li>
+              <li>Sticky header stays 74px with logo + menu only; the Let's Talk pill is dropped (it is repeated in-page twice and in the footer).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Spacing + image + states -->
+        <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 20px; margin-bottom: 20px;">
+          <div style="background: #ffffff; border-radius: 16px; padding: 30px 32px;">
+            <h3 style="margin: 0 0 18px; font-size: 20px; font-weight: 700; color: #005C6D;">Spacing specification</h3>
+            <div style="display: flex; flex-direction: column; gap: 0;">
+              <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="10">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 11px 0; border-top: 1px solid #eef1f2; font-size: 14px; line-height: 1.5;">
+                  <span style="color: #51536a;">{{ s.what }}</span>
+                  <code style="font-size: 13px; font-weight: 700; color: #005C6D; white-space: nowrap;">{{ s.value }}</code>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background: #ffffff; border-radius: 16px; padding: 30px 32px;">
+            <h3 style="margin: 0 0 18px; font-size: 20px; font-weight: 700; color: #005C6D;">Image guidance</h3>
+            <ul style="margin: 0 0 20px; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+              <li><strong style="color: #005C6D;">Hero</strong> 21:9, min 2400&times;1030, focal interest right of center so the slab never covers a face. Eager + <code>fetchpriority="high"</code>.</li>
+              <li><strong style="color: #005C6D;">Lane featured image</strong> 4:5, min 1000&times;1250, 8px radius, shadow <code>0 20px 44px rgba(0,92,109,.14)</code>. One person or one team in the act of working — no posed grip-and-grins, no stock.</li>
+              <li><strong style="color: #005C6D;">Mobile hero</strong> uses the same file with a 4:5 art-directed crop via <code>&lt;picture&gt;</code>, not CSS cropping.</li>
+              <li>Documentary color photography only: no duotone, no grayscale, no filters, no gradient scrims outside the hero.</li>
+              <li>Every image carries real alt text describing the work, not the brand. Decorative marks get <code>alt=""</code>.</li>
+              <li>WebP with JPEG fallback, width/height attributes on every <code>&lt;img&gt;</code> to hold layout.</li>
+            </ul>
+            <p style="margin: 0; padding-top: 18px; border-top: 1px solid #d3dde1; font-size: 14px; line-height: 1.7; color: #51536a;">The three lane images here are placeholders pulled from the approved homepage retreat set. Each lane wants its own photograph so the page does not repeat the homepage imagery.</p>
+          </div>
+          <div style="background: #ffffff; border-radius: 16px; padding: 30px 32px;">
+            <h3 style="margin: 0 0 18px; font-size: 20px; font-weight: 700; color: #005C6D;">Hover, focus &amp; active states</h3>
+            <div style="display: flex; flex-direction: column; gap: 18px; margin-bottom: 22px;">
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                <span style="display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 24px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;">Default</span>
+                <span style="display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 24px; border-radius: 999px; background: #C4522C; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;">Hover</span>
+                <span style="display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 24px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px #0A96CB;">Focus</span>
+              </div>
+              <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                <span style="display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 22px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Default</span>
+                <span style="display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 22px; border-radius: 999px; background: #f5f6f8; border: 1px solid #005C6D; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Hover</span>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+              <li><strong style="color: #005C6D;">Primary pill:</strong> hover <code>filter: brightness(.92)</code>, 160ms. No rise, no shadow — matches the homepage exactly.</li>
+              <li><strong style="color: #005C6D;">Secondary pill:</strong> border → <code>#005C6D</code>, ground → paper, 160ms.</li>
+              <li><strong style="color: #005C6D;">Jump-index row:</strong> whole row is the link; ground → <code>#eef1f3</code> at 240ms, arrow stays static. Row keeps its hairlines.</li>
+              <li><strong style="color: #005C6D;">Text/arrow link:</strong> label → coral, gap 12px → 18px at 240ms.</li>
+              <li><strong style="color: #005C6D;">Focus-visible, everything:</strong> 3px <code>#0A96CB</code> ring at 2px offset. Never removed, never restyled per component.</li>
+              <li><strong style="color: #005C6D;">Active nav item:</strong> Services carries a 2px coral underline, offset 8px, and <code>aria-current="page"</code>.</li>
+              <li><strong style="color: #005C6D;">Entrances:</strong> fade + 28px rise, 700ms, once per element, disabled under <code>prefers-reduced-motion</code>. No scroll-scrubbed motion on this page.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dev notes + assumptions -->
+        <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px;">
+          <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px;">
+            <h3 style="margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #005C6D;">Developer notes (WordPress)</h3>
+            <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.85; color: #51536a;">
+              <li><strong style="color: #005C6D;">CPT:</strong> <code>fs_service</code>, public, <code>page-attributes</code> support for menu order, archive off. Single template optional — the page is the canonical view; if singles ship later they reuse this same block at full width.</li>
+              <li><strong style="color: #005C6D;">Fields (ACF):</strong> <code>tagline</code> (text), <code>short_description</code> (textarea), <code>signature_offerings</code> (repeater, one text sub-field), <code>featured_image</code> (native), <code>cta_label</code> + <code>cta_link</code> (link field), <code>accent</code> (select: cerulean / coral / lime / teal).</li>
+              <li><strong style="color: #005C6D;">Accent is a token key, not a hex.</strong> The select stores <code>cerulean</code>; the template maps it to <code>var(--fs-cerulean)</code>. Editors can never enter a color.</li>
+              <li><strong style="color: #005C6D;">One template part:</strong> <code>template-parts/blocks/service-lane.php</code>, looped by <code>WP_Query</code> ordered by <code>menu_order</code>. Ground and media side derive from <code>$index % 2</code>. The jump index runs the same query and prints anchors from <code>post_name</code>.</li>
+              <li><strong style="color: #005C6D;">Editor guardrails:</strong> no per-service layout toggle, no color picker, no rich text in tagline. Section wrapper exposes ground + padding only, per DS v1 handoff.</li>
+              <li><strong style="color: #005C6D;">Anchors:</strong> <code>#{post_name}</code> with <code>scroll-margin-top: 106px</code> to clear the sticky header.</li>
+              <li><strong style="color: #005C6D;">A11y:</strong> one <code>h1</code> (hero), lane titles are <code>h2</code>, offerings label is a <code>p</code> not a heading; jump index is a <code>nav</code> with an accessible name; images lazy except the hero.</li>
+              <li><strong style="color: #005C6D;">Zero new CSS</strong> beyond the offerings list and the accent bar utility. Everything else is existing homepage classes.</li>
+            </ul>
+          </div>
+          <div style="background: #005C6D; border-radius: 16px; padding: 34px 36px; color: #ffffff;">
+            <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #ffffff;">Assumptions &amp; missing assets</h3>
+            <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.88);">Each item is a decision I made to keep moving. Correct any of them and I will revise — none of them require a new component.</p>
+            <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.9);">
+              <li><strong style="color: #ffffff;">Lane photography</strong> — placeholders from the homepage retreat set. Three distinct photographs needed, 4:5, min 1000&times;1250.</li>
+              <li><strong style="color: #ffffff;">Hero image</strong> — placeholder, and it repeats a homepage frame. A wide 21:9 frame with a quiet right side is the ask.</li>
+              <li><strong style="color: #ffffff;">CTA label</strong> — &ldquo;Start This Conversation&rdquo; is my placeholder for the CPT <code>cta_label</code>. Client copy wins.</li>
+              <li><strong style="color: #ffffff;">Closing CTA copy</strong> — &ldquo;Not sure which lane you need?&rdquo; and its paragraph are written by me; the supplied doc has no Services closing copy.</li>
+              <li><strong style="color: #ffffff;">Technical Assistance</strong> — the doc places it as a capability inside Leadership and Systems, but the homepage lists it as a fourth service row. The homepage row should either relabel or link into this lane.</li>
+              <li><strong style="color: #ffffff;">Lane accents</strong> — used as a 3px bar and 6px bullets only. Lime never sets type, per DS v1.</li>
+              <li><strong style="color: #ffffff;">Testimonial</strong> — one approved quote shown statically with a Google Reviews link, since the doc says keep testimonials as is. If Services should carry the full carousel instead, it is the same homepage component.</li>
+              <li><strong style="color: #ffffff;">Google Reviews URL</strong> — placeholder search link; need the real review destination.</li>
+              <li><strong style="color: #ffffff;">No Cycle animation</strong> — the rotating mark stays a homepage signature; here the mark is static. Confirm.</li>
+              <li><strong style="color: #ffffff;">Impact Stories on this page</strong> — deliberately not included; the lanes plus one quote carry the proof. Say the word and the homepage stories carousel drops in above the closing CTA.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440},&quot;showSpecs&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Handoff&quot;,&quot;label&quot;:&quot;Show handoff specs&quot;},&quot;showJumpIndex&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Page&quot;},&quot;laneLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Alternating media&quot;,&quot;Media right always&quot;],&quot;default&quot;:&quot;Alternating media&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Service component&quot;},&quot;showOfferings&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Service component&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const nodes = Array.from(document.querySelectorAll("[data-reveal]"))
+      .filter((n) => n.getBoundingClientRect().top >= window.innerHeight * 0.95);
+    nodes.forEach((n) => { n.style.opacity = "0"; });
+    this.safety = setTimeout(() => {
+      nodes.forEach((n) => { n.style.opacity = ""; });
+    }, 900);
+    this.io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.style.animation = "fsRise 700ms cubic-bezier(.2,.7,.2,1) both";
+        e.target.style.opacity = "";
+        this.io.unobserve(e.target);
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+    nodes.forEach((n) => this.io.observe(n));
+  }
+
+  componentWillUnmount() { clearTimeout(this.safety); if (this.io) this.io.disconnect(); }
+
+  renderVals() {
+    const alternate = (this.props.laneLayout ?? "Alternating media") === "Alternating media";
+    const showOfferings = this.props.showOfferings ?? true;
+
+    const data = [
+      {
+        id: "strategy-and-vision", num: "01", accent: "#0A96CB",
+        title: "Strategy and Vision",
+        tagline: "Your district moves in one direction, on a plan everyone owns.",
+        body: "A shared vision only matters when it guides daily decisions. We help you turn direction into an aligned plan your whole system can move on together \u2014 and keep owning long after we\u2019re gone.",
+        offerings: ["Multi-year strategic planning", "Portrait of a Learner or Graduate", "Operationalizing the plan (cabinet and directors)", "Governance support (School Committee updates)"],
+        cta: "Start This Conversation",
+        image: "https://focused-schools-rebrand.vercel.app/assets/img/retreat-3.jpg",
+        imageAlt: "District leaders mapping multi-year priorities on a shared plan.",
+        captionKicker: "Planning in practice",
+        captionLine: "A plan the whole system can move on"
+      },
+      {
+        id: "leadership-and-systems", num: "02", accent: "#DD6237",
+        title: "Leadership and Systems",
+        tagline: "Your leaders lead lasting change \u2014 and the systems hold when you\u2019re not in the room.",
+        body: "We work alongside leaders and leadership teams on both sides of change at once: the technical systems that create coherence and the human work of leading people through it. The goal is leadership that no longer needs us.",
+        offerings: ["District and Instructional Leadership Teams (DILT, ILT)", "Teacher Leadership Academy", "Aspiring and new leader development", "Change-of-leader transitions", "Executive and leadership coaching", "Technical Assistance (a capability within this lane)"],
+        cta: "Start This Conversation",
+        image: "https://focused-schools-rebrand.vercel.app/assets/img/retreat-1.jpg",
+        imageAlt: "A leadership team working side by side during a Focused Schools retreat.",
+        captionKicker: "Leadership in practice",
+        captionLine: "Both sides of change, at once"
+      },
+      {
+        id: "capacity-and-coaching", num: "03", accent: "#A7CC14",
+        title: "Capacity and Coaching",
+        tagline: "Your coaches and teams get strong enough to keep instruction improving without us.",
+        body: "This is the lane districts buy on its own \u2014 laser-focused support to build your instructional muscle from within. We strengthen your coaches, your PLCs, and your teams\u2019 ability to run an inquiry cycle and look hard at student work, so the capacity to improve instruction lives in your people, not in us.",
+        offerings: ["Coaching the coaches (IMPACT Coaching)", "Professional Learning Communities (PLCs)", "Data Inquiry Cycles (Data Days)", "Looking at Student Work protocols"],
+        cta: "Start This Conversation",
+        image: "https://focused-schools-rebrand.vercel.app/assets/img/retreat-2.jpg",
+        imageAlt: "An instructional coach and teacher team reviewing student work together.",
+        captionKicker: "Coaching in practice",
+        captionLine: "Capacity that lives in your people"
+      }
+    ];
+
+    const lanes = data.map((d, i) => {
+      const mediaFirst = alternate && i % 2 === 1;
+      const paper = i % 2 === 1;
+      const twoCol = showOfferings && d.offerings.length >= 4;
+      return {
+        id: d.id, anchor: "#" + d.id, num: d.num, title: d.title, tagline: d.tagline,
+        body: d.body, offerings: d.offerings, cta: d.cta, imageAlt: d.imageAlt,
+        captionKicker: d.captionKicker, captionLine: d.captionLine,
+        imgStyle: "width: 100%; aspect-ratio: 4 / 5; border-radius: 8px; box-shadow: 0 20px 44px rgba(0,92,109,0.14); background-image: url('" + d.image + "'); background-size: cover; background-position: center;",
+        indexNum: "font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: #005C6D;",
+        sectionStyle: "background: " + (paper ? "#f5f6f8" : "#ffffff") + "; padding: 120px 0; scroll-margin-top: 106px;",
+        gridStyle: "display: grid; grid-template-columns: minmax(0, 1fr) 500px; gap: 96px; align-items: start;",
+        copyStyle: "order: " + (mediaFirst ? 2 : 1) + ";",
+        mediaStyle: "position: relative; margin: 0; order: " + (mediaFirst ? 1 : 2) + ";",
+        accentBar: "display: block; width: 26px; height: 3px; background: " + d.accent + ";",
+        dotStyle: "display: block; width: 6px; height: 6px; margin-top: 8px; background: " + d.accent + ";",
+        offeringsStyle: "margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: " + (twoCol ? "repeat(2, minmax(0, 1fr))" : "minmax(0, 1fr)") + "; gap: 16px 40px;",
+        captionStyle: "position: absolute; " + (mediaFirst ? "left: -16px" : "right: -16px") + "; bottom: 32px; background: #ffffff; border-radius: 8px; padding: 14px 20px; box-shadow: 0 10px 28px rgba(0,92,109,0.14); max-width: 252px;",
+        captionEyebrow: "display: block; font-size: 10px; font-weight: 700; font-style: italic; letter-spacing: 0.1em; text-transform: uppercase; color: " + (d.accent === "#A7CC14" ? "#0A96CB" : d.accent) + "; margin-bottom: 5px;"
+      };
+    });
+
+    const nav = [
+      { label: "About", href: "https://www.focusedschools.com/about-our-mission-vision/" },
+      { label: "Team", href: "https://www.focusedschools.com/team/" },
+      { label: "Services", href: "https://www.focusedschools.com/services/" },
+      { label: "Impact Stories", href: "https://www.focusedschools.com/impact-stories/" }
+    ];
+
+    const tag = (t) => t === "New"
+      ? "font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #ffffff; background: #DD6237; padding: 6px 12px; border-radius: 999px; white-space: nowrap;"
+      : "font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #005C6D; background: #eef1f3; padding: 6px 12px; border-radius: 999px; white-space: nowrap;";
+
+    return {
+      navItems: nav.map((n) => ({
+        label: n.label, href: n.href,
+        current: n.label === "Services" ? "page" : undefined,
+        style: "font-size: 14px; font-weight: " + (n.label === "Services" ? "700" : "500") + "; color: #005C6D; padding-bottom: 6px; border-bottom: " + (n.label === "Services" ? "2px solid #DD6237" : "2px solid transparent") + "; transition: color 160ms cubic-bezier(.2,.7,.2,1);"
+      })),
+      lanes,
+      showIndex: this.props.showJumpIndex ?? true,
+      showOfferings,
+      showSpecs: this.props.showSpecs ?? true,
+
+      hierarchy: [
+        { num: "01", title: "Hero — what this page is", note: "H1 is the promise, not the word \u201CServices\u201D. Eyebrow carries the page name. One primary CTA." },
+        { num: "02", title: "Lane index — the whole offer in 10 seconds", note: "Three rows: number, title, one-line promise. Anchors down the page. Same query as the lanes." },
+        { num: "03", title: "Lane 01 · Strategy and Vision", note: "Reusable Service block. White ground, media right." },
+        { num: "04", title: "Lane 02 · Leadership and Systems", note: "Same block. Paper ground, media left. Six offerings, two columns." },
+        { num: "05", title: "Lane 03 · Capacity and Coaching", note: "Same block. White ground, media right. Noted as the lane districts buy alone." },
+        { num: "06", title: "A Cycle of Excellence — the method under all three", note: "Teal band, static mark, approved homepage copy. Answers \u201Chow do you actually work?\u201D" },
+        { num: "07", title: "Testimonial + Google Reviews", note: "Kept as is per the copy doc. Paper ground, one quote, no carousel." },
+        { num: "08", title: "Closing CTA", note: "For the reader who cannot self-select a lane. Primary + secondary, one photograph." }
+      ],
+      mapping: [
+        { name: "Sticky header", source: "Homepage header, Services active + coral underline", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Page hero (media + teal slab)", source: "Homepage hero, video console removed, 21:9 media", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Jump index rows", source: "Homepage \u201CHow we help\u201D service rows", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Service Lane block", source: "Content/Image split + numbered accent row + offerings list", tag: "New", tagStyle: tag("New") },
+        { name: "Floating caption chip", source: "Homepage figure caption, max one per section", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Teal band + mark watermark", source: "Homepage Cycle section, motion removed", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Testimonial block", source: "Homepage quote slide, carousel chrome removed", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Primary / secondary pills", source: "DS v1 buttons, unchanged", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Closing CTA split", source: "Homepage contact split, form replaced by buttons", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Footer", source: "Homepage footer, verbatim", tag: "Reused", tagStyle: tag("Reused") }
+      ],
+      fields: [
+        { key: "post_title", render: "Lane H2, 52px / 700 / \u22120.03em, max 18ch" },
+        { key: "tagline", render: "21px / 700 teal, max 30ch \u2014 and the one-line promise in the jump index" },
+        { key: "short_description", render: "17px / 1.75 gray, max 62ch" },
+        { key: "signature_offerings", render: "Repeater \u2192 2-col list at 4+ items, 6px accent bullet" },
+        { key: "featured_image", render: "4:5 figure, 8px radius, shadow, alternating side" },
+        { key: "cta_label / cta_link", render: "Coral primary pill at the end of the copy column" },
+        { key: "accent", render: "Token key \u2192 3px bar, bullets, caption kicker. Never type." },
+        { key: "menu_order", render: "Index numeral, ground parity, media side, anchor order" }
+      ],
+      spacing: [
+        { what: "Container / gutter", value: "1400 / 24px" },
+        { what: "Section padding, light ground", value: "120px" },
+        { what: "Section padding, teal band", value: "120px" },
+        { what: "Hero slab offset", value: "bottom \u221256px, left 24px" },
+        { what: "Lane grid: copy / media", value: "1fr / 500px, 96px gap" },
+        { what: "Accent row \u2192 title", value: "30px" },
+        { what: "Title \u2192 tagline \u2192 body", value: "22 / 26px" },
+        { what: "Body \u2192 offerings hairline", value: "40px" },
+        { what: "Offerings label \u2192 list", value: "22px" },
+        { what: "Offerings row / column gap", value: "16 / 40px" },
+        { what: "Offerings \u2192 CTA", value: "40px" },
+        { what: "Jump index row padding", value: "36px" },
+        { what: "Mobile section padding", value: "64px" },
+        { what: "Anchor scroll-margin", value: "106px" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

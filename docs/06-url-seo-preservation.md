@@ -44,4 +44,16 @@ There are also published service/detail Pages at `/change-of-leader/`, `/path-to
 ## Risks
 
 - Creating replacement Pages instead of updating existing IDs can change URLs, menu object references, Yoast indexables and inbound-link history.
-- Changing the Posts Page, permalini¬ÍÑÉÕÑÕÉ”°…Ñ•½Éä‰…Í”½ÈÁ½ÍÐÑåÁ”¡…¹•Ì	±½œUI1Ì¸(´½¹Ù•ÉÑ¥¹œ%µÁ…ÐMÑ½É¥•Ì¥¹Ñ¼„AP¡…¹•ÌÉ•ÝÉ¥Ñ”ÉÕ±•Ì…¹Á½ÍÍ¥‰±ä…É¡¥Ù”½Í¥¹±”UI1Ì¸(´±•µ•¹Ñ½ÈQ¡•µ”	Õ¥±‘•È½¹‘¥Ñ¥½¹Ì…¸…ÕÍ”‘ÕÁ±¥…Ñ”½Èµ¥ÍÍ¥¹œ…¹½¹¥…°½¹Ñ•¹Ð¥˜¹•ÜÑ•µÁ±…Ñ•Ì½Ù•É±…À±•…ä±½…Ñ¥½¹Ì¸(´I•µ½Ù¥¹œe½…ÍÐÝ¥Ñ¡½ÕÐµ¥É…Ñ¥¹œ¥ÑÌÍÑ½É•µ•Ñ…‘…Ñ„¡…¹•Ì…¹½¹¥…±Ì°Í¡•µ„°Í½¥…°ÁÉ•Ù¥•ÝÌ°É½‰½ÑÌ…¹Í¥Ñ•µ…ÀUI1Ì¸(´I•µ½Ù¥¹œÑ¡”¡¥±Ñ¡•µ”Ì€ÄÀÔµ‰åÑ”µ•Ñ„µ‘•ÍÉ¥ÁÑ¥½¸™¥±Ñ•È…¸¡…¹”Í¹¥ÁÁ•ÑÌ¸Q¡”™¥±Ñ•È¥Ì™±…Ý•‰ÕÐ¥ÑÌ•™™•ÐµÕÍÐ‰”½µÁ…É•‰•™½É”É•Ñ¥É•µ•¹Ð¸(´Q¡”!•…‘•Èµ•¹Ô½¹Ñ…¥¹Ì•Ù¥‘•¹”½˜„ÍÑ…±”‰½ÕÐÑ…É•Ð€¡ÍÕ•ÍÌµÍÑ½É¥•ÌÅ€¤¥¸Ñ¡”É•ÍÑ½É•‘…Ñ„Ý¡¥±”ÁÕ‰±¥ŒÁÉ½‘ÕÑ¥½¸¹…Ù¥…Ñ¥½¸ÕÉÉ•¹Ñ±äÉ•Í½±Ù•ÌÑ¼€½…‰½ÕÐµ½ÕÈµµ¥ÍÍ¥½¸µÙ¥Í¥½¸½€¸áÁ½ÉÐÑ¡”…ÑÕ…°ÁÉ½‘ÕÑ¥½¸µ•¹ÕÌ…Ðµ¥É…Ñ¥½¸Ñ¥µ”…¹É•Í½±Ù”Ñ¡¥Ì‘¥ÍÉ•Á…¹äÝ¥Ñ¡½ÕÐ¡…¹¥¹œÑ¡”…ÁÁÉ½Ù•…¹½¹¥…°UI0¸((ŒŒAÉ•Í•ÉÙ…Ñ¥½¸ÁÉ½•‘ÕÉ”()áÁ½ÉÐ„ÁÉ½‘ÕÑ¥½¸UI0‰…Í•±¥¹”¥µµ•‘¥…Ñ•±ä‰•™½É”ÍÑ…¥¹œµ¥É…Ñ¥½¸ìÉ…Ý°ÍÑ…ÑÕÌ°…¹½¹¥…°°Ñ¥Ñ±”°‘•ÍÉ¥ÁÑ¥½¸°¥¹‘•á…‰¥±¥Ñä…¹É•‘¥É•Ð‘•ÍÑ¥¹…Ñ¥½¸ìÕÁ‘…Ñ”½¹Ñ•¹Ð¥¸Á±…”ìÁÉ•Í•ÉÙ”%Ì½Í±ÕÌìÉ••¹•É…Ñ”e½…ÍÐ¥¹‘•á…‰±•Ì½¹±ä½¸ÍÑ…¥¹œì½µÁ…É”Í¥Ñ•µ…ÁÌ…¹„™Õ±°É…Ý°ì…‘½¹”µÑ¼µ½¹”€ÌÀÄÉ•‘¥É•ÑÌ½¹±ä™½È•áÁ±¥¥Ñ±ä…ÁÁÉ½Ù•Õ¹…Ù½¥‘…‰±”¡…¹•Ì¸
+- Changing the Posts Page, permalink structure, category/tag base, or any of the slugs in
+  the inventory above would 404 previously-indexed URLs, break inbound/external backlinks,
+  and lose accumulated search ranking for that URL â€” none of these should change without
+  explicit approval, per `AGENTS.md`'s URL Preservation rule.
+
+> **Editorial note (found during the Legacy Blog Compatibility audit):** the rest of this
+> "Risks" section was lost to file corruption â€” the content on disk past this point was
+> binary/garbled, not valid text, and `git log` shows only one commit for this file
+> (`df00632`, "add docs"), which already contains the same corruption â€” there is no clean
+> version in history to recover from. Truncated the unreadable tail rather than
+> fabricating replacement content. If the original risk list is needed, it will have to be
+> rewritten from scratch or sourced from whoever authored the original migration-planning
+> documents.

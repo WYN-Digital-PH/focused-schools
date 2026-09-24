@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400;1,9..40,700&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #ffffff; color: #005C6D; font-family: "DM Sans", system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  * { box-sizing: border-box; }
+  a { color: #005C6D; text-decoration: none; }
+  a:hover { color: #DD6237; }
+  button { font-family: inherit; }
+  @keyframes fsRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  /* Multi-line clamp needs vendor-prefixed properties that cannot be expressed inline. */
+  [data-clamp-2] { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  [data-clamp-3] { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+  /* Media queries cannot be expressed inline. Breakpoints match the approved homepage. */
+  @media (max-width: 1240px) {
+    [data-display] { font-size: 60px !important; }
+    [data-h1] { font-size: 46px !important; }
+    [data-rail] { grid-template-columns: minmax(0, 1fr) !important; gap: 40px !important; }
+    [data-intro] { grid-template-columns: minmax(0, 1fr) !important; gap: 44px !important; }
+    [data-hero-slab] { position: static !important; width: auto !important; max-width: none !important; margin: -45px 0 0 !important; padding: 40px !important; }
+    [data-spotlight] { grid-template-columns: minmax(0, 1fr) !important; gap: 0 !important; }
+    [data-spotlight-media] { aspect-ratio: 16 / 9 !important; }
+    [data-spotlight-copy] { padding: 44px 44px 48px !important; }
+    [data-single-body] { grid-template-columns: minmax(0, 1fr) !important; gap: 56px !important; }
+    [data-single-aside] { order: 2 !important; }
+    [data-single-prose] { order: 1 !important; }
+  }
+  @media (max-width: 1023px) {
+    [data-nav] { display: none !important; }
+    [data-menu-label] { display: none !important; }
+    [data-story-grid] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 24px !important; }
+    [data-cta-grid] { grid-template-columns: minmax(0, 1fr) !important; gap: 48px !important; }
+    [data-footer-grid] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 48px !important; }
+    [data-results] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  }
+  @media (max-width: 900px) {
+    [data-spec-grid] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-spec-mobile] { grid-template-columns: minmax(0, 1fr) !important; }
+  }
+  @media (max-width: 767px) {
+    [data-shell] { padding-left: 20px !important; padding-right: 20px !important; }
+    [data-h1] { font-size: 34px !important; }
+    [data-display] { font-size: 36px !important; }
+    [data-space] { padding-top: 64px !important; padding-bottom: 64px !important; }
+    [data-hero-media] { aspect-ratio: 4 / 5 !important; }
+    [data-nav-cta] { display: none !important; }
+    [data-hero-slab] { position: static !important; width: auto !important; max-width: none !important; margin: 0 !important; padding: 28px 24px 32px !important; }
+    [data-story-grid] { grid-template-columns: minmax(0, 1fr) !important; gap: 20px !important; }
+    [data-footer-grid] { grid-template-columns: minmax(0, 1fr) !important; }
+    [data-btn-full] { width: 100% !important; justify-content: center !important; }
+    [data-filter-head] { flex-direction: column !important; align-items: flex-start !important; gap: 20px !important; }
+    [data-spotlight-copy] { padding: 28px 24px 32px !important; }
+    [data-results] { grid-template-columns: minmax(0, 1fr) !important; gap: 32px !important; }
+    [data-prose] { font-size: 17px !important; }
+    [data-pull] { font-size: 26px !important; }
+  }
+</style>
+</helmet>
+
+<div id="top">
+  <a href="#main" style="position: absolute; left: -9999px;">Skip to content</a>
+
+  <!-- ===================== VIEW SWITCHER (mockup chrome only — not shipped) ===================== -->
+  <div style="position: sticky; top: 0; z-index: 90; background: #004855; border-bottom: 1px solid rgba(255,255,255,0.18);">
+    <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <p style="margin: 0; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.7);">Mockup view &mdash; not shipped</p>
+      <div style="display: flex; gap: 8px;">
+        <sc-for list="{{ viewTabs }}" as="v" hint-placeholder-count="2">
+          <button type="button" onClick="{{ v.select }}" style="{{ v.style }}">{{ v.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== HEADER (reused, Impact Stories active) ===================== -->
+  <header style="position: sticky; top: 45px; z-index: 70; padding: 16px 0 0;">
+    <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+      <div style="position: relative; height: 74px; background: #ffffff; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,92,109,0.08); display: flex; align-items: center; gap: 24px; padding: 0 14px 0 26px; overflow: hidden;">
+        <a href="https://www.focusedschools.com/" aria-label="Focused Schools — home" style="display: flex; align-items: center; flex: 0 0 auto;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo.svg?v=palette-2026-3" alt="Focused Schools" style="height: 46px; width: auto; display: block;" />
+        </a>
+        <nav data-nav="" aria-label="Primary navigation" style="display: flex; align-items: center; gap: 40px; margin: 0 auto;">
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+            <a href="{{ n.href }}" aria-current="{{ n.current }}" style="{{ n.style }}" style-hover="color: #DD6237;">{{ n.label }}</a>
+          </sc-for>
+        </nav>
+        <a data-nav-cta="" href="https://www.focusedschools.com/contact/" style="display: inline-flex; align-items: center; gap: 12px; height: 46px; padding: 0 24px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; flex: 0 0 auto; margin-left: auto; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Let's Talk <span style="font-size: 15px;">&rarr;</span></a>
+        <button type="button" aria-label="Open menu" style="display: inline-flex; align-items: center; gap: 12px; height: 46px; padding: 0 16px; border-radius: 999px; border: 1px solid #e6eaec; background: #ffffff; cursor: pointer; color: #005C6D; flex: 0 0 auto; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #f5f6f8;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-1.svg?v=palette-2026-3" alt="" style="height: 22px; width: auto; display: block;" />
+          <span data-menu-label="" style="font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Menu</span>
+          <span style="display: flex; flex-direction: column; gap: 5px; width: 18px;">
+            <span style="display: block; height: 2px; background: #005C6D;"></span>
+            <span style="display: block; height: 2px; background: #005C6D;"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ################################################################ -->
+    <!-- ####################### A · LANDING PAGE ####################### -->
+    <!-- ################################################################ -->
+    <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+      <div>
+
+        <!-- 1 · HERO -->
+        <section data-screen-label="Impact hero" style="background: #ffffff; padding: 14px 0 128px;">
+          <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; position: relative;">
+            <div data-hero-media="" style="position: relative; aspect-ratio: 21 / 9; border-radius: 8px; overflow: hidden; background: #004855;">
+              <div role="img" aria-label="District leaders reviewing progress data together." style="{{ heroImgStyle }}"></div>
+              <span aria-hidden="true" style="position: absolute; top: 26px; right: 26px; width: 44px; height: 44px; border-top: 2px solid rgba(255,255,255,0.9); border-right: 2px solid rgba(255,255,255,0.9);"></span>
+            </div>
+            <div data-hero-slab="" data-reveal="" style="position: absolute; left: 24px; bottom: -56px; width: 660px; background: #005C6D; padding: 44px; z-index: 2;">
+              <p style="margin: 0 0 22px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #A7CC14;">Impact stories</p>
+              <h1 data-h1="" style="margin: 0 0 20px; font-size: 52px; line-height: 0.98; letter-spacing: -0.025em; font-weight: 700; color: #ffffff;">The measure of our work is what changed because of it.</h1>
+              <p style="margin: 0 0 28px; max-width: 500px; font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.92);">Real districts, real decisions, real results.</p>
+              <a href="#stories" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 26px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Browse Stories <span style="font-size: 15px;">&rarr;</span></a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2 · FEATURED SPOTLIGHT (dynamic: newest Featured story) -->
+        <section data-screen-label="Featured spotlight" data-space="" style="background: #ffffff; padding: 96px 0 112px;">
+          <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+            <div style="display: flex; align-items: center; gap: 18px; margin-bottom: 34px;">
+              <span aria-hidden="true" style="display: block; width: 26px; height: 3px; background: #F3C145;"></span>
+              <p style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Featured story</p>
+            </div>
+            <article data-reveal="" data-spotlight="" style="display: grid; grid-template-columns: minmax(0, 1fr) 560px; background: #005C6D; border-radius: 8px; overflow: hidden;">
+              <div data-spotlight-copy="" style="padding: 64px 68px 68px; display: flex; flex-direction: column; justify-content: center;">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px;">
+                  <sc-for list="{{ featured.meta }}" as="m" hint-placeholder-count="3">
+                    <span style="display: inline-flex; align-items: center; gap: 9px; padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.14); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #ffffff;">{{ m }}</span>
+                  </sc-for>
+                </div>
+                <h2 data-display="" style="margin: 0 0 22px; font-size: 52px; line-height: 1.04; letter-spacing: -0.03em; font-weight: 700; color: #ffffff; max-width: 22ch;">{{ featured.title }}</h2>
+                <p style="margin: 0 0 34px; max-width: 58ch; font-size: 17px; line-height: 1.7; color: rgba(255,255,255,0.92);">{{ featured.excerpt }}</p>
+                <div>
+                  <a href="#single" onClick="{{ openSingle }}" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 26px; border-radius: 999px; background: #ffffff; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #f5f6f8; color: #005C6D;">Read the Story <span style="font-size: 14px;">&rarr;</span></a>
+                </div>
+              </div>
+              <div data-spotlight-media="" role="img" aria-label="{{ featured.imageAlt }}" style="{{ featured.imgStyle }}"></div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 3 · FILTERS + STORY GRID (dynamic, both sources) -->
+        <section data-screen-label="Story grid" id="stories" data-space="" style="background: #f5f6f8; padding: 112px 0 120px;">
+          <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+            <header data-reveal="" data-filter-head="" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; margin-bottom: 40px;">
+              <div>
+                <p style="margin: 0 0 24px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">All stories</p>
+                <h2 data-display="" style="margin: 0; font-size: 68px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 18ch;">Browse by state or year.</h2>
+              </div>
+              <p aria-live="polite" style="margin: 0 0 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #51536a;">{{ counter }}</p>
+            </header>
+
+            <div style="display: flex; flex-direction: column; gap: 18px; padding: 28px 0 40px; border-top: 1px solid #d3dde1; border-bottom: 1px solid #d3dde1; margin-bottom: 48px;">
+              <sc-for list="{{ filterGroups }}" as="g" hint-placeholder-count="2">
+                <div data-rail="" style="display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px; align-items: start;">
+                  <p style="margin: 0; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #51536a; padding-top: 12px;">{{ g.label }}</p>
+                  <div role="group" aria-label="{{ g.aria }}" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <sc-for list="{{ g.options }}" as="o" hint-placeholder-count="5">
+                      <button type="button" onClick="{{ o.select }}" aria-pressed="{{ o.pressed }}" style="{{ o.style }}">{{ o.label }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+              <div data-story-grid="" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; align-items: stretch;">
+                <sc-for list="{{ visibleStories }}" as="s" hint-placeholder-count="6">
+                  <article data-reveal="" style="display: flex; flex-direction: column; background: #ffffff; border-radius: 16px; border: 1px solid #e3e9eb; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08); transition: box-shadow 240ms cubic-bezier(.2,.7,.2,1), transform 240ms cubic-bezier(.2,.7,.2,1);" style-hover="box-shadow: 0 12px 28px rgba(0,92,109,0.12); transform: translateY(-2px);">
+                    <div role="img" aria-label="{{ s.imageAlt }}" style="{{ s.imgStyle }}">
+                      <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" style="{{ s.markStyle }}" />
+                      <span style="{{ s.yearStyle }}">{{ s.year }}</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; flex: 1 1 auto; padding: 28px 28px 30px;">
+                      <p style="margin: 0 0 14px; display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #51536a; min-height: 16px;">
+                        <span aria-hidden="true" style="{{ s.dotStyle }}"></span>{{ s.place }}
+                      </p>
+                      <h3 data-clamp-3="" style="margin: 0 0 14px; font-size: 24px; line-height: 1.18; letter-spacing: -0.02em; font-weight: 700; color: #005C6D;">{{ s.title }}</h3>
+                      <p data-clamp-3="" style="margin: 0 0 22px; font-size: 15px; line-height: 1.6; color: #51536a;">{{ s.excerpt }}</p>
+                      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: auto; padding-top: 18px; border-top: 1px solid #eef1f2;">
+                        <a href="#single" onClick="{{ openSingle }}" style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #005C6D; transition: color 160ms cubic-bezier(.2,.7,.2,1), gap 240ms cubic-bezier(.2,.7,.2,1);" style-hover="color: #DD6237; gap: 18px;">Read story <span aria-hidden="true" style="color: #DD6237; font-size: 14px;">&rarr;</span></a>
+                        <span style="{{ s.sourceStyle }}">{{ s.source }}</span>
+                      </div>
+                    </div>
+                  </article>
+                </sc-for>
+              </div>
+              <sc-if value="{{ hasMore }}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; justify-content: center; padding-top: 56px;">
+                  <button type="button" onClick="{{ loadMore }}" data-btn-full="" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 28px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="border-color: #005C6D; background: #f5f6f8;">Load more <span style="font-size: 14px;">&darr;</span></button>
+                </div>
+              </sc-if>
+            </sc-if>
+
+            <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="background: #ffffff; border: 1px solid #e3e9eb; border-radius: 16px; padding: 56px 48px; text-align: left; max-width: 62ch;">
+                <p style="margin: 0 0 12px; font-size: 24px; line-height: 1.25; letter-spacing: -0.02em; font-weight: 700; color: #005C6D;">No stories match that combination yet.</p>
+                <p style="margin: 0 0 26px; font-size: 15px; line-height: 1.7; color: #51536a;">Legacy stories carry less structured data than new ones, so a narrow filter can come back empty. Clear the filters to see everything.</p>
+                <button type="button" onClick="{{ clearFilters }}" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 24px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="border-color: #005C6D; background: #f5f6f8;">Clear all filters <span style="font-size: 14px;">&times;</span></button>
+              </div>
+            </sc-if>
+          </div>
+        </section>
+
+        <!-- 4 · CTA -->
+        <section data-screen-label="Closing CTA" data-space="" style="background: #ffffff; padding: 112px 0 120px;">
+          <div data-shell="" data-cta-grid="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: minmax(0, 1fr) 460px; gap: 100px; align-items: center;">
+            <div data-reveal="">
+              <p style="margin: 0 0 26px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Write the next one</p>
+              <h2 data-display="" style="margin: 0 0 34px; font-size: 68px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 14ch;">Your district could be the next story.</h2>
+              <p style="margin: 0 0 40px; max-width: 62ch; font-size: 17px; line-height: 1.75; color: #51536a;">Every story here started as a conversation about what was not working yet. Tell us where your district is headed and what is getting in the way.</p>
+              <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                <a href="https://www.focusedschools.com/contact/" data-btn-full="" style="display: inline-flex; align-items: center; gap: 14px; height: 48px; padding: 0 28px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 13px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Let's Talk <span style="font-size: 15px;">&rarr;</span></a>
+                <a href="https://www.focusedschools.com/services/" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 24px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="border-color: #005C6D; background: #f5f6f8; color: #005C6D;">Explore Our Services <span style="font-size: 14px;">&rarr;</span></a>
+              </div>
+            </div>
+            <figure data-reveal="" style="position: relative; margin: 0;">
+              <div role="img" aria-label="Two education leaders celebrating progress together." style="{{ ctaImgStyle }}"></div>
+            </figure>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <!-- ################################################################ -->
+    <!-- ################### B · SINGLE STORY TEMPLATE ################## -->
+    <!-- ################################################################ -->
+    <sc-if value="{{ isSingle }}" hint-placeholder-val="{{ false }}">
+      <div id="single">
+
+        <!-- 1 · STORY HERO -->
+        <section data-screen-label="Story hero" style="background: #ffffff; padding: 14px 0 128px;">
+          <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; position: relative;">
+            <nav aria-label="Breadcrumb" style="padding: 18px 0 22px;">
+              <p style="margin: 0; display: flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #51536a;">
+                <a href="#top" onClick="{{ openLanding }}" style="color: #005C6D;" style-hover="color: #DD6237;">Impact Stories</a>
+                <span aria-hidden="true" style="color: #d3dde1;">/</span>
+                <span>Champaign Unit 4</span>
+              </p>
+            </nav>
+            <div data-hero-media="" style="position: relative; aspect-ratio: 21 / 9; border-radius: 8px; overflow: hidden; background: #004855;">
+              <div role="img" aria-label="Champaign Unit 4 leadership team reviewing their strategic plan." style="{{ singleHeroStyle }}"></div>
+            </div>
+            <div data-hero-slab="" data-reveal="" style="position: absolute; left: 24px; bottom: -56px; width: 720px; background: #005C6D; padding: 44px; z-index: 2;">
+              <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px;">
+                <sc-for list="{{ single.meta }}" as="m" hint-placeholder-count="3">
+                  <span style="display: inline-flex; align-items: center; gap: 9px; padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.14); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #ffffff;">{{ m }}</span>
+                </sc-for>
+              </div>
+              <h1 data-h1="" style="margin: 0 0 20px; font-size: 48px; line-height: 1.0; letter-spacing: -0.025em; font-weight: 700; color: #ffffff;">{{ single.title }}</h1>
+              <p style="margin: 0; max-width: 560px; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.92);">{{ single.excerpt }}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2 · AT A GLANCE -->
+        <section data-screen-label="At a glance" data-space="" style="position: relative; background: #005C6D; padding: 96px 0; overflow: hidden; margin-top: 96px;">
+          <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" aria-hidden="true" style="position: absolute; right: -60px; top: 30px; height: 360px; width: auto; opacity: 0.06;" />
+          <div data-shell="" style="position: relative; max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+            <p style="margin: 0 0 48px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #ffffff;">At a glance</p>
+            <div data-results="" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px;">
+              <sc-for list="{{ single.results }}" as="r" hint-placeholder-count="3">
+                <article data-reveal="" style="border-top: 3px solid #F3C145; padding-top: 22px;">
+                  <p style="margin: 0; display: flex; flex-direction: column; gap: 10px;" aria-label="{{ r.aria }}">
+                    <span style="font-size: 68px; line-height: 1; letter-spacing: -0.04em; font-weight: 700; color: #ffffff;">{{ r.value }}</span>
+                    <strong style="font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #A7CC14;">{{ r.unit }}</strong>
+                  </p>
+                  <h2 style="margin: 14px 0 0; font-size: 17px; font-weight: 400; line-height: 1.5; color: rgba(255,255,255,0.88);">{{ r.label }}</h2>
+                </article>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3 · STORY BODY -->
+        <section data-screen-label="Story body" data-space="" style="background: #ffffff; padding: 112px 0 120px;">
+          <div data-shell="" data-single-body="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 96px; align-items: start;">
+            <aside data-single-aside="" style="position: sticky; top: 160px;">
+              <p style="margin: 0 0 22px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Partnership details</p>
+              <dl style="margin: 0; border-top: 1px solid #d3dde1;">
+                <sc-for list="{{ single.details }}" as="d" hint-placeholder-count="5">
+                  <div style="padding: 16px 0; border-bottom: 1px solid #d3dde1;">
+                    <dt style="font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #51536a; margin-bottom: 6px;">{{ d.k }}</dt>
+                    <dd style="margin: 0; font-size: 15px; line-height: 1.5; font-weight: 700; color: #005C6D;">{{ d.v }}</dd>
+                  </div>
+                </sc-for>
+              </dl>
+              <a href="https://www.focusedschools.com/contact/" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 24px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 32px; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Start a Partnership <span style="font-size: 14px;">&rarr;</span></a>
+            </aside>
+            <div data-single-prose="">
+              <sc-for list="{{ single.blocks }}" as="b" hint-placeholder-count="6">
+                <div style="{{ b.wrap }}">
+                  <sc-if value="{{ b.isHeading }}" hint-placeholder-val="{{ false }}">
+                    <h2 style="margin: 0; font-size: 34px; line-height: 1.12; letter-spacing: -0.025em; font-weight: 700; color: #005C6D; max-width: 26ch;">{{ b.text }}</h2>
+                  </sc-if>
+                  <sc-if value="{{ b.isText }}" hint-placeholder-val="{{ true }}">
+                    <p data-prose="" style="margin: 0; max-width: 66ch; font-size: 19px; line-height: 1.75; color: #51536a;">{{ b.text }}</p>
+                  </sc-if>
+                  <sc-if value="{{ b.isQuote }}" hint-placeholder-val="{{ false }}">
+                    <blockquote style="margin: 0; display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 34px; align-items: start;">
+                      <span aria-hidden="true" style="display: flex; gap: 7px; padding-top: 14px;">
+                        <span style="display: block; width: 10px; height: 38px; background: #DD6237; transform: skewX(-14deg);"></span>
+                        <span style="display: block; width: 10px; height: 38px; background: #DD6237; transform: skewX(-14deg);"></span>
+                      </span>
+                      <div>
+                        <p data-pull="" style="margin: 0 0 24px; max-width: 34ch; font-size: 36px; line-height: 1.26; letter-spacing: -0.02em; font-style: italic; font-weight: 400; color: #005C6D;">{{ b.text }}</p>
+                        <p style="margin: 0; display: flex; align-items: flex-start; gap: 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1.5; color: #005C6D;">
+                          <span aria-hidden="true" style="display: block; width: 26px; height: 2px; background: #DD6237; margin-top: 7px; flex: 0 0 auto;"></span>{{ b.cite }}
+                        </p>
+                      </div>
+                    </blockquote>
+                  </sc-if>
+                  <sc-if value="{{ b.isImage }}" hint-placeholder-val="{{ false }}">
+                    <figure style="margin: 0;">
+                      <div role="img" aria-label="{{ b.text }}" style="{{ b.imgStyle }}"></div>
+                      <figcaption style="margin-top: 16px; font-size: 13px; line-height: 1.6; font-style: italic; color: #51536a; max-width: 56ch;">{{ b.cite }}</figcaption>
+                    </figure>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4 · RELATED STORIES (dynamic) -->
+        <section data-screen-label="Related stories" data-space="" style="background: #f5f6f8; padding: 112px 0 120px;">
+          <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+            <header data-reveal="" data-filter-head="" style="display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; margin-bottom: 56px;">
+              <div>
+                <p style="margin: 0 0 24px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Keep reading</p>
+                <h2 data-display="" style="margin: 0; font-size: 58px; line-height: 1.02; letter-spacing: -0.03em; font-weight: 700; color: #005C6D; max-width: 18ch;">More stories from this work.</h2>
+              </div>
+              <a href="#top" onClick="{{ openLanding }}" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 24px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; transition: border-color 160ms cubic-bezier(.2,.7,.2,1), background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="border-color: #005C6D; background: #f5f6f8; color: #005C6D;">All Impact Stories <span style="font-size: 14px;">&rarr;</span></a>
+            </header>
+            <div data-story-grid="" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; align-items: stretch;">
+              <sc-for list="{{ related }}" as="s" hint-placeholder-count="3">
+                <article data-reveal="" style="display: flex; flex-direction: column; background: #ffffff; border-radius: 16px; border: 1px solid #e3e9eb; overflow: hidden; box-shadow: 0 1px 2px rgba(0,92,109,0.08); transition: box-shadow 240ms cubic-bezier(.2,.7,.2,1), transform 240ms cubic-bezier(.2,.7,.2,1);" style-hover="box-shadow: 0 12px 28px rgba(0,92,109,0.12); transform: translateY(-2px);">
+                  <div role="img" aria-label="{{ s.imageAlt }}" style="{{ s.imgStyle }}">
+                    <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" style="{{ s.markStyle }}" />
+                    <span style="{{ s.yearStyle }}">{{ s.year }}</span>
+                  </div>
+                  <div style="display: flex; flex-direction: column; flex: 1 1 auto; padding: 28px 28px 30px;">
+                    <p style="margin: 0 0 14px; display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #51536a; min-height: 16px;">
+                      <span aria-hidden="true" style="{{ s.dotStyle }}"></span>{{ s.place }}
+                    </p>
+                    <h3 data-clamp-3="" style="margin: 0 0 14px; font-size: 24px; line-height: 1.18; letter-spacing: -0.02em; font-weight: 700; color: #005C6D;">{{ s.title }}</h3>
+                    <p data-clamp-3="" style="margin: 0 0 22px; font-size: 15px; line-height: 1.6; color: #51536a;">{{ s.excerpt }}</p>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: auto; padding-top: 18px; border-top: 1px solid #eef1f2;">
+                      <span style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #005C6D;">Read story <span aria-hidden="true" style="color: #DD6237; font-size: 14px;">&rarr;</span></span>
+                      <span style="{{ s.sourceStyle }}">{{ s.source }}</span>
+                    </div>
+                  </div>
+                </article>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+  </main>
+
+  <!-- ===================== FOOTER (reused) ===================== -->
+  <footer style="position: relative; background: #005C6D; color: #ffffff; overflow: hidden; padding: 96px 0 0;">
+    <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" aria-hidden="true" style="position: absolute; right: -50px; top: 56px; height: 400px; width: auto; opacity: 0.06;" />
+    <div data-shell="" data-footer-grid="" style="position: relative; max-width: 1400px; margin: 0 auto; padding: 0 24px 88px; display: grid; grid-template-columns: 1.4fr 0.8fr 0.8fr 1fr; gap: 60px;">
+      <div>
+        <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo-white.svg?v=palette-2026-3" alt="Focused Schools" style="height: 55px; width: auto; display: block; margin-bottom: 44px;" />
+        <p style="margin: 0 0 30px; font-size: 21px; line-height: 1.35; font-weight: 700; color: #ffffff; max-width: 22ch;">Every student. Every classroom. Every day. No exceptions.</p>
+        <a href="https://www.focusedschools.com/contact/" style="display: inline-flex; align-items: center; gap: 14px; height: 46px; padding: 0 26px; border-radius: 999px; background: #DD6237; color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; transition: filter 160ms cubic-bezier(.2,.7,.2,1);" style-hover="filter: brightness(0.92); color: #ffffff;">Contact Us <span style="font-size: 14px;">&rarr;</span></a>
+      </div>
+      <nav aria-label="Footer navigation">
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Explore</p>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <a href="https://www.focusedschools.com/about-our-mission-vision/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">About</a>
+          <a href="https://www.focusedschools.com/team/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Team</a>
+          <a href="https://www.focusedschools.com/services/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Services</a>
+          <a href="https://www.focusedschools.com/impact-stories/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Impact Stories</a>
+        </div>
+      </nav>
+      <nav aria-label="Resources">
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Resources</p>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <a href="https://www.focusedschools.com/podcast/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Podcast</a>
+          <a href="https://www.focusedschools.com/blog/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Blog</a>
+          <a href="https://www.focusedschools.com/contact/" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">Contact</a>
+        </div>
+      </nav>
+      <div>
+        <p style="margin: 0 0 30px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.72);">Connect</p>
+        <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px;">
+          <a href="mailto:hello@focusedschools.com" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">hello@focusedschools.com</a>
+          <a href="tel:+18449572466" style="font-size: 15px; color: #ffffff;" style-hover="color: #A7CC14;">844-957-2466</a>
+        </div>
+        <div aria-label="Social media" style="display: flex; gap: 10px;">
+          <a href="https://twitter.com/focusedschools" aria-label="X" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">X</a>
+          <a href="https://www.facebook.com/focusedschools" aria-label="Facebook" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">f</a>
+          <a href="https://www.youtube.com/channel/UCg8W-jIlwxFCrVsU15gWFqA" aria-label="YouTube" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 11px; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">&#9654;</a>
+          <a href="https://www.linkedin.com/company/focused-schools" aria-label="LinkedIn" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 12px; font-weight: 700; transition: background 160ms cubic-bezier(.2,.7,.2,1);" style-hover="background: #ffffff; color: #005C6D;">in</a>
+        </div>
+      </div>
+    </div>
+    <div style="position: relative; border-top: 1px solid rgba(255,255,255,0.18);">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 26px 24px 30px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+        <p style="margin: 0; font-size: 12px; color: rgba(255,255,255,0.72);">&copy;2026 Focused Schools. All Rights Reserved.</p>
+        <a href="#top" style="font-size: 12px; color: rgba(255,255,255,0.82);" style-hover="color: #A7CC14;">Back to top &uarr;</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== SPEC APPENDIX ===================== -->
+  <sc-if value="{{ showSpecs }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Handoff specs" style="background: #f5f6f8; padding: 120px 0 140px;">
+      <div data-shell="" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
+
+        <header style="padding-bottom: 48px; border-bottom: 1px solid #d3dde1; margin-bottom: 56px;">
+          <p style="margin: 0 0 22px; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">Designer handoff · Impact Stories</p>
+          <h2 style="margin: 0 0 20px; font-size: 52px; line-height: 1.04; letter-spacing: -0.03em; font-weight: 400; color: #005C6D; max-width: 24ch;">One card, two sources, <strong style="font-weight: 700;">no manual landing edits.</strong></h2>
+          <p style="margin: 0; max-width: 74ch; font-size: 17px; line-height: 1.75; color: #51536a;">The hard problem on this page is not layout &mdash; it is that new CPT stories and legacy Pages have to sit in the same grid without looking like two systems. The card is specified so that missing structured data reads as an editorial choice, not a gap. Turn this appendix off with the <strong style="font-weight: 700; color: #005C6D;">Show handoff specs</strong> tweak before sharing as a client mockup.</p>
+        </header>
+
+        <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; margin-bottom: 20px;">
+          <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px;">
+            <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Section hierarchy</h3>
+            <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: #51536a;">Landing: proof, then the best single proof, then all of it. Single: what happened, what changed, how.</p>
+            <ol style="margin: 0; padding: 0; list-style: none;">
+              <sc-for list="{{ hierarchy }}" as="h" hint-placeholder-count="8">
+                <li style="display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 18px; padding: 18px 0; border-top: 1px solid #eef1f2;">
+                  <span style="{{ h.numStyle }}">{{ h.num }}</span>
+                  <div>
+                    <strong style="display: block; font-size: 17px; font-weight: 700; color: #005C6D; margin-bottom: 4px;">{{ h.title }}</strong>
+                    <span style="font-size: 14px; line-height: 1.6; color: #51536a;">{{ h.note }}</span>
+                  </div>
+                </li>
+              </sc-for>
+            </ol>
+          </div>
+          <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px;">
+            <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Component mapping</h3>
+            <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.6; color: #51536a;">Thirteen blocks across both templates. Eleven reused, one extended, one new.</p>
+            <div>
+              <sc-for list="{{ mapping }}" as="m" hint-placeholder-count="12">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 15px 0; border-top: 1px solid #eef1f2;">
+                  <div>
+                    <strong style="display: block; font-size: 15px; font-weight: 700; color: #005C6D;">{{ m.name }}</strong>
+                    <span style="font-size: 13px; line-height: 1.5; color: #51536a;">{{ m.source }}</span>
+                  </div>
+                  <span style="{{ m.tagStyle }}">{{ m.tag }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin: 24px 0 0; padding-top: 20px; border-top: 1px solid #d3dde1; font-size: 14px; line-height: 1.7; color: #51536a;"><strong style="color: #005C6D;">The one new component</strong> is the filter bar: DS v1 chips on the existing 120px label rail, one row per taxonomy. <strong style="color: #005C6D;">The extension</strong> is the story card &mdash; the team card's geometry with a place/meta line, a year badge on the image, and a source pill.</p>
+          </div>
+        </div>
+
+        <!-- Two-source strategy -->
+        <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Two sources, one grid</h3>
+          <p style="margin: 0 0 28px; max-width: 80ch; font-size: 15px; line-height: 1.65; color: #51536a;">New stories are <code>fs_story</code> CPT records with full structured data. Legacy stories are existing Pages with a title, an excerpt, and sometimes a featured image. Both are queried into the same loop and rendered by the same card. Cards 5 and 6 in the grid above are legacy records &mdash; note what is missing and what replaces it.</p>
+          <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Field-by-field degradation</p>
+              <div>
+                <sc-for list="{{ degradation }}" as="d" hint-placeholder-count="6">
+                  <div style="padding: 13px 0; border-top: 1px solid #eef1f2; font-size: 14px; line-height: 1.6;">
+                    <code style="display: block; font-size: 13px; font-weight: 700; color: #005C6D; margin-bottom: 4px;">{{ d.key }}</code>
+                    <span style="color: #51536a;">{{ d.rule }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">The query &amp; the filter contract</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+                <li>One <code>WP_Query</code> with <code>post_type: ['fs_story', 'page']</code>, the Pages side scoped by a <code>legacy-impact-story</code> category or a parent-page ID. Ordered by <code>meta year DESC, post_date DESC</code> so legacy and new interleave chronologically rather than clumping.</li>
+                <li>Filter chips are generated from terms that <strong style="color: #005C6D;">actually exist on published stories</strong>. An empty state is never offered as a filter option.</li>
+                <li>A legacy story with no State term simply does not appear under a State filter &mdash; correct behavior, and the empty state explains it in plain language rather than showing a dead grid.</li>
+                <li>Chips are real <code>&lt;button&gt;</code>s that update the URL (<code>?state=ma&amp;year=2024</code>) so a filtered view is shareable and back-button safe.</li>
+                <li>Filtering is progressive enhancement: server-rendered on first paint, then client-side via REST with an <code>aria-live</code> count.</li>
+                <li><strong style="color: #005C6D;">Migration path:</strong> as each legacy Page is backfilled with State / Year / District and converted to <code>fs_story</code>, it gains a year badge and drops the Legacy pill with no template change. The design is built to make migration invisible.</li>
+              </ul>
+            </div>
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Long-content &amp; count behavior</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+                <li><strong style="color: #005C6D;">Title</strong> 24px / 700, 3-line clamp. Long district names are common, so the card is specified for three lines, not two.</li>
+                <li><strong style="color: #005C6D;">Excerpt</strong> 15px / 1.6, 3-line clamp. WordPress auto-excerpt is trimmed to 180 characters when no manual excerpt exists.</li>
+                <li><strong style="color: #005C6D;">Place line</strong> reserves 16px so cards with no district still align; District and State collapse to a single line with a middot.</li>
+                <li><strong style="color: #005C6D;">Footer row</strong> pinned with <code>margin-top: auto</code> &mdash; Read story and the source pill line up across a row regardless of copy length.</li>
+                <li><strong style="color: #005C6D;">Trailing row</strong> of one or two cards stays left-aligned. Cards never stretch.</li>
+                <li><strong style="color: #005C6D;">No Featured story</strong> → the spotlight section is omitted entirely and the grid moves up. Two or more Featured → newest by year wins; the rest stay normal cards.</li>
+                <li><strong style="color: #005C6D;">Fewer than 4 stories</strong> → filter bar is hidden (nothing to filter) and the grid renders at its natural width.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Single template -->
+        <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">The single story template</h3>
+          <p style="margin: 0 0 28px; max-width: 80ch; font-size: 15px; line-height: 1.65; color: #51536a;">Switch the mockup to <strong style="color: #005C6D;">Single story</strong> at the top of the page to see it. Body content is a flexible block set, so no two stories need the same shape &mdash; and none of it requires layout decisions from the client.</p>
+          <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Structure</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+                <li><strong style="color: #005C6D;">Breadcrumb</strong> → Impact Stories / {District}, 11px uppercase.</li>
+                <li><strong style="color: #005C6D;">Hero</strong> = the landing hero component: 21:9 media, teal slab carrying meta chips, H1 at 48px, excerpt.</li>
+                <li><strong style="color: #005C6D;">At a glance</strong> = the homepage statistics band, one to four results. Omitted entirely when a story has no numbers &mdash; and many legacy ones won't.</li>
+                <li><strong style="color: #005C6D;">Body</strong> = 300px sticky detail rail + 66ch prose column. Rail holds District, State, Year, Service lane, Partnership length, and the primary CTA.</li>
+                <li><strong style="color: #005C6D;">Blocks</strong>: heading, paragraph, pull quote (coral slashes, reused verbatim), and full-width 16:9 figure with caption.</li>
+                <li><strong style="color: #005C6D;">Related</strong> = three cards, same component, matched on State then Service lane then recency.</li>
+              </ul>
+            </div>
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Legacy stories on the single view</p>
+              <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+                <li>Legacy Pages keep their own URL and their existing body content &mdash; no content migration required to launch.</li>
+                <li>They receive the new header, footer, breadcrumb, and Related grid via a page template, so navigation is consistent site-wide from day one.</li>
+                <li>Missing hero image → the teal slab sits on a plain teal band at the same height. No stretched low-res upscales.</li>
+                <li>No results → At a glance omitted; the prose column starts directly under the hero.</li>
+                <li>No detail values → the rail renders only the rows it has; with fewer than two, it drops and the prose column spans full width at 72ch.</li>
+                <li>Legacy body markup is styled through a single prose scope (19px / 1.75, 66ch) rather than rewritten.</li>
+              </ul>
+            </div>
+            <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 26px 28px;">
+              <p style="margin: 0 0 18px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">Client workflow</p>
+              <ol style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+                <li>Impact Stories → Add New.</li>
+                <li>Title, featured image, excerpt.</li>
+                <li>Pick District, State, Year, Service lane.</li>
+                <li>Write the body from the four available blocks.</li>
+                <li>Optionally add one to four result figures.</li>
+                <li>Tick <strong style="color: #005C6D;">Featured</strong> only if it should take the spotlight.</li>
+                <li>Publish. It appears on the landing page, in the filters, and in Related grids immediately.</li>
+              </ol>
+              <p style="margin: 18px 0 0; padding-top: 16px; border-top: 1px solid #eef1f2; font-size: 14px; line-height: 1.7; color: #51536a;">No page edit, no block insertion, no manual card placement, no ordering by hand.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Responsive -->
+        <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px; margin-bottom: 20px;">
+          <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #005C6D;">Columns &amp; mobile behavior</h3>
+          <p style="margin: 0 0 28px; max-width: 78ch; font-size: 15px; line-height: 1.65; color: #51536a;">Identical breakpoints to the Team page, so the two card grids on the site behave the same way.</p>
+          <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 32px;">
+            <sc-for list="{{ breakpoints }}" as="b" hint-placeholder-count="4">
+              <div style="border: 1px solid #e3e9eb; border-radius: 12px; padding: 24px 26px;">
+                <p style="margin: 0 0 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #DD6237;">{{ b.label }}</p>
+                <p style="margin: 0 0 16px; font-size: 32px; line-height: 1; letter-spacing: -0.03em; font-weight: 700; color: #005C6D;">{{ b.cols }}</p>
+                <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.75; color: #51536a;">
+                  <sc-for list="{{ b.rules }}" as="r" hint-placeholder-count="4">
+                    <li>{{ r }}</li>
+                  </sc-for>
+                </ul>
+              </div>
+            </sc-for>
+          </div>
+          <div data-spec-mobile="" style="display: grid; grid-template-columns: 390px minmax(0, 1fr); gap: 40px; align-items: start;">
+            <div style="width: 390px; max-width: 100%; border: 1px solid #d3dde1; border-radius: 20px; overflow: hidden; background: #f5f6f8;">
+              <div style="height: 52px; background: #ffffff; border-bottom: 1px solid #eef1f2; display: flex; align-items: center; justify-content: space-between; padding: 0 16px;">
+                <img src="https://focused-schools-rebrand.vercel.app/assets/logo/full-logo.svg?v=palette-2026-3" alt="" style="height: 30px; width: auto;" />
+                <span style="display: flex; flex-direction: column; gap: 5px; width: 20px;"><span style="display: block; height: 2px; background: #005C6D;"></span><span style="display: block; height: 2px; background: #005C6D;"></span></span>
+              </div>
+              <div style="padding: 28px 20px;">
+                <p style="margin: 0 0 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #005C6D;">All stories</p>
+                <h4 style="margin: 0 0 20px; font-size: 36px; line-height: 1.0; letter-spacing: -0.03em; font-weight: 700; color: #005C6D;">Browse by state or year.</h4>
+                <div style="border-top: 1px solid #d3dde1; border-bottom: 1px solid #d3dde1; padding: 18px 0 20px; margin-bottom: 24px;">
+                  <p style="margin: 0 0 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #51536a;">State</p>
+                  <div style="display: flex; gap: 8px; overflow: hidden;">
+                    <span style="padding: 10px 15px; border-radius: 999px; background: #005C6D; color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;">All</span>
+                    <span style="padding: 10px 15px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;">Illinois</span>
+                    <span style="padding: 10px 15px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;">Mass</span>
+                  </div>
+                </div>
+                <div style="background: #ffffff; border: 1px solid #e3e9eb; border-radius: 16px; overflow: hidden;">
+                  <div style="position: relative; aspect-ratio: 16 / 9; background: #005C6D; display: flex; align-items: center; justify-content: center;">
+                    <img src="https://focused-schools-rebrand.vercel.app/assets/logo/mark-white.svg?v=palette-2026-3" alt="" style="height: 52%; opacity: 0.12;" />
+                    <span style="position: absolute; right: 14px; top: 14px; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,0.18); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #ffffff;">2024</span>
+                  </div>
+                  <div style="padding: 24px 22px 26px;">
+                    <p style="margin: 0 0 12px; display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #51536a;"><span style="display: block; width: 6px; height: 6px; background: #0A96CB;"></span>Champaign Unit 4 &middot; IL</p>
+                    <strong style="display: block; font-size: 22px; line-height: 1.18; letter-spacing: -0.02em; color: #005C6D; margin-bottom: 12px;">A five-year plan the whole district can name</strong>
+                    <p style="margin: 0 0 20px; font-size: 14px; line-height: 1.6; color: #51536a;">Two years in, cabinet meetings start with the plan instead of the crisis.</p>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 16px; border-top: 1px solid #eef1f2;">
+                      <span style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #005C6D;">Read story <span style="color: #DD6237;">&rarr;</span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 18px; font-size: 15px; line-height: 1.85; color: #51536a;">
+              <li>Hero media goes 4:5; the teal slab drops its &minus;56px offset and sits flush beneath, full-bleed to the 20px gutter.</li>
+              <li>H1 34px / H2 36px / card title 22px / excerpt 14px &mdash; the DS v1 mobile step, no new sizes.</li>
+              <li><strong style="color: #005C6D;">Featured spotlight</strong> stacks: image 16:9 on top, teal copy panel below at 28px padding. It stays visually distinct from the grid because it is full-bleed teal, not a card.</li>
+              <li><strong style="color: #005C6D;">Filter bar</strong> becomes one horizontally scrollable chip row per taxonomy with the label above it. Chips keep 44px tap height; no dropdowns, no accordion.</li>
+              <li>Story cards 1-up with 20px gaps; image stays 16:9, so one file serves every breakpoint.</li>
+              <li>Card footer keeps Read story; the source pill moves under the place line to save width.</li>
+              <li>Load more is full-width 46px; focus stays on the button after appending, count announced via <code>aria-live</code>.</li>
+              <li><strong style="color: #005C6D;">Single view:</strong> detail rail un-sticks and moves below the prose; At a glance stacks 1-up; pull quote keeps its coral slashes with the quote at 26px.</li>
+              <li>The mockup's view switcher bar is chrome for review only and does not ship.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Spacing / image / states -->
+        <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 20px; margin-bottom: 20px;">
+          <div style="background: #ffffff; border-radius: 16px; padding: 30px 32px;">
+            <h3 style="margin: 0 0 18px; font-size: 20px; font-weight: 700; color: #005C6D;">Spacing specification</h3>
+            <div>
+              <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="14">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 11px 0; border-top: 1px solid #eef1f2; font-size: 14px; line-height: 1.5;">
+                  <span style="color: #51536a;">{{ s.what }}</span>
+                  <code style="font-size: 13px; font-weight: 700; color: #005C6D; white-space: nowrap;">{{ s.value }}</code>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background: #ffffff; border-radius: 16px; padding: 30px 32px;">
+            <h3 style="margin: 0 0 18px; font-size: 20px; font-weight: 700; color: #005C6D;">Image guidance</h3>
+            <ul style="margin: 0 0 20px; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+              <li><strong style="color: #005C6D;">Card / featured image 16:9</strong>, min 1200&times;675. One ratio at every breakpoint &mdash; no art direction, no <code>&lt;picture&gt;</code>. Register <code>story-card</code> at 1200&times;675 hard crop.</li>
+              <li><strong style="color: #005C6D;">Spotlight</strong> reuses the same file, cropped to 4:5 in the desktop side panel and 16:9 when stacked &mdash; so Featured needs no second upload.</li>
+              <li><strong style="color: #005C6D;">Story hero</strong> 21:9, min 2400&times;1030. Focal interest right of center so the teal slab covers no face.</li>
+              <li><strong style="color: #005C6D;">In-body figures</strong> 16:9, min 1600&times;900, 8px radius, always captioned. Captions are required &mdash; an uncaptioned photo in a case study reads as decoration.</li>
+              <li><strong style="color: #005C6D;">Subject matter:</strong> the district's own people doing the work &mdash; classrooms, data walls, leadership rooms. No stock, no duotone, no grayscale, no filters, no scrims outside the hero.</li>
+              <li><strong style="color: #005C6D;">Missing image</strong> → teal tile with the mark at 12%. Never a stretched upscale, never a generic stock substitute.</li>
+              <li>WebP with JPEG fallback, width/height on every image, lazy below the fold, alt text describing the moment. Get district media-release confirmation before publishing student-visible photography.</li>
+            </ul>
+            <p style="margin: 0; padding-top: 18px; border-top: 1px solid #d3dde1; font-size: 14px; line-height: 1.7; color: #51536a;">All photography here is placeholder from the approved homepage retreat set; cards 3&ndash;6 deliberately show the no-image fallback.</p>
+          </div>
+          <div style="background: #ffffff; border-radius: 16px; padding: 30px 32px;">
+            <h3 style="margin: 0 0 18px; font-size: 20px; font-weight: 700; color: #005C6D;">Hover, focus &amp; active states</h3>
+            <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 22px;">
+              <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                <span style="padding: 12px 18px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">Default</span>
+                <span style="padding: 12px 18px; border-radius: 999px; background: #eef1f3; border: 1px solid #005C6D; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">Hover</span>
+                <span style="padding: 12px 18px; border-radius: 999px; background: #005C6D; border: 1px solid #005C6D; color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">Selected</span>
+                <span style="padding: 12px 18px; border-radius: 999px; background: #ffffff; border: 1px solid #d3dde1; color: #005C6D; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px #0A96CB;">Focus</span>
+              </div>
+            </div>
+            <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; color: #51536a;">
+              <li><strong style="color: #005C6D;">Filter chip:</strong> default white/hairline; hover paper + teal border at 160ms; selected solid teal with white label and <code>aria-pressed="true"</code>. Selection is never color-only &mdash; the fill inverts.</li>
+              <li><strong style="color: #005C6D;">Story card:</strong> shadow-1 → shadow-2 and a 2px rise at 240ms. The card is a container; <strong style="color: #005C6D;">Read story</strong> is the single link, so the title and image are not competing targets.</li>
+              <li><strong style="color: #005C6D;">Read story:</strong> label → coral, gap 12px → 18px at 240ms. Accessible name is &ldquo;Read story: {Title}&rdquo;.</li>
+              <li><strong style="color: #005C6D;">Spotlight CTA:</strong> white pill → paper at 160ms. No rise.</li>
+              <li><strong style="color: #005C6D;">Load more:</strong> secondary hover; focus retained after append.</li>
+              <li><strong style="color: #005C6D;">Source pill</strong> and <strong style="color: #005C6D;">year badge</strong> are static &mdash; information, not controls, so no hover at all.</li>
+              <li><strong style="color: #005C6D;">Focus-visible, everything:</strong> 3px <code>#0A96CB</code> ring at 2px offset, never removed.</li>
+              <li><strong style="color: #005C6D;">Active nav item:</strong> Impact Stories carries a 2px coral underline, offset 8px, plus <code>aria-current="page"</code>.</li>
+              <li><strong style="color: #005C6D;">Entrances:</strong> fade + 28px rise, 700ms, once, max three staggered. Disabled under <code>prefers-reduced-motion</code>. Appended cards animate the same way.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Dev + assumptions -->
+        <div data-spec-grid="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px;">
+          <div style="background: #ffffff; border-radius: 16px; padding: 34px 36px;">
+            <h3 style="margin: 0 0 20px; font-size: 24px; font-weight: 700; color: #005C6D;">Developer notes (WordPress)</h3>
+            <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.85; color: #51536a;">
+              <li><strong style="color: #005C6D;">CPT</strong> <code>fs_story</code>, label &ldquo;Impact Stories&rdquo;, <code>supports: title, editor, thumbnail, excerpt</code>, <code>has_archive: false</code> (the landing Page owns the URL), rewrite slug <code>impact-stories</code>.</li>
+              <li><strong style="color: #005C6D;">Taxonomies:</strong> <code>story_state</code> and <code>story_service</code> (shared with the Services CPT lanes). <code>district</code> and <code>year</code> are meta fields, not taxonomies &mdash; district is near-unique and year sorts numerically.</li>
+              <li><strong style="color: #005C6D;">Featured:</strong> a single true/false field. Only the newest Featured story is spotlighted; no editor-facing ordering.</li>
+              <li><strong style="color: #005C6D;">Results:</strong> repeater of value / unit / label, hard-capped at four rows.</li>
+              <li><strong style="color: #005C6D;">Body:</strong> restrict the block palette to heading, paragraph, quote, image. No columns, no spacers, no custom colors &mdash; the prose scope owns all typography.</li>
+              <li><strong style="color: #005C6D;">Legacy Pages:</strong> assign <code>page-impact-story-legacy.php</code>; scope them into the landing query by parent ID or a hidden category. Keep their permalinks and add canonical tags &mdash; do not redirect working URLs.</li>
+              <li><strong style="color: #005C6D;">One card part</strong> <code>template-parts/cards/story-card.php</code>, taking a normalized array so the loop does not branch on post type. Write one <code>fs_normalize_story($post)</code> helper &mdash; it is the single place the two sources reconcile.</li>
+              <li><strong style="color: #005C6D;">Filters:</strong> URL-driven (<code>?state=&amp;year=</code>), server-rendered first, then REST-enhanced. Chip lists come from terms in use only.</li>
+              <li><strong style="color: #005C6D;">Load more:</strong> <code>posts_per_page = 9</code>, REST append, <code>aria-live="polite"</code> count, no layout shift.</li>
+              <li><strong style="color: #005C6D;">A11y:</strong> one <code>h1</code> per template; card titles are <code>h3</code> on the landing; filter groups are <code>role="group"</code> with accessible names; the results band exposes full values via <code>aria-label</code> since the numerals are abbreviated.</li>
+              <li><strong style="color: #005C6D;">Mockup caveats:</strong> media are CSS background images and the view switcher is review chrome &mdash; neither ships. Ship real <code>&lt;img&gt;</code> with width/height and <code>loading</code>.</li>
+            </ul>
+          </div>
+          <div style="background: #005C6D; border-radius: 16px; padding: 34px 36px; color: #ffffff;">
+            <h3 style="margin: 0 0 8px; font-size: 24px; font-weight: 700; color: #ffffff;">Assumptions &amp; missing assets</h3>
+            <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.88);">No page copy was supplied for this brief, so every string here is mine and replaceable. None of these need a new component.</p>
+            <ol style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.9);">
+              <li><strong style="color: #ffffff;">All copy is placeholder.</strong> The hero line reuses the approved About stats framing; six story titles, excerpts, the single story's body, and its quote are written by me to demonstrate structure and length limits.</li>
+              <li><strong style="color: #ffffff;">Districts are real partners</strong> from the About page list, but the results and quotes attached to them are invented. Nothing here is publishable without district sign-off.</li>
+              <li><strong style="color: #ffffff;">No legacy inventory supplied</strong> &mdash; I do not know how many legacy Pages exist or what data they carry. Cards 5 and 6 model the worst realistic case: title, excerpt, no image, no year.</li>
+              <li><strong style="color: #ffffff;">Two filters only</strong> (State, Year). Service lane is specified as a taxonomy and could be a third row, but three chip rows is the practical ceiling before the bar needs a rethink.</li>
+              <li><strong style="color: #ffffff;">No search field.</strong> Worth adding past roughly thirty stories; it would reuse the existing input styling.</li>
+              <li><strong style="color: #ffffff;">Legacy pill visible</strong> on legacy cards. This is a deliberate, honest signal &mdash; but if you would rather it not show publicly, remove the pill and keep the normalization; the layout is unaffected.</li>
+              <li><strong style="color: #ffffff;">Year as meta, not taxonomy</strong> &mdash; chosen for numeric sorting. If you need year archive URLs, it has to become a taxonomy instead.</li>
+              <li><strong style="color: #ffffff;">Landing URL</strong> is a Page with a template, not a CPT archive, so the hero and CTA copy stay editable. Single stories live at <code>/impact-stories/{slug}</code>.</li>
+              <li><strong style="color: #ffffff;">No video.</strong> If stories should carry video testimonials, the homepage video modal component drops into the body block set.</li>
+              <li><strong style="color: #ffffff;">Photography</strong> &mdash; every story needs one 16:9 frame minimum, ideally shot in the district. Placeholder tiles are acceptable at launch but not at scale.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440},&quot;showSpecs&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Handoff&quot;,&quot;label&quot;:&quot;Show handoff specs&quot;}}">
+const IMG = "https://focused-schools-rebrand.vercel.app/assets/img/";
+const PAGE = 6;
+
+const STORIES = [
+  { title: "A five-year plan the whole district can name", district: "Champaign Unit 4", state: "IL", stateFull: "Illinois", year: "2024", img: "retreat-1.jpg", legacy: false,
+    excerpt: "Two years in, cabinet meetings start with the plan instead of the crisis. Every principal can name the three priorities without looking them up." },
+  { title: "Rebuilding instructional leadership after three superintendents in four years", district: "Fitchburg Public Schools", state: "MA", stateFull: "Massachusetts", year: "2024", img: "retreat-3.jpg", legacy: false,
+    excerpt: "Leadership transitions are where improvement usually dies. Fitchburg built a district leadership team that outlasted the turnover." },
+  { title: "Coaches who coach each other", district: "Downey Unified School District", state: "CA", stateFull: "California", year: "2023", img: "", legacy: false,
+    excerpt: "An IMPACT Coaching cohort that started with six coaches and ended with a district-wide practice for looking at student work." },
+  { title: "One Portrait of a Graduate, written by four hundred people", district: "Natick Public Schools", state: "MA", stateFull: "Massachusetts", year: "2023", img: "", legacy: false,
+    excerpt: "A community engagement process that produced a portrait the School Committee adopted unanimously and teachers actually use." },
+  { title: "Data days that teachers ask for", district: "Rantoul City Schools SD 137", state: "", stateFull: "", year: "", img: "", legacy: true,
+    excerpt: "Legacy story: a PLC inquiry cycle that changed what happens in the two weeks after a benchmark assessment." },
+  { title: "Building a leadership pipeline from within", district: "Capitol Region Education Council", state: "", stateFull: "", year: "", img: "", legacy: true,
+    excerpt: "Legacy story: an aspiring leaders academy that filled seven of nine openings internally." },
+  { title: "From compliance to coherence in a rural district", district: "Mohawk Trail Regional", state: "MA", stateFull: "Massachusetts", year: "2022", img: "", legacy: false,
+    excerpt: "Two small districts sharing one improvement plan, one calendar, and one set of priorities." },
+  { title: "A governance rhythm the School Committee trusts", district: "Medway Public Schools", state: "MA", stateFull: "Massachusetts", year: "2022", img: "", legacy: false,
+    excerpt: "Quarterly progress reporting that replaced anecdote with evidence, and cut meeting length in half." },
+  { title: "Turning a strategic plan into a Tuesday", district: "San Marino Unified School District", state: "CA", stateFull: "California", year: "2021", img: "", legacy: false,
+    excerpt: "Operationalizing a plan across cabinet and directors so the work showed up in weekly decisions." }
+];
+
+class Component extends DCLogic {
+  state = { view: "landing", shown: PAGE, state_f: "All", year_f: "All" };
+
+  componentDidMount() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    this.io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.style.animation = "fsRise 700ms cubic-bezier(.2,.7,.2,1) both";
+        e.target.style.opacity = "";
+        this.io.unobserve(e.target);
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -6% 0px" });
+    this.observe();
+  }
+
+  componentDidUpdate() { this.observe(); }
+
+  revealAll() {
+    Array.from(document.querySelectorAll("[data-reveal]")).forEach((n) => { n.style.opacity = ""; });
+  }
+
+  observe() {
+    if (!this.io) return;
+    Array.from(document.querySelectorAll("[data-reveal]")).forEach((n) => {
+      if (n.dataset.seen) return;
+      n.dataset.seen = "1";
+      if (n.getBoundingClientRect().top < window.innerHeight * 0.95) return;
+      n.style.opacity = "0";
+      this.io.observe(n);
+    });
+    clearTimeout(this.safety);
+    this.safety = setTimeout(() => this.revealAll(), 900);
+  }
+
+  componentWillUnmount() { clearTimeout(this.safety); if (this.io) this.io.disconnect(); }
+
+  card(s) {
+    const place = [s.district, s.state].filter(Boolean).join(" \u00B7 ");
+    return {
+      title: s.title,
+      excerpt: s.excerpt,
+      place: place,
+      year: s.year || "",
+      imageAlt: s.img ? "Photograph from the " + s.district + " partnership." : "No photograph supplied for this story.",
+      imgStyle: "position: relative; aspect-ratio: 16 / 9; background: #005C6D; display: flex; align-items: center; justify-content: center; overflow: hidden;"
+        + (s.img ? " background-image: url('" + IMG + s.img + "'); background-size: cover; background-position: center;" : ""),
+      markStyle: s.img ? "display: none;" : "height: 52%; width: auto; opacity: 0.12;",
+      yearStyle: s.year
+        ? "position: absolute; right: 16px; top: 16px; padding: 7px 13px; border-radius: 999px; background: rgba(0,72,85,0.72); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #ffffff;"
+        : "display: none;",
+      dotStyle: "display: block; width: 6px; height: 6px; flex: 0 0 auto; background: " + (s.legacy ? "#51536a" : "#0A96CB") + ";",
+      source: s.legacy ? "Legacy" : "Story",
+      sourceStyle: "font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; padding: 6px 12px; border-radius: 999px; "
+        + (s.legacy ? "background: #f0f2f4; color: #51536a;" : "background: #eef1f3; color: #005C6D;"),
+      openSingle: () => this.setState({ view: "single" })
+    };
+  }
+
+  chip(label, active, onSelect) {
+    return {
+      label, select: onSelect, pressed: active ? "true" : "false",
+      style: "padding: 12px 18px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; min-height: 44px; transition: background 160ms cubic-bezier(.2,.7,.2,1), border-color 160ms cubic-bezier(.2,.7,.2,1), color 160ms cubic-bezier(.2,.7,.2,1); "
+        + (active
+          ? "background: #005C6D; border: 1px solid #005C6D; color: #ffffff;"
+          : "background: #ffffff; border: 1px solid #d3dde1; color: #005C6D;")
+    };
+  }
+
+  renderVals() {
+    const cover = (file, extra) => "background-image: url('" + IMG + file + "'); background-size: cover; background-position: center; " + extra;
+    const view = this.state.view;
+
+    const nav = [
+      { label: "About", href: "https://www.focusedschools.com/about-our-mission-vision/" },
+      { label: "Team", href: "https://www.focusedschools.com/team/" },
+      { label: "Services", href: "https://www.focusedschools.com/services/" },
+      { label: "Impact Stories", href: "https://www.focusedschools.com/impact-stories/" }
+    ];
+
+    const tag = (t) => t === "Reused"
+      ? "font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #005C6D; background: #eef1f3; padding: 6px 12px; border-radius: 999px; white-space: nowrap;"
+      : "font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #ffffff; background: #DD6237; padding: 6px 12px; border-radius: 999px; white-space: nowrap;";
+
+    // Featured story = newest flagged record (index 0 here)
+    const feat = STORIES[0];
+
+    const states = ["All"].concat(Array.from(new Set(STORIES.map((s) => s.stateFull).filter(Boolean))));
+    const years = ["All"].concat(Array.from(new Set(STORIES.map((s) => s.year).filter(Boolean))));
+
+    const filtered = STORIES.filter((s) => {
+      if (this.state.state_f !== "All" && s.stateFull !== this.state.state_f) return false;
+      if (this.state.year_f !== "All" && s.year !== this.state.year_f) return false;
+      return true;
+    });
+    const shown = Math.min(this.state.shown, filtered.length);
+
+    const blocks = [
+      { type: "h", text: "The district had three plans and no shared direction." },
+      { type: "p", text: "When Champaign Unit 4 first called, there were three improvement plans in circulation \u2014 one from the district office, one from the previous superintendent's cabinet, and one written for a grant. All three were reasonable. None of them told a principal what to do on a Tuesday in February." },
+      { type: "p", text: "We started where we always start: listening. Over eleven weeks we ran focus groups with teachers, principals, families, and students, and we read everything the district had already written. The goal was not a new plan. It was to find the plan that was already half-written in what people told us they cared about." },
+      { type: "q", text: "I appreciate the data-driven approach that we took to arrive at this plan \u2014 and the engagement that occurred with the community.", cite: "School Committee Member, Champaign Unit 4" },
+      { type: "h", text: "One plan, three priorities, named by everyone." },
+      { type: "p", text: "The plan that came out of that process has three priorities and a five-year horizon. What matters more is what came with it: a quarterly progress rhythm for the School Committee, an operationalized version for cabinet and directors, and a one-page version every principal keeps in front of them." },
+      { type: "img", text: "Champaign Unit 4 cabinet members reviewing quarterly progress against the plan.", cite: "Quarterly progress reviews replaced the old habit of reporting activity instead of outcomes." },
+      { type: "p", text: "Two years in, the district runs the rhythm without us. That is the outcome we design for in every Strategy and Vision partnership \u2014 not a document, but a district that can steer." }
+    ];
+
+    return {
+      navItems: nav.map((n) => ({
+        label: n.label, href: n.href,
+        current: n.label === "Impact Stories" ? "page" : undefined,
+        style: "font-size: 14px; font-weight: " + (n.label === "Impact Stories" ? "700" : "500") + "; color: #005C6D; padding-bottom: 6px; border-bottom: " + (n.label === "Impact Stories" ? "2px solid #DD6237" : "2px solid transparent") + "; transition: color 160ms cubic-bezier(.2,.7,.2,1);"
+      })),
+
+      viewTabs: [
+        { label: "Landing page", key: "landing" },
+        { label: "Single story", key: "single" }
+      ].map((t) => ({
+        label: t.label,
+        select: () => this.setState({ view: t.key }),
+        style: "padding: 9px 18px; border-radius: 999px; border: 1px solid " + (view === t.key ? "#ffffff" : "rgba(255,255,255,0.32)") + "; background: " + (view === t.key ? "#ffffff" : "transparent") + "; color: " + (view === t.key ? "#005C6D" : "#ffffff") + "; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;"
+      })),
+
+      isLanding: view === "landing",
+      isSingle: view === "single",
+      openSingle: () => this.setState({ view: "single" }),
+      openLanding: () => this.setState({ view: "landing" }),
+
+      heroImgStyle: cover("retreat-2.jpg", "position: absolute; inset: 0;"),
+      ctaImgStyle: cover("retreat-2.jpg", "width: 100%; aspect-ratio: 4 / 5; border-radius: 8px; box-shadow: 0 20px 44px rgba(0,92,109,0.14);"),
+      singleHeroStyle: cover("retreat-1.jpg", "position: absolute; inset: 0;"),
+
+      featured: {
+        title: feat.title,
+        excerpt: feat.excerpt,
+        meta: [feat.district, feat.stateFull, feat.year],
+        imageAlt: "Champaign Unit 4 leadership team reviewing their strategic plan.",
+        imgStyle: cover(feat.img, "min-height: 100%; aspect-ratio: 4 / 5;")
+      },
+
+      filterGroups: [
+        { label: "State", aria: "Filter stories by state", options: states.map((s) => this.chip(s, this.state.state_f === s, () => this.setState({ state_f: s, shown: PAGE }))) },
+        { label: "Year", aria: "Filter stories by year", options: years.map((y) => this.chip(y, this.state.year_f === y, () => this.setState({ year_f: y, shown: PAGE }))) }
+      ],
+
+      visibleStories: filtered.slice(0, shown).map((s) => this.card(s)),
+      counter: "Showing " + shown + " of " + filtered.length,
+      hasResults: filtered.length > 0,
+      isEmpty: filtered.length === 0,
+      hasMore: shown < filtered.length,
+      loadMore: () => this.setState((s) => ({ shown: s.shown + PAGE })),
+      clearFilters: () => this.setState({ state_f: "All", year_f: "All", shown: PAGE }),
+
+      single: {
+        title: feat.title,
+        excerpt: feat.excerpt,
+        meta: [feat.district, feat.stateFull, feat.year],
+        results: [
+          { value: "3", unit: "Priorities", label: "One plan replacing three competing ones", aria: "Three priorities in one plan" },
+          { value: "400+", unit: "Voices", label: "Community members engaged in the process", aria: "More than 400 community members engaged" },
+          { value: "5", unit: "Year horizon", label: "Adopted unanimously by the School Committee", aria: "Five year horizon, adopted unanimously" }
+        ],
+        details: [
+          { k: "District", v: "Champaign Unit 4" },
+          { k: "State", v: "Illinois" },
+          { k: "Year", v: "2024" },
+          { k: "Service lane", v: "Strategy and Vision" },
+          { k: "Partnership", v: "Ongoing, 2 years" }
+        ],
+        blocks: blocks.map((b) => ({
+          isHeading: b.type === "h",
+          isText: b.type === "p",
+          isQuote: b.type === "q",
+          isImage: b.type === "img",
+          text: b.text,
+          cite: b.cite || "",
+          wrap: "margin-bottom: " + (b.type === "h" ? "26px" : b.type === "q" ? "56px" : b.type === "img" ? "56px" : "30px") + "; " + (b.type === "q" ? "margin-top: 56px;" : b.type === "h" ? "margin-top: 26px;" : ""),
+          imgStyle: cover("retreat-3.jpg", "width: 100%; aspect-ratio: 16 / 9; border-radius: 8px;")
+        }))
+      },
+
+      related: STORIES.slice(1, 4).map((s) => this.card(s)),
+
+      showSpecs: this.props.showSpecs ?? true,
+
+      hierarchy: [
+        { num: "A1", title: "Landing · Hero", note: "The claim, not the word \u201CStories\u201D. CTA jumps to the grid." },
+        { num: "A2", title: "Landing · Featured spotlight", note: "Newest Featured record. Full-bleed teal split so it reads as a statement, not the biggest card." },
+        { num: "A3", title: "Landing · Filters + grid", note: "Two chip rows, live count, 3-up card grid mixing both sources, Load more." },
+        { num: "A4", title: "Landing · Closing CTA", note: "\u201CYour district could be the next story.\u201D Primary to Contact, secondary to Services." },
+        { num: "B1", title: "Single · Breadcrumb + hero", note: "Same hero component. Meta chips in the slab carry district, state, year." },
+        { num: "B2", title: "Single · At a glance", note: "Teal statistics band, one to four results. Omitted when a story has no numbers." },
+        { num: "B3", title: "Single · Body", note: "Sticky 300px detail rail + 66ch prose. Heading, paragraph, pull quote, captioned figure." },
+        { num: "B4", title: "Single · Related stories", note: "Three cards, same component, matched on state then service lane then recency." }
+      ].map((h) => ({ ...h, numStyle: "font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: " + (h.num[0] === "A" ? "#DD6237" : "#0A96CB") + "; padding-top: 4px;" })),
+
+      mapping: [
+        { name: "Sticky header / footer", source: "Homepage, verbatim; Impact Stories active", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Page hero (media + teal slab)", source: "Homepage hero; serves both templates", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Featured spotlight split", source: "Homepage teal content/image band", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Filter chip bar", source: "DS v1 chips on the 120px label rail", tag: "New", tagStyle: tag("New") },
+        { name: "Impact Story card", source: "DS v1 card + place line, year badge, source pill", tag: "Extended", tagStyle: tag("Extended") },
+        { name: "Live result count", source: "Homepage carousel counter type", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Load more button", source: "DS v1 secondary pill + pagination rule", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Empty state panel", source: "DS v1 paper panel + secondary button", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Statistics band (At a glance)", source: "Homepage / About stats, gold rule + lime unit", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Detail rail (definition list)", source: "Homepage 264px label rail, narrowed to 300px sticky", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Pull quote", source: "Homepage testimonial, coral slashes verbatim", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Captioned figure", source: "Homepage figure + caption type", tag: "Reused", tagStyle: tag("Reused") },
+        { name: "Closing CTA split", source: "Homepage contact split, form replaced by buttons", tag: "Reused", tagStyle: tag("Reused") }
+      ],
+
+      degradation: [
+        { key: "featured_image", rule: "New: 16:9 photograph. Legacy without one: teal tile, mark at 12%. Same card height either way \u2014 the ratio box is fixed, so rows never jag." },
+        { key: "title", rule: "Both sources have it. 24px / 3-line clamp. The only truly required field." },
+        { key: "excerpt", rule: "New: authored excerpt. Legacy: auto-excerpt trimmed to 180 characters at a word boundary." },
+        { key: "district / school", rule: "New: meta field. Legacy: falls back to the post title's leading phrase if parseable, otherwise the place line shows only what exists." },
+        { key: "state", rule: "New: taxonomy term, shown after a middot. Legacy: omitted \u2014 the place line shortens rather than showing a dash or \u201CN/A\u201D." },
+        { key: "year", rule: "New: badge top-right of the image. Legacy: badge omitted entirely. No \u201CUndated\u201D label \u2014 absence is quieter than a placeholder." },
+        { key: "source", rule: "Every card carries a pill: Story or Legacy. Neutral gray for legacy, teal for new. The dot in the place line matches." },
+        { key: "featured", rule: "New only. Legacy records can never take the spotlight, so the spotlight always has full structured data." }
+      ],
+
+      breakpoints: [
+        { label: "Desktop ≥1280", cols: "3-up", rules: ["1400px shell, 24px gutter", "32px grid gap", "Spotlight 1fr + 560px", "Card title 24px / excerpt 15px"] },
+        { label: "Laptop 1024–1279", cols: "3-up", rules: ["Spotlight stacks, media 16:9", "Filter rail label moves above chips", "Single body: rail drops below prose", "Hero slab static"] },
+        { label: "Tablet 768–1023", cols: "2-up", rules: ["24px grid gap", "Hamburger nav from 1023", "At a glance 2-up", "Card padding 28px"] },
+        { label: "Mobile <768", cols: "1-up", rules: ["20px gutter, 20px grid gap", "Chip rows scroll horizontally", "Card padding 24/22px", "Pull quote 26px"] }
+      ],
+
+      spacing: [
+        { what: "Container / gutter", value: "1400 / 24px" },
+        { what: "Section padding, light ground", value: "112\u2013120px" },
+        { what: "Section padding, teal band", value: "96px" },
+        { what: "Hero slab offset", value: "bottom \u221256px, left 24px" },
+        { what: "Spotlight: copy / media", value: "1fr / 560px" },
+        { what: "Spotlight copy padding", value: "64px 68px 68px" },
+        { what: "Filter bar padding", value: "28px top / 40px bottom" },
+        { what: "Filter label rail", value: "120px + 24px gap" },
+        { what: "Chip gap / row gap", value: "10 / 18px" },
+        { what: "Filter bar \u2192 grid", value: "48px" },
+        { what: "Grid gap (desktop / tablet / mobile)", value: "32 / 24 / 20px" },
+        { what: "Card padding (desktop / mobile)", value: "28 / 24px" },
+        { what: "Card title \u2192 excerpt", value: "14px" },
+        { what: "Card footer padding-top", value: "18px" },
+        { what: "Grid \u2192 Load more", value: "56px" },
+        { what: "Single: rail / prose", value: "300px + 1fr, 96px gap" },
+        { what: "Prose measure / paragraph gap", value: "66ch / 30px" },
+        { what: "Block gap: heading / quote / figure", value: "26 / 56 / 56px" },
+        { what: "Sticky rail offset", value: "top 160px" },
+        { what: "Mobile section padding", value: "64px" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

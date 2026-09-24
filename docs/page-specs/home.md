@@ -386,3 +386,91 @@ section was missing two things present in that capture: the Chamber of Commerce 
 menu had no menu assigned in this environment, so the header's nav rendered empty — not a
 code bug, but it blocked visual QA of any header work. Seeded a real "Primary Menu"
 (About/Team/Services/Impact Stories/Podcast) and assigned it to the `primary` location.
+
+## Responsive Fixes: Header Bar Dead-Space Gap + Contact Section Overflow
+
+A systematic bounding-box sweep across 320–1440px (not spot-checking a few breakpoints)
+found two real bugs:
+
+- **Header, 600–1023px**: the CTA and Menu toggle were stranded near the logo with a
+  large dead gap before the bar's actual right edge. The inline nav's `margin: 0 auto`
+  normally does the work of pushing everything after it to the right, but the nav is
+  `display: none` in this range (only reappearing at 1024px) and nothing else picked up
+  that job. Fixed with a scoped `margin-left: auto` on `.fs-site-header__cta` for exactly
+  that range — the already-correct ≤599px and ≥1024px behavior was untouched.
+- **Home Contact section, 1024–1099px**: a genuine 58px horizontal page overflow, from a
+  rigid `flex: 0 0 45.625rem` (730px, non-shrinking) on the CTA box that wouldn't shrink
+  even though the container had less room than that at the exact breakpoint where its own
+  padding also steps up. Made it shrinkable (`flex: 1 1 28rem`) with the same 730px
+  ceiling as a `max-width` instead.
+
+Both re-verified with zero overflow anywhere across the full width matrix afterward.
+
+## Header Menu Reverted to `Focused Schools Homepage.dc.html` Exactly
+
+§"Header and Menu Panel" above (and the merge-conflict resolution before it) had settled
+on a lightweight dropdown panel, deliberately diverging from the `.dc` source's own
+full-screen "Explore" modal — because it matched the mockup's actual deployed site more
+precisely than the `.dc` file's literal markup. **Explicit reversal, confirmed with the
+project owner**: the header now matches `Focused Schools Homepage.dc.html` exactly again
+— a full-screen modal (1280px, teal offset-shadow behind a white dialog) with a 2-column
+numbered grid of the same 'primary' nav items (42px labels, 152px-tall cells, 2-up ≥720px
+/ 1-up below) beside a teal aside (brand mark, tagline, email, socials), matching the
+`.dc` file's own responsive rules exactly (`.fs-site-menu__body` single-column ≤1024px,
+`.fs-site-menu__grid` single-column ≤720px with smaller cells).
+
+Rebuilt: `site-header.php` (scrim → centering wrapper → shadow + panel structure,
+`role="dialog" aria-modal`), `site-header.css` (full replacement of the dropdown rules),
+`site-header.js` (back to the `hidden`-attribute + focus-trap + body-scroll-lock pattern
+shared with the video/team-bio modals — the dropdown's click-outside/`data-open` logic no
+longer applies). Content stays dynamic rather than the `.dc` source's literal 8-item
+sample list (Home/Blog included) — the real registered `'primary'` menu, same as the
+compact nav, consistent with this project's no-hardcoding convention; tagline/email/
+socials pull from Site Settings with the `.dc` source's own copy as the fallback.
+
+Re-verified: `php -l` + full-project PHPCS clean; keyboard QA (Escape closes, focus
+returns to toggle); responsive breakpoints match the `.dc` source's own grid-column
+values exactly at 375/600/720/900/1024/1200/1440px, zero overflow at any width;
+About/Services/Team spot-checked live (all share this header) — zero console errors.
+
+## Header Menu Replaced Again: Dropdown Panel (Supersedes the "Explore" Modal Above)
+
+The project owner supplied a new reference screenshot and gave an explicit, direct
+instruction to replace the "Explore" modal above with a dropdown panel — checked first
+against both `Focused Schools Homepage.dc.html` (the modal's own source) and
+`Design System v1.dc.html`'s header component spec, and it matched neither (the design
+system doc describes the mobile hamburger as a full-height *teal* panel with *white*
+links — the opposite color scheme from the screenshot), so this was built directly from
+the screenshot rather than a literal `.dc` source, after confirming with the project
+owner that no such file exists and that this should replace the modal everywhere.
+
+**New design**: the Menu button now opens a compact panel anchored directly beneath the
+header bar (not a full-screen overlay) — a flat vertical list of the same `'primary'` nav
+items (one row each, hairline divider, coral arrow, hover tint) followed by the same
+Site Settings CTA button, stretched full-width. No numbered grid, no teal aside, no
+tagline/email/socials in the panel itself (those remain in the footer).
+
+Rebuilt: `site-header.php` (scrim/centering-wrapper/shadow/2-col-body structure replaced
+by a single `.fs-site-nav-panel`, positioned `absolute` inside the already-`position:
+relative` header bar so it inherits the bar's own width/alignment; dropped the
+now-unused `$fs_tagline`/`$fs_email`/`$fs_socials` variables and the numbered-cell
+markup), `site-header.css` (full replacement of the `.fs-site-menu*` rules with
+`.fs-site-nav-panel*`), `site-header.js` (simplified — no more separate scrim element to
+query, so `menu` itself is both the hidden-toggle target and the focus-trap container;
+dropped body-scroll-lock since a dropdown doesn't cover the viewport; added
+click-outside-to-close, careful not to fight the focus-trap's own Escape handling or
+return focus to the toggle when the visitor's click already moved focus elsewhere).
+Content stays dynamic (the real `'primary'` menu, same Site Settings CTA) — nothing here
+introduces new hardcoded copy.
+
+**Note**: the reference screenshot shows six items including "Contact"; the live
+`'primary'` WordPress menu in this environment currently has five (no Contact) — the
+panel correctly renders whatever the menu actually contains, so this is a wp-admin menu
+content question (Appearance → Menus), not a template gap, and wasn't changed here.
+
+Verified: opens/closes via the toggle, Escape (with focus returning to the toggle),
+and click-outside (without fighting focus); tab order enters and wraps correctly within
+the panel; swept 320–1440px on the Home page (panel always stays within the viewport,
+zero overflow) and a 7-page site-wide sweep (Home/About/Services/Team/Contact/Podcast/
+Impact Stories — all share this header) — zero overflow, zero console errors anywhere.
+`php -l` + PHPCS clean.
