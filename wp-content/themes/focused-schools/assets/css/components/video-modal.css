@@ -1,0 +1,104 @@
+/**
+ * Video modal — the lightbox the service lanes' play controls open.
+ */
+
+.fs-video-modal[hidden] {
+	display: none;
+}
+
+.fs-video-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+}
+
+.fs-video-modal__backdrop {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	border: 0;
+	background: rgba( 0, 48, 57, 0.82 );
+	cursor: pointer;
+}
+
+.fs-video-modal__dialog {
+	position: relative;
+	width: min( 1040px, 100% );
+	background: var( --wp--preset--color--teal-deep, #004855 );
+	border-radius: var( --fs-r-sm, 8px );
+	overflow: hidden;
+}
+
+.fs-video-modal__bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 14px 16px 14px 20px;
+}
+
+.fs-video-modal__title {
+	margin: 0;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var( --wp--preset--color--base, #ffffff );
+}
+
+.fs-video-modal__title:focus-visible {
+	outline: 2px solid var( --wp--preset--color--lime, #a7cc14 );
+	outline-offset: 4px;
+}
+
+.fs-video-modal__close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	flex: 0 0 auto;
+	padding: 0;
+	border: 0;
+	border-radius: var( --fs-r-pill, 999px );
+	background: rgba( 255, 255, 255, 0.14 );
+	color: var( --wp--preset--color--base, #ffffff );
+	font-size: 1.5rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.fs-video-modal__close:hover {
+	background: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-video-modal__frame {
+	position: relative;
+	aspect-ratio: 16 / 9;
+	background: #000000;
+}
+
+.fs-video-modal__frame iframe {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+/* Stop the page behind the dialog scrolling under it. */
+body.fs-has-modal {
+	overflow: hidden;
+}
+
+@media ( max-width: 640px ) {
+	.fs-video-modal {
+		padding: 16px;
+	}
+}

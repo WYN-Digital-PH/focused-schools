@@ -41,7 +41,9 @@ $fs_index   = isset( $args['index'] ) ? (int) $args['index'] : 0;
 $fs_flip    = ! empty( $args['flip'] );
 $fs_title   = get_the_title( $fs_post_id );
 $fs_tagline = get_post_meta( $fs_post_id, '_fs_service_tagline', true );
-$fs_video   = get_post_meta( $fs_post_id, '_fs_service_video_url', true );
+$fs_video   = focused_schools_youtube_id( get_post_meta( $fs_post_id, '_fs_service_video_url', true ) );
+$fs_vtitle  = (string) get_post_meta( $fs_post_id, '_fs_service_video_title', true );
+$fs_vtitle  = '' !== trim( $fs_vtitle ) ? $fs_vtitle : $fs_title;
 $fs_proof   = get_post_meta( $fs_post_id, '_fs_service_proof', true );
 $fs_raw     = (string) get_post_meta( $fs_post_id, '_fs_service_offerings', true );
 
@@ -137,24 +139,25 @@ $fs_has_image = has_post_thumbnail( $fs_post_id ) || ! empty( $args['image_url']
 				)
 			);
 
-			if ( $fs_video ) {
-				get_template_part(
-					'template-parts/components/button',
-					null,
-					array(
-						'label'  => __( 'Watch Overview Video', 'focused-schools' ),
-						'url'    => $fs_video,
-						'style'  => 'secondary',
-						'target' => '_blank',
-					)
-				);
-			}
+			if ( $fs_video ) :
+				?>
+				<button
+					class="fs-btn fs-btn--secondary fs-btn--watch"
+					type="button"
+					data-fs-video="<?php echo esc_attr( $fs_video ); ?>"
+					data-fs-video-title="<?php echo esc_attr( $fs_vtitle ); ?>"
+				>
+					<span class="fs-btn__play" aria-hidden="true">&#9654;</span>
+					<?php esc_html_e( 'Watch Overview Video', 'focused-schools' ); ?>
+				</button>
+				<?php
+			endif;
 			?>
 		</div>
 	</div>
 
 	<?php if ( $fs_has_image ) : ?>
-		<figure class="fs-lane__media fs-figure">
+		<figure class="fs-lane__media fs-figure<?php echo $fs_video ? ' fs-lane__media--video' : ''; ?>">
 			<?php
 			if ( has_post_thumbnail( $fs_post_id ) ) {
 				echo get_the_post_thumbnail(
@@ -175,6 +178,18 @@ $fs_has_image = has_post_thumbnail( $fs_post_id ) || ! empty( $args['image_url']
 				);
 			}
 			?>
+
+			<?php if ( $fs_video ) : ?>
+				<button
+					class="fs-playover"
+					type="button"
+					data-fs-video="<?php echo esc_attr( $fs_video ); ?>"
+					data-fs-video-title="<?php echo esc_attr( $fs_vtitle ); ?>"
+				>
+					<span class="fs-playover__disc" aria-hidden="true">&#9654;</span>
+					<span class="fs-playover__label"><?php esc_html_e( 'Watch Overview Video', 'focused-schools' ); ?></span>
+				</button>
+			<?php endif; ?>
 
 			<?php if ( $fs_proof ) : ?>
 				<figcaption class="fs-figure__caption<?php echo $fs_flip ? ' fs-figure__caption--left' : ''; ?>">

@@ -113,3 +113,33 @@ function focused_schools_widgets_init() {
 	);
 }
 add_action( 'widgets_init', 'focused_schools_widgets_init' );
+
+/**
+ * Extract a YouTube video ID from whatever an editor pasted.
+ *
+ * The Overview Video field is a URL field, so it will usually hold a watch or
+ * share link, but a bare ID is accepted too. Anything that is not a valid ID
+ * returns an empty string, so a mistyped value shows no play control rather
+ * than an embed that 404s.
+ *
+ * @param string $value Stored field value.
+ * @return string Eleven-character video ID, or '' when there is none.
+ */
+function focused_schools_youtube_id( $value ) {
+	$value = trim( (string) $value );
+
+	if ( '' === $value ) {
+		return '';
+	}
+
+	if ( preg_match( '/^[A-Za-z0-9_-]{11}$/', $value ) ) {
+		return $value;
+	}
+
+	// youtu.be/ID, /watch?v=ID, /embed/ID, /shorts/ID, /live/ID.
+	if ( preg_match( '#(?:youtu\.be/|v=|/embed/|/shorts/|/live/)([A-Za-z0-9_-]{11})#', $value, $matches ) ) {
+		return $matches[1];
+	}
+
+	return '';
+}

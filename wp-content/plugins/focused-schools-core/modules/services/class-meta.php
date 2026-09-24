@@ -84,6 +84,11 @@ class Meta {
 				'type'        => 'url',
 				'description' => __( 'Optional. Adds a play control over the service photo.', 'focused-schools-core' ),
 			),
+			'video_title' => array(
+				'label'       => __( 'Overview Video Title', 'focused-schools-core' ),
+				'type'        => 'text',
+				'description' => __( 'Optional. Shown on the video dialog; defaults to the service name.', 'focused-schools-core' ),
+			),
 			'proof'       => array(
 				'label'       => __( 'Proof Line', 'focused-schools-core' ),
 				'type'        => 'text',
