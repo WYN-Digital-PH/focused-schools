@@ -1,11 +1,12 @@
 /**
- * Header: the menu panel toggle, plus the scroll-progress bar.
+ * Header: the nav dropdown panel toggle, plus the scroll-progress bar.
  *
- * The panel is a dropdown anchored under the bar, matching the mockup — not a
- * full-screen dialog — so it deliberately does not trap focus or lock body
- * scrolling. It toggles data-open alongside aria-expanded, swaps the button's
- * aria-label between Open/Close menu, and closes on Escape or a click outside
- * the header.
+ * Dropdown panel — same `hidden`-attribute + focus-trap pattern used by the
+ * video/team-bio modals elsewhere in this theme, minus body-scroll-lock
+ * (a compact dropdown doesn't cover the viewport). Closes on Escape, on
+ * clicking outside the panel/toggle, or on navigating via a panel link;
+ * focus returns to the toggle except when closed by an outside click,
+ * where returning focus would fight whatever the visitor just clicked.
  *
  * Scroll progress: a thin bar under the header bar, width tied to how far down
  * the page the visitor has scrolled. Passive listener, rAF-throttled.
@@ -15,42 +16,77 @@
 
 	var toggle = document.querySelector( '[data-fs-nav-toggle]' );
 	var menu = toggle ? document.getElementById( toggle.getAttribute( 'aria-controls' ) ) : null;
-	var header = toggle ? toggle.closest( '.fs-site-header' ) : null;
 
 	if ( toggle && menu ) {
-		var setOpen = function ( open ) {
-			menu.setAttribute( 'data-open', open ? 'true' : 'false' );
-			toggle.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
-			toggle.setAttribute(
-				'aria-label',
-				open
-					? toggle.getAttribute( 'data-label-close' ) || 'Close menu'
-					: toggle.getAttribute( 'data-label-open' ) || 'Open menu'
+
+		function focusableElements() {
+			return Array.prototype.slice.call(
+				menu.querySelectorAll( 'a[href], button:not([disabled])' )
 			);
-		};
+		}
+
+		function closeMenu( returnFocus ) {
+			menu.hidden = true;
+			toggle.setAttribute( 'aria-expanded', 'false' );
+			document.removeEventListener( 'keydown', trapFocus );
+			document.removeEventListener( 'click', onOutsideClick, true );
+
+			if ( false !== returnFocus ) {
+				toggle.focus();
+			}
+		}
+
+		function openMenu() {
+			menu.hidden = false;
+			toggle.setAttribute( 'aria-expanded', 'true' );
+			document.addEventListener( 'keydown', trapFocus );
+
+			// Deferred so the click that opened the menu isn't also seen as
+			// the "outside" click that immediately closes it again.
+			setTimeout( function () {
+				document.addEventListener( 'click', onOutsideClick, true );
+			}, 0 );
+		}
+
+		function onOutsideClick( event ) {
+			if ( ! menu.contains( event.target ) && ! toggle.contains( event.target ) ) {
+				closeMenu( false );
+			}
+		}
+
+		function trapFocus( event ) {
+			if ( 'Escape' === event.key ) {
+				closeMenu();
+				return;
+			}
+
+			if ( 'Tab' !== event.key ) {
+				return;
+			}
+
+			var focusable = focusableElements();
+
+			if ( ! focusable.length ) {
+				return;
+			}
+
+			var first = focusable[ 0 ];
+			var last = focusable[ focusable.length - 1 ];
+
+			if ( event.shiftKey && document.activeElement === first ) {
+				event.preventDefault();
+				last.focus();
+			} else if ( ! event.shiftKey && document.activeElement === last ) {
+				event.preventDefault();
+				first.focus();
+			}
+		}
 
 		toggle.addEventListener( 'click', function () {
-			setOpen( 'true' !== menu.getAttribute( 'data-open' ) );
-		} );
-
-		// Anywhere outside the header closes it — the panel is a dropdown,
-		// not a modal, so it never traps focus or locks scrolling.
-		document.addEventListener( 'click', function ( event ) {
-			if ( 'true' !== menu.getAttribute( 'data-open' ) ) {
-				return;
-			}
-
-			if ( header && header.contains( event.target ) ) {
-				return;
-			}
-
-			setOpen( false );
-		} );
-
-		document.addEventListener( 'keydown', function ( event ) {
-			if ( 'Escape' === event.key && 'true' === menu.getAttribute( 'data-open' ) ) {
-				setOpen( false );
-				toggle.focus();
+			if ( 'true' === toggle.getAttribute( 'aria-expanded' ) ) {
+				closeMenu();
+			} else {
+				openMenu();
 			}
 		} );
 	}

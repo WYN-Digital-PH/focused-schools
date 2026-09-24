@@ -1,9 +1,7 @@
 /**
- * Header navigation structure. Matches the live reference site (the
- * mockup's own source, which supersedes the earlier Design System v1.dc
- * mock for this element): sticky white pill bar (74px), horizontal nav
- * ≥1024px, always-visible Menu button opening a dropdown panel anchored
- * under the bar (nav items + Contact, over a full-width CTA).
+ * Header navigation structure: sticky white pill bar (74px), horizontal
+ * nav ≥1024px, always-visible Menu button opening a dropdown panel beneath
+ * the bar (flat nav list + full-width CTA).
  */
 
 .fs-site-header {
@@ -146,6 +144,21 @@
 }
 
 /*
+ * 600–1023px: the inline nav (whose `margin: 0 auto` normally pushes the
+ * CTA/toggle to the bar's right edge) is hidden here, and only reappears
+ * at 1024px — with nothing else picking up that push, the CTA and toggle
+ * were left stranded near the logo with a large dead gap to the right of
+ * them instead of sitting flush with the bar's edge (confirmed via
+ * bounding-box measurement: the toggle's right edge stayed pinned at
+ * ~568px across the whole range while the bar itself grew to 991px).
+ */
+@media ( min-width: 600px ) and ( max-width: 1023px ) {
+	.fs-site-header__cta {
+		margin-left: auto;
+	}
+}
+
+/*
  * The .dc source only shows the header at desktop width (fixed-pixel inline
  * styles, no responsive rules) — ported as-is, the CTA + Menu toggle overflow
  * the pill bar's `overflow: hidden` box below ~600px and the toggle becomes
@@ -167,69 +180,9 @@
 	}
 }
 
-/* -----------------------------------------------------------------------
- * Menu panel — a dropdown anchored under the bar, not a full-screen dialog.
- * Same nav items as the inline nav plus Contact, each with a coral arrow,
- * over a full-width primary CTA.
- * --------------------------------------------------------------------- */
-
-.fs-site-menu {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: calc( 100% + 10px );
-	z-index: 80;
-	display: none;
-	padding: 22px;
-	border-radius: var( --fs-r-md, 16px );
-	background: var( --wp--preset--color--base, #ffffff );
-	box-shadow: var( --fs-shadow-2, 0 18px 48px rgba( 0, 92, 109, 0.16 ) );
-}
-
-.fs-site-menu[data-open="true"] {
-	display: block;
-}
-
-.fs-site-menu__list {
-	display: flex;
-	flex-direction: column;
-}
-
-.fs-site-menu__list a {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	min-height: 52px;
-	padding: 6px 4px;
-	font-size: 1.125rem;
-	font-weight: 700;
-	letter-spacing: -0.01em;
-	color: var( --wp--preset--color--contrast, #005c6d );
-	text-decoration: none;
-	border-bottom: 1px solid var( --wp--preset--color--rule, #d3dde1 );
-}
-
-.fs-site-menu__list a span {
-	color: var( --wp--preset--color--primary, #dd6237 );
-}
-
-.fs-site-menu__list a:hover,
-.fs-site-menu__list a[aria-current="page"] {
-	color: var( --wp--preset--color--primary, #dd6237 );
-}
-
-.fs-site-menu__foot {
-	padding-top: 20px;
-}
-
-.fs-site-menu__foot .fs-btn {
-	width: 100%;
-	justify-content: center;
-}
-
 /*
  * Below the inline-nav breakpoint the horizontal nav and the button's text
- * label both drop, leaving the mark and the lines — the panel then carries
+ * label both drop, leaving the mark and the lines — the modal then carries
  * the whole navigation.
  */
 @media ( max-width: 1023px ) {
@@ -237,5 +190,73 @@
 	.fs-nav--primary,
 	.fs-site-header__toggle-label {
 		display: none;
+	}
+}
+
+/* -----------------------------------------------------------------------
+ * Nav dropdown panel — flat list beneath the header bar, full-width CTA.
+ * --------------------------------------------------------------------- */
+
+.fs-site-nav-panel {
+	position: absolute;
+	top: calc( 100% + 8px );
+	left: 0;
+	right: 0;
+	z-index: 90;
+	background: var( --wp--preset--color--base, #ffffff );
+	border-radius: var( --fs-r-md, 16px );
+	box-shadow: var( --fs-shadow-2, 0 12px 28px rgba( 0, 92, 109, 0.12 ) );
+	overflow: hidden;
+}
+
+.fs-site-nav-panel[hidden] {
+	display: none;
+}
+
+.fs-site-nav-panel__list {
+	display: flex;
+	flex-direction: column;
+}
+
+.fs-site-nav-panel__item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	padding: 24px 28px;
+	border-bottom: 1px solid var( --wp--preset--color--paper-soft, #eef1f2 );
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+	text-decoration: none;
+	transition: background var( --fs-dur-fast, 160ms ) var( --fs-ease, ease );
+}
+
+.fs-site-nav-panel__item span:last-child {
+	color: var( --wp--preset--color--primary, #dd6237 );
+	flex: 0 0 auto;
+}
+
+.fs-site-nav-panel__item:hover {
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+.fs-site-nav-panel__item[aria-current="page"] {
+	color: var( --wp--preset--color--primary, #dd6237 );
+}
+
+.fs-site-nav-panel__cta {
+	padding: 20px;
+}
+
+.fs-site-nav-panel__cta .fs-btn {
+	width: 100%;
+	justify-content: center;
+}
+
+@media ( max-width: 599px ) {
+	.fs-site-nav-panel__item {
+		padding: 20px 24px;
+		font-size: 1.125rem;
 	}
 }
