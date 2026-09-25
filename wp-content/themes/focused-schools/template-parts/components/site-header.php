@@ -38,9 +38,6 @@ $fs_socials = array(
 	),
 );
 
-$fs_contact_page = get_page_by_path( 'contact' );
-$fs_contact_url  = $fs_contact_page instanceof WP_Post ? get_permalink( $fs_contact_page ) : '';
-
 $fs_menu_items = wp_get_nav_menu_items( get_nav_menu_locations()['primary'] ?? 0 );
 $fs_menu_items = is_array( $fs_menu_items ) ? $fs_menu_items : array();
 ?>
@@ -101,8 +98,10 @@ $fs_menu_items = is_array( $fs_menu_items ) ? $fs_menu_items : array();
 		<?php
 		/*
 		 * The menu is a panel anchored under the bar, not a full-screen
-		 * overlay: it lists the same 'primary' menu items plus Contact, each
-		 * with a coral arrow, and closes on outside click or Escape.
+		 * overlay: it lists exactly the same 'primary' menu items as the
+		 * inline nav, each with a coral arrow, and closes on outside click
+		 * or Escape. One menu, two presentations — editing Primary in
+		 * Appearance > Menus changes both.
 		 */
 		?>
 		<div class="fs-site-menu" id="fs-site-menu" data-open="false" data-fs-site-menu>
@@ -117,12 +116,6 @@ $fs_menu_items = is_array( $fs_menu_items ) ? $fs_menu_items : array();
 					</a>
 				<?php endforeach; ?>
 
-				<?php if ( $fs_contact_url ) : ?>
-					<a href="<?php echo esc_url( $fs_contact_url ); ?>">
-						<?php esc_html_e( 'Contact', 'focused-schools' ); ?>
-						<span aria-hidden="true">&rarr;</span>
-					</a>
-				<?php endif; ?>
 			</div>
 
 			<?php if ( $fs_cta_label && $fs_cta_url ) : ?>

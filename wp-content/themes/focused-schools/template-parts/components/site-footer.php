@@ -14,7 +14,7 @@
  * "Connect" is Site Settings contact info + socials.
  *
  * The footer-widgets sidebar (inc/setup.php) is still registered but no
- * longer rendered here — the approved design's Resources column is fixed
+ * longer rendered here — the approved design's Resources column is
  * content, not admin-widget-driven. Left registered rather than removed, in
  * case a future task needs it.
  *
@@ -98,13 +98,35 @@ $fs_socials = array(
 		?>
 	</nav>
 
-	<nav class="fs-site-footer__col" aria-label="<?php esc_attr_e( 'Resources', 'focused-schools' ); ?>">
+	<nav class="fs-site-footer__col fs-nav fs-nav--footer" aria-label="<?php esc_attr_e( 'Resources', 'focused-schools' ); ?>">
 		<p class="fs-site-footer__col-heading"><?php esc_html_e( 'Resources', 'focused-schools' ); ?></p>
-		<div class="fs-nav__list">
-			<a href="<?php echo esc_url( home_url( '/podcast/' ) ); ?>"><?php esc_html_e( 'Podcast', 'focused-schools' ); ?></a>
-			<a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'Blog', 'focused-schools' ); ?></a>
-			<a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Contact', 'focused-schools' ); ?></a>
-		</div>
+		<?php
+		if ( has_nav_menu( 'footer_resources' ) ) :
+			wp_nav_menu(
+				array(
+					'theme_location' => 'footer_resources',
+					'container'      => '',
+					'depth'          => 1,
+					'menu_class'     => 'fs-nav__list',
+					'fallback_cb'    => false,
+				)
+			);
+		else :
+			/*
+			 * No menu assigned yet, so the column keeps the links it has
+			 * always shown. Assigning a Footer Resources menu in
+			 * Appearance > Menus takes over from here, exactly as Explore
+			 * works — nothing changes until someone chooses to change it.
+			 */
+			?>
+			<div class="fs-nav__list">
+				<a href="<?php echo esc_url( home_url( '/podcast/' ) ); ?>"><?php esc_html_e( 'Podcast', 'focused-schools' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>"><?php esc_html_e( 'Blog', 'focused-schools' ); ?></a>
+				<a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Contact', 'focused-schools' ); ?></a>
+			</div>
+			<?php
+		endif;
+		?>
 	</nav>
 
 	<div class="fs-site-footer__col fs-site-footer__connect">

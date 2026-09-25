@@ -73,8 +73,9 @@ function focused_schools_setup() {
 
 	register_nav_menus(
 		array(
-			'primary' => __( 'Primary Menu', 'focused-schools' ),
-			'footer'  => __( 'Footer Menu', 'focused-schools' ),
+			'primary'          => __( 'Primary Menu', 'focused-schools' ),
+			'footer'           => __( 'Footer Menu', 'focused-schools' ),
+			'footer_resources' => __( 'Footer Resources Menu', 'focused-schools' ),
 		)
 	);
 

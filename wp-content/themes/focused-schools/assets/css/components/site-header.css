@@ -141,6 +141,15 @@
 	.fs-nav--primary {
 		display: block;
 	}
+
+	/*
+	 * The inline nav carries the whole menu from this width up, so the
+	 * toggle would open a panel listing exactly what is already on screen.
+	 * It is a mobile and tablet control only.
+	 */
+	.fs-site-header__toggle {
+		display: none;
+	}
 }
 
 /*
@@ -171,8 +180,8 @@
 
 /* -----------------------------------------------------------------------
  * Menu panel — a dropdown anchored under the bar, not a full-screen dialog.
- * Same nav items as the inline nav plus Contact, each with a coral arrow,
- * over a full-width primary CTA.
+ * Exactly the inline nav's items, each with a coral arrow, over a
+ * full-width primary CTA.
  * --------------------------------------------------------------------- */
 
 .fs-site-menu {
