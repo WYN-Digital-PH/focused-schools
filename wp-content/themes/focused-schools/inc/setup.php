@@ -52,7 +52,24 @@ function focused_schools_setup() {
 		)
 	);
 
-	add_editor_style( 'assets/css/editor-style.css' );
+	/*
+	 * The editor canvas is its own document, so the front-end stylesheets do
+	 * not reach it. Every block here is server-rendered and returns real
+	 * front-end markup, so without its CSS an editor builds the page against
+	 * unstyled output. Hand the same component and page stylesheets to the
+	 * canvas that the front end loads.
+	 */
+	$fs_editor_styles = array( 'assets/css/editor-style.css' );
+
+	foreach ( focused_schools_component_styles() as $fs_component ) {
+		$fs_editor_styles[] = 'assets/css/components/' . $fs_component . '.css';
+	}
+
+	foreach ( glob( get_template_directory() . '/assets/css/page-*.css' ) as $fs_page_style ) {
+		$fs_editor_styles[] = 'assets/css/' . basename( $fs_page_style );
+	}
+
+	add_editor_style( $fs_editor_styles );
 
 	register_nav_menus(
 		array(

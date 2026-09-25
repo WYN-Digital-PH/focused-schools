@@ -390,6 +390,18 @@ function focused_schools_enqueue_assets() {
 	 * Singles need this too: the related strip at the foot of an article
 	 * reuses the archive's listing grid and section header.
 	 */
+	if ( is_404() ) {
+		// Reuses the blog listing and contact card treatments.
+		foreach ( array( 'blog-archive', 'page-contact', 'page-error' ) as $fs_error_style ) {
+			wp_enqueue_style(
+				'focused-schools-' . $fs_error_style,
+				FOCUSED_SCHOOLS_THEME_URI . '/assets/css/' . $fs_error_style . '.css',
+				array( 'focused-schools-style' ),
+				focused_schools_asset_version( '/assets/css/' . $fs_error_style . '.css' )
+			);
+		}
+	}
+
 	if ( is_home() || is_archive() || is_search() || ( is_single() && 'post' === get_post_type() ) ) {
 		wp_enqueue_style(
 			'focused-schools-blog-archive',

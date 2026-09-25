@@ -1,0 +1,54 @@
+/**
+ * Not-found page. Reuses the blog and contact type and card treatments, so
+ * it carries no geometry of its own beyond the two section paddings.
+ */
+
+.fs-error__intro {
+	padding-block: 4.5rem 4rem;
+}
+
+.fs-error__title {
+	margin: 0 0 26px;
+	max-width: 18ch;
+	font-size: 2.25rem;
+	line-height: 1.03;
+	letter-spacing: -0.03em;
+	font-weight: 700;
+	color: var( --wp--preset--color--contrast, #005c6d );
+}
+
+.fs-error__lead {
+	margin: 0 0 2.5rem;
+	max-width: 62ch;
+	font-size: 1.1875rem;
+	line-height: 1.7;
+	color: var( --wp--preset--color--ink-soft, #51536a );
+}
+
+.fs-error__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-bottom: 3rem;
+}
+
+.fs-error__reach {
+	padding-block: 5rem 7.5rem;
+	background: var( --wp--preset--color--paper-soft, #f5f6f8 );
+}
+
+@media ( min-width: 1024px ) {
+	.fs-error__title {
+		font-size: 3.25rem;
+	}
+}
+
+@media ( max-width: 640px ) {
+	.fs-error__intro {
+		padding-block: 3rem;
+	}
+
+	.fs-error__reach {
+		padding-block: 3.5rem 4rem;
+	}
+}

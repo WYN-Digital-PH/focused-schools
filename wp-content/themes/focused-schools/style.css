@@ -100,8 +100,13 @@ video {
 	padding-inline: var( --wp--preset--spacing--medium, 1rem );
 }
 
+/*
+ * The middle tier, narrower than the 1400px shell. Pinned rather than
+ * following wideSize, because wideSize is the design's shell width — what a
+ * core block set to Wide should match — and the two are different measures.
+ */
 .fs-container--wide {
-	max-width: var( --wp--style--global--wide-size, 1200px );
+	max-width: 1200px;
 }
 
 /* The widest tier (1400px) — header/footer, hero, and full-bleed-adjacent

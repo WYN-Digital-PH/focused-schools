@@ -1,21 +1,44 @@
 /**
- * Editor styles — mirrors the frontend base typography inside the block
- * editor iframe so authors see a reasonable approximation of the frontend.
- * Values are the same TEMPORARY placeholders as style.css / theme.json.
+ * Editor canvas base.
+ *
+ * The block editor's canvas is a separate document, so none of the front-end
+ * stylesheets reach it on their own. This file sets the base, and
+ * inc/setup.php hands the component and page stylesheets to add_editor_style()
+ * alongside it — otherwise the server-rendered blocks, which return real
+ * front-end markup, would appear unstyled while an editor is building a page.
  */
 
-body {
-	font-family: var( --wp--preset--font-family--system, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif );
-	font-size: var( --wp--preset--font-size--medium, 1rem );
-	line-height: 1.6;
-	color: var( --wp--preset--color--contrast, #111111 );
+.editor-styles-wrapper {
+	font-family: var( --wp--preset--font-family--system, "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif );
+	font-size: var( --wp--preset--font-size--body, 1.0625rem );
+	line-height: 1.7;
+	color: var( --wp--preset--color--ink-soft, #51536a );
 	background-color: var( --wp--preset--color--base, #ffffff );
 }
 
-.wp-block {
-	max-width: var( --wp--style--global--content-size, 720px );
+.editor-styles-wrapper h1,
+.editor-styles-wrapper h2,
+.editor-styles-wrapper h3,
+.editor-styles-wrapper h4 {
+	color: var( --wp--preset--color--contrast, #005c6d );
+	letter-spacing: -0.02em;
+	line-height: 1.15;
 }
 
-.wp-block[data-align="wide"] {
-	max-width: var( --wp--style--global--wide-size, 1200px );
+/*
+ * Sections are full-bleed on the front end and own their own containers, so
+ * the canvas should not re-constrain them — otherwise a section that is
+ * correct on the page looks inset here.
+ */
+.editor-styles-wrapper .wp-block {
+	max-width: none;
+}
+
+.editor-styles-wrapper .wp-block[data-align="wide"] {
+	max-width: var( --wp--style--global--wide-size, 1400px );
+}
+
+/* Server-rendered previews shouldn't collapse to nothing while loading. */
+.editor-styles-wrapper .wp-block-focused-schools-placeholder {
+	min-height: 60px;
 }
