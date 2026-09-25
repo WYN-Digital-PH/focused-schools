@@ -1,0 +1,35 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/podcast-listen",
+	"title": "Podcast Listen",
+	"category": "design",
+	"icon": "format-audio",
+	"description": "Every episode, in Buzzsprout's own player, inside a branded shell.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Listen"
+		},
+		"heading": {
+			"type": "string",
+			"default": "Every episode, in one place."
+		},
+		"ctaLabel": {
+			"type": "string",
+			"default": "Open in Buzzsprout"
+		},
+		"anchor": {
+			"type": "string",
+			"default": "listen"
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

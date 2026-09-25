@@ -547,3 +547,71 @@ own nonce.
 This is a deliberate judgement rather than a literal reading of "preserve on
 failure", since an empty 200 is not a failure. It is easily reversed if the
 client would rather an empty playlist empty the page immediately.
+
+
+---
+
+## 15. Block Conversion, Round Two (September 25, 2026)
+
+Impact Stories, Podcast and Contact are now block-built like Home, About,
+Services and Team. **Blog is deliberately not**, for reasons below.
+
+Nine new blocks; everything else reuses what existed. Hero and the closing
+split are the same blocks the other pages use.
+
+### Contact: the form is carried, never replaced
+
+The Contact page's content field is where the Elementor form lives. Seeding
+blocks into it would destroy the form, so the seeder copies whatever is there
+into the Contact Form block's `formShortcode` attribute, which the block then
+runs through `do_shortcode()`. The form keeps rendering, in the same column,
+owned by the same plugin, with the same recipients and the same redirect.
+
+Verified with a real shortcode in place:
+
+| Check | Result |
+|---|---|
+| Shortcode carried into the block | `{"formShortcode":"[elementor-template id=\"4242\"]"}` |
+| Valid JSON after saving | yes |
+| `parse_blocks()` returns it intact | `[elementor-template id="4242"]` |
+| Original also kept in `_fs_pre_block_content` | yes |
+
+That needed `wp_slash()` on the way in: `wp_update_post()` unslashes what it
+is given, which stripped the backslashes JSON needs and left the block
+unparseable. Caught by testing the round trip rather than assuming it.
+
+The seeder also **skips any Elementor-built page outright** and says so,
+rather than writing blocks into content Elementor still owns.
+
+### Why /blog/ is not block-built
+
+Two structural reasons, both specific to it:
+
+1. **It is the Posts Page.** WordPress renders it through `home.php`, and a
+   Posts Page's own content is not output by the loop — the loop is the posts
+   query. Blocks placed there would simply not render.
+2. **That content field is what the coexistence guard reads.** `home.php`
+   checks Page 1191's `_elementor_edit_mode` and renders its `post_content`
+   wholesale when Elementor owns it. Putting blocks in the same field is a
+   direct collision with the mechanism protecting the blog.
+
+On top of that the listing is query-driven, and the sprint requires its query
+and URL behaviour to stay identical — which blocks controlling the loop would
+put at risk.
+
+The intro copy above the listing is already editable: `home.php` renders the
+Posts Page's content as the standfirst when it is set. That is the safe
+portion of the ask, and it already works.
+
+### Preserved throughout
+
+- Page IDs, slugs and URLs untouched: impact-stories 15, podcast 43, contact 44.
+- Elementor guard unchanged on all three templates.
+- Buzzsprout untouched — the Podcast blocks render the same vendor embed.
+- No YouTube player on page view; the video block reads cache only.
+- Impact Stories filters still server-rendered, so a filtered view stays
+  shareable and works with JavaScript off. Verified at `?state=Illinois`:
+  spotlight correctly hidden, filters present, count correct.
+- The merged story query — records plus migrated legacy Pages, interleaved by
+  year then date — moved into one shared helper so the spotlight and the grid
+  cannot disagree about it.

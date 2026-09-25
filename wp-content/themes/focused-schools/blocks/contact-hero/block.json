@@ -1,0 +1,31 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/contact-hero",
+	"title": "Contact Hero",
+	"category": "design",
+	"icon": "email",
+	"description": "The compact rail hero on the contact page.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Contact us"
+		},
+		"heading": {
+			"type": "string",
+			"default": "Let's start a conversation."
+		},
+		"body": {
+			"type": "string",
+			"default": "Tell us where your district is headed and what is getting in the way. We will read every word, and a real person from our team will reply — usually within two business days."
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

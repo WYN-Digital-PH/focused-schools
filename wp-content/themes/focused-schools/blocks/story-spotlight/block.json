@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/story-spotlight",
+	"title": "Story Spotlight",
+	"category": "design",
+	"icon": "star-filled",
+	"description": "The featured impact story. Hides itself when nothing is marked Featured, or while a filter is applied.",
+	"textdomain": "focused-schools",
+	"supports": { "html": false, "reusable": false, "multiple": false },
+	"attributes": {},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

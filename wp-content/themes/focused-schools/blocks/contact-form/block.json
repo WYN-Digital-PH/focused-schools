@@ -1,0 +1,16 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/contact-form",
+	"title": "Contact Form + Aside",
+	"category": "design",
+	"icon": "feedback",
+	"description": "The form column beside the contact aside. The form itself stays owned by your form plugin — this only renders its shortcode.",
+	"textdomain": "focused-schools",
+	"supports": { "html": false, "reusable": false, "multiple": false },
+	"attributes": {
+		"formShortcode": { "type": "string", "default": "" }
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

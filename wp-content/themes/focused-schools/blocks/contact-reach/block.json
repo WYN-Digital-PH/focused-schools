@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/contact-reach",
+	"title": "Contact Reach Cards",
+	"category": "design",
+	"icon": "grid-view",
+	"description": "The four routes offered to a reader who is not ready to write yet.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"eyebrow": {
+			"type": "string",
+			"default": "Not ready to write yet?"
+		},
+		"heading": {
+			"type": "string",
+			"default": "Get to know how we work first."
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

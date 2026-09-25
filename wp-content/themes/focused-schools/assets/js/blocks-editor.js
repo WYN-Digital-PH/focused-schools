@@ -362,6 +362,62 @@
 		{ name: 'linkLabel', label: __( 'Reviews link label', 'focused-schools' ), help: __( 'The destination is the Google Reviews URL in Site Settings.', 'focused-schools' ) }
 	] );
 
+	/* ------------------------------ Impact Stories, Podcast, Contact --- */
+
+	registerServerBlock( 'focused-schools/story-spotlight', __( 'Story Spotlight', 'focused-schools' ), [] );
+
+	registerServerBlock( 'focused-schools/story-index', __( 'Story Index', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'anchor', label: __( 'Section anchor', 'focused-schools' ) },
+		{ name: 'perPage', label: __( 'Cards before Load more', 'focused-schools' ) },
+		{ name: 'emptyText', label: __( 'Text when nothing matches', 'focused-schools' ), type: 'textarea' }
+	] );
+
+	registerServerBlock( 'focused-schools/podcast-subscribe', __( 'Podcast Subscribe', 'focused-schools' ), [
+		{ name: 'label', label: __( 'Label', 'focused-schools' ), help: __( 'Platform links come from Site Settings → Podcast.', 'focused-schools' ) }
+	] );
+
+	registerServerBlock( 'focused-schools/podcast-latest', __( 'Podcast Latest Episode', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ), help: __( 'The episode itself comes from the Buzzsprout feed, or the Site Settings override.', 'focused-schools' ) }
+	] );
+
+	registerServerBlock( 'focused-schools/podcast-listen', __( 'Podcast Listen', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'ctaLabel', label: __( 'Link label', 'focused-schools' ) },
+		{ name: 'anchor', label: __( 'Section anchor', 'focused-schools' ) }
+	] );
+
+	registerServerBlock( 'focused-schools/podcast-videos', __( 'Podcast Videos', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'intro', label: __( 'Intro', 'focused-schools' ), type: 'textarea' },
+		{ name: 'ctaLabel', label: __( 'Button label', 'focused-schools' ) },
+		{ name: 'anchor', label: __( 'Section anchor', 'focused-schools' ) },
+		{ name: 'emptyText', label: __( 'Text when no videos are cached', 'focused-schools' ), type: 'textarea' }
+	] );
+
+	registerServerBlock( 'focused-schools/contact-hero', __( 'Contact Hero', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },
+		{ name: 'body', label: __( 'Body', 'focused-schools' ), type: 'textarea' }
+	] );
+
+	registerServerBlock( 'focused-schools/contact-form', __( 'Contact Form + Aside', 'focused-schools' ), [
+		{
+			name: 'formShortcode',
+			label: __( 'Form shortcode', 'focused-schools' ),
+			type: 'textarea',
+			help: __( 'Your form plugin’s shortcode, e.g. [elementor-template id="123"]. The form itself stays owned by that plugin.', 'focused-schools' )
+		}
+	] );
+
+	registerServerBlock( 'focused-schools/contact-reach', __( 'Contact Reach Cards', 'focused-schools' ), [
+		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
+		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) }
+	] );
+
 	registerServerBlock( 'focused-schools/team-grid', __( 'Team Grid', 'focused-schools' ), [
 		{ name: 'eyebrow', label: __( 'Eyebrow', 'focused-schools' ) },
 		{ name: 'heading', label: __( 'Heading', 'focused-schools' ) },

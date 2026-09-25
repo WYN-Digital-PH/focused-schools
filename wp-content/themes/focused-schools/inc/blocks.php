@@ -51,6 +51,15 @@ function focused_schools_block_names() {
 		'service-lanes',
 		'cycle-steps',
 		'pull-quote',
+		'story-spotlight',
+		'story-index',
+		'podcast-subscribe',
+		'podcast-latest',
+		'podcast-listen',
+		'podcast-videos',
+		'contact-hero',
+		'contact-form',
+		'contact-reach',
 		'team-grid',
 		'mission-close',
 	);
@@ -235,4 +244,148 @@ function focused_schools_service_query() {
 	);
 
 	return $cache;
+}
+
+/**
+ * Impact stories for the landing page, with its filters applied.
+ *
+ * Kept whole and in one place because the ordering is not obvious: the
+ * fs_impact_story records and the migrated legacy Pages are two sources that
+ * have to interleave by year and then by date, rather than clumping by
+ * source. Splitting that across blocks would let the two drift apart.
+ *
+ * Filters come from the URL, so a filtered view stays shareable and
+ * back-button safe, and the legacy Pages are only included on the unfiltered
+ * view because they carry none of the filter meta.
+ *
+ * @return array{stories:WP_Post[],featured:?WP_Post,total:int,filtered:bool,state:string,year:string}
+ */
+function focused_schools_impact_stories() {
+	static $cache = null;
+
+	if ( null !== $cache ) {
+		return $cache;
+	}
+
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only public filters, they change no state.
+	$state = isset( $_GET['state'] ) ? sanitize_text_field( wp_unslash( $_GET['state'] ) ) : '';
+	$year  = isset( $_GET['story_year'] ) ? sanitize_text_field( wp_unslash( $_GET['story_year'] ) ) : '';
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+	$meta_query = array();
+
+	if ( '' !== $state ) {
+		$meta_query[] = array(
+			'key'   => '_fs_impact_story_state',
+			'value' => $state,
+		);
+	}
+
+	if ( '' !== $year ) {
+		$meta_query[] = array(
+			'key'   => '_fs_impact_story_year',
+			'value' => $year,
+		);
+	}
+
+	$args = array(
+		'post_type'      => 'fs_impact_story',
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'no_found_rows'  => true,
+	);
+
+	if ( $meta_query ) {
+		$meta_query['relation'] = 'AND';
+		$args['meta_query']     = $meta_query; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- small, admin-managed set.
+	}
+
+	$stories  = get_posts( $args );
+	$filtered = '' !== $state || '' !== $year;
+
+	if ( ! $filtered ) {
+		$stories = array_merge(
+			$stories,
+			get_posts(
+				array(
+					'post_type'      => 'page',
+					'post_status'    => 'publish',
+					'posts_per_page' => -1,
+					'no_found_rows'  => true,
+					'meta_key'       => '_fs_legacy_impact_story', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- small, admin-managed set.
+					'meta_value'     => '1', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- see above.
+				)
+			)
+		);
+	}
+
+	usort(
+		$stories,
+		static function ( $a, $b ) {
+			$year_a = (int) get_post_meta( $a->ID, '_fs_impact_story_year', true );
+			$year_b = (int) get_post_meta( $b->ID, '_fs_impact_story_year', true );
+
+			if ( $year_a !== $year_b ) {
+				return $year_b <=> $year_a;
+			}
+
+			return strtotime( $b->post_date ) <=> strtotime( $a->post_date );
+		}
+	);
+
+	$featured = null;
+
+	foreach ( $stories as $story ) {
+		if ( 'fs_impact_story' === $story->post_type && get_post_meta( $story->ID, '_fs_impact_story_featured', true ) ) {
+			$featured = $story;
+			break;
+		}
+	}
+
+	$cache = array(
+		'stories'  => $stories,
+		'featured' => $featured,
+		'total'    => count( $stories ),
+		'filtered' => $filtered,
+		'state'    => $state,
+		'year'     => $year,
+	);
+
+	return $cache;
+}
+
+/**
+ * Distinct values of a story meta field, for the filter chips.
+ *
+ * Lives here rather than in the page template because the Story Index block
+ * needs it too, and two copies would be free to disagree.
+ *
+ * @param string $meta_key Story meta key to collect.
+ * @return string[] Sorted, de-duplicated, blanks removed.
+ */
+function focused_schools_story_filter_terms( $meta_key ) {
+	$stories = get_posts(
+		array(
+			'post_type'      => 'fs_impact_story',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+		)
+	);
+
+	$values = array();
+
+	foreach ( $stories as $story_id ) {
+		$value = trim( (string) get_post_meta( $story_id, $meta_key, true ) );
+
+		if ( '' !== $value ) {
+			$values[ $value ] = true;
+		}
+	}
+
+	$values = array_keys( $values );
+	sort( $values );
+
+	return $values;
 }

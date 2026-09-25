@@ -1,0 +1,23 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/podcast-subscribe",
+	"title": "Podcast Subscribe",
+	"category": "design",
+	"icon": "rss",
+	"description": "Platform tiles built from the podcast URLs in Site Settings.",
+	"textdomain": "focused-schools",
+	"supports": {
+		"html": false,
+		"reusable": false,
+		"multiple": false
+	},
+	"attributes": {
+		"label": {
+			"type": "string",
+			"default": "Subscribe"
+		}
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}

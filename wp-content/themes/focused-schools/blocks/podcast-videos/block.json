@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "focused-schools/podcast-videos",
+	"title": "Podcast Videos",
+	"category": "design",
+	"icon": "video-alt3",
+	"description": "The video grid, built from the cached YouTube playlist. Never loads a player on page view.",
+	"textdomain": "focused-schools",
+	"supports": { "html": false, "reusable": false, "multiple": false },
+	"attributes": {
+		"eyebrow": { "type": "string", "default": "Watch" },
+		"heading": { "type": "string", "default": "Prefer to watch our podcasts?" },
+		"intro": { "type": "string", "default": "Every conversation is recorded on video. Thumbnails load instantly; the YouTube player only starts once you press play." },
+		"ctaLabel": { "type": "string", "default": "Visit our YouTube Channel" },
+		"anchor": { "type": "string", "default": "watch" },
+		"emptyText": { "type": "string", "default": "Video episodes will appear here once the YouTube playlist integration is connected." }
+	},
+	"editorScript": "focused-schools-blocks-editor",
+	"render": "file:./render.php"
+}
